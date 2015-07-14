@@ -66,7 +66,6 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         ImageResource status = event.getStatusIcon();
         if(status!=null){
             Image statusIcon = new Image(status);
-//            statusIcon.getElement().getStyle().setMarginLeft(5, Unit.PX);
             statusIcon.setTitle(event.getReleaseStatus().name());
             itemContent.add(statusIcon);
         }
@@ -234,28 +233,28 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
     }
 
 
-    public static final ObjectInfoResources RESOURCES;
+    public static final Resources RESOURCES;
     static {
-        RESOURCES = GWT.create(ObjectInfoResources.class);
+        RESOURCES = GWT.create(Resources.class);
         RESOURCES.getCSS().ensureInjected();
     }
 
     /**
      * A ClientBundle of resources used by this widget.
      */
-    public interface ObjectInfoResources extends ClientBundle {
+    public interface Resources extends ClientBundle {
         /**
          * The styles used in this widget.
          */
-        @Source(SuggestionPanelCSS.CSS)
-        SuggestionPanelCSS getCSS();
+        @Source(ResourceCSS.CSS)
+        ResourceCSS getCSS();
     }
 
     /**
      * Styles used by this widget.
      */
-    @CssResource.ImportedWithPrefix("diagram-ObjectInfoPanel")
-    public interface SuggestionPanelCSS extends CssResource {
+    @CssResource.ImportedWithPrefix("pwp-HierarchyItem")
+    public interface ResourceCSS extends CssResource {
         /**
          * The path to the default CSS styles used by this resource.
          */

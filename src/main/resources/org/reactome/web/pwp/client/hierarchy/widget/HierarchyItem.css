@@ -17,25 +17,23 @@
 }
 
 .hierarchyItemSelected {
-    background-color: #0000ff !important;
+    background-color: rgb(30, 148, 208) !important;
     border-radius: 5px;
-    border: 1px solid grey;
     color: white;
     font-weight: bolder;
-    padding: 0 3px 0 2px;
+    padding: 2px 2px 2px 4px;
 }
 
 .hierarchyItemHighlighted {
-    background-color: #00ffff !important;
+    background-color: rgb(98, 140, 213) !important;
     border-radius: 5px;
-    border: 1px solid grey;
+    color: white;
     font-weight: bolder;
-    padding: 0 3px 0 2px;
+    padding: 2px 2px 2px 4px;
 }
 
 .hierarchyItemHit {
-    border: 1px solid #FFD600 !important;
+    border: 2px solid rgb(211, 138, 74) !important;
     border-radius: 5px;
-    /*font-weight: bolder;*/
     padding: 0 3px 0 2px;
 }
