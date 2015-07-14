@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="Browser">
+  <!-- Inherit our applications main module.                      -->
+  <inherits name='org.reactome.web.pwp.Browser' />
+
+  <!-- Specify the path to any remote services.                   -->
+  <servlet path="/Browser/greet" class="org.reactome.web.pwp.server.GreetingServiceImpl" />
+
+</module>

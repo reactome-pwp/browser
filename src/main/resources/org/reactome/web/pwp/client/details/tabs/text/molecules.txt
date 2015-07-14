@@ -1,0 +1,3 @@
+Displays all molecule types involved in the selected event. These can either be
+proteins, chemical compounds or other types. You can either view the list or
+download molecule types with various fields and in various formats.

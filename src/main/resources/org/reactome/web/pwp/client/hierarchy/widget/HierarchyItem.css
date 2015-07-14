@@ -1,0 +1,41 @@
+.hierarchyItem {
+    background-color: transparent;
+    border: none;
+    color: #000000;
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.hierarchyItem img {
+    margin-right: 5px;
+}
+
+.hierarchyTextContainer {
+    background-color: transparent !important;
+    display: inline-block;
+}
+
+.hierarchyItemSelected {
+    background-color: #0000ff !important;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: white;
+    font-weight: bolder;
+    padding: 0 3px 0 2px;
+}
+
+.hierarchyItemHighlighted {
+    background-color: #00ffff !important;
+    border-radius: 5px;
+    border: 1px solid grey;
+    font-weight: bolder;
+    padding: 0 3px 0 2px;
+}
+
+.hierarchyItemHit {
+    border: 1px solid #FFD600 !important;
+    border-radius: 5px;
+    /*font-weight: bolder;*/
+    padding: 0 3px 0 2px;
+}

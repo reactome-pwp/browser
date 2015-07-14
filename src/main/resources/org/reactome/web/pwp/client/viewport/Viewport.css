@@ -1,0 +1,9 @@
+.viewportContainer {
+    background-color: rgb(88, 195, 229);
+}
+
+.viewportPanel {
+    background-color: white !important;
+    border: 0 solid transparent;
+    border-radius: 15px 0 0 0 !important;
+}

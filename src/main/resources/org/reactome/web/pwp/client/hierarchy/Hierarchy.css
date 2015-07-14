@@ -1,0 +1,24 @@
+.hierarchyPanelTitle {
+    background-color: rgb(88, 195, 229);
+    color: white;
+    font-weight: bolder;
+    padding: 5px;
+}
+
+.hierarchyPanelTitle img {
+    height: 12px !important;
+    width: 12px !important;
+    margin-right: 5px;
+}
+
+.hierarchyContainer {
+    background-color: rgb(88, 195, 229);
+    border: 0 solid transparent;
+    border-radius: 0 15px 0 0;
+}
+
+.hierarchyPanel {
+    background-color: white;
+    border: 0 solid transparent;
+    border-radius: 0 15px 0 0;
+}

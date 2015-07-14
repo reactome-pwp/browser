@@ -1,0 +1,2 @@
+Allows the download of chosen event(s) in a number of different formats, ranging
+from biological xml-type formats to simple Word and PDF formats.

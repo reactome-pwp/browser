@@ -1,0 +1,26 @@
+.titleContainer {
+    float: left;
+    min-width: 110px;
+}
+
+.titleContainer img {
+    margin-right: 5px;
+    vertical-align: bottom !important;
+}
+
+.counter {
+    background-color: #ee665a;
+    border: 0 solid red;
+    border-radius: 20px;
+    color: white;
+    padding: 1px 5px;
+    font-size: x-small;
+    font-weight: bolder;
+    margin-left: 5px;
+    position: relative;
+    top: -5px;
+
+    -webkit-box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 3px 5px 0 rgba(50, 50, 50, 0.75); /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}

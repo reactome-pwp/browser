@@ -1,0 +1,38 @@
+.customHeaderContainer {
+    /*height: 20px;*/
+}
+.customHeaderIcon {
+    margin-top: 2px;
+    float: left;
+}
+.customHeaderContainer img {
+    /*margin: 3px 0 0 0;*/
+}
+
+.customHeaderContainer img.customHeaderIcon {
+    float: left;
+}
+
+.customHeaderTitle, .customHeaderPrimaryMessage {
+    float: left;
+    margin: 6px 0 0 5px;
+}
+
+.customHeaderPrimaryMessage, .customHeaderSecondaryMessage {
+    vertical-align: middle;
+    margin-top: 4px;
+    font-size: smaller;
+}
+
+.customHeaderPrimaryMessage {
+    color: blue;
+}
+
+.customHeaderSecondaryMessage {
+    float: right;
+}
+
+.customHeaderButton {
+    float: right;
+    margin: 4px 4px 4px 25px;
+}

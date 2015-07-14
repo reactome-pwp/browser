@@ -1,0 +1,28 @@
+.detailsTab {
+    background: none repeat scroll 0 0 rgb(88, 195, 229) !important;
+    border-left: 1px white solid !important;
+    border-right: 1px white solid !important;
+}
+
+.detailsTabSelected {
+    background: none repeat scroll 0 0 rgb(30, 148, 208) !important;
+    color: white !important;
+    font-weight: bolder;
+}
+
+.initialStateMessage {
+    padding: 20px;
+    color: rgb(30, 148, 208);
+    width: 750px;
+}
+
+.initialStateMessage img {
+    float: left;
+}
+.initialStateMessage div {
+    float: left;
+    font-size: larger;
+    margin-left: 20px;
+    width: 500px;
+    text-align: justify;
+}

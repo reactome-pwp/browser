@@ -1,0 +1,47 @@
+.logo {
+    float: left;
+    margin: 2px 0 0 4px;
+}
+
+.beta {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.versionsPanel {
+    float: right;
+    margin-left: 10px;
+}
+
+.versionsPanel img {
+    cursor: pointer;
+    margin-right: 4px;
+}
+
+.versionsPanel a {
+    color : white;
+}
+
+.versionsPanel a span {
+    position: relative;
+    top: -2px;
+}
+
+.appVersion {
+    margin-top: 1px;
+
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.dataVersion {
+    margin-top: 14px;
+    color: white;
+
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}

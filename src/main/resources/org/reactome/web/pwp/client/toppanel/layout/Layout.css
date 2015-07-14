@@ -1,0 +1,66 @@
+.layoutPanel {
+    float: right;
+    margin: 3px 20px 0 0;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    padding: 3px 8px 3px 10px;
+}
+
+.layoutPanel div {
+    color: white;
+    float: left;
+    padding: 6px 8px 0 0;
+}
+
+.layoutPanel button {
+    margin: 0 2px 0 2px;
+}
+
+@sprite .hierarchy {
+    gwt-image: 'hierarchyNormal';
+    outline: none;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+}
+
+@sprite .hierarchy:hover {
+    gwt-image: 'hierarchyHovered';
+}
+
+@sprite .hierarchy:active:hover {
+    gwt-image: 'hierarchyClicked';
+}
+
+@sprite .details {
+    gwt-image: 'detailsNormal';
+    outline: none;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+}
+
+@sprite .details:hover {
+    gwt-image: 'detailsHovered';
+}
+
+@sprite .details:active:hover {
+    gwt-image: 'detailsClicked';
+}
+
+@sprite .centre {
+    gwt-image: 'centreNormal';
+    outline: none;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+}
+
+@sprite .centre:hover {
+    gwt-image: 'centreHovered';
+}
+
+@sprite .centre:active:hover {
+    gwt-image: 'centreClicked';
+}

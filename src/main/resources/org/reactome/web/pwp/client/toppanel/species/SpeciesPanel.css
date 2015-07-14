@@ -1,0 +1,36 @@
+.speciesPanel{
+    background-color: rgb(88,195,229);
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 5px;
+    color: white;
+    float: left;
+    padding: 8px 8px;
+    margin: 3px 0 0 20px;
+    min-width: 290px;
+    height: 20px;
+}
+
+.speciesPanel span {
+    margin-right: 4px;
+}
+
+.speciesPanel select {
+    background-color: transparent;
+    color: white;
+    border: none;
+    min-width: 210px;
+    font-weight: bold;
+}
+
+.otherSpecies {
+    background-color: rgba(160, 155, 219, 0.79) !important;
+    color: white;
+}
+
+.otherSpecies select {
+    background-color: transparent;
+    color: white;
+    border: none;
+    min-width: 210px;
+    font-weight: bold;
+}

@@ -1,0 +1,79 @@
+<!doctype html>
+
+<!--suppress ALL -->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link type="text/css" rel="stylesheet" href="index.css?v_3.0.0">
+
+    <title>Pathway Portal</title>
+
+    <!--PathwayPortal-->
+    <script type="text/javascript" language="javascript" src="Browser/Browser.nocache.js"></script>
+
+    <!--GXA dependencies-->
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/react/react-0.11.1.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/jquery-migrate-1.2.0.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/jsx/factorTooltip.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/factorTooltipModule.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/jsx/contrastTooltip.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/contrastTooltipModule.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/helpTooltipsModule.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/genePropertiesTooltipModule.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/highlight.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/anatomogramModule.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/highcharts-4.1.5/js/highcharts.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/highcharts-4.1.5/js/highcharts-more.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/highcharts-4.1.5/js/modules/exporting.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/jsx/cellBaselineVariance.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/jquery.svg.package-1.4.5/jquery.svg.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/js/lib/EventEmitter-4.2.7.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/Tools/biojs/biojs/Biojs.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/biojs/AtlasHeatmapReact.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/jsx/heatmap.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//www.ebi.ac.uk/gxa/resources/jsx/heatmapContainer.js"></script>
+
+    <!--PDBe dependencies-->
+    <script type="text/javascript" language="JavaScript" src="http://www.ebi.ac.uk:80/pdbe-apps/widgets/js/essential.js"></script>
+    <script type="text/javascript" language="JavaScript" src="http://www.ebi.ac.uk:80/pdbe-apps/widgets/js/basic.js"></script>
+    <script type="text/javascript" language="JavaScript" src="http://www.ebi.ac.uk:80/pdbe-apps/widgets/js/pdbprints.js"></script>
+
+    <!-- Scripts needed for the GenomeSpace integration -->
+    <!--<script type="text/javascript" language="JavaScript" src="http://gsui.genomespace.org/jsui/js/jquery-1.7.2.min.js"/>-->
+    <script type="text/javascript" language="JavaScript" src="http://gsui.genomespace.org/jsui/upload/gsuploadwindow.js"></script>
+
+    <!-- Scripts for ParticipatingMolecules download, FileSaver (sometimes) needs Blob as -->
+    <!-- the standard W3C File API Blob interface is not available in all browsers. -->
+    <!-- Blob.js is a cross-browser Blob implementation that solves this. -->
+    <!-- https://github.com/eligrey/FileSaver.js/blob/master/README.md -->
+    <script type="text/javascript" language="JavaScript" src="static/js/FileSaver.js"></script>
+    <script type="text/javascript" language="JavaScript" src="static/js/Blob.js"></script>
+</head>
+
+<body>
+    <div id="appLoadMessage" class="app-Loader">
+        <div style="text-align: center">
+            <img src="static/images/logo.png" style="margin-top: 15px" alt="Reactome logo">
+        </div>
+        <div style="text-align: center; margin-top: 50px">
+            <img src="static/images/ajax-loader.gif" style="margin-right: 15px" alt="loading..."> Please wait while loading the pathway browser...
+        </div>
+    </div>
+
+    <!-- history support -->
+    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
+            style="position:absolute;width:0;height:0;border:0"></iframe>
+
+    <!-- This app requires JavaScript enabled -->
+    <noscript>
+        <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+            Your web browser must have JavaScript enabled
+            in order for this application to display correctly.
+        </div>
+    </noscript>
+</body>
+</html>

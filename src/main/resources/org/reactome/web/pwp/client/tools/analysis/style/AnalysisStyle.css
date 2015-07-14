@@ -1,0 +1,112 @@
+.analysisContainer {
+    min-width: 750px;
+    padding: 5px 15px 0 5px;
+    width: auto;
+}
+
+.analysisTitle {
+    text-align: center;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.analysisTitle span {
+    color: #003061;
+    font-size: large;
+    font-weight: bold;
+    text-decoration: underline;
+    text-shadow: 1px 1px #4d9bea;
+}
+
+.analysisBlock {
+    border:2px solid #0000ff;
+    border-radius:5px;
+    box-shadow: 5px 5px 3px #888888;
+    float: left;
+    margin: 5px 0 5px 0;
+    padding: 5px 10px 15px 10px;
+    vertical-align: middle;
+    width: 99%;
+}
+
+.analysisSubmission {
+    padding:5px 5px 33px 0;
+}
+
+.analysisMainSubmitter {
+    background-color: #ddecec;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.analysisSubmission div {
+    float: left;
+    margin-left: 10px;
+    padding-top: 5px;
+}
+
+.analysisSubmission input {
+    float: left;
+    padding-left: 35px;
+    padding-top: 5px;
+}
+
+.analysisSubmission span {
+    float: left;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.analysisSubmission button {
+    background: #C6E7F7;
+    border-radius:5px;
+    float: right;
+    font-size: 10px;
+    font-weight: bold;
+    width: 100px;
+}
+
+.analysisSubmission img {
+    float: right;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+
+.analysisSubmission select {
+    border: 0;
+    float: left;
+    margin: 4px 0 0 10px;
+    background: transparent;
+}
+
+.analysisBlock textarea {
+    border: 1px solid gray;
+    height: 228px;
+    overflow-x: scroll;
+    margin-left: 5px;
+    width: 97%;
+}
+
+.postSubmitterExamples {
+    padding-right: 5px;
+}
+
+.postSubmitterExamples div {
+    float: left;
+    margin-bottom: 5px;
+    width: 200px;
+}
+
+.postSubmitterExamples button {
+    background: #d0f7c7;
+    font-weight: normal;
+    margin-bottom: 2px;
+    width: 200px;
+}
+
+.postSubmitterClear {
+    background: #dff7cb !important;
+    float: left !important;
+    margin: 0 335px 0 0 !important;
+    width: 100px !important;
+}

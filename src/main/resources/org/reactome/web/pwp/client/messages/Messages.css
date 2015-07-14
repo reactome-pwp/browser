@@ -1,0 +1,43 @@
+.popupPanel {
+    background-color: rgb(88, 195, 229);
+    border: 3px solid gray !important;
+    border-radius: 15px;
+    padding: 10px;
+
+    /*-webkit-box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75); /!* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ *!/*/
+    /*-moz-box-shadow:    3px 3px 5px 0 rgba(50, 50, 50, 0.75); /!* Firefox 3.5 - 3.6 *!/*/
+    /*box-shadow:         3px 3px 5px 0 rgba(50, 50, 50, 0.75); /!* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 *!/*/
+}
+
+.message {
+    float: right;
+    margin-left: 20px;
+}
+
+.messageHeader {
+    color: white;
+    font-size: x-large;
+    margin-bottom: 20px;
+}
+
+.messageContent {
+    color: white;
+}
+
+@sprite .close {
+    gwt-image: 'closeNormal';
+    outline: none;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: right;
+    margin-bottom: 15px;
+}
+
+@sprite .close:hover {
+    gwt-image: 'closeHovered';
+}
+
+@sprite .close:active:hover {
+    gwt-image: 'closeClicked';
+}

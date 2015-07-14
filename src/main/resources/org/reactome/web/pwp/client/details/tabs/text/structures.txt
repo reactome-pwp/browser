@@ -1,0 +1,1 @@
+Structures information will be shown here for the selected item.

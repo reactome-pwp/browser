@@ -1,0 +1,2 @@
+Will display context-sensitive, general information for the item you've clicked in the
+diagram above or the Pathway hierarchy on the left-hand side.

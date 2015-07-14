@@ -1,0 +1,484 @@
+/*####################### APP LOADER [BEGIN] #########################################################################*/
+.app-Loader{
+    background-color: azure;
+    border-radius: 5px;
+    border: 2px solid grey;
+    box-shadow: 4px 4px 2px #888;
+    height: 150px;
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left:-300px;
+    padding: 50px;
+    text-align: center
+}
+/*####################### APP LOADER [END] ###########################################################################*/
+
+
+/*####################### TAB and SPLIT Layout [BEGIN] ###############################################################*/
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+    margin-left: 0 !important;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
+    background: none repeat scroll 0 0 #F0FAFA !important;
+    padding-left: 0 !important;
+}
+
+.gwt-SplitLayoutPanel-VDragger{
+    background: rgb(88,195,229) url(static/images/thumb_horz.png) center center no-repeat !important;
+}
+
+.gwt-SplitLayoutPanel-HDragger {
+    background: rgb(88,195,229) url(static/images/thumb_vertical.png) center center no-repeat !important;
+}
+/*####################### TAB and SPLIT Layout [END] #################################################################*/
+
+
+/*####################### HELP POPUP [BEGIN] #########################################################################*/
+.elv-HelpPopup{
+    background-color: azure;
+    border-radius: 5px;
+    border: 1px solid grey;
+    box-shadow: 4px 4px 2px #888;
+}
+.elv-HelpPopup-Title {
+    border-bottom: solid black;
+    font-weight: bold;
+    font-size: larger;
+    min-width: 200px;
+    padding-left: 5px;
+}
+.elv-HelpPopup-Content {
+    padding: 15px;
+    max-width: 500px;
+    text-align: justify;
+    text-indent: 15px;
+}
+/*####################### HELP POPUP [END] ###########################################################################*/
+
+
+/*####################### TOP PANEL [BEGIN] ##########################################################################*/
+.elv-Top-Panel {
+    background-color: rgb(88, 195, 229) !important;
+}
+/*####################### TOP PANEL [END] ############################################################################*/
+
+
+/*####################### DETAILS TAB [BEGIN] ########################################################################*/
+.elv-Details-Content {
+    /*background-color: #daf0e8;*/
+}
+
+.elv-Details-Tab{
+    min-width: 640px;
+    padding: 50px;
+}
+
+.elv-Details-Title{
+    background-color: azure;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: #063da0;
+    font-weight: bolder;
+    height: 30px;
+    margin: 5px 0 5px 5px;
+    padding: 4px 10px 4px 10px;
+}
+
+.elv-Details-Species{
+    background-color: #eeffe4;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: #0a6a50;
+    font-weight: bolder;
+    height: 30px;
+    margin: 5px 0 5px 5px;
+    padding: 4px 10px 4px 10px;
+}
+
+.elv-Details-OverviewPanel {
+    border-radius: 7px;
+    border: 1px solid grey;
+    margin: 5px;
+    padding: 2px;
+}
+
+.elv-Details-OverviewRow{
+    background-color: #ffede0;
+    border-radius: 5px;
+    border: 1px solid white;
+
+    margin: 0 0 5px 5px;
+    padding: 1px 5px 2px 5px;
+}
+
+.elv-Details-OverviewRow:hover{
+    background-color: #FEF9D1;
+    border: 1px solid grey;
+}
+
+.elv-Details-OverviewProperty{
+    font-weight: bold;
+    margin: 3px 3px 3px 0;
+}
+
+.elv-Details-OverviewDisclosure {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.elv-Details-OverviewDisclosure-Advanced {
+    border-radius: 7px;
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    padding: 3px 5px;
+}
+
+.elv-Details-OverviewDisclosure-content {
+    font-weight: normal;
+}
+
+.elv-Details-OverviewDisclosure-summation {
+    font-weight: normal;
+    font-size: small;
+    padding: 10px;
+}
+
+.elv-Details-OverviewDisclosure-even {
+    border: 1px solid grey;
+    background-color: #e4eefe;
+    box-shadow: 2px 2px 1px #888;
+}
+
+.elv-Details-OverviewDisclosure-even:hover {
+    border-color: black;
+}
+
+.elv-Details-OverviewDisclosure-odd {
+    border: 1px solid grey;
+    background-color: #daf0e8;
+    box-shadow: 2px 2px 1px #888;
+}
+
+.elv-Details-OverviewDisclosure-odd:hover {
+    border-color: black;
+}
+
+.elv-Details-OverviewDisclosure-empty {
+    background-color: #ffecdb;
+    color: red;
+    font-weight: normal;
+    font-size: small;
+}
+
+.elv-Details-ListBox {
+    background: transparent;
+    border: 0 none;
+    color: black;
+    font-weight: bold;
+    padding: 2px 10px;
+    overflow: hidden;
+}
+
+.elv-Details-ListBox:hover {
+    cursor: pointer;
+}
+/*####################### DETAILS TAB [END] ##########################################################################*/
+
+
+/*####################### DOWNLOAD TAB [BEGIN] #######################################################################*/
+.elv-Download-Content {
+    background-color: #daf0e8;
+}
+
+.elv-Download-Tab{
+    min-width: 600px;
+    padding: 50px;
+}
+
+.elv-Download-Title{
+    background-color: azure;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: #063da0;
+    font-weight: bolder;
+    height: 30px;
+    margin: 5px 0 5px 5px;
+    padding: 4px 10px 4px 10px;
+}
+
+.elv-Download-Explanation{
+    background-color: #eeffe4;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: black;
+    font-size: small;
+    height: 18px;
+    margin: 5px 0 5px 5px;
+    padding: 4px 10px 4px 10px;
+}
+
+.elv-Download-ItemsPanel {
+    border-radius: 7px;
+    border: 1px solid grey;
+    margin: 5px;
+}
+
+.elv-Download-Item {
+    color: blue;
+}
+/*####################### DOWNLOAD TAB [END] #########################################################################*/
+
+
+/*####################### STRUCTURES TAB [BEGIN] #####################################################################*/
+.gxa-GXAViewer{
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid white;
+
+    margin: 0 0 5px 5px;
+    padding: 1px 5px 2px;
+
+}
+.pdb-PDBViewer {
+    background-color: #ffede0;
+    border-radius: 5px;
+    border: 1px solid white;
+
+    margin: 0 0 5px 5px;
+    padding: 1px 5px 2px;
+}
+
+.pdb-PDBRetrievalError {
+    background-color: lightcoral;
+    border-radius: 5px;
+}
+
+.pdb-PDBRetrievalError button {
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.pdb-PDBRetrievalError span {
+    margin-top: 50px;
+}
+
+.pdb-PDBViewer:hover{
+    background-color: #FEF9D1;
+    border: 1px solid grey;
+}
+
+.pdb-PDBPanel {
+    background-color: #e4eefe;
+    border-radius: 7px;
+    border: 1px solid grey;
+    box-shadow: 2px 2px 1px #888;
+    font-size: large;
+    font-weight: bold;
+    margin: 3px 0 3px 0;
+    padding: 3px 5px 3px 5px;
+}
+
+.pdb-PDBPanel:hover {
+    border-color: black;
+}
+
+.rhea-RheaViewer {
+    background-color: #ffede0;
+    border-radius: 5px;
+    border: 1px solid white;
+
+    margin: 0 0 5px 5px;
+    padding: 1px 5px 2px;
+}
+
+.rhea-RheaViewer:hover{
+    background-color: #FEF9D1;
+    border: 1px solid grey;
+}
+
+.chebi-ChEBIViewer{
+    background-color: #ffede0;
+    border-radius: 5px;
+    border: 1px solid white;
+
+    margin: 0 0 5px 5px;
+    padding: 1px 5px 2px;
+}
+
+.chebi-ChEBIViewer:hover{
+    background-color: #FEF9D1;
+    border: 1px solid grey;
+}
+/*####################### STRUCTURES TAB [END] #######################################################################*/
+
+
+/*####################### VIEWPORT [BEGIN] ###########################################################################*/
+
+/* Needed for the rounded corner in the viewport for Chrome */
+.pwp-DiagramCanvas, .pwp-FireworksCanvas {
+    border-radius: 15px 0 0 0 !important;
+}
+
+/*####################### VIEWPORT [END] #############################################################################*/
+
+
+
+/*####################### PARTICIPATING MOLECULES [BEGIN] ############################################################*/
+.elv-Disclosure-Button {
+    border-radius: 7px;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.elv-Disclosure-Button:hover {
+    background: lightgrey;
+}
+
+.elv-Disclosure-Button:active {
+    background: darkgrey;
+}
+
+.elv-Details-Reference-MoleculesRow{
+    margin: 5px 0 0 15px;
+    float: left;
+    color: #0000ff;
+}
+
+.elv-Details-MoleculesRow-undoHighlight{
+    zoom: 1;
+    /*filter: alpha(opacity=25);*/
+    opacity: 0.5;
+}
+
+.elv-Details-Name-MoleculesRow{
+    position: absolute;
+    left: 250px;
+    margin-top: 5px;
+}
+
+.elv-Molecules-InfoPanel{
+    background-color: azure;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: #063da0;
+    font-weight: bolder;
+    height: 20px;
+    margin: 5px 0 5px 5px;
+    padding: 4px 10px 4px 10px;
+    float: right;
+}
+
+.elv-Molecules-Button{
+    background-color: #f0ffff;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: #063da0;
+    font-weight: bolder;
+    height: 29px;
+    float: left;
+}
+
+.elv-Molecules-Button:hover{
+    cursor: pointer;
+    background-color:ghostwhite;
+    border-radius: 5px;
+}
+
+.elv-Molecules-ButtonBar{
+    height: 30px;
+    margin: 4px 0 5px 2px;
+    /*padding: 4px 10px 4px 10px;*/
+    float: left;
+}
+
+.elv-InformationPanel-Download{
+    margin: 2px 0 5px 5px;
+    padding: 1px 5px 2px 5px;
+}
+
+.elv-SelectionPanels-Download{
+    background-color: #ffede0;
+    border-radius: 5px;
+    border: 1px solid white;
+
+    margin: 6px 0 5px 5px;
+    /*padding: 1px 5px 2px 5px;*/
+    float: left;
+}
+
+.elv-ButtonPanel-Download{
+    padding: 1px 5px 2px 5px;
+    float: right;
+}
+
+.elv-Download-Button{
+    background-color: #f0ffff;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: #063da0;
+    font-weight: bolder;
+    height: 40px;
+    float: left;
+}
+
+.elv-Download-Button:hover{
+    cursor: pointer;
+    background-color:ghostwhite;
+    border-radius: 5px;
+}
+
+.elv-PreviewPanel-Download{
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    border: 1px solid black;
+    width: 99%;
+    height: 95%;
+    margin: 5px 5px 5px 5px;
+    resize: none;
+}
+
+
+.quantity-colourBarFrame {
+    height: 10px;
+    width: 100px;
+    float: left;
+
+    position: absolute;
+    left: 250px;
+    margin-top: 10px;
+
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.quantity-colourBar {
+    float: left;
+
+    border-radius: 5px;
+    border: 0 none;
+    background-color: rgb(205, 205, 245);
+}
+
+/************ PARTICIPATING MOLECULES [BEGIN] ************/
+SPAN.LocusLink, SPAN.EntrezGene, SPAN.RefSeq {background-color: #C6E7F7; color: #002173; font-weight: bold;}
+SPAN.ENSEMBL {color: white; background-color: #5A85D6; font-weight: bold;}
+SPAN.UniProt, SPAN.SWALL, SPAN.SPTREMBL, SPAN.SPTR, SPAN.SwissProt {background-color: #ABADBA; color: #B50E16; font-weight: bold;}
+SPAN.COMPOUND, SPAN.KEGG, SPAN.GLYCAN, SPAN.KEGGGene{background-color: #A70158; color: #FFD600; font-weight: bold;}
+SPAN.ChEBI {background-color: #003061; color: white; font-weight: bold; }
+SPAN.MIM, SPAN.OMIM {color: #105A21; background-color: #ADCEB5; font-weight: bold; }
+SPAN.UCSChuman {color: #8D6C01; background-color: #FEF9D1; font-weight: bold;}
+SPAN.EMBL {background-color: #005826; color: white; font-weight: bold;}
+SPAN.GO {background-color: #3875D7; color: #E9EFFA; font-weight: bold;}
+SPAN.ProteinDataBank {background-color: #3875D7; color: #E9EFFA; font-weight: bold;}
+SPAN.PubMed {color: white; background-color: #326599; font-weight: bold;}
+SPAN.PubChemSubstance {background-color: #336699; color: white; font-weight: bold;}
+SPAN.PubChemCompound {color: #336699; background-color: #CCFF00; font-weight: bold;}
+SPAN.HapMap {color: #024F63; background-color: #FFFFCC; font-weight: bold;}
+SPAN.DOI {background-color: #E9E0FF; color: #3875D7; font-weight: bold;}
+/************ PARTICIPATING MOLECULES [end] ************/
