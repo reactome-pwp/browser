@@ -87,7 +87,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
             Path path = newSelection.getPath();
             this.currentState.setPath(path);
 
-            this.currentState.checkConsistency(new State.StateLoadedHandler() {
+            this.currentState.doConsistencyCheck(new State.StateLoadedHandler() {
                 @Override
                 public void onStateLoaded(State state) {
                     currentState = state;

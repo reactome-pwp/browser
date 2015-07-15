@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.manager.state;
 import com.google.gwt.http.client.URL;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
@@ -84,7 +85,7 @@ public class State {
                     }
                 }
                 path = getPrunedPath(); //Very important!
-                handler.onStateLoaded(State.this);
+                doConsistencyCheck(handler);
             }
 
             @Override
@@ -103,6 +104,32 @@ public class State {
         this.detailsTab = state.detailsTab;
         this.tool = state.tool;
         this.analysisStatus = state.analysisStatus;
+    }
+
+    public void doConsistencyCheck(final StateLoadedHandler handler){
+        if(this.pathway!=null){
+            if(pathway.getHasDiagram()){
+                handler.onStateLoaded(State.this);
+            }else{
+                StateHelper.getPathwayWithDiagram(pathway, path, new StateHelper.PathwayWithDiagramHandler() {
+                    @Override
+                    public void setPathwayWithDiagram(Pathway pathway) {
+                        if(State.this.selected==null){
+                            State.this.selected = State.this.pathway;
+                        }
+                        State.this.pathway = pathway;
+                        handler.onStateLoaded(State.this);
+                    }
+
+                    @Override
+                    public void onPathwayWithDiagramRetrievalError(Throwable throwable) {
+                        Console.error("on Pathway with diagram retrieval error: " + throwable.getMessage());
+                    }
+                });
+            }
+        }else {
+            handler.onStateLoaded(this);
+        }
     }
 
     public Species getSpecies() {
