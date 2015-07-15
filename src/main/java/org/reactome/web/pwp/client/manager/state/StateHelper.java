@@ -45,7 +45,7 @@ public abstract class StateHelper {
         void onPathwayWithDiagramRetrievalError(Throwable throwable);
     }
 
-    //TODO: Use Path in first instance before call StateHelper to get the PathwayDiagram
+    //TODO: Use Path in first instance before call DatabaseObjectFactory.getAncestors to get the PathwayDiagram
     public static void getPathwayWithDiagram(Pathway pathway, Path path, final PathwayWithDiagramHandler handler){
         DatabaseObjectFactory.getAncestors(pathway, new AncestorsCreatedHandler() {
             @Override
