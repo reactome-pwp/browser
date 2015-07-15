@@ -87,8 +87,14 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
             Path path = newSelection.getPath();
             this.currentState.setPath(path);
 
-            this.eventBus.fireEventFromSource(new StateChangedEvent(this.currentState), this);
-            History.newItem(this.currentState.toString(), false);
+            this.currentState.checkConsistency(new State.StateLoadedHandler() {
+                @Override
+                public void onStateLoaded(State state) {
+                    currentState = state;
+                    eventBus.fireEventFromSource(new StateChangedEvent(currentState), this);
+                    History.newItem(currentState.toString(), false);
+                }
+            });
         }
     }
 
