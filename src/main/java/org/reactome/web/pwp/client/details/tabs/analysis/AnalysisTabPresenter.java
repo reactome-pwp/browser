@@ -98,7 +98,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
             public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
                 Pathway pathway = (Pathway) databaseObject;
                 if(!Objects.equals(pathway, AnalysisTabPresenter.this.selected)) {
-                    Selection selection = new Selection(pathway, null, new Path());
+                    Selection selection = new Selection(pathway, new Path());
                     eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), AnalysisTabPresenter.this);
                 }
             }

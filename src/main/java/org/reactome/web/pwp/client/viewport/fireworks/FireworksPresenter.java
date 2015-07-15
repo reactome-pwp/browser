@@ -119,7 +119,7 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
             @Override
             public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
                 selected = (Pathway) databaseObject;
-                Selection selection = new Selection(selected, null, null);
+                Selection selection = new Selection(selected, new Path());
                 eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), FireworksPresenter.this);
             }
 
