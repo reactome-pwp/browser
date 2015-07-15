@@ -17,7 +17,7 @@
 }
 
 .hierarchyItemSelected {
-    background-color: rgb(30, 148, 208) !important;
+    background-color: rgb(98, 140, 213) !important;
     border-radius: 5px;
     color: white;
     font-weight: bolder;
@@ -25,7 +25,7 @@
 }
 
 .hierarchyItemHighlighted {
-    background-color: rgb(98, 140, 213) !important;
+    background-color: rgb(30, 148, 208) !important;
     border-radius: 5px;
     color: white;
     font-weight: bolder;
