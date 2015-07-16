@@ -1,1 +1,3 @@
-Expression Atlas information will be shown here for the selected item.
+Details are shown when an item is selected in the pathway diagram above. Displays gene expression
+information for genes corresponding to the selected item across a standard set of tissues and
+organs. Expression data is obtained from the Gene Expression Atlas.

@@ -1,2 +1,3 @@
-Allows the download of chosen event(s) in a number of different formats, ranging
-from biological xml-type formats to simple Word and PDF formats.
+When a pathway is displayed in the panel above, shows buttons to download the pathway
+in several formats, for reuse or reference. Formats include Word, PDF, SBML, SBGN,
+BioPAX 2, BioPAX 3.

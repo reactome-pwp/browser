@@ -1,1 +1,2 @@
-Your analysis result will display here after you submit your data using the Analysis tool
+Analysis results are shown here when an analysis has been run. To start an analysis,
+click on the Analyse Data button in the top bar.

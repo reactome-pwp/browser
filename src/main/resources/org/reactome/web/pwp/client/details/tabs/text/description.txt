@@ -1,2 +1,4 @@
-Will display context-sensitive, general information for the item you've clicked in the
-diagram above or the Pathway hierarchy on the left-hand side.
+Displays details when you select an item in the Pathway Browser. For example, when a reaction is
+selected, shows details including the input and output molecules, summary and references
+containing supporting evidence. When relevant, shows details of the catalyst, regulators,
+preceding and following events.
