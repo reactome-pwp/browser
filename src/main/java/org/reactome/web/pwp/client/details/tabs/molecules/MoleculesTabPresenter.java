@@ -16,6 +16,7 @@ import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.common.utils.LRUCache;
 import org.reactome.web.pwp.client.common.utils.MapSet;
 import org.reactome.web.pwp.client.details.delegates.MoleculeSelectedHandler;
+import org.reactome.web.pwp.client.details.delegates.MoleculeSelectedListener;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Molecule;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.PhysicalToReferenceEntityMap;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Result;
@@ -51,6 +52,9 @@ public class MoleculesTabPresenter extends AbstractPresenter implements Molecule
         super(eventBus);
         this.display = display;
         this.display.setPresenter(this);
+
+        //Needed because the view implementation will be listening to all the MoleculesPanel for molecules to be selected
+        MoleculeSelectedListener.getMoleculeSelectedListener().setMoleculeSelectedHandler(this);
     }
 
     @Override
