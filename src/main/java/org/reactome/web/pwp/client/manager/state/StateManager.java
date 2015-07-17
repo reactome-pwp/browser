@@ -77,9 +77,11 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     public void onDatabaseObjectSelected(DatabaseObjectSelectedEvent event) {
         Selection newSelection = event.getSelection();
         Selection currentSelection = new Selection(currentState);
-        if(!currentSelection.equals(newSelection)){
+        if (!currentSelection.equals(newSelection)) {
             Pathway diagram = newSelection.getDiagram();
-            this.currentState.setPathway(diagram);
+            if (diagram != null) {
+                this.currentState.setPathway(diagram);
+            }
 
             DatabaseObject object = newSelection.getDatabaseObject();
             this.currentState.setSelected(object);
@@ -91,7 +93,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                 @Override
                 public void onStateLoaded(State state) {
                     currentState = state;
-                    eventBus.fireEventFromSource(new StateChangedEvent(currentState), this);
+                    eventBus.fireEventFromSource(new StateChangedEvent(currentState), StateManager.this);
                     History.newItem(currentState.toString(), false);
                 }
             });
