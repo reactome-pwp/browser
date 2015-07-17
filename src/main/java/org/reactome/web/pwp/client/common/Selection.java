@@ -32,13 +32,13 @@ public class Selection {
     public Selection(Pathway diagram, Path path) {
         this.diagram = diagram;
         this.databaseObject = null;
-        this.path = path;
+        this.path = path == null ? new Path() : path;
     }
 
     public Selection(Pathway diagram, DatabaseObject databaseObject, Path path) {
         this.diagram = diagram;
         this.databaseObject = databaseObject;
-        this.path = path;
+        this.path = path == null ? new Path() : path;
     }
 
     public Pathway getDiagram() {

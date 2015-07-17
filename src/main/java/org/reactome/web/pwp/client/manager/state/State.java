@@ -109,15 +109,17 @@ public class State {
     public void doConsistencyCheck(final StateLoadedHandler handler){
         if(this.pathway!=null){
             if(pathway.getHasDiagram()){
-                handler.onStateLoaded(State.this);
+                handler.onStateLoaded(this);
             }else{
                 StateHelper.getPathwayWithDiagram(pathway, path, new StateHelper.PathwayWithDiagramHandler() {
                     @Override
-                    public void setPathwayWithDiagram(Pathway pathway) {
+                    public void setPathwayWithDiagram(Pathway pathway, Path path) {
                         if(State.this.selected==null){
                             State.this.selected = State.this.pathway;
                         }
                         State.this.pathway = pathway;
+                        State.this.path = path;
+                        State.this.path = State.this.getPrunedPath(); //Very important!
                         handler.onStateLoaded(State.this);
                     }
 

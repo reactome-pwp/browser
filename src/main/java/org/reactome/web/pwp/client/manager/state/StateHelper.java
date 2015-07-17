@@ -41,22 +41,30 @@ public abstract class StateHelper {
     }
 
     public interface PathwayWithDiagramHandler {
-        void setPathwayWithDiagram(Pathway pathway);
+        void setPathwayWithDiagram(Pathway pathway, Path path);
         void onPathwayWithDiagramRetrievalError(Throwable throwable);
     }
 
-    //TODO: Use Path in first instance before call DatabaseObjectFactory.getAncestors to get the PathwayDiagram
     public static void getPathwayWithDiagram(Pathway pathway, Path path, final PathwayWithDiagramHandler handler){
+        //Trying first to figure out the diagram from the provided path (if there is any)
+        if(path!=null && !path.isEmpty()){
+            Pathway diagram = path.getLastPathwayWithDiagram();
+            if(diagram!=null){
+                handler.setPathwayWithDiagram(diagram, path);
+                return;
+            }
+        }
+
         DatabaseObjectFactory.getAncestors(pathway, new AncestorsCreatedHandler() {
             @Override
             public void onAncestorsLoaded(Ancestors ancestors) {
-                for (Path ancestor : ancestors) {
+                for (final Path ancestor : ancestors) {
                     Pathway diagram = ancestor.getLastPathwayWithDiagram();
                     if (diagram != null) { //The pathway with diagram object needs to be filled before sending it back
                         diagram.load(new DatabaseObjectLoadedHandler() {
                             @Override
                             public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
-                                handler.setPathwayWithDiagram((Pathway) databaseObject);
+                                handler.setPathwayWithDiagram((Pathway) databaseObject, ancestor);
                             }
 
                             @Override
@@ -67,7 +75,7 @@ public abstract class StateHelper {
                         return;
                     }
                 }
-                handler.setPathwayWithDiagram(null);
+                handler.setPathwayWithDiagram(null, new Path());
             }
 
             @Override

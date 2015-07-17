@@ -16,6 +16,8 @@ import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
 import org.reactome.web.pwp.model.util.Path;
 
+import java.util.Objects;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -33,6 +35,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
         super(eventBus);
         this.display = display;
         this.display.setPresenter(this);
+        this.path = new Path();
 
         this.eventBus.addHandler(ViewportChangedEvent.TYPE, this);
         this.eventBus.addHandler(DatabaseObjectHoveredEvent.TYPE, this);
@@ -132,8 +135,24 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     @Override
     public void diagramLoaded(final Long dbId) {
-        display.select(selected);
-        display.setAnalysisToken(this.analysisStatus);
+        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+            @Override
+            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                Pathway pathway = (Pathway) databaseObject;
+                if (Objects.equals(DiagramPresenter.this.pathway, pathway)) {
+                    display.select(selected);
+                    display.setAnalysisToken(analysisStatus);
+                } else {
+                    Selection selection = new Selection(pathway, new Path());
+                    eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
+                }
+            }
+
+            @Override
+            public void onDatabaseObjectError(Throwable exception) {
+
+            }
+        });
     }
 
     private void loadCurrentPathway(){
