@@ -16,6 +16,7 @@ import org.reactome.web.pwp.model.handlers.DatabaseObjectsCreatedHandler;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -108,9 +109,9 @@ public class StructuresTabPresenter extends AbstractPresenter implements Structu
         } else {
             DatabaseObjectFactory.get(referenceSequenceList, new DatabaseObjectsCreatedHandler() {
                 @Override
-                public void onDatabaseObjectsLoaded(List<DatabaseObject> databaseObjects) {
+                public void onDatabaseObjectsLoaded(Map<String, DatabaseObject> databaseObjects) {
                     List<ReferenceSequence> rtn = new LinkedList<>();
-                    for (DatabaseObject object : databaseObjects) {
+                    for (DatabaseObject object : databaseObjects.values()) {
                         if (object instanceof ReferenceSequence) {
                             rtn.add((ReferenceSequence) object);
                         }
