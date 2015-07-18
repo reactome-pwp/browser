@@ -11,28 +11,17 @@ import org.reactome.web.pwp.model.util.Path;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public abstract class StateHelper {
 
-    public static DatabaseObject getDatabaseObject(String identifier, List<DatabaseObject> list) {
-        if (identifier == null || identifier.isEmpty()) return null;
-
-        for (DatabaseObject databaseObject : list) {
-            if (databaseObject.getIdentifier().equals(identifier) ||
-                    databaseObject.getDbId().toString().equals(identifier)) {
-                return databaseObject;
-            }
-        }
-        return null;
-    }
-
-    public static List<Event> getEvents(String[] identifiers, List<DatabaseObject> list) {
+    public static List<Event> getEvents(String[] identifiers, Map<String, DatabaseObject> map) {
         List<Event> rtn = new LinkedList<>();
         for (String identifier : identifiers) {
-            DatabaseObject databaseObject = getDatabaseObject(identifier, list);
+            DatabaseObject databaseObject = map.get(identifier);
             if (databaseObject instanceof Event) {
                 rtn.add((Event) databaseObject);
             }
