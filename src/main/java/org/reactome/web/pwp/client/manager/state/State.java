@@ -49,19 +49,19 @@ public class State {
         final Map<StateKey, String> parameters = token.getParameters();
         DatabaseObjectFactory.get(toLoad, new DatabaseObjectsCreatedHandler() {
             @Override
-            public void onDatabaseObjectsLoaded(List<DatabaseObject> databaseObjects) {
+            public void onDatabaseObjectsLoaded(Map<String, DatabaseObject> databaseObjects) {
                 for (StateKey key : parameters.keySet()) {
                     try {
                         String identifier = parameters.get(key);
                         switch (key) {
                             case SPECIES:
-                                species = (Species) StateHelper.getDatabaseObject(identifier, databaseObjects);
+                                species = (Species) databaseObjects.get(identifier);
                                 break;
                             case PATHWAY:
-                                pathway = (Pathway) StateHelper.getDatabaseObject(identifier, databaseObjects);
+                                pathway = (Pathway) databaseObjects.get(identifier);
                                 break;
                             case SELECTED:
-                                selected = StateHelper.getDatabaseObject(identifier, databaseObjects);
+                                selected = databaseObjects.get(identifier);
                                 break;
                             case PATH:
                                 path = new Path(StateHelper.getEvents(identifier.split(","), databaseObjects));
@@ -207,8 +207,7 @@ public class State {
         if (pathway == null && species != null && !species.getDbId().equals(Token.DEFAULT_SPECIES_ID)) {
             token.append(StateKey.SPECIES.getDefaultKey());
             token.append("=");
-//            token.append(species.getIdentifier());
-            token.append(species.getDbId());
+            token.append(species.getIdentifier());
             addDelimiter = true;
         }
         if (pathway != null) {
@@ -217,16 +216,14 @@ public class State {
                 token.append(StateKey.PATHWAY.getDefaultKey());
                 token.append("=");
             }
-//            token.append(pathway.getIdentifier());
-            token.append(pathway.getDbId());
+            token.append(pathway.getIdentifier());
             addDelimiter = true;
         }
         if (selected != null) {
             if (addDelimiter) token.append(Token.DELIMITER);
             token.append(StateKey.SELECTED.getDefaultKey());
             token.append("=");
-//            token.append(selected.getIdentifier());
-            token.append(selected.getDbId());
+            token.append(selected.getIdentifier());
             addDelimiter = true;
         }
         if (path != null && !path.isEmpty()) {
@@ -234,8 +231,7 @@ public class State {
             token.append(StateKey.PATH.getDefaultKey());
             token.append("=");
             for (Event event : path) {
-//                token.append(event.getIdentifier());
-                token.append(event.getDbId());
+                token.append(event.getIdentifier());
                 token.append(",");
             }
             token.deleteCharAt(token.length() - 1);
