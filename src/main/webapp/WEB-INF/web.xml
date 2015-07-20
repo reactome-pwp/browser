@@ -19,16 +19,16 @@
         <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
-            <param-value>localhost</param-value>
+            <!--<param-value>localhost</param-value>-->
             <!--<param-value>www.reactome.org</param-value>-->
-            <!--<param-value>reactomedev.oicr.on.ca</param-value>-->
+            <param-value>reactomedev.oicr.on.ca</param-value>
             <!--<param-value>reactomecurator.oicr.on.ca</param-value>-->
             <!--<param-value>reactomerelease.oicr.on.ca</param-value>-->
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
-            <param-value>9090</param-value>
-            <!--<param-value>80</param-value>-->
+            <!--<param-value>9090</param-value>-->
+            <param-value>80</param-value>
             <!--<param-value>8080</param-value>-->
         </init-param>
         <init-param>
@@ -52,8 +52,8 @@
         <init-param>
             <param-name>proxyHost</param-name>
             <!--<param-value>localhost</param-value>-->
-            <param-value>reactome.org</param-value>
-            <!--<param-value>reactomedev.oicr.on.ca</param-value>-->
+            <!--<param-value>reactome.org</param-value>-->
+            <param-value>reactomedev.oicr.on.ca</param-value>
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
