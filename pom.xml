@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.reactome.web</groupId>
             <artifactId>diagram</artifactId>
-            <version>1.0.4-SNAPSHOT</version>
+            <version>1.0.5-SNAPSHOT</version>
         </dependency>
 
         <dependency>
