@@ -1,6 +1,8 @@
 package org.reactome.web.pwp.client;
 
-import com.google.gwt.core.client.*;
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.JavaScriptException;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import org.reactome.web.pwp.client.common.utils.Console;
@@ -34,7 +36,7 @@ public class Browser implements EntryPoint {
     }
 
     private void initConfig(){
-        Browser.VERBOSE = true;
+        Browser.VERBOSE = false;
         TitleChangedEvent.REPORT = false;
         Token.DEFAULT_SPECIES_ID = 48887L; //Homo sapiens
         Token.DELIMITER = "&";
