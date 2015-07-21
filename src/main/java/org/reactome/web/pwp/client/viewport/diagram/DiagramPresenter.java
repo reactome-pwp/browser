@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.viewport.diagram;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Timer;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.*;
@@ -76,21 +77,31 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
         this.display.highlight(event.getDatabaseObject());
     }
 
+    private static final int HOVER_DELAY = 500;
+    private Timer timer ;
+
     @Override
     public void databaseObjectHovered(final Long dbId) {
+        if(timer!=null && timer.isRunning()) timer.cancel();
         if(dbId!=null){
-            DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+            timer = new Timer() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
-                    eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(databaseObject), DiagramPresenter.this);
-                }
+                public void run() {
+                    DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+                        @Override
+                        public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                            eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(databaseObject), DiagramPresenter.this);
+                        }
 
-                @Override
-                public void onDatabaseObjectError(Throwable exception) {
-                    String errorMsg = "An error has occurred while retrieving data for " + dbId;
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DiagramPresenter.this);
+                        @Override
+                        public void onDatabaseObjectError(Throwable exception) {
+                            String errorMsg = "An error has occurred while retrieving data for " + dbId;
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DiagramPresenter.this);
+                        }
+                    });
                 }
-            });
+            };
+            timer.schedule(HOVER_DELAY);
         }else{
             this.eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(), DiagramPresenter.this);
         }
