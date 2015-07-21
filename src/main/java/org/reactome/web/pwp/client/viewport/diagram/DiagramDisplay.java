@@ -6,6 +6,7 @@ import org.reactome.web.diagram.client.DiagramFactory;
 import org.reactome.web.diagram.client.DiagramViewer;
 import org.reactome.web.diagram.events.*;
 import org.reactome.web.diagram.handlers.*;
+import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.viewport.ViewportDisplay;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
@@ -25,8 +26,8 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
     public DiagramDisplay() {
         super(Style.Unit.PX);
 
-        DiagramFactory.CONSOLE_VERBOSE = true;
-        DiagramFactory.EVENT_BUS_VERBOSE = true;
+        DiagramFactory.CONSOLE_VERBOSE = Browser.VERBOSE;
+        DiagramFactory.EVENT_BUS_VERBOSE = Browser.VERBOSE;
         DiagramFactory.SHOW_INFO = false;
 
         this.diagram = DiagramFactory.createDiagramViewer();
