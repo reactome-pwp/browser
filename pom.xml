@@ -8,10 +8,13 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0</version>
     <name>GWT Maven Archetype</name>
 
     <properties>
+        <!-- Name that will be used to generate the war file -->
+        <fileName>PathwayBrowser</fileName>
+
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.7.0</gwtVersion>
 
@@ -105,7 +108,7 @@
     <build>
         <!-- Output classes directly into the webapp, so that IDEs and "mvn process-classes" update them in DevMode -->
         <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
-
+        <finalName>${fileName}-${project.version}</finalName>
         <plugins>
 
             <!-- GWT Maven Plugin -->
