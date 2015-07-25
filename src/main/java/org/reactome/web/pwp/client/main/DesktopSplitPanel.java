@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.main;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -66,10 +67,22 @@ public class DesktopSplitPanel extends SplitLayoutPanel {
         this.westWidget = widget.asWidget();
     }
 
+    Timer timer = new Timer() {
+        @Override
+        public void run() {
+            notifyResize();
+        }
+    };
+
     @Override
     public void forceLayout() {
         super.forceLayout();
 
+        if(timer.isRunning()) timer.cancel();
+        timer.schedule(500);
+    }
+
+    private void notifyResize(){
         int size = westWidget.getOffsetWidth();
         if(size!=westPanelSize){
             if(westPanelResizedHandler!=null) {
