@@ -3,6 +3,11 @@
     margin: 2px 0 0 4px;
 }
 
+.logo img {
+    outline: none;
+    border: 0;      /* for IE 9 compatibility */
+}
+
 .beta {
     position: absolute;
     left: 0;
@@ -17,6 +22,8 @@
 .versionsPanel img {
     cursor: pointer;
     margin-right: 4px;
+    outline: none;
+    border: 0;      /* for IE 9 compatibility */
 }
 
 .versionsPanel a {
