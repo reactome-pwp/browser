@@ -43,14 +43,4 @@ public abstract class LocationHelper {
                 return true;
         }
     }
-
-    public static boolean isBeta(){
-        switch (getLocation()){
-            case DEV:
-            case LOCALHOST:
-                return true;
-            default:
-                return false;
-        }
-    }
 }
