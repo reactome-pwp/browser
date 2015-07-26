@@ -37,6 +37,7 @@ import org.reactome.web.pwp.client.hierarchy.HierarchyPresenter;
 import org.reactome.web.pwp.client.main.DesktopApp;
 import org.reactome.web.pwp.client.main.DesktopAppDisplay;
 import org.reactome.web.pwp.client.main.DesktopAppPresenter;
+import org.reactome.web.pwp.client.manager.analytics.GAManager;
 import org.reactome.web.pwp.client.manager.orthology.OrthologyManager;
 import org.reactome.web.pwp.client.manager.state.StateManager;
 import org.reactome.web.pwp.client.messages.Messages;
@@ -48,10 +49,10 @@ import org.reactome.web.pwp.client.tools.analysis.AnalysisLauncherPresenter;
 import org.reactome.web.pwp.client.tools.launcher.ToolLauncher;
 import org.reactome.web.pwp.client.tools.launcher.ToolLauncherDisplay;
 import org.reactome.web.pwp.client.tools.launcher.ToolLauncherPresenter;
-import org.reactome.web.pwp.client.toppanel.logo.LogoPanel;
 import org.reactome.web.pwp.client.toppanel.layout.LayoutSelector;
 import org.reactome.web.pwp.client.toppanel.layout.LayoutSelectorDisplay;
 import org.reactome.web.pwp.client.toppanel.layout.LayoutSelectorPresenter;
+import org.reactome.web.pwp.client.toppanel.logo.LogoPanel;
 import org.reactome.web.pwp.client.toppanel.species.SpeciesSelector;
 import org.reactome.web.pwp.client.toppanel.species.SpeciesSelectorDisplay;
 import org.reactome.web.pwp.client.toppanel.species.SpeciesSelectorPresenter;
@@ -97,6 +98,7 @@ public class AppController implements BrowserReadyHandler {
     private void initManager(){
         new StateManager(this.eventBus);
         new OrthologyManager(this.eventBus);
+        new GAManager(this.eventBus);
     }
 
     private IsWidget getDesktopBrowser(){
