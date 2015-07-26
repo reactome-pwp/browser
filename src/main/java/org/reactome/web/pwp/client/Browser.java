@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.manager.state.token.Token;
@@ -36,7 +37,8 @@ public class Browser implements EntryPoint {
     }
 
     private void initConfig(){
-        Browser.VERBOSE = false;
+        String hostName = Window.Location.getHostName();
+        Browser.VERBOSE = (hostName.equals("localhost") || hostName.equals("127.0.0.1"));
         TitleChangedEvent.REPORT = false;
         Token.DEFAULT_SPECIES_ID = 48887L; //Homo sapiens
         Token.DELIMITER = "&";
