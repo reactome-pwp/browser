@@ -75,9 +75,8 @@ public class DesktopSplitPanel extends SplitLayoutPanel {
     };
 
     @Override
-    public void forceLayout() {
-        super.forceLayout();
-
+    public void onResize() {
+        super.onResize();
         if(timer.isRunning()) timer.cancel();
         timer.schedule(500);
     }
