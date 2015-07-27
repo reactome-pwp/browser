@@ -12,8 +12,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemDoubleClickedEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOverEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyTreeSpeciesNotFoundException;
+import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemDoubleClickedHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOutHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOverHandler;
 import org.reactome.web.pwp.client.hierarchy.widget.HierarchyContainer;
@@ -22,7 +24,6 @@ import org.reactome.web.pwp.client.hierarchy.widget.HierarchyTree;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.ReactionLikeEvent;
 import org.reactome.web.pwp.model.classes.Species;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
 import org.reactome.web.pwp.model.util.Path;
@@ -35,7 +36,7 @@ import java.util.Set;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>, SelectionHandler<TreeItem>,
-        Hierarchy.Display, HierarchyItemMouseOverHandler, HierarchyItemMouseOutHandler {
+        Hierarchy.Display, HierarchyItemMouseOverHandler, HierarchyItemMouseOutHandler, HierarchyItemDoubleClickedHandler {
 
     private Hierarchy.Presenter presenter;
 
@@ -57,6 +58,14 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
         initWidget(container);
 
         container.getParent().addStyleName(RESOURCES.getCSS().hierarchyContainer());
+    }
+
+    @Override
+    public void onHierarchyItemDoubleClicked(HierarchyItemDoubleClickedEvent e) {
+        Event event = e.getItem().getEvent();
+        if(event instanceof Pathway) {
+            this.presenter.openDiagram((Pathway) event);
+        }
     }
 
     @Override
@@ -154,13 +163,13 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
         return hierarchyTree.getHierarchyPathwaysWithReactionsLoaded();
     }
 
+
     @Override
     public void highlightHitReactions(Set<Long> reactionsHit) {
         if(hierarchyTree!=null){
             hierarchyTree.highlightHitReactions(reactionsHit);
         }
     }
-
 
     @Override
     public void setPresenter(Hierarchy.Presenter presenter) {
@@ -199,12 +208,14 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
         }
     }
 
+
     @Override
     public void setData(Species species, List<Event> tlps) {
         this.hierarchyTree = new HierarchyTree(species);
         this.hierarchyTree.getElement().getStyle().setProperty("borderRadius","0 15px 0 0");
         this.hierarchyTree.setScrollOnSelectEnabled(true);
         this.hierarchyTree.setAnimationEnabled(true);
+        this.hierarchyTree.addHierarchyItemDoubleClickedHandler(this);
         this.hierarchyTree.addHierarchyItemMouseOverHandler(this);
         this.hierarchyTree.addHierarchyItemMouseOutHandler(this);
         this.hierarchyTree.addOpenHandler(this);
@@ -218,6 +229,7 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
             e.printStackTrace();
         }
     }
+
 
 
     private void onOpen(final HierarchyItem item) {
@@ -245,10 +257,8 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
         }
         item.setState(true, false);
     }
-
-
-
     public static Resources RESOURCES;
+
     static {
         RESOURCES = GWT.create(Resources.class);
         RESOURCES.getCSS().ensureInjected();

@@ -5,8 +5,10 @@ import com.google.gwt.user.client.ui.CustomTree;
 import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.common.utils.MapSet;
+import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemDoubleClickedEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOutEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOverEvent;
+import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemDoubleClickedHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOutHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOverHandler;
 import org.reactome.web.pwp.model.classes.Event;
@@ -23,7 +25,7 @@ import java.util.Set;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class HierarchyTree extends CustomTree implements HierarchyItemMouseOverHandler, HierarchyItemMouseOutHandler {
+public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClickedHandler, HierarchyItemMouseOverHandler, HierarchyItemMouseOutHandler {
 
     private MapSet<Long, HierarchyItem> treeItems;
     private Species species;
@@ -32,6 +34,10 @@ public class HierarchyTree extends CustomTree implements HierarchyItemMouseOverH
         super();
         this.treeItems = new MapSet<>();
         this.species = species;
+    }
+
+    public HandlerRegistration addHierarchyItemDoubleClickedHandler(HierarchyItemDoubleClickedHandler handler){
+        return addHandler(handler, HierarchyItemDoubleClickedEvent.TYPE);
     }
 
     public HandlerRegistration addHierarchyItemMouseOverHandler(HierarchyItemMouseOverHandler handler) {
@@ -133,6 +139,7 @@ public class HierarchyTree extends CustomTree implements HierarchyItemMouseOverH
         }
         for (Event child : children) {
             HierarchyItem hi = new HierarchyItem(species, child);
+            hi.addHierarchyItemDoubleClickedHandler(this);
             hi.addHierarchyItemMouseOverHandler(this);
             hi.addHierarchyItemMouseOutHandler(this);
             this.treeItems.add(child.getDbId(), hi);
@@ -159,6 +166,11 @@ public class HierarchyTree extends CustomTree implements HierarchyItemMouseOverH
             }
             return null;
         }
+    }
+
+    @Override
+    public void onHierarchyItemDoubleClicked(HierarchyItemDoubleClickedEvent e) {
+        fireEvent(e);
     }
 
     @Override

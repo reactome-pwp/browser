@@ -5,10 +5,7 @@ import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
 import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
-import org.reactome.web.pwp.client.common.events.DatabaseObjectHoveredEvent;
-import org.reactome.web.pwp.client.common.events.DatabaseObjectSelectedEvent;
-import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
-import org.reactome.web.pwp.client.common.events.StateChangedEvent;
+import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.hierarchy.delgates.FrontPagesItemsLoader;
@@ -120,6 +117,11 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
             this.selection = this.toSelect;
             this.display.select(null, null);  //Just clear highlights
         }
+    }
+
+    @Override
+    public void openDiagram(Pathway pathway) {
+        this.eventBus.fireEventFromSource(new PathwayDiagramOpenRequestEvent(pathway), this);
     }
 
     @Override

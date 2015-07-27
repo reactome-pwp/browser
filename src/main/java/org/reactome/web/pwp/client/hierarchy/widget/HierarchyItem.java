@@ -3,10 +3,7 @@ package org.reactome.web.pwp.client.hierarchy.widget;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -19,8 +16,10 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.analysis.model.EntityStatistics;
 import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemDoubleClickedEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOutEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOverEvent;
+import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemDoubleClickedHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOutHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOverHandler;
 import org.reactome.web.pwp.client.manager.state.token.Token;
@@ -34,7 +33,7 @@ import org.reactome.web.pwp.model.util.Path;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHandler, MouseOutHandler {
+public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHandler, MouseOutHandler, DoubleClickHandler {
 
     private HandlerManager handlerManager = new HandlerManager(this);
 
@@ -47,6 +46,10 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         setUserObject(event);
         init(species, event);
         initHandlers();
+    }
+
+    public HandlerRegistration addHierarchyItemDoubleClickedHandler(HierarchyItemDoubleClickedHandler handler){
+        return handlerManager.addHandler(HierarchyItemDoubleClickedEvent.TYPE, handler);
     }
 
     public HandlerRegistration addHierarchyItemMouseOverHandler(HierarchyItemMouseOverHandler handler){
@@ -120,8 +123,10 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         Widget widget = getWidget();
         widget.sinkEvents(com.google.gwt.user.client.Event.ONMOUSEOVER);
         widget.sinkEvents(com.google.gwt.user.client.Event.ONMOUSEOUT);
+        widget.sinkEvents(com.google.gwt.user.client.Event.ONDBLCLICK);
         widget.addHandler(this, MouseOverEvent.getType());
         widget.addHandler(this, MouseOutEvent.getType());
+        widget.addHandler(this, DoubleClickEvent.getType());
     }
 
     public void clearAnalysisData(){
@@ -218,6 +223,11 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
     }
 
     @Override
+    public void onDoubleClick(DoubleClickEvent event) {
+        fireEvent(new HierarchyItemDoubleClickedEvent(this));
+    }
+
+    @Override
     public void onMouseOver(MouseOverEvent event) {
         fireEvent(new HierarchyItemMouseOverEvent(this));
     }
@@ -227,11 +237,11 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         fireEvent(new HierarchyItemMouseOutEvent());
     }
 
+
     @Override
     public void fireEvent(GwtEvent<?> event) {
         handlerManager.fireEvent(event);
     }
-
 
     public static final Resources RESOURCES;
     static {

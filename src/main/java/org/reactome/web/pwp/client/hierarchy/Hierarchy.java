@@ -24,6 +24,8 @@ public interface Hierarchy {
 
         void hierarchyChanged(Species species);
 
+        void openDiagram(Pathway pathway);
+
         void pathwayExpanded(Pathway pathway);
 
         void retrieveData(Species species);

@@ -8,6 +8,7 @@ import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.DatabaseObjectHoveredHandler;
 import org.reactome.web.pwp.client.common.handlers.FireworksOpenedHandler;
+import org.reactome.web.pwp.client.common.handlers.PathwayDiagramOpenRequestHandler;
 import org.reactome.web.pwp.client.common.handlers.ViewportChangedHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.viewport.ViewportToolType;
@@ -23,7 +24,7 @@ import org.reactome.web.pwp.model.util.Path;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class FireworksPresenter extends AbstractPresenter implements Fireworks.Presenter, DatabaseObjectHoveredHandler,
-        FireworksOpenedHandler, ViewportChangedHandler {
+        FireworksOpenedHandler, ViewportChangedHandler, PathwayDiagramOpenRequestHandler {
 
     /**
      * Static files are cached by the browser, but we want to force download at least once per session
@@ -46,6 +47,7 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
 
         this.eventBus.addHandler(DatabaseObjectHoveredEvent.TYPE, this);
         this.eventBus.addHandler(FireworksOpenedEvent.TYPE, this);
+        this.eventBus.addHandler(PathwayDiagramOpenRequestEvent.TYPE, this);
         this.eventBus.addHandler(ViewportChangedEvent.TYPE, this);
     }
 
@@ -219,5 +221,10 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
     @Override
     public void onFireworksOpened(FireworksOpenedEvent event) {
         this.selected = event.getPathway();
+    }
+
+    @Override
+    public void onPathwayDiagramOpenRequest(PathwayDiagramOpenRequestEvent event) {
+        this.display.openPathway(event.getPathway());
     }
 }
