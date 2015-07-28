@@ -16,7 +16,7 @@ import org.reactome.web.pwp.model.classes.Pathway;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
-        DiagramLoadedHandler, DatabaseObjectSelectedHandler, DatabaseObjectHoveredHandler,
+        DiagramLoadedHandler, GraphObjectSelectedHandler, GraphObjectHoveredHandler,
         AnalysisResetHandler, FireworksOpenedHandler {
 
     private Diagram.Presenter presenter;
@@ -75,18 +75,18 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
     }
 
     @Override
-    public void onDatabaseObjectSelected(DatabaseObjectSelectedEvent event) {
-        if (event.getDatabaseObject() != null) {
-            this.presenter.databaseObjectSelected(event.getDatabaseObject().getDbId());
+    public void onGraphObjectSelected(GraphObjectSelectedEvent event) {
+        if (event.getGraphObject() != null) {
+            this.presenter.databaseObjectSelected(event.getGraphObject().getDbId());
         } else {
             this.presenter.databaseObjectSelected(null);
         }
     }
 
     @Override
-    public void onDatabaseObjectHovered(DatabaseObjectHoveredEvent event) {
-        if (event.getDatabaseObject() != null) {
-            this.presenter.databaseObjectHovered(event.getDatabaseObject().getDbId());
+    public void onGraphObjectHovered(GraphObjectHoveredEvent event) {
+        if (event.getGraphObject() != null) {
+            this.presenter.databaseObjectHovered(event.getGraphObject().getDbId());
         } else {
             this.presenter.databaseObjectHovered(null);
         }
