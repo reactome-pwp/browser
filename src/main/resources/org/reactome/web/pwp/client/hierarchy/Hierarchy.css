@@ -15,6 +15,14 @@
     background-color: rgb(88, 195, 229);
     border: 0 solid transparent;
     border-radius: 0 15px 0 0;
+
+    /*No selection*/
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .hierarchyPanel {
