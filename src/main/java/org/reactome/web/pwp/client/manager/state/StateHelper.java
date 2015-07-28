@@ -3,8 +3,8 @@ package org.reactome.web.pwp.client.manager.state;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.AncestorsCreatedHandler;
+import org.reactome.web.pwp.model.client.RESTFulClient;
+import org.reactome.web.pwp.model.client.handlers.AncestorsCreatedHandler;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
 import org.reactome.web.pwp.model.util.Ancestors;
 import org.reactome.web.pwp.model.util.Path;
@@ -44,7 +44,7 @@ public abstract class StateHelper {
             }
         }
 
-        DatabaseObjectFactory.getAncestors(pathway, new AncestorsCreatedHandler() {
+        RESTFulClient.getAncestors(pathway, new AncestorsCreatedHandler() {
             @Override
             public void onAncestorsLoaded(Ancestors ancestors) {
                 for (final Path ancestor : ancestors) {
