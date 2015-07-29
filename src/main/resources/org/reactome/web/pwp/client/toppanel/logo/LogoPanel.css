@@ -6,6 +6,7 @@
 .logo img {
     outline: none;
     border: 0;      /* for IE 9 compatibility */
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
 }
 
 .beta {
@@ -24,6 +25,7 @@
     margin-right: 4px;
     outline: none;
     border: 0;      /* for IE 9 compatibility */
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
 }
 
 .versionsPanel a {
