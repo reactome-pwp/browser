@@ -63,6 +63,14 @@
 /*####################### TOP PANEL [BEGIN] ##########################################################################*/
 .elv-Top-Panel {
     background-color: rgb(88, 195, 229) !important;
+
+    /*No selection*/
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 /*####################### TOP PANEL [END] ############################################################################*/
 

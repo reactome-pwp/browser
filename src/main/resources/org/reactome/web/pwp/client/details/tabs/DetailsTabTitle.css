@@ -14,6 +14,7 @@
 .titleContainer img {
     margin-right: 5px;
     vertical-align: bottom !important;
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
 }
 
 .counter {

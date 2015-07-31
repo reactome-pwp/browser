@@ -10,22 +10,21 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.tools.analysis.submitters.FileSubmitter;
+import org.reactome.web.pwp.client.tools.analysis.submitters.PostSubmitter;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
-import org.reactome.web.pwp.client.tools.analysis.submitters.AnalysisStyleFactory;
-import org.reactome.web.pwp.client.tools.analysis.submitters.FileSubmitter;
-import org.reactome.web.pwp.client.tools.analysis.submitters.PostSubmitter;
 import org.reactome.web.pwp.client.tools.analysis.submitters.SpeciesSubmitter;
 import org.reactome.web.pwp.model.classes.Species;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -35,10 +34,18 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     private AnalysisLauncher.Presenter presenter;
 
+    private List<Button> btns = new LinkedList<>();
+    private Button analysisBtn;
+    private Button speciesBtn;
+
+    private DeckLayoutPanel container;
+
     private SpeciesSubmitter speciesSubmitter;
 
     public AnalysisLauncherDisplay() {
-        super(true, true);
+        super();
+        this.setAutoHideEnabled(true);
+        this.setModal(true);
         this.setAnimationEnabled(true);
         this.setGlassEnabled(true);
         this.setAutoHideOnHistoryEventsEnabled(false);
@@ -50,10 +57,19 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.setWidth(width + "px");
         this.setHeight(height + "px");
 
-        FlowPanel vp = new FlowPanel();
-        vp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisContainer());
+        FlowPanel vp = new FlowPanel();                         // Main panel
+        vp.addStyleName(RESOURCES.getCSS().analysisPanel());
+        vp.add(setTitlePanel());                                // Title panel with label & button
 
-        vp.add(new LauncherButton("close", RESOURCES.getCSS().close(), this));
+        FlowPanel buttonsPanel = new FlowPanel();               // Tab buttons panel
+        buttonsPanel.setStyleName(RESOURCES.getCSS().buttonsPanel());
+        buttonsPanel.addStyleName(RESOURCES.getCSS().unselectable());
+        buttonsPanel.add(this.analysisBtn = getButton("Analysis Tool", RESOURCES.analysisTabIcon()));
+        buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
+        this.analysisBtn.addStyleName(RESOURCES.getCSS().buttonSelected());
+
+        this.container = new DeckLayoutPanel();                 // Main tab container
+        this.container.setStyleName(RESOURCES.getCSS().container());
 
         PostSubmitter postSubmitter = new PostSubmitter();
         postSubmitter.addAnalysisCompletedEventHandler(this);
@@ -62,21 +78,57 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         FileSubmitter fileSubmitter = new FileSubmitter(postSubmitter);
         fileSubmitter.addAnalysisCompletedEventHandler(this);
         fileSubmitter.addAnalysisErrorEventHandler(this);
-        vp.add(fileSubmitter);
 
         this.speciesSubmitter = new SpeciesSubmitter();
         this.speciesSubmitter.addAnalysisCompletedEventHandler(this);
         this.speciesSubmitter.addAnalysisErrorEventHandler(this);
-        vp.add(this.speciesSubmitter);
 
-        ScrollPanel container = new ScrollPanel();
-        container.setStyleName(RESOURCES.getCSS().analysisPanel());
-        container.getElement().setAttribute("min-width", "600px");
-        container.add(vp);
+        this.container.add(fileSubmitter);
+        this.container.add(speciesSubmitter);
+
+        this.container.showWidget(0);
+        this.container.setAnimationVertical(true);
+        this.container.setAnimationDuration(500);
+
+        FlowPanel outerPanel = new FlowPanel();                 // Vertical tab Panel and buttons container
+        outerPanel.setStyleName(RESOURCES.getCSS().outerPanel());
+        outerPanel.add(buttonsPanel);
+        outerPanel.add(this.container);
+
+        vp.add(outerPanel);
 
         this.addCloseHandler(this);
 
-        this.add(container);
+        this.add(vp);
+    }
+
+    public Button getButton(String text, ImageResource imageResource){
+        FlowPanel fp = new FlowPanel();
+        Image image = new Image(imageResource);
+        image.addStyleName(RESOURCES.getCSS().undraggable());
+        fp.add(image);
+        fp.add(new Label(text));
+
+        SafeHtml safeHtml = SafeHtmlUtils.fromSafeConstant(fp.toString());
+        Button btn = new Button(safeHtml, this);
+        this.btns.add(btn);
+        return btn;
+    }
+
+    private Widget setTitlePanel(){
+        FlowPanel header = new FlowPanel();
+        header.setStyleName(RESOURCES.getCSS().header());
+        Label title = new Label("Analyse your data");
+        title.setStyleName(RESOURCES.getCSS().headerText());
+        Button closeBtn = new LauncherButton("close", RESOURCES.getCSS().close(), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                AnalysisLauncherDisplay.this.hide();
+            }
+        });
+        header.add(title);
+        header.add(closeBtn);
+        return header;
     }
 
     @Override
@@ -91,7 +143,16 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     @Override
     public void onClick(ClickEvent event) {
-        this.hide();
+        for (Button btn : btns) {
+            btn.removeStyleName(RESOURCES.getCSS().buttonSelected());
+        }
+        Button btn = (Button) event.getSource();
+        btn.addStyleName(RESOURCES.getCSS().buttonSelected());
+        if(btn.equals(this.analysisBtn)){
+            this.container.showWidget(0);
+        }else if(btn.equals(this.speciesBtn)){
+            this.container.showWidget(1);
+        }
     }
 
     @Override
@@ -136,6 +197,9 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
 
+        @Source("images/analysisTabIcon.png")
+        ImageResource analysisTabIcon();
+
         @Source("images/close_clicked.png")
         ImageResource closeClicked();
 
@@ -144,6 +208,9 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
         @Source("images/close_normal.png")
         ImageResource closeNormal();
+
+        @Source("images/speciesTabIcon.png")
+        ImageResource speciesTabIcon();
 
     }
 
@@ -161,6 +228,22 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
         String analysisPanel();
 
+        String header();
+
+        String headerText();
+
         String close();
+
+        String outerPanel();
+
+        String buttonsPanel();
+
+        String unselectable();
+
+        String undraggable();
+
+        String buttonSelected();
+
+        String container();
     }
 }
