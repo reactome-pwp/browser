@@ -1,7 +1,6 @@
 package org.reactome.web.pwp.client.messages;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
@@ -39,7 +38,7 @@ public class MessagesDisplay extends PopupPanel implements Messages.Display {
         FlowPanel message = new FlowPanel();
         message.setStyleName(RESOURCES.getCSS().message());
 
-        Label header = new Label("OUPS! Something unexpected happened");
+        Label header = new Label("OOPS! Something unexpected happened");
         header.setStyleName(RESOURCES.getCSS().messageHeader());
         message.add(header);
 
