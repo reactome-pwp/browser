@@ -49,13 +49,14 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
                 textArea.setText("");
             }
         });
-        clear.addStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterClear());
+        clear.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterClear());
         submissionPanel.add(clear);
-        submissionPanel.add(new Button("Analyse", this));
+        submissionPanel.add(new Button("GO", this));
         this.loading = new Image(CommonImages.INSTANCE.loader());
         this.loading.setVisible(false);
         submissionPanel.add(this.loading);
         this.projection = new CheckBox("Project to human");
+        this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterCheckBox());
         this.projection.setValue(true);
         submissionPanel.add(this.projection);
         addSouth(submissionPanel, 40);
@@ -69,6 +70,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         Label label = new Label("Paste the data to analyse");
         label.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
         label.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+        label.getElement().getStyle().setColor("rgb(14, 124, 179)");
         north.add(label);
         addNorth(north, 30);
 
@@ -144,6 +146,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         examples.addStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterExamples());
         Label label = new Label("Some examples:");
         label.getElement().getStyle().setMargin(5, Style.Unit.PX);
+        label.getElement().getStyle().setColor("rgb(14, 124, 179)");
         examples.add(label);
         examples.add(new Button("Uniprot accession list", new ClickHandler() {
             @Override

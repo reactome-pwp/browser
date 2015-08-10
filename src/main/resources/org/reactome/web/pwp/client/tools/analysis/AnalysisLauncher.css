@@ -6,7 +6,7 @@
 }
 
 .analysisPanel {
-    min-width: 600px;
+    min-width: 800px;
     min-height: 500px;
     width: 100%;
     padding: 2px 0 0 2px;
@@ -18,15 +18,22 @@
     width: 100%;
 }
 
+.headerIcon {
+    float: left;
+    margin-right: 8px;
+    margin-top: -3px;
+}
+
 .headerText {
     float: left;
-    min-width: 470px;
+    min-width: 570px;
     color: white;
     font-weight: bolder;
     font-size: large;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
+    cursor: default;
 }
 
 @sprite .close {
@@ -44,7 +51,7 @@
 }
 
 @sprite .close:active:hover {
-    gwt-image: 'closeClicked';
+    gwt-image: 'closeClicked' ;
 }
 
 .outerPanel {

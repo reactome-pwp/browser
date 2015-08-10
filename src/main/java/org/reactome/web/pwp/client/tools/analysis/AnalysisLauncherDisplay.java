@@ -118,9 +118,14 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     private Widget setTitlePanel(){
         FlowPanel header = new FlowPanel();
         header.setStyleName(RESOURCES.getCSS().header());
+        header.addStyleName(RESOURCES.getCSS().unselectable());
+        Image image = new Image(RESOURCES.analysisHeaderIcon());
+        image.setStyleName(RESOURCES.getCSS().headerIcon());
+        image.addStyleName(RESOURCES.getCSS().undraggable());
+        header.add(image);
         Label title = new Label("Analyse your data");
         title.setStyleName(RESOURCES.getCSS().headerText());
-        Button closeBtn = new LauncherButton("close", RESOURCES.getCSS().close(), new ClickHandler() {
+        Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
                 AnalysisLauncherDisplay.this.hide();
@@ -209,6 +214,9 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         @Source("images/close_normal.png")
         ImageResource closeNormal();
 
+        @Source("images/analysisHeaderIcon.png")
+        ImageResource analysisHeaderIcon();
+
         @Source("images/speciesTabIcon.png")
         ImageResource speciesTabIcon();
 
@@ -229,6 +237,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         String analysisPanel();
 
         String header();
+
+        String headerIcon();
 
         String headerText();
 

@@ -11,6 +11,7 @@ import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.common.widgets.DialogBoxFactory;
+import org.reactome.web.pwp.client.tools.analysis.AnalysisLauncher;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorType;
@@ -33,6 +34,7 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
     public SpeciesSubmitter() {
         //noinspection GWTStyleCheck
         setStyleName("clearfix");
+        addStyleName(AnalysisStyleFactory.getAnalysisStyle().unselectable());
         addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisBlock());
 
         SimplePanel title = new SimplePanel();
@@ -42,13 +44,20 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
 
         SimplePanel explanation = new SimplePanel();
         explanation.getElement().setInnerHTML(AnalysisExamples.EXAMPLES.speciesComparisonInfo().getText());
+        explanation.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisText());
         add(explanation);
 
         FlowPanel submissionPanel = new FlowPanel();
         submissionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisSubmission());
         submissionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisMainSubmitter());
-        submissionPanel.add(new Label("Compare Homo sapiens with "));
-        submissionPanel.add(new Button("Compare", this));
+        submissionPanel.add(new Label("Compare "));
+
+        Label hsaLabel = new Label("Homo sapiens ");
+        hsaLabel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().emphasis());
+        submissionPanel.add(hsaLabel);
+
+        submissionPanel.add(new Label("with "));
+        submissionPanel.add(new Button("GO", this));
         this.loading = new Image(CommonImages.INSTANCE.loader());
         this.loading.setVisible(false);
         submissionPanel.add(this.loading);

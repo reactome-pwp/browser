@@ -11,31 +11,38 @@
 }
 
 .analysisTitle span {
-    color: #003061;
-    font-size: large;
+    color: rgb(14, 124, 179);
+    font-size: x-large;
+    font-weight: bolder;
+
+}
+
+.analysisText {
+    color: rgb(14, 124, 179);
+    font-size: medium;
     font-weight: bold;
-    text-decoration: underline;
-    text-shadow: 1px 1px #4d9bea;
+    text-align: justify;
 }
 
 .analysisBlock {
-    /*border:2px solid #0000ff;*/
     border-radius:5px;
-    /*box-shadow: 5px 5px 3px #888888;*/
     float: left;
     margin: 5px 0 5px 0;
     padding: 5px 10px 15px 10px;
     vertical-align: middle;
     width: 97%;
+    cursor: default;
 }
 
 .analysisSubmission {
     padding:5px 5px 33px 0;
+    color: white;
+    font-size: medium;
 }
 
 .analysisMainSubmitter {
-    background-color: #ddecec;
-    border: 1px solid gray;
+    background-color: #58c3e5;
+    border: 1px solid #0e7cb3;
     border-radius: 5px;
 }
 
@@ -47,8 +54,8 @@
 
 .analysisSubmission input {
     float: left;
-    padding-left: 35px;
-    padding-top: 5px;
+    padding-left: 12px;
+    padding-top: 8px;
 }
 
 .analysisSubmission span {
@@ -58,12 +65,29 @@
 }
 
 .analysisSubmission button {
-    background: #C6E7F7;
-    border-radius:5px;
+    background: #1e95cf;
+    color: white;
+    border-radius: 16px;
+    border: 1px solid #0e7cb3;
     float: right;
-    font-size: 10px;
-    font-weight: bold;
-    width: 100px;
+    font-size: 13px;
+    font-weight: bolder;
+    width: 32px;
+    height: 32px;
+    margin-top: -2px;
+    outline: none;
+    padding: 0 !important;
+}
+
+.analysisSubmission button:hover {
+    background: #066b9e;
+    border: 1px solid #1e95cf;
+}
+
+.analysisSubmission button:active:hover {
+    color: #066b9e;
+    background: white;
+    border: 2px solid #066b9e;
 }
 
 .analysisSubmission img {
@@ -73,10 +97,15 @@
 }
 
 .analysisSubmission select {
-    border: 0;
+    /*border: 0;*/
     float: left;
-    margin: 4px 0 0 10px;
+    margin: 0 0 0 10px;
     background: transparent;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    color: white;
+    font-size: large;
+    font-weight: bold;
 }
 
 .analysisBlock textarea {
@@ -85,6 +114,23 @@
     overflow-x: scroll;
     margin-left: 5px;
     width: 97%;
+}
+
+.analysisCheckBox{
+    color: white;
+    vertical-align: middle;
+    font-size: small;
+}
+
+.disclosurePanel {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.emphasis {
+    font-size: larger;
+    margin-top: -4px;
+    font-weight: bold;
 }
 
 .postSubmitterExamples {
@@ -98,15 +144,51 @@
 }
 
 .postSubmitterExamples button {
-    background: #d0f7c7;
+    background: #1e95cf;
+    border-radius: 5px;
+    color: white;
     font-weight: normal;
-    margin-bottom: 2px;
+    margin-top: 2px;
     width: 200px;
+    outline: none;
+    padding: 6px 0 6px 0;
+
+}
+
+.postSubmitterExamples button:hover {
+    background: #066b9e;
+    border: 1px solid #1e95cf;
+}
+
+.postSubmitterExamples button:active:hover {
+    color: #066b9e;
+    background: white;
+    border: 1px solid #066b9e;
+}
+
+.postSubmitterCheckBox {
+    color: rgb(14, 124, 179);
+    vertical-align: middle;
+    font-size: small;
 }
 
 .postSubmitterClear {
-    background: #dff7cb !important;
+    background: #1e95cf;
     float: left !important;
     margin: 0 335px 0 0 !important;
     width: 100px !important;
+}
+
+.postSubmitterClear:hover {
+    background: #066b9e;
+    border: 1px solid #1e95cf;
+}
+
+.unselectable {
+    -webkit-touch-callout: none; /* Prevents selection */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

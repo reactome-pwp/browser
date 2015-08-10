@@ -13,6 +13,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
@@ -51,6 +52,7 @@ public class FileSubmitter extends FlowPanel
 
         SimplePanel explanation = new SimplePanel();
         explanation.getElement().setInnerHTML(AnalysisExamples.EXAMPLES.analysisInfo().getText());
+        explanation.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisText());
         add(explanation);
 
         FlowPanel submissionPanel = new FlowPanel();
@@ -60,9 +62,10 @@ public class FileSubmitter extends FlowPanel
         this.form = getFormPanel();
         submissionPanel.add(form);
         this.projection = new CheckBox("Project to human");
+        this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisCheckBox());
         this.projection.setValue(true);
         submissionPanel.add(this.projection);
-        submissionPanel.add(new Button("Analyse", this));
+        submissionPanel.add(new Button("GO", this));
         this.loading = new Image(CommonImages.INSTANCE.loader());
         this.loading.setVisible(false);
         submissionPanel.add(this.loading);
@@ -142,6 +145,7 @@ public class FileSubmitter extends FlowPanel
         form.setMethod(FormPanel.METHOD_POST);
         form.setEncoding(FormPanel.ENCODING_MULTIPART);
         this.fileUpload.setName("file");
+        Console.info( this.fileUpload.getElement().getInnerHTML());
 //        this.fileUpload.getElement().setAttribute("accept", ".txt");
         this.fileUpload.setTitle("Select a file to analyse");
         form.add(this.fileUpload);

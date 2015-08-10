@@ -37,15 +37,27 @@ public abstract class AnalysisStyleFactory {
 
         String analysisTitle();
 
+        String analysisText();
+
         String analysisBlock();
+
+        String analysisCheckBox();
 
         String analysisSubmission();
 
         String analysisMainSubmitter();
 
+        String disclosurePanel();
+
+        String emphasis();
+
         String postSubmitterExamples();
 
+        String postSubmitterCheckBox();
+
         String postSubmitterClear();
+
+        String unselectable();
     }
 
     public static AnalysisStyle getAnalysisStyle(){
