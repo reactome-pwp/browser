@@ -366,8 +366,7 @@
 
 .elv-Details-MoleculesRow-undoHighlight{
     zoom: 1;
-    /*filter: alpha(opacity=25);*/
-    opacity: 0.5;
+    background: #dddddd;
 }
 
 .elv-Details-Name-MoleculesRow{
