@@ -46,7 +46,7 @@ public class FileSubmitter extends FlowPanel
         addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisBlock());
 
         SimplePanel title = new SimplePanel();
-        title.add(new InlineLabel("Analysis Tools"));
+        title.add(new InlineLabel("Analyse your data"));
         title.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisTitle());
         add(title);
 
@@ -63,7 +63,7 @@ public class FileSubmitter extends FlowPanel
         submissionPanel.add(form);
         this.projection = new CheckBox("Project to human");
         this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisCheckBox());
-        this.projection.setValue(true);
+//        this.projection.setValue(true);
         submissionPanel.add(this.projection);
         submissionPanel.add(new Button("GO", this));
         this.loading = new Image(CommonImages.INSTANCE.loader());

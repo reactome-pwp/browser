@@ -57,7 +57,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         submissionPanel.add(this.loading);
         this.projection = new CheckBox("Project to human");
         this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterCheckBox());
-        this.projection.setValue(true);
+//        this.projection.setValue(true);
         submissionPanel.add(this.projection);
         addSouth(submissionPanel, 40);
 

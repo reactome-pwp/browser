@@ -14,14 +14,14 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.tools.analysis.submitters.FileSubmitter;
-import org.reactome.web.pwp.client.tools.analysis.submitters.PostSubmitter;
-import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
+import org.reactome.web.pwp.client.tools.analysis.submitters.FileSubmitter;
+import org.reactome.web.pwp.client.tools.analysis.submitters.PostSubmitter;
 import org.reactome.web.pwp.client.tools.analysis.submitters.SpeciesSubmitter;
+import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 import org.reactome.web.pwp.model.classes.Species;
 
 import java.util.LinkedList;
@@ -64,7 +64,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         FlowPanel buttonsPanel = new FlowPanel();               // Tab buttons panel
         buttonsPanel.setStyleName(RESOURCES.getCSS().buttonsPanel());
         buttonsPanel.addStyleName(RESOURCES.getCSS().unselectable());
-        buttonsPanel.add(this.analysisBtn = getButton("Analysis Tool", RESOURCES.analysisTabIcon()));
+        buttonsPanel.add(this.analysisBtn = getButton("Analyse your data", RESOURCES.analysisTabIcon()));
         buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
         this.analysisBtn.addStyleName(RESOURCES.getCSS().buttonSelected());
 
@@ -123,7 +123,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         image.setStyleName(RESOURCES.getCSS().headerIcon());
         image.addStyleName(RESOURCES.getCSS().undraggable());
         header.add(image);
-        Label title = new Label("Analyse your data");
+        Label title = new Label("Analysis tools");
         title.setStyleName(RESOURCES.getCSS().headerText());
         Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), new ClickHandler() {
             @Override
