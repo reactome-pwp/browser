@@ -63,7 +63,7 @@ public class FileSubmitter extends FlowPanel
         submissionPanel.add(form);
         this.projection = new CheckBox("Project to human");
         this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisCheckBox());
-//        this.projection.setValue(true);
+        this.projection.setValue(true);
         submissionPanel.add(this.projection);
         submissionPanel.add(new Button("GO", this));
         this.loading = new Image(CommonImages.INSTANCE.loader());
