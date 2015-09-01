@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 /*####################### APP LOADER [BEGIN] #########################################################################*/
 .app-Loader{
     background-color: azure;

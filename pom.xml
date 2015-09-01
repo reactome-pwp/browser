@@ -9,7 +9,7 @@
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
     <version>3.0.0</version>
-    <name>GWT Maven Archetype</name>
+    <name>Reactome Pathway Portal</name>
 
     <properties>
         <!-- Name that will be used to generate the war file -->
