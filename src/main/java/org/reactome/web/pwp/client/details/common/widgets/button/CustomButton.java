@@ -31,7 +31,7 @@ public class CustomButton extends Button {
         fp.getElement().getStyle().setPaddingRight(3, Style.Unit.PX);
         getElement().getStyle().setPadding(0, Style.Unit.PX);
         getElement().getStyle().setPaddingBottom(0, Style.Unit.PX);
-        getElement().getStyle().setMarginTop(2, Style.Unit.PX);
+        getElement().getStyle().setMarginBottom(2, Style.Unit.PX);
         getElement().getStyle().setMarginLeft(3, Style.Unit.PX);
         setHTML(fp.toString());
     }

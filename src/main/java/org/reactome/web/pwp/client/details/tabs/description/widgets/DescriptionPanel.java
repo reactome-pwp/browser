@@ -3,14 +3,14 @@ package org.reactome.web.pwp.client.details.tabs.description.widgets;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.help.HelpPopupImage;
 import org.reactome.web.pwp.client.details.common.help.InstanceTypeExplanation;
+import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.OverviewTableFactory;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.model.classes.PhysicalEntity;
 import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.OverviewTableFactory;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class DescriptionPanel extends DockLayoutPanel {
 
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("100%");
-        vp.getElement().getStyle().setPaddingTop(5, Style.Unit.PX);
+//        vp.getElement().getStyle().setPaddingTop(5, Style.Unit.PX);
         vp.getElement().getStyle().setPaddingBottom(25, Style.Unit.PX);
 
         vp.add(OverviewTableFactory.getOverviewTable(databaseObject));

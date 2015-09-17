@@ -22,8 +22,12 @@ body {
 
 
 /*####################### TAB and SPLIT Layout [BEGIN] ###############################################################*/
-.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
-    margin-left: 0 !important;
+.gwt-TabLayoutPanelContentContainer {
+    border: none !important;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent{
+    border: none !important;
 }
 
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
@@ -33,6 +37,15 @@ body {
 
 .gwt-SplitLayoutPanel-VDragger{
     background: rgb(88,195,229) url(static/images/thumb_horz.png) center center no-repeat !important;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+    color: white !important;
+    margin-left: 0 !important;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+    cursor: pointer !important;
 }
 
 .gwt-SplitLayoutPanel-HDragger {
@@ -96,7 +109,7 @@ body {
     color: #063da0;
     font-weight: bolder;
     height: 30px;
-    margin: 5px 0 5px 5px;
+    margin: 0 0 5px 5px;
     padding: 4px 10px 4px 10px;
 }
 
@@ -107,15 +120,15 @@ body {
     color: #0a6a50;
     font-weight: bolder;
     height: 30px;
-    margin: 5px 0 5px 5px;
+    margin: 0 0 5px 5px;
     padding: 4px 10px 4px 10px;
 }
 
 .elv-Details-OverviewPanel {
-    border-radius: 7px;
-    border: 1px solid grey;
-    margin: 5px;
-    padding: 2px;
+    /*border-radius: 7px;*/
+    /*border: 1px solid grey;*/
+    /*margin: 5px;*/
+    /*padding: 2px;*/
 }
 
 .elv-Details-OverviewRow{
@@ -220,7 +233,7 @@ body {
     color: #063da0;
     font-weight: bolder;
     height: 30px;
-    margin: 5px 0 5px 5px;
+    margin: 0 0 5px 5px;
     padding: 4px 10px 4px 10px;
 }
 
@@ -386,8 +399,8 @@ body {
     color: #063da0;
     font-weight: bolder;
     height: 20px;
-    margin: 5px 0 5px 5px;
-    padding: 4px 10px 4px 10px;
+    margin: 4px 0 5px 5px;
+    padding: 4px 10px 0 10px;
     float: right;
 }
 
@@ -409,7 +422,7 @@ body {
 
 .elv-Molecules-ButtonBar{
     height: 30px;
-    margin: 4px 0 5px 2px;
+    margin: 0 0 5px 2px;
     /*padding: 4px 10px 4px 10px;*/
     float: left;
 }

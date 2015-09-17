@@ -1,6 +1,6 @@
 .titleContainer {
     float: left;
-    min-width: 110px;
+    min-width: 125px;
 
     /*No selection*/
     -webkit-touch-callout: none;
