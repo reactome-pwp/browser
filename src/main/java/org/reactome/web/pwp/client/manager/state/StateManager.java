@@ -14,9 +14,6 @@ import org.reactome.web.pwp.client.manager.state.token.TokenMalformedException;
 import org.reactome.web.pwp.client.manager.title.TitleManager;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.util.Path;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -78,16 +75,9 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         Selection newSelection = event.getSelection();
         Selection currentSelection = new Selection(currentState);
         if (!currentSelection.equals(newSelection)) {
-            Pathway diagram = newSelection.getDiagram();
-            if (diagram != null) {
-                this.currentState.setPathway(diagram);
-            }
-
-            DatabaseObject object = newSelection.getDatabaseObject();
-            this.currentState.setSelected(object);
-
-            Path path = newSelection.getPath();
-            this.currentState.setPath(path);
+            this.currentState.setPathway(newSelection.getDiagram());
+            this.currentState.setSelected(newSelection.getDatabaseObject());
+            this.currentState.setPath(newSelection.getPath());
 
             this.currentState.doConsistencyCheck(new State.StateLoadedHandler() {
                 @Override

@@ -154,6 +154,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
                     display.select(selected);
                     display.setAnalysisToken(analysisStatus);
                 } else {
+                    DiagramPresenter.this.pathway = pathway;
                     Selection selection = new Selection(pathway, new Path());
                     eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
                 }
@@ -168,7 +169,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     private void loadCurrentPathway(){
         if(this.pathway==null){
-            Console.error("Undetermined pathway...", this);
+            Console.warn("Undetermined pathway...", this);
         }else {
             this.display.loadPathway(this.pathway);
         }

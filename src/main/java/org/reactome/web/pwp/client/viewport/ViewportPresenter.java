@@ -16,6 +16,7 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 public class ViewportPresenter extends AbstractPresenter implements Viewport.Presenter, PathwayDiagramOpenedHandler, FireworksOpenedHandler {
 
     private Viewport.Display display;
+    private ViewportToolType currentViewportTool = ViewportToolType.FIREWORKS;
 
     public ViewportPresenter(EventBus eventBus, Viewport.Display display) {
         super(eventBus);
@@ -29,10 +30,12 @@ public class ViewportPresenter extends AbstractPresenter implements Viewport.Pre
     @Override
     public void onStateChanged(StateChangedEvent event) {
         if(event.getState().getPathway()==null){
+            if(currentViewportTool.equals(ViewportToolType.FIREWORKS)) return;
             display.showFireworks();
             Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
                 @Override
                 public void execute() {
+                    currentViewportTool = ViewportToolType.FIREWORKS;
                     eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
                 }
             });
@@ -45,6 +48,7 @@ public class ViewportPresenter extends AbstractPresenter implements Viewport.Pre
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
+                currentViewportTool = ViewportToolType.DIAGRAM;
                 eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.DIAGRAM), ViewportPresenter.this);
             }
         });
@@ -56,6 +60,7 @@ public class ViewportPresenter extends AbstractPresenter implements Viewport.Pre
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
+                currentViewportTool = ViewportToolType.FIREWORKS;
                 eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
             }
         });
