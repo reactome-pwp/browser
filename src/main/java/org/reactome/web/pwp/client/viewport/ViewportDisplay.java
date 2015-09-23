@@ -39,11 +39,13 @@ public class ViewportDisplay extends TabLayoutPanel implements Viewport.Display 
 
     @Override
     public void showDiagram() {
+        diagram.setVisible(true);
         selectTab(getWidgetIndex(this.diagram));
     }
 
     @Override
     public void showFireworks() {
+        diagram.setVisible(false);
         selectTab(getWidgetIndex(this.fireworks));
     }
 
@@ -68,7 +70,7 @@ public class ViewportDisplay extends TabLayoutPanel implements Viewport.Display 
     /**
      * Styles used by this widget.
      */
-    @CssResource.ImportedWithPrefix("pwp-Hierarchy")
+    @CssResource.ImportedWithPrefix("pwp-Viewport")
     public interface ResourceCSS extends CssResource {
         /**
          * The path to the default CSS styles used by this resource.

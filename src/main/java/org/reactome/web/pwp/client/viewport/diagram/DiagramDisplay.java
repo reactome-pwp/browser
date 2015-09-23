@@ -110,8 +110,6 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        if (visible) {
-            this.diagram.onResize();
-        }
+        this.diagram.setVisible(visible);
     }
 }

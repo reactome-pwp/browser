@@ -34,5 +34,7 @@ public interface Diagram {
         void setAnalysisToken(AnalysisStatus analysisStatus);
 
         void setPresenter(Presenter presenter);
+
+        void setVisible(boolean visible);
     }
 }
