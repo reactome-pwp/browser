@@ -128,13 +128,17 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     @Override
     public void onStateChanged(StateChangedEvent event) {
         State state = event.getState();
-        boolean forceLoad = !Objects.equals(this.pathway, state.getPathway());
+        boolean isNewDiagram = !Objects.equals(this.pathway, state.getPathway());
         this.pathway = state.getPathway();
         this.selected = state.getSelected();
         this.path = state.getPath();
         this.analysisStatus = state.getAnalysisStatus();
-        if(forceLoad && this.display.isVisible()){
-            this.loadCurrentPathway();
+        if(this.display.isVisible()) {
+            if (isNewDiagram) {
+                this.loadCurrentPathway();
+            } else {
+                this.display.select(this.selected);
+            }
         }
     }
 
