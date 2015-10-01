@@ -18,7 +18,8 @@ import org.reactome.web.pwp.model.classes.Species;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class TitleManager implements BrowserModule.Manager, BrowserReadyHandler, StateChangedHandler {
+public class
+        TitleManager implements BrowserModule.Manager, BrowserReadyHandler, StateChangedHandler {
     private EventBus eventBus;
 
     private String initialTitle = "";
@@ -40,22 +41,21 @@ public class TitleManager implements BrowserModule.Manager, BrowserReadyHandler,
         StringBuilder sb = new StringBuilder("PB | ");
         Pathway pathway = state.getPathway();
         DatabaseObject databaseObject = state.getSelected();
-        if(pathway==null && databaseObject==null){
-            return;
-        }
-        if(databaseObject==null) {
+        if (pathway == null && databaseObject == null) {
+            sb = new StringBuilder("Reactome | Pathway Browser");
+        }else if (pathway != null && databaseObject == null) {
             sb.append(pathway.getDisplayName());
-        }else{
+        } else {
             sb.append(databaseObject.getDisplayName());
         }
         Species species = state.getSpecies();
-        if(species!=null && !species.getDbId().equals(Token.DEFAULT_SPECIES_ID)){
+        if (species != null && !species.getDbId().equals(Token.DEFAULT_SPECIES_ID)) {
             sb.append(" [");
             sb.append(species.getDisplayName());
             sb.append("]");
         }
         DetailsTabType detailsTabType = state.getDetailsTab();
-        if(!detailsTabType.equals(DetailsTabType.getDefault())){
+        if (!detailsTabType.equals(DetailsTabType.getDefault())) {
             sb.append(" - ");
             sb.append(detailsTabType.getTitle());
         }
