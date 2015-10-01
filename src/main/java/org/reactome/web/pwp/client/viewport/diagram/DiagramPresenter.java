@@ -31,6 +31,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     private DatabaseObject selected;
     private Path path;
     private AnalysisStatus analysisStatus = new AnalysisStatus();
+    private Long hovered;
 
     public DiagramPresenter(EventBus eventBus, Diagram.Display display) {
         super(eventBus);
@@ -74,7 +75,11 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     @Override
     public void onDatabaseObjectHovered(DatabaseObjectHoveredEvent event) {
-        this.display.highlight(event.getDatabaseObject());
+        Long hovered = event.getDatabaseObject() != null ? event.getDatabaseObject().getDbId() : null;
+        if(!Objects.equals(hovered, this.hovered)) {
+            this.hovered = hovered;
+            this.display.highlight(event.getDatabaseObject());
+        }
     }
 
     private static final int HOVER_DELAY = 500;
@@ -82,6 +87,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     @Override
     public void databaseObjectHovered(final Long dbId) {
+        this.hovered = dbId;
         if(timer!=null && timer.isRunning()) timer.cancel();
         if(dbId!=null){
             timer = new Timer() {
