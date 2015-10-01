@@ -112,7 +112,7 @@
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
-            <param-value>8000</param-value>
+            <param-value>80</param-value>
         </init-param>
         <init-param>
             <param-name>proxyPath</param-name>
