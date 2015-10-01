@@ -149,6 +149,8 @@ public class State {
     public void setPathway(Pathway pathway) {
         if (pathway == null) {
             this.species = getSpecies();
+            this.selected = null;
+            this.path = null;
         }
         this.pathway = pathway;
     }
