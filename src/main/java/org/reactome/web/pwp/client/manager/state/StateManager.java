@@ -14,6 +14,8 @@ import org.reactome.web.pwp.client.manager.state.token.TokenMalformedException;
 import org.reactome.web.pwp.client.manager.title.TitleManager;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
+import org.reactome.web.pwp.model.classes.*;
+import org.reactome.web.pwp.model.util.Path;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -75,11 +77,44 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         Selection newSelection = event.getSelection();
         Selection currentSelection = new Selection(currentState);
         if (!currentSelection.equals(newSelection)) {
-            this.currentState.setPathway(newSelection.getDiagram());
-            this.currentState.setSelected(newSelection.getDatabaseObject());
-            this.currentState.setPath(newSelection.getPath());
+            Pathway diagram = newSelection.getDiagram();
+            DatabaseObject selected = newSelection.getDatabaseObject();
+            Path path = newSelection.getPath();
 
-            this.currentState.doConsistencyCheck(new State.StateLoadedHandler() {
+            //The following code assumes that PE or Events of different species
+            //are selected when showing them, so it is highly recommended to do
+            //some further checking and detect when an odd case happens
+            if (diagram == null) {
+                if (selected == null) {
+                    currentState.setPathway(null);
+                } else {
+                    Species species = null;
+                    if(selected instanceof PhysicalEntity){
+                        PhysicalEntity pe = (PhysicalEntity) selected;
+                        if(pe.getSpecies()!=null && !pe.getSpecies().isEmpty()) {
+                            species = pe.getSpecies().get(pe.getSpecies().size()-1);
+                        }
+                    }else if(selected instanceof Event){
+                        Event e = (Event) selected;
+                        if(e.getSpecies()!=null && !e.getSpecies().isEmpty()) {
+                            species = e.getSpecies().get(e.getSpecies().size()-1);
+                        }
+                    }
+                    if (species!=null && !species.equals(currentState.getSpecies())) {
+                        eventBus.fireEventFromSource(new SpeciesSelectedEvent(species), this);
+                        return;
+                    }
+                    currentState.setSelected(selected);
+                }
+            } else {
+                currentState.setPathway(diagram);
+                currentState.setPath(path);
+            }
+
+            currentState.setSelected(newSelection.getDatabaseObject());
+            currentState.setPath(newSelection.getPath());
+
+            currentState.doConsistencyCheck(new State.StateLoadedHandler() {
                 @Override
                 public void onStateLoaded(State state) {
                     currentState = state;
