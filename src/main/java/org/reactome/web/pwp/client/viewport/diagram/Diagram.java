@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.viewport.diagram;
 
+import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
@@ -20,12 +21,16 @@ public interface Diagram {
         void diagramLoaded(Long dbId);
 
         void fireworksOpened(Long dbId);
+
+        void resetFlag(DiagramObjectsFlagResetEvent event);
     }
 
     interface Display extends BrowserModule.Display {
         boolean isVisible();
 
         void loadPathway(Pathway pathway);
+
+        void flag(String flag);
 
         void highlight(DatabaseObject databaseObject);
 

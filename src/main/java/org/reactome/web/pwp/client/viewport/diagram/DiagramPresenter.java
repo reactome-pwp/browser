@@ -2,6 +2,7 @@ package org.reactome.web.pwp.client.viewport.diagram;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Timer;
+import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.*;
@@ -32,6 +33,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     private Path path;
     private AnalysisStatus analysisStatus = new AnalysisStatus();
     private Long hovered;
+    private String flag;
 
     public DiagramPresenter(EventBus eventBus, Diagram.Display display) {
         super(eventBus);
@@ -132,6 +134,11 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     }
 
     @Override
+    public void resetFlag(DiagramObjectsFlagResetEvent event) {
+        this.eventBus.fireEventFromSource(event, this);
+    }
+
+    @Override
     public void onStateChanged(StateChangedEvent event) {
         State state = event.getState();
         boolean isNewDiagram = !Objects.equals(this.pathway, state.getPathway());
@@ -139,12 +146,12 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
         this.selected = state.getSelected();
         this.path = state.getPath();
         this.analysisStatus = state.getAnalysisStatus();
+        this.flag = state.getFlag();
         if(this.display.isVisible()) {
             if (isNewDiagram) {
                 this.loadCurrentPathway();
             } else {
-                this.display.select(this.selected);
-                display.setAnalysisToken(analysisStatus);
+                updateView();
             }
         }
     }
@@ -163,8 +170,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
             public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
                 Pathway pathway = (Pathway) databaseObject;
                 if (Objects.equals(DiagramPresenter.this.pathway, pathway)) {
-                    display.select(selected);
-                    display.setAnalysisToken(analysisStatus);
+                    updateView();
                 } else {
                     DiagramPresenter.this.pathway = pathway;
                     Selection selection = new Selection(pathway, new Path());
@@ -185,5 +191,11 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
         }else {
             this.display.loadPathway(this.pathway);
         }
+    }
+
+    private void updateView(){
+        this.display.select(this.selected);
+        display.setAnalysisToken(analysisStatus);
+        display.flag(this.flag);
     }
 }

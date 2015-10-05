@@ -44,6 +44,8 @@ public class State {
 
     private AnalysisStatus analysisStatus = new AnalysisStatus();
 
+    private String flag;
+
     public State(Token token, final StateLoadedHandler handler) {
         List<String> toLoad = token.getToLoad();
         final Map<StateKey, String> parameters = token.getParameters();
@@ -75,6 +77,9 @@ public class State {
                             case ANALYSIS:
                                 setAnalysisToken(identifier);
                                 break;
+                            case FLAG:
+                                flag = identifier;
+                                break;
                             default:
                                 System.err.println(getClass().getSimpleName() + " >> " + key + " not treated!");
                         }
@@ -104,6 +109,7 @@ public class State {
         this.detailsTab = state.detailsTab;
         this.tool = state.tool;
         this.analysisStatus = state.analysisStatus;
+        this.flag = state.flag;
     }
 
     public void doConsistencyCheck(final StateLoadedHandler handler){
@@ -202,6 +208,14 @@ public class State {
         this.analysisStatus = new AnalysisStatus(analysisToken);
     }
 
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
     @Override
     public String toString() {
         StringBuilder token = new StringBuilder("/");
@@ -257,7 +271,14 @@ public class State {
             token.append(StateKey.ANALYSIS.getDefaultKey());
             token.append("=");
             token.append(URL.encodeQueryString(analysisStatus.getToken()));
-            //addDelimiter=true;
+            addDelimiter=true;
+        }
+        if( flag != null ) {
+            if (addDelimiter) token.append(Token.DELIMITER);
+            token.append(StateKey.FLAG.getDefaultKey());
+            token.append("=");
+            token.append(flag);
+//            addDelimiter=true;
         }
         return token.toString();
     }

@@ -13,7 +13,8 @@ public enum StateKey {
     PATH        ("PATH"),
     DETAILS_TAB ("DTAB", "DETAILS_TAB"),
     TOOL        ("TOOL"),
-    ANALYSIS    ("ANALYSIS", "ANALYSIS_ID");
+    ANALYSIS    ("ANALYSIS", "ANALYSIS_ID"),
+    FLAG        ("FLG", "FLAG", "ACC", "UNIPROT", "GENE", "CHEBI", "ENSEMBL");
 
     List<String> keys;
 
