@@ -50,6 +50,9 @@ public class State {
         List<String> toLoad = token.getToLoad();
         final Map<StateKey, String> parameters = token.getParameters();
         DatabaseObjectFactory.get(toLoad, new DatabaseObjectsCreatedHandler() {
+            private String token;
+            private String resource = "TOTAL";
+
             @Override
             public void onDatabaseObjectsLoaded(Map<String, DatabaseObject> databaseObjects) {
                 for (StateKey key : parameters.keySet()) {
@@ -75,7 +78,10 @@ public class State {
                                 tool = PathwayPortalTool.getByCode(identifier);
                                 break;
                             case ANALYSIS:
-                                setAnalysisToken(identifier);
+                                token = identifier;
+                                break;
+                            case RESOURCE:
+                                resource = identifier;
                                 break;
                             case FLAG:
                                 flag = identifier;
@@ -89,6 +95,7 @@ public class State {
                         return;
                     }
                 }
+                setAnalysisParameters(token, resource);
                 path = getPrunedPath(); //Very important!
                 doConsistencyCheck(handler);
             }
@@ -203,9 +210,9 @@ public class State {
         return this.analysisStatus;
     }
 
-    public void setAnalysisToken(String analysisToken) {
+    public void setAnalysisParameters(String analysisToken, String resource) {
         //IMPORTANT! Do no use setToken! ALWAYS create a new object here
-        this.analysisStatus = new AnalysisStatus(analysisToken);
+        this.analysisStatus = new AnalysisStatus(analysisToken, resource);
     }
 
     public String getFlag() {
@@ -271,6 +278,12 @@ public class State {
             token.append(StateKey.ANALYSIS.getDefaultKey());
             token.append("=");
             token.append(URL.encodeQueryString(analysisStatus.getToken()));
+            if(analysisStatus.getResource()!=null && !analysisStatus.getResource().equals("TOTAL")){
+                token.append(Token.DELIMITER);
+                token.append(StateKey.RESOURCE.getDefaultKey());
+                token.append("=");
+                token.append(analysisStatus.getResource());
+            }
             addDelimiter=true;
         }
         if( flag != null ) {

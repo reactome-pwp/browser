@@ -7,10 +7,14 @@ import com.google.gwt.user.client.History;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.diagram.handlers.DiagramObjectsFlagResetHandler;
 import org.reactome.web.pwp.client.common.Selection;
+import org.reactome.web.pwp.client.common.analysis.model.AnalysisSummary;
+import org.reactome.web.pwp.client.common.analysis.model.ResourceSummary;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.*;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ResourceChangedHandler;
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.manager.state.token.TokenMalformedException;
 import org.reactome.web.pwp.client.manager.title.TitleManager;
@@ -19,12 +23,15 @@ import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandl
 import org.reactome.web.pwp.model.classes.*;
 import org.reactome.web.pwp.model.util.Path;
 
+import java.util.List;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class StateManager implements BrowserModule.Manager, ValueChangeHandler<String>,
         State.StateLoadedHandler, StateChangedHandler, DatabaseObjectSelectedHandler, DetailsTabChangedHandler,
-        DiagramObjectsFlagResetHandler, AnalysisCompletedHandler, AnalysisResetHandler, ToolSelectedHandler {
+        DiagramObjectsFlagResetHandler, AnalysisCompletedHandler, AnalysisResetHandler, ResourceChangedHandler,
+        ToolSelectedHandler {
 
     private EventBus eventBus;
 
@@ -43,6 +50,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         this.eventBus.addHandler(AnalysisCompletedEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
         this.eventBus.addHandler(DiagramObjectsFlagResetEvent.TYPE, this);
+        this.eventBus.addHandler(ResourceChangedEvent.TYPE, this);
     }
 
     @Override
@@ -62,16 +70,20 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
 
     @Override
     public void onAnalysisCompleted(AnalysisCompletedEvent event) {
+        AnalysisSummary summary = event.getAnalysisResult().getSummary();
+        List<ResourceSummary> resources = event.getAnalysisResult().getResourceSummary();
+        ResourceSummary resource = resources.size() > 2 ? resources.get(0) : resources.get(1); //IMPORTANT!
+
         State desiredState = new State(this.currentState);
         desiredState.setDetailsTab(DetailsTabType.ANALYSIS);
-        desiredState.setAnalysisToken(event.getAnalysisResult().getSummary().getToken());
+        desiredState.setAnalysisParameters(summary.getToken(), resource.getResource());
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 
     @Override
     public void onAnalysisReset() {
         State desiredState = new State(this.currentState);
-        desiredState.setAnalysisToken(null);
+        desiredState.setAnalysisParameters(null, null);
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 
@@ -139,6 +151,13 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     public void onDiagramObjectsFlagReset(DiagramObjectsFlagResetEvent event) {
         State desiredState = new State(this.currentState);
         desiredState.setFlag(null);
+        this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
+    }
+
+    @Override
+    public void onResourceChanged(ResourceChangedEvent event) {
+        State desiredState = new State(this.currentState);
+        desiredState.setAnalysisParameters(this.currentState.getAnalysisStatus().getToken(), event.getResource());
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 

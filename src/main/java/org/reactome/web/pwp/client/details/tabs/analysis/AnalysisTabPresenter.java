@@ -13,6 +13,7 @@ import org.reactome.web.pwp.client.common.events.DatabaseObjectSelectedEvent;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Pathway;
@@ -44,7 +45,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         //IMPORTANT: Analysis will always load on a performed analysis! It doesn't matter whether is is active or not
         //if(!state.getDetailsTab().equals(display.getDetailTabType())) return;
 
-        AnalysisStatus analysisStatus = state.getAnalysisStatus();
+        AnalysisStatus analysisStatus = state.getAnalysisStatus().clone();
         if(analysisStatus.isEmpty()){
             if(!this.analysisStatus.isEmpty()) {
                 this.selected = null;
@@ -61,10 +62,9 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         display.selectPathway(this.selected);
 
         if(!analysisStatus.equals(this.analysisStatus)){
+            if(this.analysisStatus.isEmpty()) display.showLoadingMessage();
             this.analysisStatus = analysisStatus;
-            //Load analysis and select the pathway!!
-            display.showLoadingMessage();
-            this.loadAnalysisData();
+            this.loadAnalysisData(analysisStatus.getToken(), analysisStatus.getResource());
         }
     }
 
@@ -111,16 +111,11 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
     }
 
     @Override
-    public void onResourceSelected(String resource) {
-        this.analysisStatus.setResource(resource);
-        System.out.println("AnalysisTabPresenter (116) >> resource: " + resource);
-        //TODO: Notify the change
-        this.loadAnalysisData();
+    public void onResourceSelected(ResourceChangedEvent event) {
+        this.eventBus.fireEventFromSource(event, this);
     }
 
-    private void loadAnalysisData(){
-        final String token = analysisStatus.getToken();
-        final String resource = analysisStatus.getResource();
+    private void loadAnalysisData(final String token, final String resource){
         String url = AnalysisHelper.URL_PREFIX + "/token/" + token + "?page=1&resource=" + resource;
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");

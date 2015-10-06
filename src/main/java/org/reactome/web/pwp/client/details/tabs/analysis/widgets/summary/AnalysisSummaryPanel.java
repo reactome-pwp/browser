@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class AnalysisSummaryPanel extends DockLayoutPanel {
     private String token;
+    private ListBox resourceBox;
 
     private TableSelectorPanel selectorPanel;
 
@@ -52,16 +53,27 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         return token;
     }
 
+    public void setResource(String resource){
+        for (int i = 0; i < resourceBox.getItemCount(); i++) {
+            String value = resourceBox.getValue(i);
+            if(value.equals(resource)){
+                resourceBox.setSelectedIndex(i);
+                return;
+            }
+        }
+    }
+
     private Widget getResourceTypePanel(List<ResourceSummary> resourceSummary){
         FlowPanel resourcePanel = new FlowPanel();
         resourcePanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().analysisTabSummaryInfo());
         resourcePanel.add(new InlineLabel("Results for: "));
-        ListBox resourceBox = new ListBox();
+        resourceBox = new ListBox();
         resourceBox.setMultipleSelect(false);
-//        boolean noTotal = resourceSummary.size()==2;
+        boolean noTotal = resourceSummary.size()==2;
         for (ResourceSummary summary : resourceSummary) {
-//            if(noTotal && summary.getResource().equals("TOTAL")) continue;
-            resourceBox.addItem(summary.getResource() + " (" + summary.getPathways() + ")", summary.getResource());
+            String rsrc = summary.getResource();
+            if(noTotal && rsrc.equals("TOTAL")) continue;
+            resourceBox.addItem(rsrc + " (" + summary.getPathways() + ")", rsrc);
         }
         resourcePanel.add(resourceBox);
         resourceBox.addChangeHandler(new ChangeHandler() {

@@ -2,6 +2,7 @@ package org.reactome.web.pwp.client.details.tabs.analysis;
 
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.tabs.DetailsTab;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.model.classes.Pathway;
 
 /**
@@ -10,7 +11,7 @@ import org.reactome.web.pwp.model.classes.Pathway;
 public interface AnalysisTab {
 
     interface Presenter extends DetailsTab.Presenter {
-        void onResourceSelected(String resource);
+        void onResourceSelected(ResourceChangedEvent event);
         void onPathwayHovered(Long dbId);
         void onPathwayHoveredReset();
         void onPathwaySelected(Long dbId);

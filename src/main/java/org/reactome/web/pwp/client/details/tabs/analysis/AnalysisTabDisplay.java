@@ -20,7 +20,6 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handler
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwayHoveredResetHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwaySelectedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.ResultPathwaySelectedHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.AnalysisInfoType;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.AnalysisSummaryPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.OptionSelectedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
@@ -142,6 +141,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
             this.container.clear();
             this.summaryPanel = new AnalysisSummaryPanel(analysisResult);
+            this.summaryPanel.setResource(resource);
             this.summaryPanel.addOptionSelectedHandler(this);
             this.summaryPanel.addResourceChangeHandler(this);
             this.container.addNorth(summaryPanel, 2.6);
@@ -157,6 +157,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.pathwayPanel.setResource(resource);
         }else{
             this.analysisResultPanel.showResult(analysisResult, resource);
+            this.summaryPanel.setResource(resource);
         }
     }
 
@@ -225,10 +226,10 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
     @Override
     public void onResourceChanged(ResourceChangedEvent event) {
-        this.summaryPanel.setSelected(AnalysisInfoType.PATHWAYS_FOUND);
-        this.analysisResultPanel.setResource(event.getResource());
-        this.pathwayPanel.setResource(event.getResource());
-        presenter.onResourceSelected(event.getResource());
+//        this.summaryPanel.setSelected(AnalysisInfoType.PATHWAYS_FOUND);
+//        this.analysisResultPanel.setResource(event.getResource());
+//        this.pathwayPanel.setResource(event.getResource());
+        presenter.onResourceSelected(event);
     }
 
     @Override

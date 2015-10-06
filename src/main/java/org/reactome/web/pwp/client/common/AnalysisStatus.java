@@ -16,7 +16,21 @@ public class AnalysisStatus {
 
     public AnalysisStatus(String token) {
         setToken(token);
-        this.resource = token == null ? null : "TOTAL";
+//        this.resource = token == null ? null : "TOTAL";
+        this.resource = null;
+    }
+
+    public AnalysisStatus(String token, String resource) {
+        setToken(token);
+        if (token != null && !token.isEmpty()) {
+            this.resource = resource;
+        } else {
+            this.resource = null;
+        }
+    }
+
+    public AnalysisStatus clone(){
+        return new AnalysisStatus(this.token, this.resource);
     }
 
     public void setToken(String token) {

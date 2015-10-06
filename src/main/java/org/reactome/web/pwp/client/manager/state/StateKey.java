@@ -14,6 +14,7 @@ public enum StateKey {
     DETAILS_TAB ("DTAB", "DETAILS_TAB"),
     TOOL        ("TOOL"),
     ANALYSIS    ("ANALYSIS", "ANALYSIS_ID"),
+    RESOURCE    ("RESOURCE"),
     FLAG        ("FLG", "FLAG", "ACC", "UNIPROT", "GENE", "CHEBI", "ENSEMBL");
 
     List<String> keys;
