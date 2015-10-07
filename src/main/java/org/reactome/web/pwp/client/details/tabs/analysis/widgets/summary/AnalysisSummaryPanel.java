@@ -69,11 +69,11 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         resourcePanel.add(new InlineLabel("Results for: "));
         resourceBox = new ListBox();
         resourceBox.setMultipleSelect(false);
-        boolean noTotal = resourceSummary.size()==2;
+//        boolean noTotal = resourceSummary.size()==2;
         for (ResourceSummary summary : resourceSummary) {
-            String rsrc = summary.getResource();
-            if(noTotal && rsrc.equals("TOTAL")) continue;
-            resourceBox.addItem(rsrc + " (" + summary.getPathways() + ")", rsrc);
+            String resource = summary.getResource();
+//            if(noTotal && resource.equals("TOTAL")) continue;
+            resourceBox.addItem(resource + " (" + summary.getPathways() + ")", resource);
         }
         resourcePanel.add(resourceBox);
         resourceBox.addChangeHandler(new ChangeHandler() {
