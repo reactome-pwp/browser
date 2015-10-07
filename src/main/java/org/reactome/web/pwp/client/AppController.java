@@ -56,6 +56,9 @@ import org.reactome.web.pwp.client.toppanel.logo.LogoPanel;
 import org.reactome.web.pwp.client.toppanel.species.SpeciesSelector;
 import org.reactome.web.pwp.client.toppanel.species.SpeciesSelectorDisplay;
 import org.reactome.web.pwp.client.toppanel.species.SpeciesSelectorPresenter;
+import org.reactome.web.pwp.client.toppanel.tour.TourSelector;
+import org.reactome.web.pwp.client.toppanel.tour.TourSelectorDisplay;
+import org.reactome.web.pwp.client.toppanel.tour.TourSelectorPresenter;
 import org.reactome.web.pwp.client.viewport.Viewport;
 import org.reactome.web.pwp.client.viewport.ViewportDisplay;
 import org.reactome.web.pwp.client.viewport.ViewportPresenter;
@@ -133,11 +136,15 @@ public class AppController implements BrowserReadyHandler {
         SpeciesSelector.Display species = new SpeciesSelectorDisplay();
         new SpeciesSelectorPresenter(this.eventBus, species);
 
+        TourSelector.Display tour = new TourSelectorDisplay();
+        new TourSelectorPresenter(this.eventBus, tour);
+
         FlowPanel topPanel = new FlowPanel();
         topPanel.setStyleName("elv-Top-Panel");
         topPanel.add(new LogoPanel());
         topPanel.add(species);
         topPanel.add(layoutSelector);
+        topPanel.add(tour);
         topPanel.add(toolLauncher);
 
         return topPanel;

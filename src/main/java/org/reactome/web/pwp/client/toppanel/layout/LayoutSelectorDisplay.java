@@ -51,7 +51,6 @@ public class LayoutSelectorDisplay extends Composite implements LayoutSelector.D
 
 
     public static Resources RESOURCES;
-
     static {
         RESOURCES = GWT.create(Resources.class);
         RESOURCES.getCSS().ensureInjected();
