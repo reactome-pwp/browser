@@ -72,7 +72,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     public void onAnalysisCompleted(AnalysisCompletedEvent event) {
         AnalysisSummary summary = event.getAnalysisResult().getSummary();
         List<ResourceSummary> resources = event.getAnalysisResult().getResourceSummary();
-        ResourceSummary resource = resources.size() > 2 ? resources.get(0) : resources.get(1); //IMPORTANT!
+        ResourceSummary resource = resources.size() == 2 ? resources.get(1) : resources.get(0); //IMPORTANT!
 
         State desiredState = new State(this.currentState);
         desiredState.setDetailsTab(DetailsTabType.ANALYSIS);
