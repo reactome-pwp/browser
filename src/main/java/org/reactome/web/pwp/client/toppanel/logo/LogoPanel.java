@@ -1,7 +1,6 @@
 package org.reactome.web.pwp.client.toppanel.logo;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.*;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
@@ -11,11 +10,13 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.model.client.RESTFulClient;
+import org.reactome.web.pwp.model.client.handlers.VersionRetrievedHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class LogoPanel extends Composite implements RequestCallback {
+public class LogoPanel extends Composite {
 
     private SimplePanel releasePanel;
 
@@ -51,18 +52,6 @@ public class LogoPanel extends Composite implements RequestCallback {
         setDataVersion();
     }
 
-    @Override
-    public void onResponseReceived(Request request, Response response) {
-        String version = response.getText().trim();
-        this.releasePanel.clear();
-        this.releasePanel.add(getReactomeReleasePanel(version, "Reactome database release " + version));
-    }
-
-    @Override
-    public void onError(Request request, Throwable exception) {
-        Console.error(exception.getMessage(), exception);
-    }
-
     private Widget getBrowserVersionPanel() {
         FlowPanel fp = new FlowPanel();
         fp.add(new Image(RESOURCES.version()));
@@ -87,13 +76,18 @@ public class LogoPanel extends Composite implements RequestCallback {
     }
 
     private void setDataVersion() {
-        String url = "/ReactomeRESTfulAPI/RESTfulWS/version";
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
-        try {
-            requestBuilder.sendRequest(null, this);
-        } catch (RequestException e) {
-            Console.error(e.getMessage(), e);
-        }
+        RESTFulClient.getVersion(new VersionRetrievedHandler() {
+            @Override
+            public void onVersionRetrieved(String version) {
+                releasePanel.clear();
+                releasePanel.add(getReactomeReleasePanel(version, "Reactome database release " + version));
+            }
+
+            @Override
+            public void onVersionRetrievedError(Throwable ex) {
+                Console.error(ex.getMessage(), ex);
+            }
+        });
     }
 
 
