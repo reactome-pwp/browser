@@ -260,6 +260,13 @@ public class State {
             token.deleteCharAt(token.length() - 1);
             addDelimiter = true;
         }
+        if( flag != null ) {
+            if (addDelimiter) token.append(Token.DELIMITER);
+            token.append(StateKey.FLAG.getDefaultKey());
+            token.append("=");
+            token.append(flag);
+            addDelimiter=true;
+        }
         if (detailsTab != null && !detailsTab.equals(DetailsTabType.getDefault())) {
             if (addDelimiter) token.append(Token.DELIMITER);
             token.append(StateKey.DETAILS_TAB.getDefaultKey());
@@ -284,13 +291,6 @@ public class State {
                 token.append("=");
                 token.append(analysisStatus.getResource());
             }
-            addDelimiter=true;
-        }
-        if( flag != null ) {
-            if (addDelimiter) token.append(Token.DELIMITER);
-            token.append(StateKey.FLAG.getDefaultKey());
-            token.append("=");
-            token.append(flag);
 //            addDelimiter=true;
         }
         return token.toString();
