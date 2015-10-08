@@ -188,9 +188,9 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     }
 
     private void loadCurrentPathway(){
-        if(this.pathway==null){
+        if (this.pathway == null) {
             Console.warn("Undetermined pathway...", this);
-        } else if(!Objects.equals(pathway, displayedPathway)) {
+        } else if (!Objects.equals(pathway, displayedPathway)) {
             this.display.loadPathway(this.pathway);
         } else {
             updateView();
