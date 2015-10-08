@@ -35,7 +35,7 @@ public interface AnalysisExamples extends ClientBundle {
     @Source("kegg.txt")
     TextResource getKegg();
 
-    @Source("expression.txt")
+    @Source("demo.txt")
     TextResource getExpression();
 
     @Source("metabolomics.txt")
