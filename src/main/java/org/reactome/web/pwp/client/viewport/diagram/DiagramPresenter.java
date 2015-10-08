@@ -28,6 +28,8 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     private Diagram.Display display;
 
+    private Pathway displayedPathway;
+
     private Pathway pathway;
     private DatabaseObject selected;
     private Path path;
@@ -168,11 +170,11 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
         DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
             @Override
             public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
-                Pathway pathway = (Pathway) databaseObject;
-                if (Objects.equals(DiagramPresenter.this.pathway, pathway)) {
+                displayedPathway = (Pathway) databaseObject;
+                if (Objects.equals(DiagramPresenter.this.pathway, displayedPathway)) {
                     updateView();
                 } else {
-                    DiagramPresenter.this.pathway = pathway;
+                    DiagramPresenter.this.pathway = displayedPathway;
                     Selection selection = new Selection(pathway, new Path());
                     eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
                 }
@@ -180,16 +182,18 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
             @Override
             public void onDatabaseObjectError(Throwable exception) {
-
+                displayedPathway = null;
             }
         });
     }
 
     private void loadCurrentPathway(){
-        if(this.pathway==null){
+        if (this.pathway == null) {
             Console.warn("Undetermined pathway...", this);
-        }else {
+        } else if (!Objects.equals(pathway, displayedPathway)) {
             this.display.loadPathway(this.pathway);
+        } else {
+            updateView();
         }
     }
 
