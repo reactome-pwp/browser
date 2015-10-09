@@ -1,4 +1,4 @@
-#Proteins	Sample 1	Sample 2	Sample 3	Sample 4
+#Proteins	 Control	     10h	     14h	     18h
 P78363    	    4.76	   -1.42	    1.59	   -0.34
 O60218    	   -2.38	   -1.32	    0.88	   -4.01
 Q04828    	    1.70	    3.47	   -2.48	    0.91
