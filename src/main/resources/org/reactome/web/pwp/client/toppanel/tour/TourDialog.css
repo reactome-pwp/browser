@@ -1,0 +1,58 @@
+.popupPanel {
+    border: 3px solid gray !important;
+    border-radius: 15px;
+    padding: 5px 10px 5px 10px;
+
+    background-color: rgb(88, 195, 229);
+
+    background: -webkit-linear-gradient(135deg, rgb(88, 195, 229), rgb(30, 148, 208)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(135deg, rgb(88, 195, 229), rgb(30, 148, 208)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(135deg, rgb(88, 195, 229), rgb(30, 148, 208)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(135deg, rgb(88, 195, 229), rgb(30, 148, 208)); /* Standard syntax */
+    background-image: -ms-linear-gradient(135deg, rgb(88, 195, 229), rgb(30, 148, 208)); /* For IE10 */
+
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+    font-size: small !important;
+}
+
+.header {
+    float: left;
+    padding: 2px 0 2px 0;
+    width: 100%;
+}
+
+.headerText {
+    float: left;
+    min-width: 370px;
+    color: white;
+    font-weight: bolder;
+    font-size: large;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    cursor: default;
+}
+
+.video iframe {
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+@sprite .close {
+    gwt-image: 'closeNormal';
+    outline: none;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: right;
+    margin-top: -25px;
+    /*margin-bottom: 10px;*/
+}
+
+@sprite .close:hover {
+    gwt-image: 'closeHovered';
+}
+
+@sprite .close:active:hover {
+    gwt-image: 'closeClicked';
+}
