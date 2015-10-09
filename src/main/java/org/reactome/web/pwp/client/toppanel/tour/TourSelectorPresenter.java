@@ -22,7 +22,7 @@ public class TourSelectorPresenter extends AbstractPresenter implements TourSele
     @Override
     public void tour() {
         TourContainer tour = new TourContainer();
-//        tour.show();
+        tour.center();
 //        this.eventBus.fireEventFromSource(new TourSelectedEvent(), this);
     }
 }
