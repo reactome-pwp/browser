@@ -23,6 +23,10 @@
     outline: none;
 }
 
+.speciesPanel select option {
+    color: black;
+}
+
 .otherSpecies {
     background-color: rgba(160, 155, 219, 0.79) !important;
     color: white;
@@ -34,4 +38,8 @@
     border: none;
     min-width: 210px;
     font-weight: bold;
+}
+
+.otherSpecies select option {
+    color: black;
 }
