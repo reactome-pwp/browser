@@ -1,5 +1,8 @@
 package com.google.gwt.user.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.user.client.Command;
+
 /**
  * The selection is never updated when opening or closing
  *
@@ -11,14 +14,19 @@ public class CustomTree extends Tree {
      * Ensures that the item is visible, opening its parents
      * and scrolling the tree as necessary.
      */
-    public void ensureItemVisible(TreeItem item) {
+    public void ensureItemVisible(final TreeItem item) {
         if(item==null) return;
         TreeItem parent = item.getParentItem();
         while (parent != null) {
             parent.setState(true);
             parent = parent.getParentItem();
         }
-        item.getElement().scrollIntoView();
+        Scheduler.get().scheduleDeferred(new Command() {
+            @Override
+            public void execute() {
+                item.getElement().scrollIntoView();
+            }
+        });
     }
 
 //    /**
