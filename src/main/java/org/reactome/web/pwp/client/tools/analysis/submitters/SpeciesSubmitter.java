@@ -5,20 +5,21 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
+import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.common.widgets.DialogBoxFactory;
-import org.reactome.web.pwp.client.tools.analysis.AnalysisLauncher;
+import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorType;
+import org.reactome.web.pwp.client.tools.analysis.event.ServiceUnavailableEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
-import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.model.classes.Species;
 
 import java.util.List;
@@ -93,14 +94,19 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     if(!response.getStatusText().equals("OK")){
-                        fireEvent(new AnalysisErrorEvent(AnalysisErrorType.FROM_RESPONSE.setMessage(response)));
+                        loading.setVisible(false);
+                        try {
+                            AnalysisError analysisError= AnalysisModelFactory.getModelObject(AnalysisError.class, response.getText());
+                            fireEvent(new AnalysisErrorEvent(analysisError));
+                        } catch (AnalysisModelException e) {
+                            Console.error("Oops! This is unexpected", this);
+                        }
                     }else{
                         try {
                             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, response.getText());
                             fireEvent(new AnalysisCompletedEvent(result));
                         } catch (AnalysisModelException e) {
-                            fireEvent(new AnalysisErrorEvent(AnalysisErrorType.RESULT_FORMAT));
-                            //ToDo: Look into new Error Handling
+                            Console.error("Oops! This is unexpected", this);
                         }
                     }
                     loading.setVisible(false);
@@ -109,14 +115,12 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
                 @Override
                 public void onError(Request request, Throwable exception) {
                     loading.setVisible(false);
-                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.SERVICE_UNAVAILABLE));
-                    //ToDo: Look into new Error Handling
+                    fireEvent(new ServiceUnavailableEvent());
                 }
             });
         }catch (RequestException ex) {
             loading.setVisible(false);
-            fireEvent(new AnalysisErrorEvent(AnalysisErrorType.SERVICE_UNAVAILABLE));
-            //ToDo: Look into new Error Handling
+            fireEvent(new ServiceUnavailableEvent());
         }
     }
 

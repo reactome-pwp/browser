@@ -17,20 +17,22 @@ import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
+import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorType;
+import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
+import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
 
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class FileSubmitter extends FlowPanel
-        implements FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler, ClickHandler, HasHandlers {
+public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler,
+        ClickHandler, HasHandlers {
 
     private static final String FORM_ANALYSIS = "/AnalysisService/identifiers/form?page=1";
     private static final String FORM_ANALYSIS_PROJECTION = "/AnalysisService/identifiers/form/projection?page=1";
@@ -94,11 +96,15 @@ public class FileSubmitter extends FlowPanel
         return this.addHandler(handler, AnalysisErrorEvent.TYPE);
     }
 
+    public HandlerRegistration addFileNotSelectedEventHandler(FileNotSelectedEventHandler handler){
+        return this.addHandler(handler, FileNotSelectedEvent.TYPE);
+    }
+
     @Override
     public void onClick(ClickEvent event) {
         String fileName = this.fileUpload.getFilename();
         if(fileName==null || fileName.isEmpty()){
-            fireEvent(new AnalysisErrorEvent(AnalysisErrorType.FILE_NOT_SELECTED));
+            fireEvent(new FileNotSelectedEvent());
             return;
         }
 
@@ -127,15 +133,25 @@ public class FileSubmitter extends FlowPanel
             this.loading.setVisible(false);
         } catch (AnalysisModelException e) {
             this.loading.setVisible(false);
-            if(json.contains("413")) { //TODO: Find a better way to detect errors here
-                fireEvent(new AnalysisErrorEvent(AnalysisErrorType.FILE_SIZE_ERROR));
-            }else if(json.contains("415")){
-                fireEvent(new AnalysisErrorEvent(AnalysisErrorType.PROCESSING_DATA));
-            }else if(json.contains("500")) {
-                fireEvent(new AnalysisErrorEvent(AnalysisErrorType.SERVICE_UNAVAILABLE));
-            }else{
-                fireEvent(new AnalysisErrorEvent(AnalysisErrorType.RESULT_FORMAT));
+            try {
+                AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, json);
+                fireEvent(new AnalysisErrorEvent(analysisError));
+            } catch (AnalysisModelException e1) {
+                Console.error("Oops! This is unexpected", this);
             }
+//            switch (analysisError.getCode()){
+//                case 413:
+//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.FILE_SIZE_ERROR));
+//                    break;
+//                case 415:
+//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.PROCESSING_DATA));
+//                    break;
+//                case 500:
+//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.SERVICE_UNAVAILABLE));
+//                    break;
+//                default:
+//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.RESULT_FORMAT));
+//            }
         }
     }
 

@@ -14,10 +14,13 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
+import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
+import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
 import org.reactome.web.pwp.client.tools.analysis.submitters.FileSubmitter;
 import org.reactome.web.pwp.client.tools.analysis.submitters.PostSubmitter;
 import org.reactome.web.pwp.client.tools.analysis.submitters.SpeciesSubmitter;
@@ -30,7 +33,7 @@ import java.util.List;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLauncher.Display, ResizeHandler, AnalysisCompletedHandler, AnalysisErrorEventHandler, ClickHandler, CloseHandler<PopupPanel> {
+public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLauncher.Display, ResizeHandler, AnalysisCompletedHandler, AnalysisErrorEventHandler, ClickHandler, CloseHandler<PopupPanel>,FileNotSelectedEventHandler {
 
     private AnalysisLauncher.Presenter presenter;
 
@@ -78,6 +81,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         FileSubmitter fileSubmitter = new FileSubmitter(postSubmitter);
         fileSubmitter.addAnalysisCompletedEventHandler(this);
         fileSubmitter.addAnalysisErrorEventHandler(this);
+        fileSubmitter.addFileNotSelectedEventHandler(this);
 
         this.speciesSubmitter = new SpeciesSubmitter();
         this.speciesSubmitter.addAnalysisCompletedEventHandler(this);
@@ -144,6 +148,12 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     @Override
     public void onAnalysisError(AnalysisErrorEvent event) {
         presenter.analysisError(event);
+    }
+
+    @Override
+    public void onFileNotSelectedEvent(FileNotSelectedEvent event) {
+        Console.warn("File not selected");
+        //TODO: Complain about FILE NOT SELECTED :D
     }
 
     @Override

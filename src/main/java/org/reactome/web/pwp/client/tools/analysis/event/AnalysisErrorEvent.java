@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.tools.analysis.event;
 
 import com.google.gwt.event.shared.GwtEvent;
+import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
 
 /**
@@ -9,10 +10,10 @@ import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHand
 public class AnalysisErrorEvent extends GwtEvent<AnalysisErrorEventHandler> {
     public static Type<AnalysisErrorEventHandler> TYPE = new GwtEvent.Type<AnalysisErrorEventHandler>();
 
-    private AnalysisErrorType errorType;
+    private AnalysisError analysisError;
 
-    public AnalysisErrorEvent(AnalysisErrorType errorType) {
-        this.errorType = errorType;
+    public AnalysisErrorEvent(AnalysisError analysisError) {
+        this.analysisError = analysisError;
     }
 
     @Override
@@ -20,8 +21,8 @@ public class AnalysisErrorEvent extends GwtEvent<AnalysisErrorEventHandler> {
         return TYPE;
     }
 
-    public AnalysisErrorType getErrorType() {
-        return errorType;
+    public AnalysisError getAnalysisError() {
+        return analysisError;
     }
 
     @Override
@@ -31,8 +32,11 @@ public class AnalysisErrorEvent extends GwtEvent<AnalysisErrorEventHandler> {
 
     @Override
     public String toString() {
+        if(analysisError==null) return "AnalysisErrorEvent{}";
         return "AnalysisErrorEvent{" +
-                "errorType=" + errorType +
+                "code=" + analysisError.getCode() +
+                ", reason=" + analysisError.getReason() +
+                ", messages=" + analysisError.getMessages() +
                 '}';
     }
 }
