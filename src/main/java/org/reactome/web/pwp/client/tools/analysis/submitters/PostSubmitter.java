@@ -13,12 +13,12 @@ import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.common.widgets.DialogBoxFactory;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.ServiceUnavailableEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
+import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -85,7 +85,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         return this.addHandler(handler, AnalysisCompletedEvent.TYPE);
     }
 
-    public HandlerRegistration addAnalysisErrorEventHandler(AnalysisErrorEventHandler handler){
+    public HandlerRegistration addAnalysisErrorEventHandler(AnalysisErrorHandler handler){
         return this.addHandler(handler, AnalysisErrorEvent.TYPE);
     }
 

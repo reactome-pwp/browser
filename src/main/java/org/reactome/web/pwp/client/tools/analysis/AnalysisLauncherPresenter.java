@@ -6,13 +6,15 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
+import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.events.BrowserReadyEvent;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.events.ToolSelectedEvent;
 import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.tools.analysis.notifications.Notification;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.model.classes.Species;
 import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
@@ -51,6 +53,11 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     @Override
     public void analysisError(AnalysisErrorEvent event) {
         this.eventBus.fireEventFromSource(event, this);
+        if(event!=null){
+            AnalysisError error =  event.getAnalysisError();
+//            DialogBoxFactory.alert(error.getReason() + "[" + error.getCode() + "]", error.getMessages().get(0));
+            new Notification(error.getReason() + "[" + error.getCode() + "]", error.getMessages().get(0) );
+        }
     }
 
     @Override

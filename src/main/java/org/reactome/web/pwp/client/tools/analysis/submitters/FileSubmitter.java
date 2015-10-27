@@ -19,12 +19,12 @@ import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelExceptio
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
+import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
 
 
@@ -92,7 +92,7 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         return this.addHandler(handler, AnalysisCompletedEvent.TYPE);
     }
 
-    public HandlerRegistration addAnalysisErrorEventHandler(AnalysisErrorEventHandler handler){
+    public HandlerRegistration addAnalysisErrorEventHandler(AnalysisErrorHandler handler){
         return this.addHandler(handler, AnalysisErrorEvent.TYPE);
     }
 
