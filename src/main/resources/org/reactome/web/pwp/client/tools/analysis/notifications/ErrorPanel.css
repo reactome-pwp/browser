@@ -19,7 +19,7 @@
     margin-top: 25px;
     padding: 5px;
     width: 97%;
-    max-height: 70px;
+    max-height: 90px;
     overflow: auto;
     border-radius: 5px;
     border: 1px solid #b31a0c;
@@ -31,4 +31,9 @@
 .errorTitle {
     font-size: large;
     width: 80%;
+}
+
+.errorMsg {
+    max-height: 60px;
+    overflow: scroll;
 }

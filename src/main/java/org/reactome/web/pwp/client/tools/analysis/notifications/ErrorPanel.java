@@ -6,7 +6,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 
@@ -33,6 +36,7 @@ public class ErrorPanel extends FlowPanel implements ClickHandler {
 
 
         errorMsg = new Label();
+        errorMsg.addStyleName(RESOURCES.getCSS().errorMsg());
 
         add(header);
         add(errorMsg);
@@ -105,5 +109,7 @@ public class ErrorPanel extends FlowPanel implements ClickHandler {
         String errorPanel();
 
         String errorTitle();
+
+        String errorMsg();
     }
 }
