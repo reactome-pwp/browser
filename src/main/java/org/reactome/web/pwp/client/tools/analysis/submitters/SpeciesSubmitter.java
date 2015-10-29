@@ -109,7 +109,8 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
                             AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, response.getText());
                             fireEvent(new AnalysisErrorEvent(analysisError));
                         } catch (AnalysisModelException e) {
-                            Console.error("Oops! This is unexpected", this);
+//                            Console.error("Oops! This is unexpected", this);
+                            setStatusIcon(CommonImages.INSTANCE.error(), true, true);
                         }
                     }else{
                         setStatusIcon(CommonImages.INSTANCE.success(), true, true);
@@ -120,11 +121,18 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
                             Console.error("Oops! This is unexpected", this);
                         }
                     }
+                    if(response.getStatusCode() == 500){
+                        errorPanel.setErrorMessage("The Analysis Service is temporarily unavailable",
+                                "We have trouble performing the analysis. Please check your internet connection and try again in a while");
+                        fireEvent(new ServiceUnavailableEvent());
+                    }
                 }
 
                 @Override
                 public void onError(Request request, Throwable exception) {
                     setStatusIcon(CommonImages.INSTANCE.error(), true, true);
+                    errorPanel.setErrorMessage("The Analysis Service is temporarily unavailable",
+                            "We have trouble performing the analysis. Please check your internet connection and try again in a while");
                     fireEvent(new ServiceUnavailableEvent());
                 }
             });
