@@ -58,6 +58,10 @@ public abstract class AnalysisStyleFactory {
         String postSubmitterClear();
 
         String unselectable();
+
+        String statusIcon();
+
+        String statusIconVisible();
     }
 
     public static AnalysisStyle getAnalysisStyle(){

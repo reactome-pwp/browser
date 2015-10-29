@@ -29,6 +29,9 @@ public interface CommonImages extends ClientBundle {
     @Source("images/external_link_icon.gif")
     ImageResource externalLink();
 
+    @Source("images/error.png")
+    ImageResource error();
+
     @Source("images/information.png")
     ImageResource information();
 
@@ -40,5 +43,8 @@ public interface CommonImages extends ClientBundle {
 
     @Source("images/ORCID.png")
     ImageResource orcid();
+
+    @Source("images/success.png")
+    ImageResource success();
 
 }

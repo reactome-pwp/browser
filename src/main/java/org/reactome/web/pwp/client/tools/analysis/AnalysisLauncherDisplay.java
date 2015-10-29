@@ -16,7 +16,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
-import org.reactome.web.pwp.client.tools.analysis.notifications.Notification;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
@@ -78,13 +77,16 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.container.setStyleName(RESOURCES.getCSS().container());
 
         PostSubmitter postSubmitter = new PostSubmitter();
-        postSubmitter.addAnalysisCompletedEventHandler(this);
-        postSubmitter.addAnalysisErrorEventHandler(this);
-
         FileSubmitter fileSubmitter = new FileSubmitter(postSubmitter);
+
+        //Add handlers
         fileSubmitter.addAnalysisCompletedEventHandler(this);
         fileSubmitter.addAnalysisErrorEventHandler(this);
         fileSubmitter.addFileNotSelectedEventHandler(this);
+        postSubmitter.addAnalysisCompletedEventHandler(this);
+        postSubmitter.addAnalysisCompletedEventHandler(fileSubmitter);
+        postSubmitter.addAnalysisErrorEventHandler(this);
+        postSubmitter.addAnalysisErrorEventHandler(fileSubmitter);
 
         this.speciesSubmitter = new SpeciesSubmitter();
         this.speciesSubmitter.addAnalysisCompletedEventHandler(this);
@@ -108,6 +110,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
         this.add(vp);
     }
+
 
     public Button getButton(String text, ImageResource imageResource){
         FlowPanel fp = new FlowPanel();
@@ -156,8 +159,6 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     @Override
     public void onFileNotSelectedEvent(FileNotSelectedEvent event) {
         Console.warn("File not selected");
-//        DialogBoxFactory.alert("No file Selected","Please select a file and then press GO");
-        new Notification(Notification.Type.WARNING, "No file Selected", "Please select a file and then press GO");
     }
 
     @Override

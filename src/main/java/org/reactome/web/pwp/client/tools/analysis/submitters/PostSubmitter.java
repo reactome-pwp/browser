@@ -1,10 +1,13 @@
 package org.reactome.web.pwp.client.tools.analysis.submitters;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.*;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
@@ -29,7 +32,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
     private CheckBox projection;
     private TextArea textArea;
-    private Image loading;
+    private Image statusIcon;
     private Integer height = 310;
 
     public PostSubmitter() {
@@ -54,9 +57,10 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         clear.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterClear());
         submissionPanel.add(clear);
         submissionPanel.add(new Button("GO", this));
-        this.loading = new Image(CommonImages.INSTANCE.loader());
-        this.loading.setVisible(false);
-        submissionPanel.add(this.loading);
+        this.statusIcon = new Image(CommonImages.INSTANCE.loader());
+        this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
+        setStatusIcon(null, false);
+        submissionPanel.add(this.statusIcon);
         this.projection = new CheckBox("Project to human");
         this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterCheckBox());
         this.projection.setValue(true);
@@ -97,11 +101,12 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
     public void onClick(ClickEvent event) {
         if(this.textArea.getText().isEmpty()) {
             //ToDo: Check for new Error Handling
-            DialogBoxFactory.alert("Analysis tool", "Please add the identifiers to analyse");
+            //DialogBoxFactory.alert("Analysis tool", "Please add the identifiers to analyse");
+            setStatusIcon(CommonImages.INSTANCE.error(),true);
             return;
         }
+        setStatusIcon(CommonImages.INSTANCE.loader(), true);
 
-        this.loading.setVisible(true);
         String url = this.projection.getValue() ? POST_ANALYSIS_PROJECTION : POST_ANALYSIS;
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.POST, url);
         requestBuilder.setHeader("Content-Type", "text/plain");
@@ -111,17 +116,17 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     if(response.getStatusCode() != Response.SC_OK){
-                        loading.setVisible(false);
                         try {
                             AnalysisError analysisError= AnalysisModelFactory.getModelObject(AnalysisError.class, response.getText());
+                            setStatusIcon(CommonImages.INSTANCE.error(), true);
                             fireEvent(new AnalysisErrorEvent(analysisError));
                         } catch (AnalysisModelException e) {
                             Console.error("Oops! This is unexpected", this);
                         }
                     }else{
-                        loading.setVisible(false);
                         try {
                             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, response.getText());
+                            setStatusIcon(CommonImages.INSTANCE.success(), true);
                             fireEvent(new AnalysisCompletedEvent(result));
                         } catch (AnalysisModelException e) {
                             Console.error("Oops! This is unexpected", this);
@@ -131,13 +136,31 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
                 @Override
                 public void onError(Request request, Throwable exception) {
-                    loading.setVisible(false);
+                    setStatusIcon(CommonImages.INSTANCE.error(), true);
                     fireEvent(new ServiceUnavailableEvent());
                 }
             });
         }catch (RequestException ex) {
-            loading.setVisible(false);
             fireEvent(new ServiceUnavailableEvent());
+        }
+    }
+
+    private void setStatusIcon(final ImageResource resource, boolean visible) {
+        if (resource != null) {
+            statusIcon.setResource(resource);
+        }
+        if (visible) {
+            statusIcon.addStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+            Timer timer = new Timer() {
+                @Override
+                public void run() {
+                    statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+                }
+            };
+            timer.schedule(2000);
+
+        } else {
+            statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
         }
     }
 

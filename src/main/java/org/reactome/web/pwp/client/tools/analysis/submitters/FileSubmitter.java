@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.tools.analysis.submitters;
 
 import com.google.gwt.animation.client.Animation;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -11,7 +12,9 @@ import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
@@ -26,13 +29,16 @@ import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
+import org.reactome.web.pwp.client.tools.analysis.notifications.ErrorPanel;
+
+import java.util.List;
 
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler,
-        ClickHandler, HasHandlers {
+        AnalysisCompletedHandler, AnalysisErrorHandler, ClickHandler, HasHandlers {
 
     private static final String FORM_ANALYSIS = "/AnalysisService/identifiers/form?page=1";
     private static final String FORM_ANALYSIS_PROJECTION = "/AnalysisService/identifiers/form/projection?page=1";
@@ -40,7 +46,9 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
     private FileUpload fileUpload;
     private FormPanel form;
     private CheckBox projection;
-    private Image loading;
+    private Image statusIcon;
+
+    private ErrorPanel errorPanel;
 
     public FileSubmitter(PostSubmitter postSubmitter) {
         //noinspection GWTStyleCheck
@@ -68,12 +76,16 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         this.projection.setValue(true);
         submissionPanel.add(this.projection);
         submissionPanel.add(new Button("GO", this));
-        this.loading = new Image(CommonImages.INSTANCE.loader());
-        this.loading.setVisible(false);
-        submissionPanel.add(this.loading);
-        add(submissionPanel);
 
+        this.statusIcon = new Image(CommonImages.INSTANCE.loader());
+        this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
+        setStatusIcon(null, false);
+        submissionPanel.add(this.statusIcon);
+        add(submissionPanel);
         addPostSubmitter(postSubmitter);
+
+        errorPanel = new ErrorPanel();
+        add(errorPanel);
     }
 
     private void addPostSubmitter(final PostSubmitter postSubmitter){
@@ -101,10 +113,29 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
     }
 
     @Override
+    public void onAnalysisCompleted(AnalysisCompletedEvent event) {
+        // Analysis successful coming from postSubmitter
+        setStatusIcon(null, false);
+        errorPanel.makeVisible(false);
+    }
+
+    @Override
+    public void onAnalysisError(AnalysisErrorEvent event) {
+        // Error coming from postSubmitter
+        if(event!=null) {
+            AnalysisError error =  event.getAnalysisError();
+            errorPanel.setErrorMessage(error);
+        }
+       setStatusIcon(null, false);
+    }
+
+    @Override
     public void onClick(ClickEvent event) {
         String fileName = this.fileUpload.getFilename();
         if(fileName==null || fileName.isEmpty()){
-            fireEvent(new FileNotSelectedEvent());
+//            fireEvent(new FileNotSelectedEvent()); //TODO keep???
+            setStatusIcon(CommonImages.INSTANCE.error(), true);
+            errorPanel.setErrorMessage("No file Selected", "Please select a file and then press GO");
             return;
         }
 
@@ -118,7 +149,8 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
 
     @Override
     public void onSubmit(FormPanel.SubmitEvent event) {
-        this.loading.setVisible(true);
+        setStatusIcon(CommonImages.INSTANCE.loader(), true);
+        errorPanel.makeVisible(false);
     }
 
     @Override
@@ -130,11 +162,12 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         try {
             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, json);
             fireEvent(new AnalysisCompletedEvent(result));
-            this.loading.setVisible(false);
+            setStatusIcon(CommonImages.INSTANCE.success(), true);
         } catch (AnalysisModelException e) {
-            this.loading.setVisible(false);
+            setStatusIcon(CommonImages.INSTANCE.error(), true);
             try {
                 AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, json);
+                errorPanel.setErrorMessage(analysisError);
                 fireEvent(new AnalysisErrorEvent(analysisError));
             } catch (AnalysisModelException e1) {
                 Console.error("Oops! This is unexpected", this);
@@ -171,6 +204,25 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         form.addSubmitHandler(this);
         form.addSubmitCompleteHandler(this);
         return form;
+    }
+
+    private void setStatusIcon(final ImageResource resource, boolean visible) {
+        if (resource != null) {
+            statusIcon.setResource(resource);
+        }
+        if (visible) {
+            statusIcon.addStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+            Timer timer = new Timer() {
+                @Override
+                public void run() {
+                    statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+                }
+            };
+            timer.schedule(2000);
+
+        } else {
+            statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+        }
     }
 
     private class PostSubmitterAnimation extends Animation implements OpenHandler<DisclosurePanel>, CloseHandler<DisclosurePanel> {

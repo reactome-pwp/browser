@@ -192,3 +192,13 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+.statusIcon {
+    opacity:0;
+    transition: opacity 0.5s;
+    -webkit-transition: opacity 0.5s; /* Safari */
+}
+
+.statusIconVisible {
+    opacity:1;
+}
