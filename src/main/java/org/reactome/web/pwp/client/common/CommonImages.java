@@ -32,6 +32,9 @@ public interface CommonImages extends ClientBundle {
     @Source("images/error.png")
     ImageResource error();
 
+    @Source("images/warning.png")
+    ImageResource warning();
+
     @Source("images/information.png")
     ImageResource information();
 

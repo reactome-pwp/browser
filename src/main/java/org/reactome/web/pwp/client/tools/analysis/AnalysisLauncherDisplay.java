@@ -87,6 +87,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         postSubmitter.addAnalysisCompletedEventHandler(fileSubmitter);
         postSubmitter.addAnalysisErrorEventHandler(this);
         postSubmitter.addAnalysisErrorEventHandler(fileSubmitter);
+        postSubmitter.addEmptySampleEventHandler(fileSubmitter);
 
         this.speciesSubmitter = new SpeciesSubmitter();
         this.speciesSubmitter.addAnalysisCompletedEventHandler(this);

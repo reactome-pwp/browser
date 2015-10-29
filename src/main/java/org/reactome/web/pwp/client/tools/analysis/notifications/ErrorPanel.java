@@ -50,7 +50,7 @@ public class ErrorPanel extends FlowPanel implements ClickHandler {
 
     public void setErrorMessage(AnalysisError error){
         if(error!=null) {
-            String title = error.getReason() + " [" + error.getCode() + "]";
+            String title = "There are some issues with your sample - " + error.getReason() + " [" + error.getCode() + "]";
             StringBuilder sb = new StringBuilder();
             List<String> msgList = error.getMessages();
             if(msgList!=null) {
@@ -84,14 +84,14 @@ public class ErrorPanel extends FlowPanel implements ClickHandler {
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
 
-        @Source("../images/close_clicked.png")
-        ImageResource closeClicked();
+        @Source("../images/close_red_clicked.png")
+        ImageResource closeRedClicked();
 
-        @Source("../images/close_hovered.png")
-        ImageResource closeHovered();
+        @Source("../images/close_red_hovered.png")
+        ImageResource closeRedHovered();
 
-        @Source("../images/close_normal.png")
-        ImageResource closeNormal();
+        @Source("../images/close_red_normal.png")
+        ImageResource closeRedNormal();
 
     }
 

@@ -24,10 +24,12 @@ import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
+import org.reactome.web.pwp.client.tools.analysis.event.EmptySampleEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
+import org.reactome.web.pwp.client.tools.analysis.handler.EmptySampleHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
 import org.reactome.web.pwp.client.tools.analysis.notifications.ErrorPanel;
 
@@ -38,7 +40,7 @@ import java.util.List;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler,
-        AnalysisCompletedHandler, AnalysisErrorHandler, ClickHandler, HasHandlers {
+        AnalysisCompletedHandler, AnalysisErrorHandler, EmptySampleHandler, ClickHandler, HasHandlers {
 
     private static final String FORM_ANALYSIS = "/AnalysisService/identifiers/form?page=1";
     private static final String FORM_ANALYSIS_PROJECTION = "/AnalysisService/identifiers/form/projection?page=1";
@@ -127,6 +129,12 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
             errorPanel.setErrorMessage(error);
         }
        setStatusIcon(null, false);
+    }
+
+    @Override
+    public void onEmptySample(EmptySampleEvent event) {
+        // Error coming from postSubmitter
+        errorPanel.setErrorMessage("No sample to analyse", "Please paste your sample or select one of the examples and press GO");
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.submitters;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -9,6 +10,8 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
+import com.google.web.bindery.autobean.shared.AutoBean;
+import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
@@ -18,10 +21,12 @@ import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.common.widgets.DialogBoxFactory;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
+import org.reactome.web.pwp.client.tools.analysis.event.EmptySampleEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.ServiceUnavailableEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
+import org.reactome.web.pwp.client.tools.analysis.handler.EmptySampleHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -93,6 +98,10 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         return this.addHandler(handler, AnalysisErrorEvent.TYPE);
     }
 
+    public HandlerRegistration addEmptySampleEventHandler(EmptySampleHandler handler){
+        return this.addHandler(handler, EmptySampleEvent.TYPE);
+    }
+
     public Integer getHeight() {
         return height;
     }
@@ -101,8 +110,8 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
     public void onClick(ClickEvent event) {
         if(this.textArea.getText().isEmpty()) {
             //ToDo: Check for new Error Handling
-            //DialogBoxFactory.alert("Analysis tool", "Please add the identifiers to analyse");
             setStatusIcon(CommonImages.INSTANCE.error(),true);
+            fireEvent(new EmptySampleEvent());
             return;
         }
         setStatusIcon(CommonImages.INSTANCE.loader(), true);
