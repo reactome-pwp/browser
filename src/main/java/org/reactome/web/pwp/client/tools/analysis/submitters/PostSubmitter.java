@@ -1,7 +1,5 @@
 package org.reactome.web.pwp.client.tools.analysis.submitters;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -10,21 +8,18 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
-import com.google.web.bindery.autobean.shared.AutoBean;
-import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
-import org.reactome.web.pwp.client.details.common.widgets.DialogBoxFactory;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.EmptySampleEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.ServiceUnavailableEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
-import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.EmptySampleHandler;
 
@@ -64,7 +59,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         submissionPanel.add(new Button("GO", this));
         this.statusIcon = new Image(CommonImages.INSTANCE.loader());
         this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
-        setStatusIcon(null, false);
+        setStatusIcon(null, false, false);
         submissionPanel.add(this.statusIcon);
         this.projection = new CheckBox("Project to human");
         this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterCheckBox());
@@ -109,12 +104,11 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
         if(this.textArea.getText().isEmpty()) {
-            //ToDo: Check for new Error Handling
-            setStatusIcon(CommonImages.INSTANCE.error(),true);
+            setStatusIcon(CommonImages.INSTANCE.error(),true, true);
             fireEvent(new EmptySampleEvent());
             return;
         }
-        setStatusIcon(CommonImages.INSTANCE.loader(), true);
+        setStatusIcon(CommonImages.INSTANCE.loader(), true, false);
 
         String url = this.projection.getValue() ? POST_ANALYSIS_PROJECTION : POST_ANALYSIS;
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.POST, url);
@@ -125,17 +119,17 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     if(response.getStatusCode() != Response.SC_OK){
+                        setStatusIcon(CommonImages.INSTANCE.error(), true, true);
                         try {
                             AnalysisError analysisError= AnalysisModelFactory.getModelObject(AnalysisError.class, response.getText());
-                            setStatusIcon(CommonImages.INSTANCE.error(), true);
                             fireEvent(new AnalysisErrorEvent(analysisError));
                         } catch (AnalysisModelException e) {
                             Console.error("Oops! This is unexpected", this);
                         }
                     }else{
+                        setStatusIcon(CommonImages.INSTANCE.success(), true, true);
                         try {
                             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, response.getText());
-                            setStatusIcon(CommonImages.INSTANCE.success(), true);
                             fireEvent(new AnalysisCompletedEvent(result));
                         } catch (AnalysisModelException e) {
                             Console.error("Oops! This is unexpected", this);
@@ -145,7 +139,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
                 @Override
                 public void onError(Request request, Throwable exception) {
-                    setStatusIcon(CommonImages.INSTANCE.error(), true);
+                    setStatusIcon(CommonImages.INSTANCE.error(), true, true);
                     fireEvent(new ServiceUnavailableEvent());
                 }
             });
@@ -154,20 +148,21 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         }
     }
 
-    private void setStatusIcon(final ImageResource resource, boolean visible) {
+    private void setStatusIcon(final ImageResource resource, boolean visible, boolean schedule) {
         if (resource != null) {
             statusIcon.setResource(resource);
         }
         if (visible) {
             statusIcon.addStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-            Timer timer = new Timer() {
-                @Override
-                public void run() {
-                    statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-                }
-            };
-            timer.schedule(2000);
-
+            if(schedule) {
+                Timer timer = new Timer() {
+                    @Override
+                    public void run() {
+                        statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+                    }
+                };
+                timer.schedule(2000);
+            }
         } else {
             statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
         }

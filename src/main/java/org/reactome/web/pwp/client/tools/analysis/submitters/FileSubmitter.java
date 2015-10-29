@@ -1,7 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.submitters;
 
 import com.google.gwt.animation.client.Animation;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,17 +22,15 @@ import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.EmptySampleEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
-import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.EmptySampleHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
 import org.reactome.web.pwp.client.tools.analysis.notifications.ErrorPanel;
-
-import java.util.List;
 
 
 /**
@@ -81,7 +78,7 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
 
         this.statusIcon = new Image(CommonImages.INSTANCE.loader());
         this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
-        setStatusIcon(null, false);
+        setStatusIcon(null, false, false);
         submissionPanel.add(this.statusIcon);
         add(submissionPanel);
         addPostSubmitter(postSubmitter);
@@ -117,7 +114,7 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
     @Override
     public void onAnalysisCompleted(AnalysisCompletedEvent event) {
         // Analysis successful coming from postSubmitter
-        setStatusIcon(null, false);
+        setStatusIcon(null, false, false);
         errorPanel.makeVisible(false);
     }
 
@@ -128,7 +125,7 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
             AnalysisError error =  event.getAnalysisError();
             errorPanel.setErrorMessage(error);
         }
-       setStatusIcon(null, false);
+       setStatusIcon(null, false, false);
     }
 
     @Override
@@ -142,7 +139,7 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         String fileName = this.fileUpload.getFilename();
         if(fileName==null || fileName.isEmpty()){
 //            fireEvent(new FileNotSelectedEvent()); //TODO keep???
-            setStatusIcon(CommonImages.INSTANCE.error(), true);
+            setStatusIcon(CommonImages.INSTANCE.error(), true, true);
             errorPanel.setErrorMessage("No file Selected", "Please select a file and then press GO");
             return;
         }
@@ -157,7 +154,7 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
 
     @Override
     public void onSubmit(FormPanel.SubmitEvent event) {
-        setStatusIcon(CommonImages.INSTANCE.loader(), true);
+        setStatusIcon(CommonImages.INSTANCE.loader(), true, false);
         errorPanel.makeVisible(false);
     }
 
@@ -170,9 +167,9 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         try {
             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, json);
             fireEvent(new AnalysisCompletedEvent(result));
-            setStatusIcon(CommonImages.INSTANCE.success(), true);
+            setStatusIcon(CommonImages.INSTANCE.success(), true, true);
         } catch (AnalysisModelException e) {
-            setStatusIcon(CommonImages.INSTANCE.error(), true);
+            setStatusIcon(CommonImages.INSTANCE.error(), true, true);
             try {
                 AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, json);
                 errorPanel.setErrorMessage(analysisError);
@@ -214,20 +211,21 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         return form;
     }
 
-    private void setStatusIcon(final ImageResource resource, boolean visible) {
+    private void setStatusIcon(final ImageResource resource, boolean visible, boolean schedule) {
         if (resource != null) {
             statusIcon.setResource(resource);
         }
         if (visible) {
             statusIcon.addStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-            Timer timer = new Timer() {
-                @Override
-                public void run() {
-                    statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-                }
-            };
-            timer.schedule(2000);
-
+            if(schedule) {
+                Timer timer = new Timer() {
+                    @Override
+                    public void run() {
+                        statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+                    }
+                };
+                timer.schedule(2000);
+            }
         } else {
             statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
         }
