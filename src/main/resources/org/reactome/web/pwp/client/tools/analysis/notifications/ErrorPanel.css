@@ -1,0 +1,34 @@
+@sprite .close {
+    gwt-image: 'closeRedNormal';
+    outline: none;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: right;
+}
+
+@sprite .close:hover {
+    gwt-image: 'closeRedHovered';
+}
+
+@sprite .close:active:hover {
+    gwt-image: 'closeRedClicked' ;
+}
+
+.errorPanel {
+    margin-top: 25px;
+    padding: 5px;
+    width: 97%;
+    max-height: 70px;
+    overflow: auto;
+    border-radius: 5px;
+    border: 1px solid #b31a0c;
+    background-color: rgb(197, 77, 71);
+    color: white;
+    white-space:pre; /* this is to handle line breaks */
+}
+
+.errorTitle {
+    font-size: large;
+    width: 80%;
+}
