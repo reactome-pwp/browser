@@ -7,6 +7,7 @@ import com.google.gwt.user.client.History;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.diagram.handlers.DiagramObjectsFlagResetHandler;
 import org.reactome.web.pwp.client.common.Selection;
+import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisSummary;
 import org.reactome.web.pwp.client.common.analysis.model.ResourceSummary;
 import org.reactome.web.pwp.client.common.events.*;
@@ -18,8 +19,6 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handler
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.manager.state.token.TokenMalformedException;
 import org.reactome.web.pwp.client.manager.title.TitleManager;
-import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
-import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.model.classes.*;
 import org.reactome.web.pwp.model.util.Path;
 
@@ -71,6 +70,8 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     @Override
     public void onAnalysisCompleted(AnalysisCompletedEvent event) {
         AnalysisSummary summary = event.getAnalysisResult().getSummary();
+        AnalysisHelper.addValidToken(summary.getToken());
+
         List<ResourceSummary> resources = event.getAnalysisResult().getResourceSummary();
         ResourceSummary resource = resources.size() == 2 ? resources.get(1) : resources.get(0); //IMPORTANT!
 
@@ -171,12 +172,23 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     }
 
     @Override
-    public void onStateLoaded(State state) {
+    public void onStateLoaded(final State state) {
         if (state == null) {
             this.eventBus.fireEventFromSource(new ErrorMessageEvent("The data in the URL can not be fit into a state"), this);
         } else if (!state.equals(this.currentState)) {
-            this.currentState = state;
-            this.eventBus.fireEventFromSource(new StateChangedEvent(state), this);
+            String token = state.getAnalysisStatus().getToken();
+            AnalysisHelper.checkTokenAvailability(token, new AnalysisHelper.TokenAvailabilityHandler() {
+                @Override
+                public void onTokenAvailabilityChecked(boolean available, String message) {
+                    if (!available) {
+                        eventBus.fireEventFromSource(new ErrorMessageEvent(message), StateManager.this);
+                        state.setAnalysisParameters(null, null);
+                        History.newItem(state.toString(), false);
+                    }
+                    currentState = state;
+                    eventBus.fireEventFromSource(new StateChangedEvent(state), StateManager.this);
+                }
+            });
         }
     }
 
@@ -185,8 +197,6 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         State desiredState = new State(this.currentState);
         desiredState.setTool(event.getTool());
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
-//        this.currentState.setTool(event.getTool());
-//        History.newItem(this.currentState.toString(), false);
     }
 
     private void tokenError(String token) {
