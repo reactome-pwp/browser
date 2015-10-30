@@ -1,0 +1,23 @@
+.notificationPanel {
+    background: rgb(220, 160, 79);
+    border: 1px solid rgb(249, 161, 35);
+    border-radius:5px;
+    color: #FFFFFF;
+    float: left;
+    margin: 4px 10px 0 0;
+    padding: 4px 6px 4px 6px;
+
+    -webkit-transition: width, height 0.3s;
+    -moz-transition: width,height 0.3s;
+    transition: width,height 0.3s;
+}
+
+.notificationPanelExpanded {
+    width: 100px;
+}
+
+.icon {
+    height: 13px;
+    width: auto;
+    margin-right: 3px;
+}
