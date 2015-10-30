@@ -32,7 +32,8 @@
     vertical-align: middle;
     width: 97%;
     cursor: default;
-    overflow: scroll; /* To make the submitter tab scrollable */
+    overflow-x: hidden; /* To make the submitter tab scrollable */
+    overflow-y: auto;
 }
 
 .analysisSubmission {

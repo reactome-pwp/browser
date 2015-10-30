@@ -34,9 +34,8 @@ public class ErrorPanel extends FlowPanel implements ClickHandler {
         errorTitle.setStyleName(RESOURCES.getCSS().errorTitle());
         header.add(errorTitle);
 
-
         errorMsg = new Label();
-        errorMsg.addStyleName(RESOURCES.getCSS().errorMsg());
+        errorMsg.setStyleName(RESOURCES.getCSS().errorMsg());
 
         add(header);
         add(errorMsg);
