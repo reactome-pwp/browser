@@ -33,14 +33,19 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         this.selectorPanel = new TableSelectorPanel(analysisResult.getIdentifiersNotFound(), speciesComparison);
         this.addEast(this.selectorPanel, 305);
 
-        NotificationPanel notificationPanel = new NotificationPanel();
-
         FlowPanel fp = new FlowPanel();
         fp.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().analysisTabSummary());
         fp.add(getResourceTypePanel(analysisResult.getResourceSummary()));
         fp.add(getTypePanel(summary));
         fp.add(getOptionPanel(summary));
-        fp.add(notificationPanel);
+
+        // Get tha analysis warnings
+        List<String> warningsList = analysisResult.getWarnings();
+        if(warningsList!=null && !warningsList.isEmpty()) {
+            NotificationPanel notificationPanel = new NotificationPanel(warningsList);
+            fp.add(notificationPanel);
+        }
+
         this.add(fp);
     }
 

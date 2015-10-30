@@ -6,36 +6,48 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 
+import java.util.List;
+
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class NotificationPanel extends FlowPanel implements ClickHandler {
+public class NotificationPanel extends Anchor implements ClickHandler {
 
-    public NotificationPanel(){
+    private List<String> warnings;
+    private NotificationPopup popupInstance;
+
+    public NotificationPanel(List<String> warnings){
+        this.warnings = warnings;
         this.addStyleName(RESOURCES.getCSS().notificationPanel());
 
         Image icon = new Image(RESOURCES.warning());
         icon.setStyleName(RESOURCES.getCSS().icon());
 
-        InlineLabel title = new InlineLabel("Warnings (5)");
+        InlineLabel title = new InlineLabel( warnings.size() + " Warning" + (warnings.size()>1?"s":"") );
         title.addClickHandler(this);
-        add(icon);
-        add(title);
 
-        initHandlers();
+        FlowPanel fp = new FlowPanel();
+        fp.add(icon);
+        fp.add(title);
+
+        this.setHTML(SafeHtmlUtils.fromTrustedString(fp.toString()));
+        this.addClickHandler(this);
     }
 
     @Override
     public void onClick(ClickEvent clickEvent) {
-        this.addStyleName(RESOURCES.getCSS().notificationPanelExpanded());
-    }
+        if(popupInstance==null) {
+            popupInstance = new NotificationPopup();
+        }
 
-    private void initHandlers(){
-
+        popupInstance.setMessage(warnings);
+        popupInstance.showRelativeTo(this);
     }
 
 
@@ -57,13 +69,6 @@ public class NotificationPanel extends FlowPanel implements ClickHandler {
 
         @Source("../images/warning.png")
         ImageResource warning();
-//
-//        @Source("../images/close_hovered.png")
-//        ImageResource closeHovered();
-//
-//        @Source("../images/close_normal.png")
-//        ImageResource closeNormal();
-
     }
 
     /**
@@ -77,8 +82,6 @@ public class NotificationPanel extends FlowPanel implements ClickHandler {
         String CSS = "org/reactome/web/pwp/client/details/tabs/analysis/widgets/summary/NoticationPanel.css";
 
         String notificationPanel();
-
-        String notificationPanelExpanded();
 
         String icon();
     }
