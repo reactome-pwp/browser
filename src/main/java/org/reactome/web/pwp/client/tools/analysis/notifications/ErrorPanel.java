@@ -53,11 +53,11 @@ public class ErrorPanel extends FlowPanel implements ClickHandler {
 
     public void setErrorMessage(AnalysisError error){
         if(error!=null) {
-            String title = "There are some issues with your sample ";
+            String title = "";
             StringBuilder sb = new StringBuilder();
             List<String> msgList = error.getMessages();
             if(msgList!=null && !msgList.isEmpty()) {
-                title += "(" + msgList.size() + " issue" + (msgList.size()>1?"s)":")");
+                title += "There " + (msgList.size()>1?"are " + msgList.size() + " issues " : "is 1 issue ") + "with your sample:";
 
                 for (int i = 0; i < msgList.size(); i++) {
                     sb.append("\t- " + error.getMessages().get(i) + "\n");
