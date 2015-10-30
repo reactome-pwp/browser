@@ -18,4 +18,6 @@ public interface AnalysisResult {
     List<ResourceSummary> getResourceSummary();
 
     ExpressionSummary getExpression();
+
+    List<String> getWarnings();
 }

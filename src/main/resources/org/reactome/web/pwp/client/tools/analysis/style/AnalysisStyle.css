@@ -32,6 +32,8 @@
     vertical-align: middle;
     width: 97%;
     cursor: default;
+    overflow-x: hidden; /* To make the submitter tab scrollable */
+    overflow-y: auto;
 }
 
 .analysisSubmission {
@@ -196,4 +198,14 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.statusIcon {
+    opacity:0;
+    transition: opacity 0.5s;
+    -webkit-transition: opacity 0.5s; /* Safari */
+}
+
+.statusIconVisible {
+    opacity:1;
 }

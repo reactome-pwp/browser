@@ -1,8 +1,8 @@
-package org.reactome.web.pwp.client.tools.analysis.event;
+package org.reactome.web.pwp.client.common.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

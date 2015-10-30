@@ -20,6 +20,7 @@ public abstract class AnalysisModelFactory {
 
     @SuppressWarnings("UnusedDeclaration")
     interface AnalysisAutoBeanFactory extends AutoBeanFactory {
+        AutoBean<AnalysisError> analysisError();
         AutoBean<AnalysisResult> analysisResult();
         AutoBean<AnalysisSummary> analysisSummary();
         AutoBean<ResourceSummary> resourceSummary();

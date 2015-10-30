@@ -12,7 +12,7 @@ import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.events.ToolSelectedEvent;
 import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.model.classes.Species;
 import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;

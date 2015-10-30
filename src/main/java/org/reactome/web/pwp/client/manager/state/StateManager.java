@@ -18,8 +18,8 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handler
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.manager.state.token.TokenMalformedException;
 import org.reactome.web.pwp.client.manager.title.TitleManager;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
+import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.model.classes.*;
 import org.reactome.web.pwp.model.util.Path;
 

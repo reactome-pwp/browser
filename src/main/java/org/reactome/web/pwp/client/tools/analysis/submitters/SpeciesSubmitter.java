@@ -4,21 +4,24 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.*;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
 import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
 import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
+import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
 import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
-import org.reactome.web.pwp.client.details.common.widgets.DialogBoxFactory;
-import org.reactome.web.pwp.client.tools.analysis.AnalysisLauncher;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisCompletedEvent;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorType;
-import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisCompletedHandler;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorEventHandler;
+import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.manager.state.token.Token;
+import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
+import org.reactome.web.pwp.client.tools.analysis.event.ServiceUnavailableEvent;
+import org.reactome.web.pwp.client.tools.analysis.examples.AnalysisExamples;
+import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
+import org.reactome.web.pwp.client.tools.analysis.notifications.ErrorPanel;
 import org.reactome.web.pwp.model.classes.Species;
 
 import java.util.List;
@@ -28,8 +31,10 @@ import java.util.List;
  */
 public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
 
-    private Image loading;
     private ListBox species;
+    private Image statusIcon;
+
+    private ErrorPanel errorPanel;
 
     public SpeciesSubmitter() {
         //noinspection GWTStyleCheck
@@ -58,20 +63,25 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
 
         submissionPanel.add(new Label("with "));
         submissionPanel.add(new Button("GO", this));
-        this.loading = new Image(CommonImages.INSTANCE.loader());
-        this.loading.setVisible(false);
-        submissionPanel.add(this.loading);
+        this.statusIcon = new Image(CommonImages.INSTANCE.loader());
+        this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
+        setStatusIcon(null, false, false);
+        submissionPanel.add(this.statusIcon);
+
         this.species = new ListBox();
         this.species.setMultipleSelect(false);
         submissionPanel.add(this.species);
         add(submissionPanel);
+
+        errorPanel = new ErrorPanel();
+        add(errorPanel);
     }
 
     public HandlerRegistration addAnalysisCompletedEventHandler(AnalysisCompletedHandler handler){
         return this.addHandler(handler, AnalysisCompletedEvent.TYPE);
     }
 
-    public HandlerRegistration addAnalysisErrorEventHandler(AnalysisErrorEventHandler handler){
+    public HandlerRegistration addAnalysisErrorEventHandler(AnalysisErrorHandler handler){
         return this.addHandler(handler, AnalysisErrorEvent.TYPE);
     }
 
@@ -79,12 +89,13 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
     public void onClick(ClickEvent event) {
         Long dbId = Long.valueOf(species.getValue(species.getSelectedIndex()));
         if(dbId==-1) {
-            //ToDo: Check for new Error Handling
-            DialogBoxFactory.alert("Species comparison", "Please select a species to compare with");
+//            DialogBoxFactory.alert("Species comparison", "Please select a species to compare with");
+            setStatusIcon(CommonImages.INSTANCE.error(), true, true);
+            errorPanel.setErrorMessage("No species selected", "Please select a species to compare with and then press GO");
             return;
         }
 
-        this.loading.setVisible(true);
+        setStatusIcon(CommonImages.INSTANCE.loader(), true, false);
         String url = AnalysisHelper.URL_PREFIX + "/species/homoSapiens/" + dbId + "?page=1";
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
@@ -93,30 +104,41 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     if(!response.getStatusText().equals("OK")){
-                        fireEvent(new AnalysisErrorEvent(AnalysisErrorType.FROM_RESPONSE.setMessage(response)));
+                        setStatusIcon(CommonImages.INSTANCE.error(), true, true);
+                        try {
+                            AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, response.getText());
+                            fireEvent(new AnalysisErrorEvent(analysisError));
+                        } catch (AnalysisModelException e) {
+//                            Console.error("Oops! This is unexpected", this);
+                            setStatusIcon(CommonImages.INSTANCE.error(), true, true);
+                        }
                     }else{
+                        setStatusIcon(CommonImages.INSTANCE.success(), true, true);
                         try {
                             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, response.getText());
                             fireEvent(new AnalysisCompletedEvent(result));
                         } catch (AnalysisModelException e) {
-                            fireEvent(new AnalysisErrorEvent(AnalysisErrorType.RESULT_FORMAT));
-                            //ToDo: Look into new Error Handling
+                            Console.error("Oops! This is unexpected", this);
                         }
                     }
-                    loading.setVisible(false);
+                    if(response.getStatusCode() == 500){
+                        errorPanel.setErrorMessage("The Analysis Service is temporarily unavailable",
+                                "We have trouble performing the analysis. Please check your internet connection and try again in a while");
+                        fireEvent(new ServiceUnavailableEvent());
+                    }
                 }
 
                 @Override
                 public void onError(Request request, Throwable exception) {
-                    loading.setVisible(false);
-                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.SERVICE_UNAVAILABLE));
-                    //ToDo: Look into new Error Handling
+                    setStatusIcon(CommonImages.INSTANCE.error(), true, true);
+                    errorPanel.setErrorMessage("The Analysis Service is temporarily unavailable",
+                            "We have trouble performing the analysis. Please check your internet connection and try again in a while");
+                    fireEvent(new ServiceUnavailableEvent());
                 }
             });
         }catch (RequestException ex) {
-            loading.setVisible(false);
-            fireEvent(new AnalysisErrorEvent(AnalysisErrorType.SERVICE_UNAVAILABLE));
-            //ToDo: Look into new Error Handling
+            setStatusIcon(CommonImages.INSTANCE.error(), true, true);
+            fireEvent(new ServiceUnavailableEvent());
         }
     }
 
@@ -127,6 +149,26 @@ public class SpeciesSubmitter extends FlowPanel implements ClickHandler {
             if(!species.getDbId().equals(Token.DEFAULT_SPECIES_ID)){
                 this.species.addItem(species.getDisplayName(), species.getDbId().toString());
             }
+        }
+    }
+
+    private void setStatusIcon(final ImageResource resource, boolean visible, boolean schedule) {
+        if (resource != null) {
+            statusIcon.setResource(resource);
+        }
+        if (visible) {
+            statusIcon.addStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+            if(schedule) {
+                Timer timer = new Timer() {
+                    @Override
+                    public void run() {
+                        statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
+                    }
+                };
+                timer.schedule(2000);
+            }
+        } else {
+            statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
         }
     }
 }
