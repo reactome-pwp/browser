@@ -74,5 +74,6 @@ public class NotificationPopup extends PopupPanel implements ClickHandler {
         String popup();
 
         String messages();
+
     }
 }
