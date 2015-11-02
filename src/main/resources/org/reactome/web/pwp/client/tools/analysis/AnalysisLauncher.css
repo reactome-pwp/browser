@@ -3,6 +3,7 @@
     border-radius: 15px;
     padding: 5px 10px 10px 10px;
     background-color: rgb(30, 148, 208) !important;
+    z-index: 100; /* Avoids the zombie spotted when GXA tab is visible xD */
 }
 
 .analysisPanel {
