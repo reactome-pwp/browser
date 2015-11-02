@@ -1,0 +1,28 @@
+.notificationPanel {
+    background: rgb(220, 160, 79);
+    border: 1px solid rgb(249, 161, 35);
+    border-radius:5px;
+    color: #FFFFFF;
+    float: left;
+    margin: 4px 10px 0 0;
+    padding: 4px 6px 4px 6px;
+    cursor: pointer;
+
+    -webkit-transition: width, height 0.3s;
+    -moz-transition: width,height 0.3s;
+    transition: width,height 0.3s;
+
+    /*No selection*/
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.icon {
+    height: 13px;
+    width: auto;
+    margin-right: 3px;
+}

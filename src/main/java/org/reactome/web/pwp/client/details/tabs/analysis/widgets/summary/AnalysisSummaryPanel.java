@@ -38,6 +38,14 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         fp.add(getResourceTypePanel(analysisResult.getResourceSummary()));
         fp.add(getTypePanel(summary));
         fp.add(getOptionPanel(summary));
+
+        // Get tha analysis warnings
+        List<String> warningsList = analysisResult.getWarnings();
+        if(warningsList!=null && !warningsList.isEmpty()) {
+            NotificationPanel notificationPanel = new NotificationPanel(warningsList);
+            fp.add(notificationPanel);
+        }
+
         this.add(fp);
     }
 

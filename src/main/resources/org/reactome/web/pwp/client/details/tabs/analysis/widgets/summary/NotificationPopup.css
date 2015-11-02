@@ -1,0 +1,22 @@
+.popup {
+    background: rgb(220, 160, 79);
+    border: 1px solid rgb(249, 161, 35);
+    border-radius:5px;
+    color: #FFFFFF;
+    margin: 4px 10px 0 0;
+    padding: 4px 6px 4px 6px;
+    white-space:pre; /* this is to handle line breaks */
+    overflow: hidden;
+    opacity: 0.95;
+}
+
+.messages {
+    max-height: 75px;
+    /*overflow-x: hidden;*/
+    /*overflow-y: auto;*/
+    overflow: auto;
+    -ms-overflow-style: none;
+    padding-right: 25px;
+}
+
+.messages::-webkit-scrollbar { width: 0 !important }
