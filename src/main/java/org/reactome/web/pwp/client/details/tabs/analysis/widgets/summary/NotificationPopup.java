@@ -29,8 +29,8 @@ public class NotificationPopup extends PopupPanel implements ClickHandler {
 
     public void setMessage(List<String> messages){
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < messages.size(); i++) {
-            sb.append("- " + messages.get(i) + "\n");
+        for (String message : messages) {
+            sb.append("-").append(message).append("\n");
         }
         messageLabel.setText(sb.toString());
     }
