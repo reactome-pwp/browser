@@ -58,9 +58,8 @@ public class ErrorPanel extends FlowPanel implements ClickHandler {
             List<String> msgList = error.getMessages();
             if(msgList!=null && !msgList.isEmpty()) {
                 title += "There " + (msgList.size()>1?"are " + msgList.size() + " issues " : "is 1 issue ") + "with your sample:";
-
-                for (int i = 0; i < msgList.size(); i++) {
-                    sb.append("\t- " + msgList.get(i) + "\n");
+                for (String message:msgList) {
+                    sb.append("\t- ").append(message).append("\n");
                 }
             }
             setErrorMessage(title, sb.toString());
