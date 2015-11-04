@@ -22,6 +22,7 @@
 
 .messageContent {
     color: white;
+    overflow: scroll;
 }
 
 @sprite .close {
