@@ -1,10 +1,13 @@
 package org.reactome.web.pwp.client.messages;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.diagram.common.PwpButton;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -38,9 +41,21 @@ public class MessagesDisplay extends PopupPanel implements Messages.Display {
         FlowPanel message = new FlowPanel();
         message.setStyleName(RESOURCES.getCSS().message());
 
-        Label header = new Label("OOPS! Something unexpected happened");
+        InlineLabel header = new InlineLabel("OOPS! Something unexpected happened");
         header.setStyleName(RESOURCES.getCSS().messageHeader());
-        message.add(header);
+//        message.add(header);
+
+        Button closeBtn = new PwpButton("Close this message", RESOURCES.getCSS().close(), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                MessagesDisplay.this.hide();
+            }
+        });
+
+        FlowPanel headerFp = new FlowPanel();
+        headerFp.add(header);
+        headerFp.add(closeBtn);
+        message.add(headerFp);
 
         Label content = new Label(errorMsg);
         content.setStyleName(RESOURCES.getCSS().messageContent());
