@@ -4,9 +4,10 @@ body {
 
 /*####################### APP LOADER [BEGIN] #########################################################################*/
 .app-Loader{
-    background-color: azure;
+    background-color: rgb(27, 135, 197);
+    border: 2px solid rgb(42, 147, 189);
+    color: white;
     border-radius: 5px;
-    border: 2px solid grey;
     box-shadow: 4px 4px 2px #888;
     height: 150px;
     width: 500px;
@@ -15,9 +16,34 @@ body {
     left: 50%;
     margin-top: -150px;
     margin-left:-300px;
-    padding: 50px;
+    padding: 30px;
     text-align: center
 }
+
+.logoDiv{
+    text-align: center;
+}
+
+.logoIcon{
+    margin-top: 5px;
+    width: auto;
+    height: 100px;
+}
+
+.loaderDiv{
+    text-align: center;
+    margin-top: 5px;
+    font-family: Arial Unicode MS, Arial, sans-serif;
+    font-size: 20px;
+}
+
+.loaderIcon {
+    margin-right: 15px;
+    width: auto;
+    height: 48px;
+    vertical-align: middle;
+}
+
 /*####################### APP LOADER [END] ###########################################################################*/
 
 
