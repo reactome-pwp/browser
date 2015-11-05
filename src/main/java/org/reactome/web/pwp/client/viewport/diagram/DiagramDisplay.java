@@ -29,6 +29,7 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
         DiagramFactory.CONSOLE_VERBOSE = Browser.VERBOSE;
         DiagramFactory.EVENT_BUS_VERBOSE = Browser.VERBOSE;
         DiagramFactory.SHOW_INFO = false;
+        DiagramFactory.WATERMARK = false;
 
         this.diagram = DiagramFactory.createDiagramViewer();
         this.diagram.asWidget().setStyleName(ViewportDisplay.RESOURCES.getCSS().viewportPanel());
