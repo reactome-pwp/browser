@@ -1,4 +1,4 @@
 Details are shown when an item is selected in the pathway diagram above. For a reaction shows,
 when available, reaction diagrams from the Rhea database. For simple molecules, shows information
-rom ChEBI. For pathway items that contain proteins shows, when available, 3D structure information
+from ChEBI. For pathway items that contain proteins shows, when available, 3D structure information
 from PDBe.

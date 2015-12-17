@@ -1,4 +1,4 @@
 When a pathway is displayed in the panel above, shows details of all the molecules involved. If an item
 is selected in the diagram, the corresponding molecules are highlighted. Molecules are grouped into the
-subtypes Protein, Chenmical Compound,  Sequences (for DNA/RNA) and Other. The molecule lists can be
-downloaded. Click the Downlaod button, select the fields and molecule types you want and click Start Download.
+subtypes Protein, Chemical Compound,  Sequences (for DNA/RNA) and Other. The molecule lists can be
+downloaded. Click the Download button, select the fields and molecule types you want and click Start Download.
