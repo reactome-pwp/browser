@@ -29,7 +29,10 @@ public class State {
 
     private Species species;
 
-    private Pathway pathway;
+    /**
+     * event can either be a Pathway or a ReactionLikeEvent (these are linkable as default parameters)
+     */
+    private Event event;
 
     /**
      * selected can either be a Pathway, a PhysicalEntity or a Species object
@@ -63,7 +66,7 @@ public class State {
                                 species = (Species) databaseObjects.get(identifier);
                                 break;
                             case PATHWAY:
-                                pathway = (Pathway) databaseObjects.get(identifier);
+                                event = (Event) databaseObjects.get(identifier);
                                 break;
                             case SELECTED:
                                 selected = databaseObjects.get(identifier);
@@ -110,7 +113,7 @@ public class State {
 
     public State(State state) {
         this.species = state.species;
-        this.pathway = state.pathway;
+        this.event = state.event;
         this.selected = state.selected;
         this.path = state.path;
         this.detailsTab = state.detailsTab;
@@ -120,17 +123,17 @@ public class State {
     }
 
     public void doConsistencyCheck(final StateLoadedHandler handler){
-        if(this.pathway!=null){
-            if(pathway.getHasDiagram()){
+        if(event !=null){
+            if((event instanceof Pathway) && ((Pathway) event).getHasDiagram()){
                 handler.onStateLoaded(this);
             }else{
-                StateHelper.getPathwayWithDiagram(pathway, path, new StateHelper.PathwayWithDiagramHandler() {
+                StateHelper.getPathwayWithDiagram(event, path, new StateHelper.PathwayWithDiagramHandler() {
                     @Override
                     public void setPathwayWithDiagram(Pathway pathway, Path path) {
                         if(State.this.selected==null){
-                            State.this.selected = State.this.pathway;
+                            State.this.selected = State.this.event;
                         }
-                        State.this.pathway = pathway;
+                        State.this.event = pathway;
                         State.this.path = path;
                         State.this.path = State.this.getPrunedPath(); //Very important!
                         handler.onStateLoaded(State.this);
@@ -148,7 +151,7 @@ public class State {
     }
 
     public Species getSpecies() {
-        return pathway != null && pathway.getSpecies() != null && !pathway.getSpecies().isEmpty() ? pathway.getSpecies().get(0) : species;
+        return event != null && event.getSpecies() != null && !event.getSpecies().isEmpty() ? event.getSpecies().get(0) : species;
     }
 
     public void setSpecies(Species species) {
@@ -156,7 +159,7 @@ public class State {
     }
 
     public Pathway getPathway() {
-        return pathway;
+        return (Pathway) event;
     }
 
     public void setPathway(Pathway pathway) {
@@ -165,7 +168,7 @@ public class State {
             this.selected = null;
             this.path = null;
         }
-        this.pathway = pathway;
+        this.event = pathway;
     }
 
     public DatabaseObject getSelected() {
@@ -186,7 +189,7 @@ public class State {
 
     public DatabaseObject getTarget() {
         if (this.selected != null) return this.selected;
-        return this.pathway;
+        return this.event;
     }
 
     public DetailsTabType getDetailsTab() {
@@ -227,19 +230,19 @@ public class State {
     public String toString() {
         StringBuilder token = new StringBuilder("/");
         boolean addDelimiter = false;
-        if (pathway == null && species != null && !species.getDbId().equals(Token.DEFAULT_SPECIES_ID)) {
+        if (event == null && species != null && !species.getDbId().equals(Token.DEFAULT_SPECIES_ID)) {
             token.append(StateKey.SPECIES.getDefaultKey());
             token.append("=");
             token.append(species.getIdentifier());
             addDelimiter = true;
         }
-        if (pathway != null) {
+        if (event != null) {
             if (addDelimiter) token.append(Token.DELIMITER);
-            if (!Token.isSingleIdentifier(pathway.getIdentifier())) {
+            if (!Token.isSingleIdentifier(event.getIdentifier())) {
                 token.append(StateKey.PATHWAY.getDefaultKey());
                 token.append("=");
             }
-            token.append(pathway.getIdentifier());
+            token.append(event.getIdentifier());
             addDelimiter = true;
         }
         if (selected != null) {
@@ -305,7 +308,7 @@ public class State {
         if (this.path == null) return null;
         List<Event> prunedPath = new LinkedList<>();
         for (Event event : this.path) {
-            if (event.equals(this.pathway)) {
+            if (event.equals(this.event)) {
                 break;
             }
             prunedPath.add(event);

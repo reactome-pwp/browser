@@ -34,7 +34,7 @@ public abstract class StateHelper {
         void onPathwayWithDiagramRetrievalError(Throwable throwable);
     }
 
-    public static void getPathwayWithDiagram(Pathway pathway, Path path, final PathwayWithDiagramHandler handler){
+    public static void getPathwayWithDiagram(Event event, Path path, final PathwayWithDiagramHandler handler){
         //Trying first to figure out the diagram from the provided path (if there is any)
         if(path!=null && !path.isEmpty()){
             Pathway diagram = path.getLastPathwayWithDiagram();
@@ -44,7 +44,7 @@ public abstract class StateHelper {
             }
         }
 
-        RESTFulClient.getAncestors(pathway, new AncestorsCreatedHandler() {
+        RESTFulClient.getAncestors(event, new AncestorsCreatedHandler() {
             @Override
             public void onAncestorsLoaded(Ancestors ancestors) {
                 for (final Path ancestor : ancestors) {
