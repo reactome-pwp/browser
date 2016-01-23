@@ -8,8 +8,8 @@ import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.model.classes.DatabaseIdentifier;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.LiteratureReference;
 import org.reactome.web.pwp.model.classes.Person;
+import org.reactome.web.pwp.model.classes.Publication;
 import org.reactome.web.pwp.model.client.RESTFulClient;
 import org.reactome.web.pwp.model.client.handlers.LiteratureReferencesLoadedHandler;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
@@ -68,7 +68,7 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
         RESTFulClient.loadLiteratureReferences(this.person, new LiteratureReferencesLoadedHandler() {
             @Override
             public void onLiteratureReferencesLoaded(Person person) {
-                setReceivedReferences(person.getLiteratureReferences());
+                setReceivedReferences(person.getPublications());
             }
 
             @Override
@@ -79,7 +79,7 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
     }
 
 
-    public void setReceivedReferences(List<LiteratureReference> literatureReferences) {
+    public void setReceivedReferences(List<Publication> publications) {
         setLoaded(true);
 
         VerticalPanel vp = new VerticalPanel();
@@ -87,8 +87,8 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
         vp.setWidth("100%");
 
         vp.add(getPositionBasedTitle());
-        for (LiteratureReference literatureReference : literatureReferences) {
-            PublicationPanel lrp = new PublicationPanel(this, literatureReference);
+        for (Publication publication : publications) {
+            PublicationPanel lrp = new PublicationPanel(this, publication);
             lrp.setWidth("99%");
             if(!isPanelInParentPanels(lrp))
                 vp.add(lrp);
