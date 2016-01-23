@@ -65,7 +65,7 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
 
     public void setReceivedData(DatabaseObject data) {
         this.person = (Person) data;
-        RESTFulClient.loadLiteratureReferences(this.person, new LiteratureReferencesLoadedHandler() {
+        RESTFulClient.loadPublications(this.person, new LiteratureReferencesLoadedHandler() {
             @Override
             public void onLiteratureReferencesLoaded(Person person) {
                 setReceivedReferences(person.getPublications());
