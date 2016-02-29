@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found;
 
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.view.client.ProvidesKey;
-import org.reactome.web.pwp.client.common.analysis.model.PathwayIdentifier;
+import org.reactome.web.analysis.client.model.PathwayIdentifier;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.AbstractColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.ExpressionColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.IdentifierColumn;

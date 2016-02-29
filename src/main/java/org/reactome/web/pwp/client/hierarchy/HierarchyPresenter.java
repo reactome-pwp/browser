@@ -1,10 +1,12 @@
 package org.reactome.web.pwp.client.hierarchy;
 
 import com.google.gwt.event.shared.EventBus;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
-import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.common.utils.Console;
@@ -16,10 +18,7 @@ import org.reactome.web.pwp.model.classes.Pathway;
 import org.reactome.web.pwp.model.classes.Species;
 import org.reactome.web.pwp.model.util.Path;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -171,20 +170,49 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
 
     private void loadAnalysisOverlay(Set<Pathway> pathways){
         if(this.analysisStatus.isEmpty()) return;
-        AnalysisHelper.getAnalysisDataForPathways(this.analysisStatus, pathways, new AnalysisHelper.PathwaysAnalysisDataRetrievedHandler() {
+        List<String> ids = new LinkedList<>();
+        for (Pathway pathway : pathways) {
+            ids.add(pathway.getDbId().toString());
+        }
+        AnalysisClient.getPathwaySummaries(analysisStatus.getToken(), analysisStatus.getResource(), ids, new AnalysisHandler.Summaries() {
             @Override
-            public void onPathwaysAnalysisDataRetrieved(List<PathwaySummary> result) {
-                display.showAnalysisResult(result);
+            public void onPathwaySummariesLoaded(List<PathwaySummary> pathwaySummaries, long time) {
+                display.showAnalysisResult(pathwaySummaries);
+            }
+
+            @Override
+            public void onPathwaySummariesNotFound(long time) {
+                display.showAnalysisResult(new LinkedList<PathwaySummary>());
+            }
+
+            @Override
+            public void onPathwaySummariesError(AnalysisError error) {
+                //TODO
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
+                //TODO
             }
         });
     }
 
     private void loadHitReactions(Set<Pathway> pathways){
         if(this.analysisStatus.isEmpty()) return;
-        AnalysisHelper.getAnalysisDataForPathwaysWithReactions(this.analysisStatus, pathways, new AnalysisHelper.ReactionsAnalysisDataRetrievedHandler() {
+        AnalysisClient.getHitReactions(analysisStatus.getToken(), analysisStatus.getResource(), pathways, new AnalysisHandler.Reactions() {
             @Override
-            public void onReactionsAnalysisDataRetrieved(Set<Long> hitReactions) {
-                display.highlightHitReactions(hitReactions);
+            public void onReactionsAnalysisDataRetrieved(Set<Long> reactions) {
+                display.highlightHitReactions(reactions);
+            }
+
+            @Override
+            public void onReactionsAnalysisError(AnalysisError error) {
+                //TODO
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
+                //TODO
             }
         });
     }

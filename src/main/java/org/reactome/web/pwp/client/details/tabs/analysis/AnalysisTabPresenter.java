@@ -1,18 +1,18 @@
 package org.reactome.web.pwp.client.details.tabs.analysis;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.http.client.*;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
-import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
-import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
-import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.common.events.DatabaseObjectHoveredEvent;
 import org.reactome.web.pwp.client.common.events.DatabaseObjectSelectedEvent;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
@@ -116,58 +116,47 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
     }
 
     private void loadAnalysisData(final String token, final String resource){
-        String url = AnalysisHelper.URL_PREFIX + "/token/" + token + "?page=1&resource=" + resource;
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
-        requestBuilder.setHeader("Accept", "application/json");
-        try {
-            requestBuilder.sendRequest(null, new RequestCallback() {
-                @Override
-                public void onResponseReceived(Request request, Response response) {
-                    final AnalysisResult result;
-                    try {
-                        result = AnalysisModelFactory.getModelObject(AnalysisResult.class, response.getText());
-                    } catch (AnalysisModelException e) {
-                        String errorMsg = "The received object for '" + resource + "' is empty or faulty and could not be parsed. ERROR: " + e.getMessage();
-                        eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, e), AnalysisTabPresenter.this);
-                        display.setInitialState();
-                        return;
-                    }
-                    Long speciesId = result.getSummary().getSpecies();
-                    if(speciesId!=null) {
-                        DatabaseObjectFactory.get(result.getSummary().getSpecies(), new DatabaseObjectCreatedHandler() {
-                            @Override
-                            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
-                                result.getSummary().setSpeciesName(databaseObject.getDisplayName());
-                                display.clearSelection();
-                                display.showResult(result, resource);
-                                display.selectPathway(selected);
-                            }
+        AnalysisClient.getResult(token, resource, AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
+            @Override
+            public void onAnalysisResult(final AnalysisResult result, long time) {
+                Long speciesId = result.getSummary().getSpecies();
+                if (speciesId != null) {
+                    DatabaseObjectFactory.get(result.getSummary().getSpecies(), new DatabaseObjectCreatedHandler() {
+                        @Override
+                        public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                            result.getSummary().setSpeciesName(databaseObject.getDisplayName());
+                            display.clearSelection();
+                            display.showResult(result, resource);
+                            display.selectPathway(selected);
+                        }
 
-                            @Override
-                            public void onDatabaseObjectError(Throwable exception) {
-                                String errorMsg = "No species information available for '" + resource + "'. ERROR: " + exception.getMessage();
-                                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), AnalysisTabPresenter.this);
-                                display.setInitialState();
-                            }
-                        });
-                    }else{
-                        display.clearSelection();
-                        display.showResult(result, resource);
-                        display.selectPathway(selected);
-                    }
+                        @Override
+                        public void onDatabaseObjectError(Throwable exception) {
+                            String errorMsg = "No species information available for '" + resource + "'. ERROR: " + exception.getMessage();
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), AnalysisTabPresenter.this);
+                            display.setInitialState();
+                        }
+                    });
+                } else {
+                    display.clearSelection();
+                    display.showResult(result, resource);
+                    display.selectPathway(selected);
                 }
+            }
 
-                @Override
-                public void onError(Request request, Throwable exception) {
-                    String errorMsg = "The request for '" + resource + "' received an error instead of a valid response. ERROR: " + exception.getMessage();
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), AnalysisTabPresenter.this);
-                    display.setInitialState();
-                }
-            });
-        }catch (RequestException ex) {
-            String errorMsg = "The requested detailed data for '" + resource + "' in the Analysis could not be received. ERROR: " + ex.getMessage();
-            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, ex), AnalysisTabPresenter.this);
-            display.setInitialState();
-        }
+            @Override
+            public void onAnalysisError(AnalysisError error) {
+                String errorMsg = "The request for '" + resource + "' received an error instead of a valid response. ERROR: " + error.getReason();
+                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), AnalysisTabPresenter.this);
+                display.setInitialState();
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
+                String errorMsg = "The requested detailed data for '" + resource + "' in the Analysis could not be received. ERROR: " + message;
+                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), AnalysisTabPresenter.this);
+                display.setInitialState();
+            }
+        });
     }
 }

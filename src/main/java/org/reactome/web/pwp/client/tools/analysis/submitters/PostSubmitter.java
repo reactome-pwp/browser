@@ -4,18 +4,17 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.http.client.*;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.diagram.util.Console;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
-import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.EmptySampleEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.ServiceUnavailableEvent;
@@ -27,8 +26,6 @@ import org.reactome.web.pwp.client.tools.analysis.handler.EmptySampleHandler;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
-    private static final String POST_ANALYSIS = "/AnalysisService/identifiers/?page=1";
-    private static final String POST_ANALYSIS_PROJECTION = "/AnalysisService/identifiers/projection?page=1";
 
     private CheckBox projection;
     private TextArea textArea;
@@ -110,42 +107,22 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         }
         setStatusIcon(CommonImages.INSTANCE.loader(), true, false);
 
-        String url = this.projection.getValue() ? POST_ANALYSIS_PROJECTION : POST_ANALYSIS;
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.POST, url);
-        requestBuilder.setHeader("Content-Type", "text/plain");
-        requestBuilder.setHeader("Accept", "application/json");
-        try {
-            requestBuilder.sendRequest(this.getData(), new RequestCallback() {
-                @Override
-                public void onResponseReceived(Request request, Response response) {
-                    if(response.getStatusCode() != Response.SC_OK){
-                        setStatusIcon(CommonImages.INSTANCE.error(), true, true);
-                        try {
-                            AnalysisError analysisError= AnalysisModelFactory.getModelObject(AnalysisError.class, response.getText());
-                            fireEvent(new AnalysisErrorEvent(analysisError));
-                        } catch (AnalysisModelException e) {
-                            Console.error("Oops! This is unexpected", this);
-                        }
-                    }else{
-                        setStatusIcon(CommonImages.INSTANCE.success(), true, true);
-                        try {
-                            AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, response.getText());
-                            fireEvent(new AnalysisCompletedEvent(result));
-                        } catch (AnalysisModelException e) {
-                            Console.error("Oops! This is unexpected", this);
-                        }
-                    }
-                }
+        AnalysisClient.analyseData(getData(), projection.getValue(), AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
+            @Override
+            public void onAnalysisResult(AnalysisResult result, long time) {
+                fireEvent(new AnalysisCompletedEvent(result));
+            }
 
-                @Override
-                public void onError(Request request, Throwable exception) {
-                    setStatusIcon(CommonImages.INSTANCE.error(), true, true);
-                    fireEvent(new ServiceUnavailableEvent());
-                }
-            });
-        }catch (RequestException ex) {
-            fireEvent(new ServiceUnavailableEvent());
-        }
+            @Override
+            public void onAnalysisError(AnalysisError error) {
+                fireEvent(new AnalysisErrorEvent(error));
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
+                fireEvent(new ServiceUnavailableEvent());
+            }
+        });
     }
 
     private void setStatusIcon(final ImageResource resource, boolean visible, boolean schedule) {

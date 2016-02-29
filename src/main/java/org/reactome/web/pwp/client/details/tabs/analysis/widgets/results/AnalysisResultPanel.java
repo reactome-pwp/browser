@@ -11,9 +11,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.AnalysisResult;
+import org.reactome.web.analysis.client.model.PathwaySummary;
+import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
 import org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
@@ -30,8 +33,8 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handler
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class AnalysisResultPanel extends DockLayoutPanel implements SelectionChangeEvent.Handler, RowHoverEvent.Handler, MouseOutHandler,
-        AnalysisAsyncDataProvider.PageFoundHandler,
         AnalysisAsyncDataProvider.PageLoadedHandler,
+        AnalysisHandler.Page,
         ResultPathwaySelectedHandler {
 
     private AnalysisAsyncDataProvider dataProvider;
@@ -201,12 +204,22 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     }
 
     @Override
+    public void onAnalysisServerException(String message) {
+        Console.warn(getClass().getSimpleName() + " --> TODO");
+    }
+
+    @Override
     public void onPageFound(Integer page) {
         if( page == -1 ){
             this.clearSelection();
         }else{
             this.showPage(page);
         }
+    }
+
+    @Override
+    public void onPageError(AnalysisError error) {
+        //TODO
     }
 
     @Override

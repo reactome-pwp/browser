@@ -9,7 +9,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.columns.*;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.ResultPathwaySelectedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.ResultPathwaySelectedHandler;

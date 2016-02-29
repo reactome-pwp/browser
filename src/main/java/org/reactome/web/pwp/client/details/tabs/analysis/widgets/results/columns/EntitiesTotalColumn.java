@@ -1,7 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.columns;
 
 import com.google.gwt.cell.client.NumberCell;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

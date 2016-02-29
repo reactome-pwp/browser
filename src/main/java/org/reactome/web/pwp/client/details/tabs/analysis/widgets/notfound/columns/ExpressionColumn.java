@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound.colum
 
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.i18n.client.NumberFormat;
-import org.reactome.web.pwp.client.common.analysis.model.IdentifierSummary;
+import org.reactome.web.analysis.client.model.IdentifierSummary;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

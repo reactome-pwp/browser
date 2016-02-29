@@ -5,7 +5,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.cells.CustomHeader;
 
 /**

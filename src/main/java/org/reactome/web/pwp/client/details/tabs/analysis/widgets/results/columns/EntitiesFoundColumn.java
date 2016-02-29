@@ -4,7 +4,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

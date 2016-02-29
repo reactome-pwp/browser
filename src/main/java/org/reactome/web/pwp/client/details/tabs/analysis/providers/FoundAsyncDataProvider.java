@@ -1,14 +1,13 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.providers;
 
-import com.google.gwt.http.client.*;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelException;
-import org.reactome.web.pwp.client.common.analysis.factory.AnalysisModelFactory;
-import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
-import org.reactome.web.pwp.client.common.analysis.model.PathwayIdentifier;
-import org.reactome.web.pwp.client.common.analysis.model.PathwayIdentifiers;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.PathwayIdentifier;
+import org.reactome.web.analysis.client.model.PathwayIdentifiers;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.FoundTable;
@@ -38,34 +37,28 @@ public class FoundAsyncDataProvider extends AsyncDataProvider<PathwayIdentifier>
     protected void onRangeChanged(HasData<PathwayIdentifier> display) {
         final Integer page = this.pager.getPage() + 1;
 
-        String url = AnalysisHelper.URL_PREFIX  + "/token/" + this.token + "/summary/" + this.pathwayId + "?resource=" + this.resource + "&pageSize=" + NotFoundTable.PAGE_SIZE + "&page=" + page;
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
-        requestBuilder.setHeader("Accept", "application/json");
-        try {
-            requestBuilder.sendRequest(null, new RequestCallback() {
-                @Override
-                public void onResponseReceived(Request request, Response response) {
-                    try {
-                        PathwayIdentifiers identifiers = AnalysisModelFactory.getModelObject(PathwayIdentifiers.class, response.getText());
-                        table.setRowCount(identifiers.getFound());
-                        table.setRowData(pager.getPageStart(), identifiers.getIdentifiers());
-                    } catch (AnalysisModelException e) {
-                        Console.error(e.getMessage());
-                        //ToDo: Look into new Error Handling
-                    }
-                }
+        AnalysisClient.getPathwayIdentifiers(token, resource, pathwayId, NotFoundTable.PAGE_SIZE, page, new AnalysisHandler.Identifiers() {
+            @Override
+            public void onPathwayIdentifiersLoaded(PathwayIdentifiers identifiers, long time) {
+                table.setRowCount(identifiers.getFound());
+                table.setRowData(pager.getPageStart(), identifiers.getIdentifiers());
+            }
 
-                @Override
-                public void onError(Request request, Throwable exception) {
-                    Console.error(exception.getMessage());
-                    //ToDo: Look into new Error Handling
-                }
-            });
-        }catch (RequestException ex) {
-            Console.error(ex.getMessage());
-            //ToDo: Look into new Error Handling
-        }
+            @Override
+            public void onPathwayIdentifiersNotFound(long time) {
+                Console.error("onPathwayIdentifiersNotFound", FoundAsyncDataProvider.this);
+            }
+
+            @Override
+            public void onPathwayIdentifiersError(AnalysisError error) {
+                Console.error(error.getReason(), FoundAsyncDataProvider.this);
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
+                Console.error(message, FoundAsyncDataProvider.this);
+            }
+        });
     }
-
 
 }

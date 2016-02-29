@@ -4,12 +4,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisSummary;
+import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.diagram.handlers.DiagramObjectsFlagResetHandler;
 import org.reactome.web.pwp.client.common.Selection;
-import org.reactome.web.pwp.client.common.analysis.helper.AnalysisHelper;
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisSummary;
-import org.reactome.web.pwp.client.common.analysis.model.ResourceSummary;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.*;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
@@ -70,7 +71,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     @Override
     public void onAnalysisCompleted(AnalysisCompletedEvent event) {
         AnalysisSummary summary = event.getAnalysisResult().getSummary();
-        AnalysisHelper.addValidToken(summary.getToken());
+        AnalysisClient.addValidToken(summary.getToken());
 
         List<ResourceSummary> resources = event.getAnalysisResult().getResourceSummary();
         ResourceSummary resource = resources.size() == 2 ? resources.get(1) : resources.get(0); //IMPORTANT!
@@ -177,7 +178,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
             this.eventBus.fireEventFromSource(new ErrorMessageEvent("The data in the URL can not be fit into a state"), this);
         } else if (!state.equals(this.currentState)) {
             String token = state.getAnalysisStatus().getToken();
-            AnalysisHelper.checkTokenAvailability(token, new AnalysisHelper.TokenAvailabilityHandler() {
+            AnalysisClient.checkTokenAvailability(token, new AnalysisHandler.Token() {
                 @Override
                 public void onTokenAvailabilityChecked(boolean available, String message) {
                     if (!available) {
@@ -187,6 +188,11 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                     }
                     currentState = state;
                     eventBus.fireEventFromSource(new StateChangedEvent(state), StateManager.this);
+                }
+
+                @Override
+                public void onAnalysisServerException(String message) {
+                    //TODO
                 }
             });
         }

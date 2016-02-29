@@ -1,6 +1,6 @@
 package org.reactome.web.pwp.client.details.tabs.analysis;
 
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisResult;
+import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.tabs.DetailsTab;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.model.classes.Pathway;

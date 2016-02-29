@@ -2,8 +2,8 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
-import org.reactome.web.pwp.client.common.analysis.model.IdentifierMap;
-import org.reactome.web.pwp.client.common.analysis.model.PathwayIdentifier;
+import org.reactome.web.analysis.client.model.IdentifierMap;
+import org.reactome.web.analysis.client.model.PathwayIdentifier;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

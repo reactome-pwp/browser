@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
+import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 
 import java.util.List;

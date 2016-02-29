@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.hierarchy.widget;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.CustomTree;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.common.utils.MapSet;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemDoubleClickedEvent;

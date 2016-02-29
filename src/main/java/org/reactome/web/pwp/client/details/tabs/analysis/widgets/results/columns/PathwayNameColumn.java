@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.column
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

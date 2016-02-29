@@ -10,7 +10,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemDoubleClickedEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOverEvent;
@@ -190,7 +190,9 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
 
     @Override
     public void showAnalysisResult(List<PathwaySummary> pathwaySummaries) {
-        this.hierarchyTree.showAnalysisData(pathwaySummaries);
+        if (hierarchyTree != null) {
+            this.hierarchyTree.showAnalysisData(pathwaySummaries);
+        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.ResultPathwaySelectedHandler;
 
 /**

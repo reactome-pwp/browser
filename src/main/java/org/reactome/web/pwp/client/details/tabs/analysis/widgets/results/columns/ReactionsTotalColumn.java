@@ -1,7 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.columns;
 
 import com.google.gwt.dom.client.Style;
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.cells.CustomNumberCell;
 
 /**

@@ -1,8 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.pwp.client.common.analysis.model.AnalysisError;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.EmptySampleHandler;
 
 /**

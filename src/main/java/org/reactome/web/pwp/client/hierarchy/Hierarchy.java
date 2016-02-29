@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.hierarchy;
 
-import org.reactome.web.pwp.client.common.analysis.model.PathwaySummary;
+
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
 import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.model.classes.Pathway;
