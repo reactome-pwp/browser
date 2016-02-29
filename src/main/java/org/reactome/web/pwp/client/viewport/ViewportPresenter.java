@@ -2,6 +2,7 @@ package org.reactome.web.pwp.client.viewport;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
+import org.reactome.web.pwp.client.AppConfig;
 import org.reactome.web.pwp.client.common.events.FireworksOpenedEvent;
 import org.reactome.web.pwp.client.common.events.PathwayDiagramOpenedEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
@@ -31,14 +32,22 @@ public class ViewportPresenter extends AbstractPresenter implements Viewport.Pre
     public void onStateChanged(StateChangedEvent event) {
         if(event.getState().getPathway()==null){
             if(currentViewportTool.equals(ViewportToolType.FIREWORKS)) return;
-            display.showFireworks();
-            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    currentViewportTool = ViewportToolType.FIREWORKS;
-                    eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
-                }
-            });
+            if(AppConfig.getIsCurator()) {
+                display.showWelcome();
+            } else {
+                display.showFireworks();
+                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        currentViewportTool = ViewportToolType.FIREWORKS;
+                        eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
+                    }
+                });
+            }
+        } else if(AppConfig.getIsCurator()) {
+            //This needs to be done here because Fireworks is not present when the curator pathway browser is shown
+            //so this event will never happen (and then the diagram will never be open)
+            eventBus.fireEventFromSource(new PathwayDiagramOpenedEvent(event.getState().getPathway()), this);
         }
     }
 

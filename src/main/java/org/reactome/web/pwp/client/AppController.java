@@ -68,6 +68,9 @@ import org.reactome.web.pwp.client.viewport.diagram.DiagramPresenter;
 import org.reactome.web.pwp.client.viewport.fireworks.Fireworks;
 import org.reactome.web.pwp.client.viewport.fireworks.FireworksDisplay;
 import org.reactome.web.pwp.client.viewport.fireworks.FireworksPresenter;
+import org.reactome.web.pwp.client.viewport.welcome.Welcome;
+import org.reactome.web.pwp.client.viewport.welcome.WelcomeDisplay;
+import org.reactome.web.pwp.client.viewport.welcome.WelcomePresenter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -151,15 +154,25 @@ public class AppController implements BrowserReadyHandler {
     }
 
     private IsWidget getViewport(){
-        Fireworks.Display fireworks = new FireworksDisplay();
-        new FireworksPresenter(this.eventBus, fireworks);
+        Viewport.Display viewport;
+        if (AppConfig.getIsCurator()) {
+            Diagram.Display diagram = new DiagramDisplay();
+            new DiagramPresenter(this.eventBus, diagram);
 
-        Diagram.Display diagram = new DiagramDisplay();
-        new DiagramPresenter(this.eventBus, diagram);
+            Welcome.Display welcome = new WelcomeDisplay();
+            new WelcomePresenter(this.eventBus, welcome);
 
-        Viewport.Display viewport = new ViewportDisplay(diagram, fireworks);
+            viewport = new ViewportDisplay(diagram, welcome);
+        } else {
+            Fireworks.Display fireworks = new FireworksDisplay();
+            new FireworksPresenter(this.eventBus, fireworks);
+
+            Diagram.Display diagram = new DiagramDisplay();
+            new DiagramPresenter(this.eventBus, diagram);
+
+            viewport = new ViewportDisplay(diagram, fireworks);
+        }
         new ViewportPresenter(this.eventBus, viewport);
-
         return viewport;
     }
 

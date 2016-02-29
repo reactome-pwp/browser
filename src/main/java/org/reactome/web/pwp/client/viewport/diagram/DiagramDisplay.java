@@ -4,8 +4,11 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import org.reactome.web.diagram.client.DiagramFactory;
 import org.reactome.web.diagram.client.DiagramViewer;
+import org.reactome.web.diagram.data.loader.GraphLoader;
+import org.reactome.web.diagram.data.loader.LayoutLoader;
 import org.reactome.web.diagram.events.*;
 import org.reactome.web.diagram.handlers.*;
+import org.reactome.web.pwp.client.AppConfig;
 import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.viewport.ViewportDisplay;
@@ -33,6 +36,20 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
 
         this.diagram = DiagramFactory.createDiagramViewer();
         this.diagram.asWidget().setStyleName(ViewportDisplay.RESOURCES.getCSS().viewportPanel());
+
+        //When the pathway browser is configured to run on the Curator site, the Fireworks
+        //is not available and the diagram data needs to be retrieved from the ContentService
+        if (AppConfig.getIsCurator()) {
+            DiagramFactory.SHOW_FIREWORKS_BTN = false;
+            //Altering the loaders to retrieve data from the ContentService
+            LayoutLoader.PREFIX = "/ContentService/diagram/layout/";
+            LayoutLoader.SUFFIX = "";
+            GraphLoader.PREFIX = "/ContentService/diagram/graph/";
+            GraphLoader.SUFFIX = "";
+
+            this.diagram.setVisible(false);
+        }
+
         add(this.diagram);
 
         this.diagram.addDatabaseObjectSelectedHandler(this);

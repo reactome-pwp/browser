@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import org.reactome.web.pwp.client.AppConfig;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
 
 /**
@@ -26,6 +27,8 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         this.analysisBtn= new LauncherButton("Analyse your data...", RESOURCES.getCSS().analysis(), this);
         flowPanel.add(new SimplePanel(new InlineLabel("Analysis:")));
         flowPanel.add(this.analysisBtn);
+        //The analysis tools are not available for the curation sites
+        flowPanel.setVisible(!AppConfig.getIsCurator());
         initWidget(flowPanel);
     }
 
