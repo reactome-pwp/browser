@@ -37,8 +37,9 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         //noinspection GWTStyleCheck
         setStyleName("clearfix");
         addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisBlock());
+        addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisExample());
+        getElement().getStyle().setMarginLeft(5, Style.Unit.PX);
         setHeight(this.height + "px");
-        getElement().getStyle().setPadding(0, Style.Unit.PX);
 
         FlowPanel submissionPanel = new FlowPanel();
         submissionPanel.getElement().getStyle().setPaddingLeft(5, Style.Unit.PX);
@@ -67,10 +68,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         addEast(this.getExampleButtons(), 210);
 
         FlowPanel north = new FlowPanel();
-//        SimplePanel explanation = new SimplePanel();
-//        explanation.getElement().setInnerHTML(AnalysisExamples.EXAMPLES.analysisExamples().getText());
-//        north.add(explanation);
-        Label label = new Label("Paste the data to analyse");
+        Label label = new Label("Paste your data to analyse or try example data sets:");
         label.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
         label.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
         label.getElement().getStyle().setColor("rgb(14, 124, 179)");
@@ -107,9 +105,10 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         }
         setStatusIcon(CommonImages.INSTANCE.loader(), true, false);
 
-        AnalysisClient.analyseData(getData(), projection.getValue(), AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
+        AnalysisClient.analyseData(textArea.getText(), projection.getValue(), AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(AnalysisResult result, long time) {
+                statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
                 fireEvent(new AnalysisCompletedEvent(result));
             }
 
@@ -143,10 +142,6 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         } else {
             statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
         }
-    }
-
-    private String getData(){
-        return this.textArea.getText();
     }
 
     private Widget getExampleButtons(){

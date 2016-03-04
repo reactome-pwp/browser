@@ -1,14 +1,8 @@
 package org.reactome.web.pwp.client.tools.analysis.submitters;
 
-import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.resources.client.ImageResource;
@@ -49,7 +43,7 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
 
     private ErrorPanel errorPanel;
 
-    public FileSubmitter(PostSubmitter postSubmitter) {
+    public FileSubmitter(ErrorPanel errorPanel) {
         //noinspection GWTStyleCheck
         setStyleName("clearfix");
         addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisBlock());
@@ -81,22 +75,8 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         setStatusIcon(null, false, false);
         submissionPanel.add(this.statusIcon);
         add(submissionPanel);
-        addPostSubmitter(postSubmitter);
 
-        errorPanel = new ErrorPanel();
-        add(errorPanel);
-    }
-
-    private void addPostSubmitter(final PostSubmitter postSubmitter){
-        postSubmitter.getElement().getStyle().setDisplay(Style.Display.NONE);
-
-        final PostSubmitterAnimation postSubmitterAnimation = new PostSubmitterAnimation(postSubmitter);
-        DisclosurePanel dp = new DisclosurePanel("Click here to paste your data or try example data sets..."); dp.setWidth("100%");
-        dp.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
-        dp.addOpenHandler(postSubmitterAnimation);
-        dp.addCloseHandler(postSubmitterAnimation);
-        add(dp);
-        add(postSubmitter);
+        this.errorPanel = errorPanel;
     }
 
     public HandlerRegistration addAnalysisCompletedEventHandler(AnalysisCompletedHandler handler){
@@ -177,19 +157,6 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
             } catch (AnalysisModelException e1) {
                 Console.error("Oops! This is unexpected", this);
             }
-//            switch (analysisError.getCode()){
-//                case 413:
-//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.FILE_SIZE_ERROR));
-//                    break;
-//                case 415:
-//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.PROCESSING_DATA));
-//                    break;
-//                case 500:
-//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.SERVICE_UNAVAILABLE));
-//                    break;
-//                default:
-//                    fireEvent(new AnalysisErrorEvent(AnalysisErrorType.RESULT_FORMAT));
-//            }
         }
     }
 
@@ -228,43 +195,6 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
             }
         } else {
             statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-        }
-    }
-
-    private class PostSubmitterAnimation extends Animation implements OpenHandler<DisclosurePanel>, CloseHandler<DisclosurePanel> {
-        private PostSubmitter widget;
-        private Integer height;
-        private boolean open;
-
-        PostSubmitterAnimation(PostSubmitter postSubmitter) {
-            this.widget = postSubmitter;
-            this.height = postSubmitter.getHeight();
-        }
-
-        @Override
-        protected void onUpdate(double progress) {
-            progress = open ? progress : 1.0 - progress;
-            double aux = Math.floor(progress * height);
-            if(aux>50 && !this.widget.getElement().getStyle().getDisplay().equals(Style.Display.INLINE.name())){
-                this.widget.getElement().getStyle().setDisplay(Style.Display.INLINE);
-            }else if(!this.widget.getElement().getStyle().getDisplay().equals(Style.Display.NONE.name())){
-                this.widget.getElement().getStyle().setDisplay(Style.Display.NONE);
-            }
-            this.widget.setHeight(aux + "px");
-        }
-
-        @Override
-        public void onClose(CloseEvent<DisclosurePanel> event) {
-            this.cancel();
-            this.open = false;
-            run(500);
-        }
-
-        @Override
-        public void onOpen(OpenEvent<DisclosurePanel> event) {
-            this.cancel();
-            this.open = true;
-            run(500);
         }
     }
 }

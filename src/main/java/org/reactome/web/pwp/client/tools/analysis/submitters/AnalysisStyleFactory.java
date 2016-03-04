@@ -33,21 +33,19 @@ public abstract class AnalysisStyleFactory {
          */
         String DEFAULT_CSS = "org/reactome/web/pwp/client/tools/analysis/style/AnalysisStyle.css";
 
-        String analysisContainer();
-
         String analysisTitle();
 
         String analysisText();
 
         String analysisBlock();
 
+        String analysisExample();
+
         String analysisCheckBox();
 
         String analysisSubmission();
 
         String analysisMainSubmitter();
-
-        String disclosurePanel();
 
         String emphasis();
 

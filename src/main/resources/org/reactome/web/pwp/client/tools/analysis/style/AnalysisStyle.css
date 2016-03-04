@@ -1,9 +1,3 @@
-.analysisContainer {
-    min-width: 750px;
-    padding: 5px 15px 0 5px;
-    width: auto;
-}
-
 .analysisTitle {
     text-align: center;
     margin-bottom: 15px;
@@ -34,6 +28,11 @@
     cursor: default;
     overflow-x: hidden; /* To make the submitter tab scrollable */
     overflow-y: auto;
+}
+
+.analysisExample {
+    padding: 0 5px 0 5px;
+    margin-top: 10px;
 }
 
 .analysisSubmission {
@@ -127,11 +126,6 @@
     color: white;
     vertical-align: middle;
     font-size: small;
-}
-
-.disclosurePanel {
-    width: 100%;
-    margin-top: 5px;
 }
 
 .emphasis {

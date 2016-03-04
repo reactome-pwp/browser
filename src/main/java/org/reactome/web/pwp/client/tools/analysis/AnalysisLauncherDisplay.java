@@ -16,11 +16,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
 import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
-import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
 import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
+import org.reactome.web.pwp.client.tools.analysis.notifications.ErrorPanel;
 import org.reactome.web.pwp.client.tools.analysis.submitters.FileSubmitter;
 import org.reactome.web.pwp.client.tools.analysis.submitters.PostSubmitter;
 import org.reactome.web.pwp.client.tools.analysis.submitters.SpeciesSubmitter;
@@ -44,8 +45,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     private Button speciesBtn;
 
     private DeckLayoutPanel container;
-
     private SpeciesSubmitter speciesSubmitter;
+    private ErrorPanel errorPanel;
 
     public AnalysisLauncherDisplay() {
         super();
@@ -76,8 +77,9 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.container = new DeckLayoutPanel();                 // Main tab container
         this.container.setStyleName(RESOURCES.getCSS().container());
 
+        this.errorPanel = new ErrorPanel();
         PostSubmitter postSubmitter = new PostSubmitter();
-        FileSubmitter fileSubmitter = new FileSubmitter(postSubmitter);
+        FileSubmitter fileSubmitter = new FileSubmitter(this.errorPanel);
 
         //Add handlers
         fileSubmitter.addAnalysisCompletedEventHandler(this);
@@ -93,7 +95,12 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.speciesSubmitter.addAnalysisCompletedEventHandler(this);
         this.speciesSubmitter.addAnalysisErrorEventHandler(this);
 
-        this.container.add(fileSubmitter);
+        FlowPanel analysis = new FlowPanel();
+        analysis.add(fileSubmitter);
+        analysis.add(postSubmitter);
+        analysis.add(errorPanel);
+
+        this.container.add(analysis);
         this.container.add(speciesSubmitter);
 
         this.container.showWidget(0);
