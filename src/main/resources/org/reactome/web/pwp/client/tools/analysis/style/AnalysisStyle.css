@@ -123,6 +123,7 @@
 }
 
 .analysisCheckBox{
+    margin-right: 20px;
     color: white;
     vertical-align: middle;
     font-size: small;
@@ -168,6 +169,7 @@
 }
 
 .postSubmitterCheckBox {
+    margin-right: 20px;
     color: rgb(14, 124, 179);
     vertical-align: middle;
     font-size: small;

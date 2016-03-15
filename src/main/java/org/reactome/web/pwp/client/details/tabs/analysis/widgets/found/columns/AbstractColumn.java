@@ -5,13 +5,12 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
-import org.reactome.web.analysis.client.model.PathwayIdentifier;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.cells.CustomHeader;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public abstract class AbstractColumn<T> extends Column<PathwayIdentifier, T> {
+public abstract class AbstractColumn<S, T> extends Column<S, T> {
 
     protected final String COLUMN_NAME_TITLE;
     protected final String COLUMN_GROUP;

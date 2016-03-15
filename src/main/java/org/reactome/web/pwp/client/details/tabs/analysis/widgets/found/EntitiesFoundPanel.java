@@ -3,8 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.client.details.tabs.analysis.providers.FoundAsyncDataProvider;
+import org.reactome.web.pwp.client.details.tabs.analysis.providers.EntitiesFoundAsyncDataProvider;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound.NotFoundTable;
 
@@ -14,7 +13,7 @@ import java.util.List;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class FoundPanel extends DockLayoutPanel {
+public class EntitiesFoundPanel extends DockLayoutPanel {
     private String token;
     private String resource = "TOTAL";
     private Long pathwayId;
@@ -22,7 +21,7 @@ public class FoundPanel extends DockLayoutPanel {
 
     private CustomPager pager;
 
-    public FoundPanel() {
+    public EntitiesFoundPanel() {
         super(Style.Unit.EM);
 
         this.pager = new CustomPager(); // Create paging controls.
@@ -30,19 +29,19 @@ public class FoundPanel extends DockLayoutPanel {
         this.pager.setPageSize(NotFoundTable.PAGE_SIZE);
     }
 
-    public void showFound(List<String> resources, List<String> columnNames){
+    public void showFoundEntities(List<String> resources, List<String> columnNames){
         if(!forceLoad) return; //Will only force to reload the data when the analysis details has been changed
         this.forceLoad = false;
 
-        FoundTable table;
+        EntitiesFoundTable table;
         if(this.resource.equals("TOTAL")){
-            table = new FoundTable(resources, columnNames);
+            table = new EntitiesFoundTable(resources, columnNames);
         }else{
-            table = new FoundTable(Arrays.asList(this.resource), columnNames);
+            table = new EntitiesFoundTable(Arrays.asList(this.resource), columnNames);
         }
         this.pager.setDisplay(table);
 
-        new FoundAsyncDataProvider(table, this.pager, this.token, this.pathwayId, this.resource);
+        new EntitiesFoundAsyncDataProvider(table, this.pager, this.token, this.pathwayId, this.resource);
 
         this.clear();
         FlowPanel pagerPanel = new FlowPanel();

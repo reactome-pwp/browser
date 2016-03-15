@@ -28,6 +28,7 @@ import org.reactome.web.pwp.client.tools.analysis.handler.EmptySampleHandler;
 public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
     private CheckBox projection;
+    private CheckBox interactors;
     private TextArea textArea;
     private Image statusIcon;
     private Integer height = 310;
@@ -63,6 +64,9 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterCheckBox());
         this.projection.setValue(true);
         submissionPanel.add(this.projection);
+        this.interactors = new CheckBox("Include interactors");
+        this.interactors.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterCheckBox());
+        submissionPanel.add(this.interactors);
         addSouth(submissionPanel, 40);
 
         addEast(this.getExampleButtons(), 210);
@@ -105,7 +109,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         }
         setStatusIcon(CommonImages.INSTANCE.loader(), true, false);
 
-        AnalysisClient.analyseData(textArea.getText(), projection.getValue(), AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
+        AnalysisClient.analyseData(textArea.getText(), projection.getValue(), interactors.getValue(), AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(AnalysisResult result, long time) {
                 statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());

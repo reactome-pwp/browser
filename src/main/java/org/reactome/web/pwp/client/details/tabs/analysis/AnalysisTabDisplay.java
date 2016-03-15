@@ -9,17 +9,12 @@ import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.FoundPanel;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.EntitiesFoundPanel;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.InteractorsFoundPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound.NotFoundPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultPanel;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.PathwayHoveredEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.PathwayHoveredResetEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.PathwaySelectedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.ResultPathwaySelectedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwayHoveredHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwayHoveredResetHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwaySelectedHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.ResultPathwaySelectedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.*;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.*;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.AnalysisSummaryPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.OptionSelectedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
@@ -35,7 +30,7 @@ import java.util.List;
  */
 public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.Display, ResourceChangedHandler, OptionSelectedHandler,
         PathwaySelectedHandler, PathwayHoveredHandler, PathwayHoveredResetHandler,
-        ResultPathwaySelectedHandler {
+        EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler {
 
     private AnalysisTab.Presenter presenter;
 
@@ -50,7 +45,8 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     private StackLayoutPanel stackPanel;
 
     private AnalysisResultPanel analysisResultPanel;
-    private FoundPanel pathwayPanel;
+    private EntitiesFoundPanel entitiesEntitiesFoundPanel;
+    private InteractorsFoundPanel interactorsFoundPanel;
     private NotFoundPanel notFoundPanel;
 
 
@@ -80,7 +76,8 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
         this.stackPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
 
         this.analysisResultPanel = new AnalysisResultPanel();
-        this.analysisResultPanel.addResultPathwaySelectedHandler(this);
+        this.analysisResultPanel.addEntitiesPathwaySelectedHandler(this);
+        this.analysisResultPanel.addInteractorsPathwaySelectedHandler(this);
         this.analysisResultPanel.addPathwaySelectedHandler(this);
         this.analysisResultPanel.addPathwayHoveredHandler(this);
         this.analysisResultPanel.addPathwayHoveredResetHandler(this);
@@ -88,10 +85,15 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
         this.analysisResultPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
         this.stackPanel.add(this.analysisResultPanel, "Analysis Result", 0);
 
-        this.pathwayPanel = new FoundPanel();
-        this.pathwayPanel.getElement().getStyle().setBackgroundColor("transparent");
-        this.pathwayPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
-        this.stackPanel.add(this.pathwayPanel, "Found", 0);
+        this.entitiesEntitiesFoundPanel = new EntitiesFoundPanel();
+        this.entitiesEntitiesFoundPanel.getElement().getStyle().setBackgroundColor("transparent");
+        this.entitiesEntitiesFoundPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
+        this.stackPanel.add(this.entitiesEntitiesFoundPanel, "Entities Found", 0);
+
+        this.interactorsFoundPanel = new InteractorsFoundPanel();
+        this.interactorsFoundPanel.getElement().getStyle().setBackgroundColor("transparent");
+        this.interactorsFoundPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
+        this.stackPanel.add(this.interactorsFoundPanel, "Interactors Found", 0);
 
         this.notFoundPanel = new NotFoundPanel();
         this.notFoundPanel.getElement().getStyle().setBackgroundColor("transparent");
@@ -154,7 +156,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             Integer notFound = analysisResult.getIdentifiersNotFound();
             this.notFoundPanel.setAnalysisDetails(this.token, notFound);
 
-            this.pathwayPanel.setResource(resource);
+            this.entitiesEntitiesFoundPanel.setResource(resource);
         }else{
             this.analysisResultPanel.showResult(analysisResult, resource);
             this.summaryPanel.setResource(resource);
@@ -228,16 +230,25 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     public void onResourceChanged(ResourceChangedEvent event) {
 //        this.summaryPanel.setSelected(AnalysisInfoType.PATHWAYS_FOUND);
 //        this.analysisResultPanel.setResource(event.getResource());
-//        this.pathwayPanel.setResource(event.getResource());
+//        this.entitiesEntitiesFoundPanel.setResource(event.getResource());
         presenter.onResourceSelected(event);
     }
 
     @Override
-    public void onPathwayFoundEntitiesSelected(ResultPathwaySelectedEvent event) {
-        this.stackPanel.showWidget(this.pathwayPanel);
+    public void onPathwayFoundEntitiesSelected(EntitiesPathwaySelectedEvent event) {
+        this.stackPanel.showWidget(this.entitiesEntitiesFoundPanel);
         Long pathwayId = event.getPathwaySummary().getDbId();
-        this.pathwayPanel.setAnalysisDetails(this.token, pathwayId);
-        this.pathwayPanel.showFound(this.resources, this.columnNames);
+        this.entitiesEntitiesFoundPanel.setAnalysisDetails(this.token, pathwayId);
+        this.entitiesEntitiesFoundPanel.showFoundEntities(this.resources, this.columnNames);
+        this.summaryPanel.setDownAll(false);
+    }
+
+    @Override
+    public void onPathwayFoundInteractorsSelected(InteractorsPathwaySelectedEvent event) {
+        this.stackPanel.showWidget(this.interactorsFoundPanel);
+        Long pathwayId = event.getPathwaySummary().getDbId();
+        this.interactorsFoundPanel.setAnalysisDetails(this.token, pathwayId);
+        this.interactorsFoundPanel.showFoundInteractors(this.resources, this.columnNames);
         this.summaryPanel.setDownAll(false);
     }
 

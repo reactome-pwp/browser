@@ -20,22 +20,14 @@ import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
 import org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.PathwayHoveredEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.PathwayHoveredResetEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.PathwaySelectedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.ResultPathwaySelectedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwayHoveredHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwayHoveredResetHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.PathwaySelectedHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.ResultPathwaySelectedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.*;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class AnalysisResultPanel extends DockLayoutPanel implements SelectionChangeEvent.Handler, RowHoverEvent.Handler, MouseOutHandler,
-        AnalysisAsyncDataProvider.PageLoadedHandler,
-        AnalysisHandler.Page,
-        ResultPathwaySelectedHandler {
+        AnalysisAsyncDataProvider.PageLoadedHandler, AnalysisHandler.Page, EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler {
 
     private AnalysisAsyncDataProvider dataProvider;
     private AnalysisResultTable table;
@@ -53,8 +45,12 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.pager.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);
     }
 
-    public HandlerRegistration addResultPathwaySelectedHandler(ResultPathwaySelectedHandler handler){
-        return this.addHandler(handler, ResultPathwaySelectedEvent.TYPE);
+    public HandlerRegistration addEntitiesPathwaySelectedHandler(EntitiesPathwaySelectedHandler handler){
+        return this.addHandler(handler, EntitiesPathwaySelectedEvent.TYPE);
+    }
+
+    public HandlerRegistration addInteractorsPathwaySelectedHandler(InteractorsPathwaySelectedHandler handler){
+        return this.addHandler(handler, InteractorsPathwaySelectedEvent.TYPE);
     }
 
     public HandlerRegistration addPathwaySelectedHandler(PathwaySelectedHandler handler){
@@ -122,12 +118,13 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
 
     public void showResult(final AnalysisResult analysisResult, final String resource) {
 //        ColumnSortEvent.ListHandler<PathwaySummary> sortHandler = new ColumnSortEvent.ListHandler<PathwaySummary>(analysisResult.getPathways());
-        this.table = new AnalysisResultTable(analysisResult.getExpression().getColumnNames());
+        this.table = new AnalysisResultTable(analysisResult.getExpression().getColumnNames(), analysisResult.getSummary().getInteractors());
         this.table.addSelectionChangeHandler(this);
         this.table.addRowHoverHandler(this);
         this.table.addMouseOutHandler(this);
 
-        this.table.addResultPathwaySelectedHandler(this);
+        this.table.addEntitiesPathwaySelectedHandler(this);
+        this.table.addInteractorsPathwaySelectedHandler(this);
         this.table.setRowCount(analysisResult.getPathwaysFound());
 
         this.pager.setDisplay(this.table);
@@ -223,7 +220,12 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     }
 
     @Override
-    public void onPathwayFoundEntitiesSelected(ResultPathwaySelectedEvent event) {
+    public void onPathwayFoundEntitiesSelected(EntitiesPathwaySelectedEvent event) {
+        fireEvent(event);
+    }
+
+    @Override
+    public void onPathwayFoundInteractorsSelected(InteractorsPathwaySelectedEvent event) {
         fireEvent(event);
     }
 }

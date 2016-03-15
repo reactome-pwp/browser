@@ -33,12 +33,13 @@ import org.reactome.web.pwp.client.tools.analysis.notifications.ErrorPanel;
 public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler,
         AnalysisCompletedHandler, AnalysisErrorHandler, EmptySampleHandler, ClickHandler, HasHandlers {
 
-    private static final String FORM_ANALYSIS = "/AnalysisService/identifiers/form?page=1";
-    private static final String FORM_ANALYSIS_PROJECTION = "/AnalysisService/identifiers/form/projection?page=1";
+    private static final String FORM_ANALYSIS = "/AnalysisService/identifiers/form?page=1&interactors=";
+    private static final String FORM_ANALYSIS_PROJECTION = "/AnalysisService/identifiers/form/projection?page=1&interactors=";
 
     private FileUpload fileUpload;
     private FormPanel form;
     private CheckBox projection;
+    private CheckBox interactors;
     private Image statusIcon;
 
     private ErrorPanel errorPanel;
@@ -68,6 +69,9 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         this.projection.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisCheckBox());
         this.projection.setValue(true);
         submissionPanel.add(this.projection);
+        this.interactors = new CheckBox("Include interactors");
+        this.interactors.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisCheckBox());
+        submissionPanel.add(this.interactors);
         submissionPanel.add(new Button("GO", this));
 
         this.statusIcon = new Image(CommonImages.INSTANCE.loader());
@@ -125,9 +129,9 @@ public class FileSubmitter extends FlowPanel  implements FormPanel.SubmitHandler
         }
 
         if(this.projection.getValue()){
-            form.setAction(FORM_ANALYSIS_PROJECTION);
+            form.setAction(FORM_ANALYSIS_PROJECTION + this.interactors.getValue());
         }else{
-            form.setAction(FORM_ANALYSIS);
+            form.setAction(FORM_ANALYSIS + this.interactors.getValue());
         }
         this.form.submit();
     }

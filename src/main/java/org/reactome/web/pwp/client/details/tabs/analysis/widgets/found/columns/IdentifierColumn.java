@@ -2,12 +2,12 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
-import org.reactome.web.analysis.client.model.PathwayIdentifier;
+import org.reactome.web.analysis.client.model.PathwayEntity;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class IdentifierColumn extends AbstractColumn<String> {
+public class IdentifierColumn extends AbstractColumn<PathwayEntity, String> {
 
     private static final String explanation = "The submitted identifier";
 
@@ -17,7 +17,7 @@ public class IdentifierColumn extends AbstractColumn<String> {
     }
 
     @Override
-    public String getValue(PathwayIdentifier object) {
-        return object.getIdentifier();
+    public String getValue(PathwayEntity object) {
+        return object.getId();
     }
 }

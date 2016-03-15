@@ -2,11 +2,11 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found;
 
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.view.client.ProvidesKey;
-import org.reactome.web.analysis.client.model.PathwayIdentifier;
+import org.reactome.web.analysis.client.model.PathwayEntity;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.AbstractColumn;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.EntityResourceColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.ExpressionColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.IdentifierColumn;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.ResourceColumn;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,14 +14,14 @@ import java.util.List;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class FoundTable extends DataGrid<PathwayIdentifier> {
+public class EntitiesFoundTable extends DataGrid<PathwayEntity> {
     public final static Integer PAGE_SIZE = 40;
 
-    public FoundTable(List<String> resources, List<String> columnNames) {
-        super(PAGE_SIZE, new ProvidesKey<PathwayIdentifier>() {
+    public EntitiesFoundTable(List<String> resources, List<String> columnNames) {
+        super(PAGE_SIZE, new ProvidesKey<PathwayEntity>() {
             @Override
-            public Object getKey(PathwayIdentifier item) {
-                return item == null ? null : item.getIdentifier();
+            public Object getKey(PathwayEntity item) {
+                return item == null ? null : item.getId();
             }
         });
 
@@ -32,13 +32,13 @@ public class FoundTable extends DataGrid<PathwayIdentifier> {
     }
 
     private void addColumns(List<String> resources, List<String> columnNames){
-        List<AbstractColumn<?>> columns = new LinkedList<AbstractColumn<?>>();
+        List<AbstractColumn<PathwayEntity, ?>> columns = new LinkedList<>();
 
         columns.add(new IdentifierColumn("Identifiers", "found"));
 
         for (String resource : resources) {
             if(resource.equals("TOTAL")) continue;
-            columns.add(new ResourceColumn(resource, "Resource", resource));
+            columns.add(new EntityResourceColumn(resource, "Resource", resource));
         }
 
         int i = 0;
@@ -46,7 +46,7 @@ public class FoundTable extends DataGrid<PathwayIdentifier> {
             columns.add(new ExpressionColumn(i++, columnName));
         }
 
-        for (AbstractColumn<?> column : columns) {
+        for (AbstractColumn<PathwayEntity, ?> column : columns) {
             this.addColumn(column, column.buildHeader());
             this.setColumnWidth(column, column.getWidth(), com.google.gwt.dom.client.Style.Unit.PX);
         }

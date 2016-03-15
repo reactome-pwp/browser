@@ -3,24 +3,24 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
 import org.reactome.web.analysis.client.model.IdentifierMap;
-import org.reactome.web.analysis.client.model.PathwayIdentifier;
+import org.reactome.web.analysis.client.model.PathwayEntity;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class ResourceColumn extends AbstractColumn<String> {
+public class EntityResourceColumn extends AbstractColumn<PathwayEntity, String> {
 
     private static final String explanation = "Mapped identifier in Reactome for ";
     private String resource;
 
-    public ResourceColumn(String resource, String group, String title) {
+    public EntityResourceColumn(String resource, String group, String title) {
         super(new TextCell(), Style.TextAlign.LEFT, group, title, explanation + title);
         this.resource = resource;
         setHorizontalAlignment(ALIGN_LEFT);
     }
 
     @Override
-    public String getValue(PathwayIdentifier object) {
+    public String getValue(PathwayEntity object) {
         StringBuilder sb = new StringBuilder();
         for (IdentifierMap identifierMap : object.getMapsTo()) {
             if(identifierMap.getResource().equals(resource)){

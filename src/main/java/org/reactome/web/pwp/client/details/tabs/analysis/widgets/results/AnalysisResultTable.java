@@ -11,8 +11,10 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.columns.*;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.ResultPathwaySelectedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.ResultPathwaySelectedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.EntitiesPathwaySelectedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.InteractorsPathwaySelectedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.EntitiesPathwaySelectedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.InteractorsPathwaySelectedHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
 
     private SingleSelectionModel<PathwaySummary> selectionModel;
 
-    public AnalysisResultTable(List<String> expColumnNames) {
+    public AnalysisResultTable(List<String> expColumnNames, boolean interactors) {
         super(PAGE_SIZE, new ProvidesKey<PathwaySummary>() {
             @Override
             public Object getKey(PathwaySummary item) {
@@ -36,15 +38,25 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
         this.setWidth("100%");
         this.setVisible(true);
 
-        List<AbstractColumn<?>> columns = new LinkedList<AbstractColumn<?>>();
+        List<AbstractColumn<?>> columns = new LinkedList<>();
         columns.add(new PathwayNameColumn());
         columns.add(new EntitiesFoundColumn(new FieldUpdater<PathwaySummary, String>() {
             @Override
             public void update(int index, PathwaySummary object, String value) {
-                fireEvent(new ResultPathwaySelectedEvent(getSelectedObject()));
+                fireEvent(new EntitiesPathwaySelectedEvent(getSelectedObject()));
             }
         }));
         columns.add(new EntitiesTotalColumn());
+
+        if(interactors) {
+            columns.add(new InteractorsFoundColumn(new FieldUpdater<PathwaySummary, String>() {
+                @Override
+                public void update(int i, PathwaySummary pathwaySummary, String s) {
+                    fireEvent(new InteractorsPathwaySelectedEvent(getSelectedObject()));
+                }
+            }));
+            columns.add(new InteractorsTotalColumn());
+        }
 
 //        if(!analysisResult.getSummary().getType().equals("EXPRESSION")){
             columns.add(new EntitiesRatioColumn());
@@ -81,8 +93,12 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
         return this.selectionModel.addSelectionChangeHandler(handler);
     }
 
-    public HandlerRegistration addResultPathwaySelectedHandler(ResultPathwaySelectedHandler handler){
-        return this.addHandler(handler, ResultPathwaySelectedEvent.TYPE);
+    public HandlerRegistration addEntitiesPathwaySelectedHandler(EntitiesPathwaySelectedHandler handler){
+        return this.addHandler(handler, EntitiesPathwaySelectedEvent.TYPE);
+    }
+
+    public HandlerRegistration addInteractorsPathwaySelectedHandler(InteractorsPathwaySelectedHandler handler){
+        return this.addHandler(handler, InteractorsPathwaySelectedEvent.TYPE);
     }
 
     public PathwaySummary getSelectedObject(){
