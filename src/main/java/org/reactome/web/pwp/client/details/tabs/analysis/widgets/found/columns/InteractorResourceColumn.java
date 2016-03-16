@@ -2,12 +2,12 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
-import org.reactome.web.analysis.client.model.PathwayInteractor;
+import org.reactome.web.analysis.client.model.FoundInteractor;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class InteractorResourceColumn extends AbstractColumn<PathwayInteractor, String> {
+public class InteractorResourceColumn extends AbstractColumn<FoundInteractor, String> {
 
     private static final String explanation = "Identifiers submitted";
 
@@ -17,7 +17,7 @@ public class InteractorResourceColumn extends AbstractColumn<PathwayInteractor, 
     }
 
     @Override
-    public String getValue(PathwayInteractor object) {
-        return object.getIdentifier();
+    public String getValue(FoundInteractor object) {
+        return object.getId();
     }
 }
