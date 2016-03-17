@@ -6,8 +6,8 @@ import com.google.gwt.view.client.HasData;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
 import org.reactome.web.analysis.client.model.AnalysisError;
-import org.reactome.web.analysis.client.model.PathwayEntities;
-import org.reactome.web.analysis.client.model.PathwayEntity;
+import org.reactome.web.analysis.client.model.FoundEntities;
+import org.reactome.web.analysis.client.model.FoundEntity;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.EntitiesFoundTable;
@@ -16,7 +16,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound.NotFou
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class EntitiesFoundAsyncDataProvider extends AsyncDataProvider<PathwayEntity> {
+public class EntitiesFoundAsyncDataProvider extends AsyncDataProvider<FoundEntity> {
     private EntitiesFoundTable table;
     private SimplePager pager;
 
@@ -34,12 +34,12 @@ public class EntitiesFoundAsyncDataProvider extends AsyncDataProvider<PathwayEnt
     }
 
     @Override
-    protected void onRangeChanged(HasData<PathwayEntity> display) {
+    protected void onRangeChanged(HasData<FoundEntity> display) {
         final Integer page = this.pager.getPage() + 1;
 
         AnalysisClient.getPathwayFoundEntities(token, resource, pathwayId, NotFoundTable.PAGE_SIZE, page, new AnalysisHandler.Entities() {
             @Override
-            public void onPathwayEntitiesLoaded(PathwayEntities entities, long time) {
+            public void onPathwayEntitiesLoaded(FoundEntities entities, long time) {
                 table.setRowCount(entities.getFound());
                 table.setRowData(pager.getPageStart(), entities.getIdentifiers());
             }

@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found;
 
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.view.client.ProvidesKey;
-import org.reactome.web.analysis.client.model.PathwayEntity;
+import org.reactome.web.analysis.client.model.FoundEntity;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.AbstractColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.EntityResourceColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.ExpressionColumn;
@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class EntitiesFoundTable extends DataGrid<PathwayEntity> {
+public class EntitiesFoundTable extends DataGrid<FoundEntity> {
     public final static Integer PAGE_SIZE = 40;
 
     public EntitiesFoundTable(List<String> resources, List<String> columnNames) {
-        super(PAGE_SIZE, new ProvidesKey<PathwayEntity>() {
+        super(PAGE_SIZE, new ProvidesKey<FoundEntity>() {
             @Override
-            public Object getKey(PathwayEntity item) {
+            public Object getKey(FoundEntity item) {
                 return item == null ? null : item.getId();
             }
         });
@@ -32,7 +32,7 @@ public class EntitiesFoundTable extends DataGrid<PathwayEntity> {
     }
 
     private void addColumns(List<String> resources, List<String> columnNames){
-        List<AbstractColumn<PathwayEntity, ?>> columns = new LinkedList<>();
+        List<AbstractColumn<FoundEntity, ?>> columns = new LinkedList<>();
 
         columns.add(new IdentifierColumn("Identifiers", "found"));
 
@@ -46,7 +46,7 @@ public class EntitiesFoundTable extends DataGrid<PathwayEntity> {
             columns.add(new ExpressionColumn(i++, columnName));
         }
 
-        for (AbstractColumn<PathwayEntity, ?> column : columns) {
+        for (AbstractColumn<FoundEntity, ?> column : columns) {
             this.addColumn(column, column.buildHeader());
             this.setColumnWidth(column, column.getWidth(), com.google.gwt.dom.client.Style.Unit.PX);
         }

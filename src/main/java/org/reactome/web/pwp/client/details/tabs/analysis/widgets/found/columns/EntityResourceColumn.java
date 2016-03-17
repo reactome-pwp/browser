@@ -2,13 +2,13 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
+import org.reactome.web.analysis.client.model.FoundEntity;
 import org.reactome.web.analysis.client.model.IdentifierMap;
-import org.reactome.web.analysis.client.model.PathwayEntity;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class EntityResourceColumn extends AbstractColumn<PathwayEntity, String> {
+public class EntityResourceColumn extends AbstractColumn<FoundEntity, String> {
 
     private static final String explanation = "Mapped identifier in Reactome for ";
     private String resource;
@@ -20,7 +20,7 @@ public class EntityResourceColumn extends AbstractColumn<PathwayEntity, String> 
     }
 
     @Override
-    public String getValue(PathwayEntity object) {
+    public String getValue(FoundEntity object) {
         StringBuilder sb = new StringBuilder();
         for (IdentifierMap identifierMap : object.getMapsTo()) {
             if(identifierMap.getResource().equals(resource)){
