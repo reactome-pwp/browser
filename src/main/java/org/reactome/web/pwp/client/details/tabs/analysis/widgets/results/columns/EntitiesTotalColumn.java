@@ -8,10 +8,11 @@ import org.reactome.web.analysis.client.model.PathwaySummary;
  */
 public class EntitiesTotalColumn extends AbstractColumn<Number> {
 
-    private static final String explanation = "The total number of identifiers in the pathway for the selected molecular type";
+    private static final String standard = "The total number of identifiers in the pathway for the selected molecular type";
+    private static final String interactors = "The total number of identifiers in the pathway aggregating curated and interactors for the selected molecular type";
 
-    public EntitiesTotalColumn() {
-        super(new NumberCell(), "Entities", "Total", explanation);
+    public EntitiesTotalColumn(boolean includeInteractors) {
+        super(new NumberCell(), "Entities", "Total", includeInteractors ? interactors : standard);
         setWidth(65);
     }
 

@@ -40,23 +40,38 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
 
         List<AbstractColumn<?>> columns = new LinkedList<>();
         columns.add(new PathwayNameColumn());
-        columns.add(new EntitiesFoundColumn(new FieldUpdater<PathwaySummary, String>() {
-            @Override
-            public void update(int index, PathwaySummary object, String value) {
-                fireEvent(new EntitiesPathwaySelectedEvent(getSelectedObject()));
-            }
-        }));
-        columns.add(new EntitiesTotalColumn());
 
         if(interactors) {
+            columns.add(new CuratedFoundColumn(new FieldUpdater<PathwaySummary, String>() {
+                @Override
+                public void update(int i, PathwaySummary pathwaySummary, String s) {
+                    if(pathwaySummary.getEntities().getCuratedFound() > 0) {
+                        fireEvent(new EntitiesPathwaySelectedEvent(getSelectedObject()));
+                    }
+                }
+            }));
+            columns.add(new CuratedTotalColumn());
+
             columns.add(new InteractorsFoundColumn(new FieldUpdater<PathwaySummary, String>() {
                 @Override
                 public void update(int i, PathwaySummary pathwaySummary, String s) {
-                    fireEvent(new InteractorsPathwaySelectedEvent(getSelectedObject()));
+                    if(pathwaySummary.getEntities().getInteractorsFound() > 0) {
+                        fireEvent(new InteractorsPathwaySelectedEvent(getSelectedObject()));
+                    }
                 }
             }));
             columns.add(new InteractorsTotalColumn());
+
+            columns.add(new EntitiesFoundColumn());
+        } else {
+            columns.add(new EntitiesFoundColumn(new FieldUpdater<PathwaySummary, String>() {
+                @Override
+                public void update(int index, PathwaySummary object, String value) {
+                    fireEvent(new EntitiesPathwaySelectedEvent(getSelectedObject()));
+                }
+            }));
         }
+        columns.add(new EntitiesTotalColumn(interactors));
 
 //        if(!analysisResult.getSummary().getType().equals("EXPRESSION")){
             columns.add(new EntitiesRatioColumn());
