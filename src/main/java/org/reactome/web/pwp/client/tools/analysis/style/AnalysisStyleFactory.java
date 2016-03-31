@@ -62,6 +62,12 @@ public abstract class AnalysisStyleFactory {
         String unselectable();
 
         String errorMessage();
+
+        String analysisProgress();
+
+        String analysisError();
+
+        String analysisErrorButton();
     }
 
     public static AnalysisWizardStyle getAnalysisStyle(){
