@@ -1,14 +1,14 @@
-package org.reactome.web.pwp.client.tools.analysis.event;
+package org.reactome.web.pwp.client.tools.analysis.wizard.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.analysis.client.model.AnalysisError;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
+import org.reactome.web.pwp.client.tools.analysis.wizard.handlers.AnalysisErrorHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class AnalysisErrorEvent extends GwtEvent<AnalysisErrorHandler> {
-    public static Type<AnalysisErrorHandler> TYPE = new GwtEvent.Type<AnalysisErrorHandler>();
+    public static Type<AnalysisErrorHandler> TYPE = new Type<>();
 
     private AnalysisError analysisError;
 

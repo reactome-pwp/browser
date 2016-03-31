@@ -1,4 +1,4 @@
-package org.reactome.web.pwp.client.tools.analysis.submitters;
+package org.reactome.web.pwp.client.tools.analysis.style;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
@@ -9,25 +9,25 @@ import com.google.gwt.resources.client.CssResource;
  */
 public abstract class AnalysisStyleFactory {
 
-    private static AnalysisResources RESOURCES = null;
+    private static AnalysisWizardResources RESOURCES = null;
 
     /**
      * A ClientBundle of resources used by this module.
      */
-    public interface AnalysisResources extends ClientBundle {
+    public interface AnalysisWizardResources extends ClientBundle {
         /**
          * The styles used in this widget.
          */
-        @Source(AnalysisStyle.DEFAULT_CSS)
-        AnalysisStyle analysisStyle();
+        @Source(AnalysisWizardStyle.DEFAULT_CSS)
+        AnalysisWizardStyle analysisStyle();
 
     }
 
     /**
      * Styles used by this module.
      */
-    @CssResource.ImportedWithPrefix("pwp-analysisPanel")
-    public interface AnalysisStyle extends CssResource {
+    @CssResource.ImportedWithPrefix("pwp-analysisWizardPanel")
+    public interface AnalysisWizardStyle extends CssResource {
         /**
          * The path to the default CSS styles used by this resource.
          */
@@ -36,8 +36,6 @@ public abstract class AnalysisStyleFactory {
         String analysisTitle();
 
         String analysisText();
-
-        String analysisBlock();
 
         String analysisExample();
 
@@ -49,11 +47,15 @@ public abstract class AnalysisStyleFactory {
 
         String emphasis();
 
+        String postSubmitter();
+
         String postSubmitterExamples();
 
-        String postSubmitterCheckBox();
-
         String postSubmitterClear();
+
+        String optionsPanel();
+
+        String optionsPanelCheckBox();
 
         String unselectable();
 
@@ -62,9 +64,9 @@ public abstract class AnalysisStyleFactory {
         String statusIconVisible();
     }
 
-    public static AnalysisStyle getAnalysisStyle(){
+    public static AnalysisWizardStyle getAnalysisStyle(){
         if(RESOURCES==null){
-            RESOURCES = GWT.create(AnalysisResources.class);
+            RESOURCES = GWT.create(AnalysisWizardResources.class);
             RESOURCES.analysisStyle().ensureInjected();
         }
         return RESOURCES.analysisStyle();

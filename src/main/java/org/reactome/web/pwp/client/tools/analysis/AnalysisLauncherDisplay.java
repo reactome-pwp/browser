@@ -14,17 +14,10 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
-import org.reactome.web.pwp.client.tools.analysis.event.AnalysisErrorEvent;
-import org.reactome.web.pwp.client.tools.analysis.event.FileNotSelectedEvent;
-import org.reactome.web.pwp.client.tools.analysis.handler.AnalysisErrorHandler;
-import org.reactome.web.pwp.client.tools.analysis.handler.FileNotSelectedEventHandler;
-import org.reactome.web.pwp.client.tools.analysis.notifications.ErrorPanel;
-import org.reactome.web.pwp.client.tools.analysis.submitters.FileSubmitter;
-import org.reactome.web.pwp.client.tools.analysis.submitters.PostSubmitter;
-import org.reactome.web.pwp.client.tools.analysis.submitters.SpeciesSubmitter;
+import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
+import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 import org.reactome.web.pwp.model.classes.Species;
 
@@ -35,8 +28,8 @@ import java.util.List;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLauncher.Display, ResizeHandler,
-        AnalysisCompletedHandler, AnalysisErrorHandler,
-        ClickHandler, CloseHandler<PopupPanel>,FileNotSelectedEventHandler {
+        AnalysisCompletedHandler,
+        ClickHandler, CloseHandler<PopupPanel> {
 
     private AnalysisLauncher.Presenter presenter;
 
@@ -45,8 +38,6 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     private Button speciesBtn;
 
     private DeckLayoutPanel container;
-    private SpeciesSubmitter speciesSubmitter;
-    private ErrorPanel errorPanel;
 
     public AnalysisLauncherDisplay() {
         super();
@@ -55,7 +46,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.setAnimationEnabled(true);
         this.setGlassEnabled(true);
         this.setAutoHideOnHistoryEventsEnabled(false);
-        this.addStyleName(RESOURCES.getCSS().popupPanel());
+        this.addStyleName( RESOURCES.getCSS().popupPanel());
         Window.addResizeHandler(this);
 
         int width = (int) Math.round(Window.getClientWidth() * 0.9);
@@ -77,31 +68,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.container = new DeckLayoutPanel();                 // Main tab container
         this.container.setStyleName(RESOURCES.getCSS().container());
 
-        this.errorPanel = new ErrorPanel();
-        PostSubmitter postSubmitter = new PostSubmitter();
-        FileSubmitter fileSubmitter = new FileSubmitter(this.errorPanel);
-
-        //Add handlers
-        fileSubmitter.addAnalysisCompletedEventHandler(this);
-        fileSubmitter.addAnalysisErrorEventHandler(this);
-        fileSubmitter.addFileNotSelectedEventHandler(this);
-        postSubmitter.addAnalysisCompletedEventHandler(this);
-        postSubmitter.addAnalysisCompletedEventHandler(fileSubmitter);
-        postSubmitter.addAnalysisErrorEventHandler(this);
-        postSubmitter.addAnalysisErrorEventHandler(fileSubmitter);
-        postSubmitter.addEmptySampleEventHandler(fileSubmitter);
-
-        this.speciesSubmitter = new SpeciesSubmitter();
-        this.speciesSubmitter.addAnalysisCompletedEventHandler(this);
-        this.speciesSubmitter.addAnalysisErrorEventHandler(this);
-
-        FlowPanel analysis = new FlowPanel();
-        analysis.add(fileSubmitter);
-        analysis.add(postSubmitter);
-        analysis.add(errorPanel);
-
-        this.container.add(analysis);
-        this.container.add(speciesSubmitter);
+        this.container.add(new AnalysisWizard(this));
+        this.container.add(new SpeciesComparison());
 
         this.container.showWidget(0);
         this.container.setAnimationVertical(true);
@@ -120,54 +88,12 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     }
 
 
-    public Button getButton(String text, ImageResource imageResource){
-        FlowPanel fp = new FlowPanel();
-        Image image = new Image(imageResource);
-        image.addStyleName(RESOURCES.getCSS().undraggable());
-        fp.add(image);
-        fp.add(new Label(text));
-
-        SafeHtml safeHtml = SafeHtmlUtils.fromSafeConstant(fp.toString());
-        Button btn = new Button(safeHtml, this);
-        this.btns.add(btn);
-        return btn;
-    }
-
-    private Widget setTitlePanel(){
-        FlowPanel header = new FlowPanel();
-        header.setStyleName(RESOURCES.getCSS().header());
-        header.addStyleName(RESOURCES.getCSS().unselectable());
-        Image image = new Image(RESOURCES.analysisHeaderIcon());
-        image.setStyleName(RESOURCES.getCSS().headerIcon());
-        image.addStyleName(RESOURCES.getCSS().undraggable());
-        header.add(image);
-        Label title = new Label("Analysis tools");
-        title.setStyleName(RESOURCES.getCSS().headerText());
-        Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                AnalysisLauncherDisplay.this.hide();
-            }
-        });
-        header.add(title);
-        header.add(closeBtn);
-        return header;
-    }
 
     @Override
     public void onAnalysisCompleted(AnalysisCompletedEvent event) {
         presenter.analysisCompleted(event);
     }
 
-    @Override
-    public void onAnalysisError(AnalysisErrorEvent event) {
-        presenter.analysisError(event);
-    }
-
-    @Override
-    public void onFileNotSelectedEvent(FileNotSelectedEvent event) {
-        Console.warn("File not selected");
-    }
 
     @Override
     public void onClick(ClickEvent event) {
@@ -205,7 +131,40 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     @Override
     public void setSpeciesList(List<Species> speciesList) {
-        this.speciesSubmitter.setSpeciesList(speciesList);
+//        this.speciesSubmitter.setSpeciesList(speciesList);
+    }
+
+    private Button getButton(String text, ImageResource imageResource){
+        FlowPanel fp = new FlowPanel();
+        Image image = new Image(imageResource);
+        image.addStyleName(RESOURCES.getCSS().undraggable());
+        fp.add(image);
+        fp.add(new Label(text));
+
+        SafeHtml safeHtml = SafeHtmlUtils.fromSafeConstant(fp.toString());
+        Button btn = new Button(safeHtml, this);
+        this.btns.add(btn);
+        return btn;
+    }
+    private Widget setTitlePanel(){
+        FlowPanel header = new FlowPanel();
+        header.setStyleName(RESOURCES.getCSS().header());
+        header.addStyleName(RESOURCES.getCSS().unselectable());
+        Image image = new Image(RESOURCES.analysisHeaderIcon());
+        image.setStyleName(RESOURCES.getCSS().headerIcon());
+        image.addStyleName(RESOURCES.getCSS().undraggable());
+        header.add(image);
+        Label title = new Label("Analysis tools");
+        title.setStyleName(RESOURCES.getCSS().headerText());
+        Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                AnalysisLauncherDisplay.this.hide();
+            }
+        });
+        header.add(title);
+        header.add(closeBtn);
+        return header;
     }
 
 
