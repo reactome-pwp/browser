@@ -14,7 +14,6 @@ public interface AnalysisLauncher {
     interface Presenter extends BrowserModule.Presenter {
         void displayClosed();
         void analysisCompleted(AnalysisCompletedEvent event);
-//        void analysisError(AnalysisErrorEvent event);
     }
 
     interface Display extends BrowserModule.Display {
