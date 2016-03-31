@@ -1,7 +1,9 @@
 package org.reactome.web.pwp.client.tools.analysis.species;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
@@ -9,6 +11,7 @@ import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
+import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
@@ -23,15 +26,17 @@ import java.util.List;
 public class SpeciesComparison extends FlowPanel implements ClickHandler {
 
     private ListBox species;
-    private Image statusIcon;
 
-//    private ErrorPanel errorPanel;
+    private FlowPanel errorPanel;
+    private InlineLabel errorHolder;
 
-    public SpeciesComparison() {
-        //noinspection GWTStyleCheck
-        setStyleName("clearfix");
-        addStyleName(AnalysisStyleFactory.getAnalysisStyle().unselectable());
-//        addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisBlock());
+    private Image loading;
+
+    private AnalysisCompletedHandler handler;
+
+    public SpeciesComparison(AnalysisCompletedHandler handler) {
+        this.handler = handler;
+        getElement().getStyle().setMargin(5, Style.Unit.PX);
 
         SimplePanel title = new SimplePanel();
         title.add(new InlineLabel("Species Comparison"));
@@ -43,73 +48,66 @@ public class SpeciesComparison extends FlowPanel implements ClickHandler {
         explanation.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisText());
         add(explanation);
 
-        FlowPanel submissionPanel = new FlowPanel();
-        submissionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisSubmission());
-        submissionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisMainSubmitter());
-        submissionPanel.add(new Label("Compare "));
+        FlowPanel fp = new FlowPanel();
+        fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisSubmission());
+        fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisMainSubmitter());
+        fp.add(new InlineLabel("Compare"));
+        fp.add(new InlineLabel("Homo sapiens"));
+        fp.add(new InlineLabel("with"));
+        fp.add(species = new ListBox());
+        species.setMultipleSelect(false);
 
-        Label hsaLabel = new Label("Homo sapiens ");
-        hsaLabel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().emphasis());
-        submissionPanel.add(hsaLabel);
+        fp.add(new Button("Go!", this));
+        fp.add(loading = new Image(CommonImages.INSTANCE.loader()));
+        loading.getElement().getStyle().setFloat(Style.Float.RIGHT);
+        loading.setVisible(false);
 
-        submissionPanel.add(new Label("with "));
-        submissionPanel.add(new Button("GO", this));
-        this.statusIcon = new Image(CommonImages.INSTANCE.loader());
-//        this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
-//        setStatusIcon(null, false, false);
-        submissionPanel.add(this.statusIcon);
+        add(fp);
 
-        this.species = new ListBox();
-        this.species.setMultipleSelect(false);
-        submissionPanel.add(this.species);
-        add(submissionPanel);
-
-//        errorPanel = new ErrorPanel();
-//        add(errorPanel);
+        add(errorPanel = getErrorHolder());
     }
-
-//    public HandlerRegistration addAnalysisCompletedEventHandler(AnalysisCompletedHandler handler) {
-//        return this.addHandler(handler, AnalysisCompletedEvent.TYPE);
-//    }
-//
-//    public HandlerRegistration addAnalysisErrorEventHandler(AnalysisErrorHandler handler) {
-//        return this.addHandler(handler, AnalysisErrorEvent.TYPE);
-//    }
 
     @Override
     public void onClick(ClickEvent event) {
+        errorPanel.getElement().getStyle().setOpacity(0);
         Long dbId = Long.valueOf(species.getValue(species.getSelectedIndex()));
         if (dbId == -1) {
-//            DialogBoxFactory.alert("Species comparison", "Please select a species to compare with");
-//            setStatusIcon(CommonImages.INSTANCE.error(), true, true);
-//            errorPanel.setErrorMessage("No species selected", "Please select a species to compare with and then press GO");
+            errorHolder.setText("Please select a species to compare with and then press GO");
+            errorPanel.getElement().getStyle().setOpacity(1);
+            (new Timer() {
+                @Override
+                public void run() {
+                    errorPanel.getElement().getStyle().setOpacity(0);
+                }
+            }).schedule(4000);
             return;
         }
 
-
+        loading.setVisible(true);
         AnalysisClient.speciesComparison(dbId, AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(AnalysisResult result, long time) {
-                fireEvent(new AnalysisCompletedEvent(result));
+                loading.setVisible(false);
+                handler.onAnalysisCompleted(new AnalysisCompletedEvent(result));
             }
 
             @Override
             public void onAnalysisError(AnalysisError error) {
-//                fireEvent(new AnalysisErrorEvent(error));
+                if (error.getMessages() != null && !error.getMessages().isEmpty()) {
+                    showErrorMessage(error.getMessages().get(0));
+                } else {
+                    showErrorMessage(error.getReason());
+                }
             }
 
             @Override
             public void onAnalysisServerException(String message) {
-//                setStatusIcon(CommonImages.INSTANCE.error(), true, true);
-//                errorPanel.setErrorMessage("The Analysis Service is temporarily unavailable",
-//                        "We have trouble performing the analysis. Please check your internet connection and try again in a while");
-//                fireEvent(new ServiceUnavailableEvent());
+                showErrorMessage(message);
             }
         });
     }
 
     public void setSpeciesList(List<Species> speciesList) {
-//        this.speciesList = speciesList;
         this.species.addItem("Select a species...", "-1");
         for (Species species : speciesList) {
             if (!species.getDbId().equals(Token.DEFAULT_SPECIES_ID)) {
@@ -118,23 +116,24 @@ public class SpeciesComparison extends FlowPanel implements ClickHandler {
         }
     }
 
-//    private void setStatusIcon(final ImageResource resource, boolean visible, boolean schedule) {
-//        if (resource != null) {
-//            statusIcon.setResource(resource);
-//        }
-//        if (visible) {
-//            statusIcon.addStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-//            if (schedule) {
-//                Timer timer = new Timer() {
-//                    @Override
-//                    public void run() {
-//                        statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-//                    }
-//                };
-//                timer.schedule(2000);
-//            }
-//        } else {
-//            statusIcon.removeStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIconVisible());
-//        }
-//    }
+    protected void showErrorMessage(String error) {
+        loading.setVisible(false);
+        errorHolder.setText(error);
+        errorPanel.getElement().getStyle().setOpacity(1);
+        (new Timer() {
+            @Override
+            public void run() {
+                errorPanel.getElement().getStyle().setOpacity(0);
+            }
+        }).schedule(4000);
+    }
+
+    @SuppressWarnings("Duplicates")
+    private FlowPanel getErrorHolder() {
+        FlowPanel fp = new FlowPanel();
+        fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().errorMessage());
+        fp.add(new Image(CommonImages.INSTANCE.error()));
+        fp.add(errorHolder = new InlineLabel());
+        return fp;
+    }
 }

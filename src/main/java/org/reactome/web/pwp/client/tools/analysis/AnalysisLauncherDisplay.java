@@ -33,6 +33,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     private AnalysisLauncher.Presenter presenter;
 
+    private SpeciesComparison speciesComparison;
+
     private List<Button> btns = new LinkedList<>();
     private Button analysisBtn;
     private Button speciesBtn;
@@ -69,7 +71,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.container.setStyleName(RESOURCES.getCSS().container());
 
         this.container.add(new AnalysisWizard(this));
-        this.container.add(new SpeciesComparison());
+        this.container.add(speciesComparison = new SpeciesComparison(this));
 
         this.container.showWidget(0);
         this.container.setAnimationVertical(true);
@@ -131,7 +133,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     @Override
     public void setSpeciesList(List<Species> speciesList) {
-//        this.speciesSubmitter.setSpeciesList(speciesList);
+        speciesComparison.setSpeciesList(speciesList);
     }
 
     private Button getButton(String text, ImageResource imageResource){
