@@ -18,25 +18,8 @@
     text-align: justify;
 }
 
-/*.analysisBlock {*/
-    /*border-radius:5px;*/
-    /*float: left;*/
-    /*margin: 5px 0 5px 0;*/
-    /*padding: 5px 10px 15px 10px;*/
-    /*vertical-align: middle;*/
-    /*width: 97%;*/
-    /*cursor: default;*/
-    /*overflow-x: hidden; !* To make the submitter tab scrollable *!*/
-    /*overflow-y: auto;*/
-/*}*/
-
-.analysisExample {
-    padding: 0 5px 0 5px;
-    margin-top: 10px;
-}
-
 .analysisSubmission {
-    padding:5px 5px 33px 0;
+    padding: 5px 5px 33px 0;
     color: white;
     font-size: medium;
 }
@@ -46,13 +29,8 @@
     border: 1px solid #0e7cb3;
     border-radius: 5px;
     margin-bottom: 25px;
+    height: 10px;
 }
-
-/*.analysisSubmission div {*/
-    /*float: left;*/
-    /*margin-left: 10px;*/
-    /*padding-top: 5px;*/
-/*}*/
 
 .analysisSubmission input {
     float: left;
@@ -73,11 +51,10 @@
     border: 1px solid #0e7cb3;
     float: right;
     font-size: 13px;
-    font-weight: bolder;
-    width: 32px;
-    height: 32px;
+    font-weight: bold;
+    padding: 10px 25px;
     outline: none;
-    padding: 0 !important;
+    /*padding: 0 !important;*/
 }
 
 .analysisSubmission button:hover {
@@ -114,20 +91,13 @@
     color: black;
 }
 
-.analysisCheckBox{
-    margin-right: 20px;
-    color: white;
-    vertical-align: middle;
-    font-size: small;
-}
-
 .emphasis {
     font-size: larger;
     margin-top: -4px;
     font-weight: bold;
 }
 
-.postSubmitter div{
+.postSubmitter div {
     color: white;
     margin: 5px;
 }
@@ -140,7 +110,7 @@
     width: 98%;
 }
 
-.postSubmitterExamples div{
+.postSubmitterExamples div {
     color: white;
     margin: 5px;
 }
@@ -150,10 +120,12 @@
     border-radius: 5px;
     color: white;
     font-weight: normal;
-    margin: 2px 5px 0 0;
+    font-size: 13px;
+    margin: 0 5px 4px 0;
     width: 200px;
+    height: 30px;
     outline: none;
-
+    padding: 0px !important;
 }
 
 .postSubmitterExamples button:hover {
@@ -167,28 +139,58 @@
     border: 1px solid #066b9e;
 }
 
+.postSubmitterButtons {
+    margin: 5px;
+}
+
 .postSubmitterClear {
-    background: #1e95cf;
     float: left !important;
-    margin: 0 335px 0 0 !important;
-    width: 100px !important;
-}
-
-.postSubmitterClear:hover {
-    background: #066b9e;
-    border: 1px solid #1e95cf;
-}
-
-.optionsPanel {
-
 }
 
 .optionsPanelCheckBox {
-    margin-top: 20px;
+    margin: 20px 0 0 50px;
     color: rgb(14, 124, 179);
     vertical-align: middle;
     font-size: large;
     display: block;
+}
+
+.optionsPanelDisclosure {
+    margin-left: 75px;
+}
+
+.optionsPanelDisclosureContent {
+    border: 0 none !important;
+    padding: 0 !important;
+}
+
+.optionsPanelButtons {
+    background-color: #58c3e5;
+    border: 1px solid #0e7cb3;
+    border-radius: 5px;
+    margin: 25px 0 25px 0;
+}
+
+.optionsPanelButtons button {
+    background: #1e95cf;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 5px;
+    padding: 10px 25px;
+    outline: none;
+}
+
+.optionsPanelButtons button:hover {
+    background: #066b9e;
+    border: 1px solid #1e95cf;
+}
+
+.optionsPanelButtons button:active:hover {
+    color: #066b9e;
+    background: white;
+    border: 1px solid #066b9e;
 }
 
 .unselectable {
@@ -200,12 +202,18 @@
     user-select: none;
 }
 
-.statusIcon {
+.errorMessage {
     opacity:0;
     transition: opacity 0.5s;
     -webkit-transition: opacity 0.5s; /* Safari */
 }
 
-.statusIconVisible {
-    opacity:1;
+.errorMessage span {
+    color: #B71C1C;
+    float: left;
+}
+
+.errorMessage img {
+    margin: 8px 0 8px 20px;
+    float: left !important;
 }

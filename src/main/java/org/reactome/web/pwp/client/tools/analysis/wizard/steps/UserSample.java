@@ -33,7 +33,7 @@ public class UserSample extends ScrollPanel implements GoHandler {
 
         SimplePanel explanation = new SimplePanel();
         explanation.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisText());
-        explanation.getElement().setInnerHTML(AnalysisWizard.UserSampleResource.INSTANCE.analysisInfo().getText());
+        explanation.getElement().setInnerHTML(AnalysisWizard.RESOURCES.analysisInfo().getText());
         container.add(explanation);
 
         FileSubmitter fileSubmitter = new FileSubmitter();

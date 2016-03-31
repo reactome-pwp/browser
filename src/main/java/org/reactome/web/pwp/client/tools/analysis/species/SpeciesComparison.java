@@ -39,7 +39,7 @@ public class SpeciesComparison extends FlowPanel implements ClickHandler {
         add(title);
 
         SimplePanel explanation = new SimplePanel();
-        explanation.getElement().setInnerHTML(AnalysisWizard.UserSampleResource.INSTANCE.speciesComparisonInfo().getText());
+        explanation.getElement().setInnerHTML(AnalysisWizard.RESOURCES.speciesComparisonInfo().getText());
         explanation.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisText());
         add(explanation);
 
@@ -55,7 +55,7 @@ public class SpeciesComparison extends FlowPanel implements ClickHandler {
         submissionPanel.add(new Label("with "));
         submissionPanel.add(new Button("GO", this));
         this.statusIcon = new Image(CommonImages.INSTANCE.loader());
-        this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
+//        this.statusIcon.setStyleName(AnalysisStyleFactory.getAnalysisStyle().statusIcon());
 //        setStatusIcon(null, false, false);
         submissionPanel.add(this.statusIcon);
 

@@ -37,10 +37,6 @@ public abstract class AnalysisStyleFactory {
 
         String analysisText();
 
-        String analysisExample();
-
-        String analysisCheckBox();
-
         String analysisSubmission();
 
         String analysisMainSubmitter();
@@ -51,17 +47,21 @@ public abstract class AnalysisStyleFactory {
 
         String postSubmitterExamples();
 
+        String postSubmitterButtons();
+
         String postSubmitterClear();
 
-        String optionsPanel();
+        String optionsPanelDisclosure();
+
+        String optionsPanelDisclosureContent();
 
         String optionsPanelCheckBox();
 
+        String optionsPanelButtons();
+
         String unselectable();
 
-        String statusIcon();
-
-        String statusIconVisible();
+        String errorMessage();
     }
 
     public static AnalysisWizardStyle getAnalysisStyle(){

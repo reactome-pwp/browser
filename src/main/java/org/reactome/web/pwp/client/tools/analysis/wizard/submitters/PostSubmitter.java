@@ -7,7 +7,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
 import org.reactome.web.pwp.client.tools.analysis.wizard.events.GoEvent;
 import org.reactome.web.pwp.client.tools.analysis.wizard.handlers.GoHandler;
@@ -20,6 +22,9 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
     private TextArea textArea;
     private Integer height = 280;
 
+    private FlowPanel errorPanel;
+    private InlineLabel errorHolder;
+
     public PostSubmitter() {
         super(Style.Unit.PX);
         //noinspection GWTStyleCheck
@@ -31,6 +36,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         addEast(getExampleButtons(), 210);
 
         FlowPanel submissionPanel = new FlowPanel();
+        submissionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterButtons());
         Button clear = new Button("Clear", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -39,8 +45,9 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         });
         clear.setStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterClear());
         submissionPanel.add(clear);
-        submissionPanel.add(new Button("Go", this));
-        addSouth(submissionPanel, 40);
+        submissionPanel.add(errorPanel = getErrorHolder());
+        submissionPanel.add(new Button("Continue", this));
+        addSouth(submissionPanel, 50);
 
         FlowPanel fp = new FlowPanel();
         fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitter());
@@ -52,7 +59,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         add(fp);
     }
 
-    public HandlerRegistration addGoHandler(GoHandler handler){
+    public HandlerRegistration addGoHandler(GoHandler handler) {
         return addHandler(handler, GoEvent.TYPE);
     }
 
@@ -62,11 +69,22 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
     @Override
     public void onClick(ClickEvent clickEvent) {
-        //TODO: Check for errors!
-        fireEvent(new GoEvent(textArea));
+        errorPanel.getElement().getStyle().setOpacity(0);
+        if (textArea.getValue().isEmpty()) {
+            errorHolder.setText("Please paste the content to analyse or select an example to continue...");
+            errorPanel.getElement().getStyle().setOpacity(1);
+            (new Timer(){
+                @Override
+                public void run() {
+                    errorPanel.getElement().getStyle().setOpacity(0);
+                }
+            }).schedule(4000);
+        } else {
+            fireEvent(new GoEvent(textArea));
+        }
     }
 
-    private Widget getExampleButtons(){
+    private Widget getExampleButtons() {
         FlowPanel examples = new FlowPanel();
         examples.addStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterExamples());
         examples.add(new Label("Some examples:"));
@@ -115,6 +133,14 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         return examples;
     }
 
+    @SuppressWarnings("Duplicates")
+    private FlowPanel getErrorHolder(){
+        FlowPanel fp = new FlowPanel();
+        fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().errorMessage());
+        fp.add(new Image(CommonImages.INSTANCE.error()));
+        fp.add(errorHolder = new InlineLabel());
+        return fp;
+    }
 
     public interface AnalysisExamples extends ClientBundle {
 

@@ -6,11 +6,9 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.wizard.common.WizardEventBus;
@@ -26,19 +24,12 @@ import org.reactome.web.pwp.client.tools.analysis.wizard.steps.UserSample;
  */
 public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedHandler, AnalysisCompletedHandler {
 
-    public enum Step {
-        SAMPLE, OPTIONS, ANALYSIS;
-
-        public int getIndex() {
-            for (int i = 0; i < values().length; i++)
-                if(values()[i].equals(this)) return i;
-            return 0;
-        }
-
-    }
+    public enum Step {SAMPLE, OPTIONS, ANALYSIS}
 
     private WizardEventBus wizardEventBus = new WizardEventBus();
     private WizardSelection wizardSelection = new WizardSelection();
+
+    private SimplePanel top;
     private TabLayoutPanel panels;
 
     private AnalysisCompletedHandler handler;
@@ -48,11 +39,10 @@ public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedH
         this.handler = handler;
         initHandlers();
 
-        FlowPanel optionsSelector = new FlowPanel();
-        optionsSelector.add(getButton("Your Sample", Step.SAMPLE));
-        optionsSelector.add(getButton("Options", Step.OPTIONS));
-        optionsSelector.add(getButton("Analysis", Step.ANALYSIS));
-        this.addNorth(optionsSelector, 50);
+        top = new SimplePanel();
+        top.getElement().getStyle().setMargin(2, Style.Unit.PX);
+        top.add(new Image(RESOURCES.wizardTopStep01()));
+        this.addNorth(top, 73);
 
         this.panels = new TabLayoutPanel(0, Style.Unit.PX);
         this.panels.setAnimationDuration(250);
@@ -81,7 +71,22 @@ public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedH
 
 
     public void select(Step step) {
-        panels.selectTab(step.getIndex());
+        int index = 0;
+        top.clear();
+        switch (step){
+            case SAMPLE:
+                top.add(new Image(RESOURCES.wizardTopStep01()));
+                break;
+            case OPTIONS:
+                index = 1;
+                top.add(new Image(RESOURCES.wizardTopStep02()));
+                break;
+            case ANALYSIS:
+                index = 2;
+                top.add(new Image(RESOURCES.wizardTopStep03()));
+                break;
+        }
+        panels.selectTab(index);
     }
 
     private void initHandlers(){
@@ -99,9 +104,8 @@ public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedH
     }
 
 
+    public static UserSampleResource RESOURCES = GWT.create(UserSampleResource.class);
     public interface UserSampleResource extends ClientBundle {
-
-        UserSampleResource INSTANCE = GWT.create(UserSampleResource.class);
 
         @Source("AnalysisInfo.html")
         TextResource analysisInfo();
@@ -111,5 +115,14 @@ public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedH
 
         @Source("SpeciesComparisonInfo.html")
         TextResource speciesComparisonInfo();
+
+        @Source("top/wizard_top_step1.png")
+        ImageResource wizardTopStep01();
+
+        @Source("top/wizard_top_step2.png")
+        ImageResource wizardTopStep02();
+
+        @Source("top/wizard_top_step3.png")
+        ImageResource wizardTopStep03();
     }
 }
