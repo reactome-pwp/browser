@@ -16,6 +16,7 @@
     font-size: medium;
     font-weight: bold;
     text-align: justify;
+    margin: 15px 5px;
 }
 
 .analysisSubmission {
@@ -168,7 +169,8 @@
     background-color: #58c3e5;
     border: 1px solid #0e7cb3;
     border-radius: 5px;
-    margin: 25px 0 25px 0;
+    margin: 25px 5px;
+    height: 50px;
 }
 
 .optionsPanelButtons button {
@@ -191,15 +193,6 @@
     color: #066b9e;
     background: white;
     border: 1px solid #066b9e;
-}
-
-.unselectable {
-    -webkit-touch-callout: none; /* Prevents selection */
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .errorMessage {
@@ -292,4 +285,13 @@
     color: #066b9e;
     background: white;
     border: 1px solid #066b9e;
+}
+
+.wizardTop{
+    margin: 5px;
+}
+
+.wizardTop img {
+    height: 45px;
+    width: auto !important;
 }
