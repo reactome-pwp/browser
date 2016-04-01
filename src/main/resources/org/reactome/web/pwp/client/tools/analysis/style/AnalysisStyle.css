@@ -156,6 +156,10 @@
     display: block;
 }
 
+.optionsPanelCheckBox input {
+    cursor: pointer;
+}
+
 .optionsPanelDisclosure {
     margin-left: 75px;
 }

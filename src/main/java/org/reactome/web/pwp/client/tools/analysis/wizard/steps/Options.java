@@ -48,7 +48,7 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
         projection.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelCheckBox());
         projection.setValue(true);
 
-        DisclosurePanel projectionInfo = new DisclosurePanel("All non-human identifiers are converted to their human equivalents (expand for more info...)");
+        DisclosurePanel projectionInfo = new DisclosurePanel(RESOURCES.minus(), RESOURCES.plus(), "All non-human identifiers are converted to their human equivalents (expand for more info...)");
         projectionInfo.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosure());
         projectionInfo.add(getProjectionCarousel());
         projectionInfo.getContent().addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosureContent());
@@ -58,7 +58,7 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
         container.add(interactors = new CheckBox("Include interactors"));
         interactors.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelCheckBox());
 
-        DisclosurePanel interactorsInfo = new DisclosurePanel("IntAct interactors are used to increase the analysis background (expand for more info...)");
+        DisclosurePanel interactorsInfo = new DisclosurePanel(RESOURCES.minus(), RESOURCES.plus(), "IntAct interactors are used to increase the analysis background (expand for more info...)");
         interactorsInfo.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosure());
         interactorsInfo.add(getInteractorsCarousel());
         interactorsInfo.getContent().addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosureContent());
@@ -155,5 +155,11 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
 
         @Source("interactors/slide_04.png")
         ImageResource interactorsSlide04();
+
+        @Source("images/minus_blue.png")
+        ImageResource minus();
+
+        @Source("images/plus_blue.png")
+        ImageResource plus();
     }
 }
