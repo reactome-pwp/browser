@@ -11,6 +11,7 @@ import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
+import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
 import org.reactome.web.pwp.client.tools.analysis.wizard.common.WizardEventBus;
 import org.reactome.web.pwp.client.tools.analysis.wizard.common.WizardSelection;
 import org.reactome.web.pwp.client.tools.analysis.wizard.events.NextStepSelectedEvent;
@@ -40,9 +41,9 @@ public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedH
         initHandlers();
 
         top = new SimplePanel();
-        top.getElement().getStyle().setMargin(2, Style.Unit.PX);
+        top.addStyleName(AnalysisStyleFactory.getAnalysisStyle().wizardTop());
         top.add(new Image(RESOURCES.wizardTopStep01()));
-        this.addNorth(top, 73);
+        this.addNorth(top, 55);
 
         this.panels = new TabLayoutPanel(0, Style.Unit.PX);
         this.panels.setAnimationDuration(250);
@@ -106,12 +107,6 @@ public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedH
 
     public static UserSampleResource RESOURCES = GWT.create(UserSampleResource.class);
     public interface UserSampleResource extends ClientBundle {
-
-        @Source("AnalysisInfo.html")
-        TextResource analysisInfo();
-
-        @Source("AnalysisExamples.html")
-        TextResource analysisExamples();
 
         @Source("SpeciesComparisonInfo.html")
         TextResource speciesComparisonInfo();

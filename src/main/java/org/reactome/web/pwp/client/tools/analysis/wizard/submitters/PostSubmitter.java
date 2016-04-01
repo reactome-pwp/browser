@@ -52,10 +52,9 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         FlowPanel fp = new FlowPanel();
         fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitter());
         fp.add(new Label("Paste your data to analyse or try example data sets:"));
-        this.textArea = new TextArea();
-        this.textArea.getElement().setAttribute("style", "font-family: Consolas;");
-        fp.add(this.textArea);
-
+        fp.add(textArea = new TextArea());
+        textArea.getElement().setAttribute("style", "font-family: Consolas;");
+        textArea.getElement().setAttribute("placeholder", "Paste your data here or select an example from the right >>");
         add(fp);
     }
 
@@ -73,7 +72,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         if (textArea.getValue().isEmpty()) {
             errorHolder.setText("Please paste the content to analyse or select an example to continue...");
             errorPanel.getElement().getStyle().setOpacity(1);
-            (new Timer(){
+            (new Timer() {
                 @Override
                 public void run() {
                     errorPanel.getElement().getStyle().setOpacity(0);
@@ -134,7 +133,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
     }
 
     @SuppressWarnings("Duplicates")
-    private FlowPanel getErrorHolder(){
+    private FlowPanel getErrorHolder() {
         FlowPanel fp = new FlowPanel();
         fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().errorMessage());
         fp.add(new Image(CommonImages.INSTANCE.error()));

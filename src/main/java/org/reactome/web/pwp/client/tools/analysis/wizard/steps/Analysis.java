@@ -75,14 +75,19 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
     public void onNextStepSelected(NextStepSelectedEvent event) {
         if (!event.getStep().equals(AnalysisWizard.Step.ANALYSIS)) return;
 
-        //It's me!
-        switch (wizardSelection.getSampleType()) {
-            case FILE:
-                analyseFile(wizardSelection.getForm());
-                break;
-            default:
-                analyseText(wizardSelection.getPostData());
-        }
+        //The idea behind deferring is to show the "analysing" message before requesting the analysis
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                switch (wizardSelection.getSampleType()) {
+                    case FILE:
+                        analyseFile(wizardSelection.getForm());
+                        break;
+                    default:
+                        analyseText(wizardSelection.getPostData());
+                }
+            }
+        });
     }
 
     @Override
@@ -98,14 +103,15 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
         String json = label.getInnerText();
         try {
             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, json);
-            analysisCompleted(result);
+            if (result.getSummary() != null)  analysisCompleted(result);
         } catch (AnalysisModelException e) {
-            try {
-                AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, json);
-                analysisError(analysisError);
-            } catch (AnalysisModelException e1) {
-                Console.error("Oops! This is unexpected", this);
-            }
+            //Nothing here
+        }
+        try {
+            AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, json);
+            analysisError(analysisError);
+        } catch (AnalysisModelException e1) {
+            Console.error("Oops! This is unexpected", this);
         }
     }
 
@@ -113,6 +119,7 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
         progress.getElement().getStyle().setOpacity(0);
         error.getElement().getStyle().setOpacity(1);
         back.getElement().getStyle().setOpacity(1);
+        error.clear();
         error.add(new Label("Service not available. Please wait or contact help@reactome.org"));
     }
 
@@ -120,6 +127,10 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
         progress.getElement().getStyle().setOpacity(0);
         error.getElement().getStyle().setOpacity(1);
         back.getElement().getStyle().setOpacity(1);
+        error.clear();
+        if(analysisError.getMessages() == null || analysisError.getMessages().isEmpty()){
+            error.add(new Label(analysisError.getReason()));
+        }
         for (String message : analysisError.getMessages()) {
             error.add(new Label(message));
         }
@@ -141,7 +152,6 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
 
     private void analyseText(String data) {
         AnalysisClient.analyseData(data, wizardSelection.isProjectToHuman(), wizardSelection.isIncludeInteractors(), AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
-
             @Override
             public void onAnalysisServerException(String s) {
                 analysisNotAvailable();
@@ -167,7 +177,7 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
         return fp;
     }
 
-    private FlowPanel getErrorPanel(){
+    private FlowPanel getErrorPanel() {
         FlowPanel fp = new FlowPanel();
         fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisError());
         return fp;
@@ -179,6 +189,7 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
 
 
     public UserSampleResource RESOURCES = GWT.create(UserSampleResource.class);
+
     public interface UserSampleResource extends ClientBundle {
         @Source("analysis/loader_lines.gif")
         ImageResource loader();

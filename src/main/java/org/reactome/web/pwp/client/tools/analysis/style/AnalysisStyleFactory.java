@@ -59,8 +59,6 @@ public abstract class AnalysisStyleFactory {
 
         String optionsPanelButtons();
 
-        String unselectable();
-
         String errorMessage();
 
         String analysisProgress();
@@ -68,6 +66,8 @@ public abstract class AnalysisStyleFactory {
         String analysisError();
 
         String analysisErrorButton();
+
+        String wizardTop();
     }
 
     public static AnalysisWizardStyle getAnalysisStyle(){

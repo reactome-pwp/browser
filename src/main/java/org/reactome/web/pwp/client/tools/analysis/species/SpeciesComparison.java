@@ -52,7 +52,11 @@ public class SpeciesComparison extends FlowPanel implements ClickHandler {
         fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisSubmission());
         fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisMainSubmitter());
         fp.add(new InlineLabel("Compare"));
-        fp.add(new InlineLabel("Homo sapiens"));
+
+        InlineLabel hs = new InlineLabel("Homo sapiens");
+        hs.addStyleName(AnalysisStyleFactory.getAnalysisStyle().emphasis());
+        fp.add(hs);
+
         fp.add(new InlineLabel("with"));
         fp.add(species = new ListBox());
         species.setMultipleSelect(false);

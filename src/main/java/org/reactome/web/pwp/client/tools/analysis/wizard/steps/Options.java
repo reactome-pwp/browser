@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class Options extends ScrollPanel implements ClickHandler, NextStepSelectedHandler {
+public class Options extends DockLayoutPanel implements ClickHandler, NextStepSelectedHandler {
 
     private WizardEventBus wizardEventBus;
     //wizardSelection is shared by all the steps in the wizard
@@ -32,6 +32,7 @@ public class Options extends ScrollPanel implements ClickHandler, NextStepSelect
     private CheckBox interactors;
 
     public Options(WizardEventBus wizardEventBus, WizardSelection wizardSelection) {
+        super(Style.Unit.PX);
         this.wizardEventBus = wizardEventBus;
         this.wizardSelection = wizardSelection;
         initHandlers();
@@ -47,7 +48,7 @@ public class Options extends ScrollPanel implements ClickHandler, NextStepSelect
         projection.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelCheckBox());
         projection.setValue(true);
 
-        DisclosurePanel projectionInfo = new DisclosurePanel("All non-human identifiers are converted to their human equivalents (click here for more info...)");
+        DisclosurePanel projectionInfo = new DisclosurePanel("All non-human identifiers are converted to their human equivalents (expand for more info...)");
         projectionInfo.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosure());
         projectionInfo.add(getProjectionCarousel());
         projectionInfo.getContent().addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosureContent());
@@ -57,7 +58,7 @@ public class Options extends ScrollPanel implements ClickHandler, NextStepSelect
         container.add(interactors = new CheckBox("Include interactors"));
         interactors.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelCheckBox());
 
-        DisclosurePanel interactorsInfo = new DisclosurePanel("IntAct interactors are used to increase the analysis background (click here for more info...)");
+        DisclosurePanel interactorsInfo = new DisclosurePanel("IntAct interactors are used to increase the analysis background (expand for more info...)");
         interactorsInfo.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosure());
         interactorsInfo.add(getInteractorsCarousel());
         interactorsInfo.getContent().addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosureContent());
@@ -78,9 +79,9 @@ public class Options extends ScrollPanel implements ClickHandler, NextStepSelect
         buttonsBar.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelButtons());
         buttonsBar.add(back);
         buttonsBar.add(analyse);
-        container.add(buttonsBar);
+        addSouth(buttonsBar, 100);
 
-        add(container);
+        add(new ScrollPanel(container));
     }
 
     @Override
@@ -104,30 +105,28 @@ public class Options extends ScrollPanel implements ClickHandler, NextStepSelect
     }
 
     private CarouselPanel getInteractorsCarousel(){
-        Slide slide1 = new Slide(RESOURCES.interactorsSlide01(),"Reactome includes interactors data from IntAct","white");
-        Slide slide2 = new Slide(RESOURCES.interactorsSlide02(),"Every protein with interactors looks now like this","white");
-        Slide slide3 = new Slide(RESOURCES.interactorsSlide03(),"Selecting this option will perform the analysis taking also into account the interactors from IntAct","white");
         List<Slide> slidesList = new LinkedList<>();
-        slidesList.add(slide1);
-        slidesList.add(slide2);
-        slidesList.add(slide3);
+        slidesList.add(new Slide(RESOURCES.interactorsSlide01(),"Reactome includes interactors data from IntAct","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide02(),"Every protein with interactors looks now like this","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide03(),"Selecting this option will perform the analysis<br>taking also into account the interactors from IntAct","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide04(),"Only gene or chemical names and  UniProt or ChEBI<br>identifiers are taken into account for interactors","white"));
 
-        CarouselPanel carouselPanel = new CarouselPanel(slidesList, 335, 200, "azure");
+        CarouselPanel carouselPanel = new CarouselPanel(slidesList, 500, 300, "azure");
         carouselPanel.getElement().getStyle().setMarginLeft(50, Style.Unit.PX);
         carouselPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
         return carouselPanel;
     }
 
     private CarouselPanel getProjectionCarousel(){
-        Slide slide1 = new Slide(RESOURCES.projectionSlide01(),"Every species has its own set of proteins identifiers","white");
-        Slide slide2 = new Slide(RESOURCES.projectionSlide02(),"Reactome mainly curates human proteins and infers to other species using ENSEMBL compara","white");
-        Slide slide3 = new Slide(RESOURCES.projectionSlide03(),"Selecting this option, all non-human identifiers in your sample are mapped to their human equivalent","white");
+        Slide slide1 = new Slide(RESOURCES.projectionSlide01(),"Every species has its own set of identifiers<br>(genes, proteins, chemicals, mRNA, etc...)","white");
+        Slide slide2 = new Slide(RESOURCES.projectionSlide02(),"Reactome mainly curates human proteins and<br>infers to other species using ENSEMBL compara","white");
+        Slide slide3 = new Slide(RESOURCES.projectionSlide03(),"Selecting this option, all non-human identifiers in<br>your sample are mapped to their human equivalent","white");
         List<Slide> slidesList = new LinkedList<>();
         slidesList.add(slide1);
         slidesList.add(slide2);
         slidesList.add(slide3);
 
-        CarouselPanel carouselPanel = new CarouselPanel(slidesList, 335, 200, "azure");
+        CarouselPanel carouselPanel = new CarouselPanel(slidesList, 500, 300, "azure");
         carouselPanel.getElement().getStyle().setMarginLeft(50, Style.Unit.PX);
         return carouselPanel;
     }
@@ -153,5 +152,8 @@ public class Options extends ScrollPanel implements ClickHandler, NextStepSelect
 
         @Source("interactors/slide_03.png")
         ImageResource interactorsSlide03();
+
+        @Source("interactors/slide_04.png")
+        ImageResource interactorsSlide04();
     }
 }
