@@ -106,10 +106,12 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
 
     private CarouselPanel getInteractorsCarousel(){
         List<Slide> slidesList = new LinkedList<>();
-        slidesList.add(new Slide(RESOURCES.interactorsSlide01(),"Reactome includes interactors data from IntAct","white"));
-        slidesList.add(new Slide(RESOURCES.interactorsSlide02(),"Every protein with interactors looks now like this","white"));
-        slidesList.add(new Slide(RESOURCES.interactorsSlide03(),"Selecting this option will perform the analysis<br>taking also into account the interactors from IntAct","white"));
-        slidesList.add(new Slide(RESOURCES.interactorsSlide04(),"Only gene or chemical names and  UniProt or ChEBI<br>identifiers are taken into account for interactors","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide01(),"Reactome can include interaction data from IntAct<br>when performing an analysis","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide02(),"When interactors are found for the selected resource<br>proteins that have interactors are displayed like this","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide03(),"Selecting the <b>\"include interactors\"</b> option will take<br>interactors into account when performing the analysis","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide04(),"Only gene symbols, chemical names and UniProt or<br>ChEBI identifiers can be used to identify interactors","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide05(),"Curated entities and interactors backgrounds may overlap (e.g. entities<br>can interact with themselves (dimers) or with other entities in the diagram)","white"));
+        slidesList.add(new Slide(RESOURCES.interactorsSlide06(),"The analysis result uses the <b>union</b> of both backgrounds.<br>Entities in the overlapping area are only counted once","white"));
 
         CarouselPanel carouselPanel = new CarouselPanel(slidesList, 500, 300, "azure");
         carouselPanel.getElement().getStyle().setMarginLeft(50, Style.Unit.PX);
@@ -119,8 +121,9 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
 
     private CarouselPanel getProjectionCarousel(){
         Slide slide1 = new Slide(RESOURCES.projectionSlide01(),"Every species has its own set of identifiers<br>(genes, proteins, chemicals, mRNA, etc...)","white");
-        Slide slide2 = new Slide(RESOURCES.projectionSlide02(),"Reactome mainly curates human proteins and<br>infers to other species using ENSEMBL compara","white");
-        Slide slide3 = new Slide(RESOURCES.projectionSlide03(),"Selecting this option, all non-human identifiers in<br>your sample are mapped to their human equivalent","white");
+        String infers = " <a style=\"color:white\" target=\"_blank\" href=\"http://www.reactome.org/pages/documentation/electronically-inferred-events/\">infers</a> ";
+        Slide slide2 = new Slide(RESOURCES.projectionSlide02(),"Reactome curates human pathways and" + infers + "their existence in other<br>species using ortholgy information from the ENSEMBL Compara database","white");
+        Slide slide3 = new Slide(RESOURCES.projectionSlide03(),"When this option is selected, all non-human identifiers in your sample<br>are mapped to their human equivalents before the analysis is performed","white");
         List<Slide> slidesList = new LinkedList<>();
         slidesList.add(slide1);
         slidesList.add(slide2);
@@ -155,6 +158,12 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
 
         @Source("interactors/slide_04.png")
         ImageResource interactorsSlide04();
+
+        @Source("interactors/slide_05.png")
+        ImageResource interactorsSlide05();
+
+        @Source("interactors/slide_06.png")
+        ImageResource interactorsSlide06();
 
         @Source("images/minus_blue.png")
         ImageResource minus();
