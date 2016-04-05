@@ -20,7 +20,7 @@ import org.reactome.web.pwp.client.tools.analysis.wizard.handlers.GoHandler;
 public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
     private TextArea textArea;
-    private Integer height = 280;
+    private Integer height = 320;
 
     private FlowPanel errorPanel;
     private InlineLabel errorHolder;
@@ -33,7 +33,7 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
         addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisMainSubmitter());
         setHeight(this.height + "px");
 
-        addEast(getExampleButtons(), 210);
+        addEast(getExampleButtons(), 230);
 
         FlowPanel submissionPanel = new FlowPanel();
         submissionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().postSubmitterButtons());
@@ -129,6 +129,12 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
                 textArea.setText(AnalysisExamples.EXAMPLES.getMetabolomics().getText());
             }
         }));
+        examples.add(new Button("Cancer Gene Census (COSMIC)", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                textArea.setText(AnalysisExamples.EXAMPLES.getCancerGeneCensus().getText());
+            }
+        }));
         return examples;
     }
 
@@ -159,6 +165,9 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
         @Source("kegg.txt")
         TextResource getKegg();
+
+        @Source("CancerGeneCensus.txt")
+        TextResource getCancerGeneCensus();
 
         @Source("expression.txt")
         TextResource getExpression();
