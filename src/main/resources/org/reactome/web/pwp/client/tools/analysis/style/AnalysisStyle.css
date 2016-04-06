@@ -126,7 +126,7 @@
     width: 220px;
     height: 30px;
     outline: none;
-    padding: 0px !important;
+    padding: 0 !important;
 }
 
 .postSubmitterExamples button:hover {
