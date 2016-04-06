@@ -56,12 +56,14 @@ public class ViewportDisplay extends TabLayoutPanel implements Viewport.Display 
 
     @Override
     public void showDiagram() {
+        fireworks.setVisible(false);
         diagram.setVisible(true);
         selectTab(getWidgetIndex(this.diagram));
     }
 
     @Override
     public void showFireworks() {
+        fireworks.setVisible(true);
         diagram.setVisible(false);
         selectTab(getWidgetIndex(this.fireworks));
     }

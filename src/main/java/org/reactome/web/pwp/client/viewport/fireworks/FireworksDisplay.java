@@ -209,8 +209,8 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        if(visible && this.fireworks!=null) {
-            this.fireworks.onResize();
+        if(this.fireworks!=null) {
+            this.fireworks.setVisible(visible);
         }
     }
 

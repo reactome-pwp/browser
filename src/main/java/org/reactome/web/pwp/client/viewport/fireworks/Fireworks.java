@@ -37,5 +37,7 @@ public interface Fireworks {
         void resetSelection();
 
         void resetView();
+
+        void setVisible(boolean visible);
     }
 }
