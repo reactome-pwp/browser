@@ -9,7 +9,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.diagram.common.PwpButton;
 
 /**
@@ -36,7 +39,7 @@ public class TourContainer extends DialogBox implements ClickHandler {
             w = height * 1.7778 + "px";
             h = height + "px";
         }
-        String videoIframe = "<iframe width=\"" + w + "\" height=\"" + h + "\" src=\"https://www.youtube.com/embed/ogJn_pgEjHY\" frameborder=\"0\" allowfullscreen></iframe>";
+        String videoIframe = "<iframe width=\"" + w + "\" height=\"" + h + "\" src=\"https://www.youtube.com/embed/-skixrvI4nU\" frameborder=\"0\" allowfullscreen></iframe>";
         HTMLPanel video =new HTMLPanel(SafeHtmlUtils.fromTrustedString(videoIframe));
         video.setStyleName(RESOURCES.getCSS().video());
 
