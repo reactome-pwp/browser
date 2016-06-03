@@ -7,8 +7,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.diagram.controls.carousel.CarouselPanel;
-import org.reactome.web.diagram.controls.carousel.Slide;
+import org.reactome.web.carrousel.client.CarrouselPanel;
+import org.reactome.web.carrousel.client.Slide;
 import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
 import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
 import org.reactome.web.pwp.client.tools.analysis.wizard.common.WizardEventBus;
@@ -50,7 +50,7 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
 
         DisclosurePanel projectionInfo = new DisclosurePanel(RESOURCES.minus(), RESOURCES.plus(), "All non-human identifiers are converted to their human equivalents (expand for more info...)");
         projectionInfo.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosure());
-        projectionInfo.add(getProjectionCarousel());
+        projectionInfo.add(getProjectionCarrousel());
         projectionInfo.getContent().addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosureContent());
         projectionInfo.setAnimationEnabled(true);
         container.add(projectionInfo);
@@ -60,7 +60,7 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
 
         DisclosurePanel interactorsInfo = new DisclosurePanel(RESOURCES.minus(), RESOURCES.plus(), "IntAct interactors are used to increase the analysis background (expand for more info...)");
         interactorsInfo.addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosure());
-        interactorsInfo.add(getInteractorsCarousel());
+        interactorsInfo.add(getInteractorsCarrousel());
         interactorsInfo.getContent().addStyleName(AnalysisStyleFactory.getAnalysisStyle().optionsPanelDisclosureContent());
         interactorsInfo.setAnimationEnabled(true);
         container.add(interactorsInfo);
@@ -104,7 +104,7 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
         wizardEventBus.addHandler(NextStepSelectedEvent.TYPE, this);
     }
 
-    private CarouselPanel getInteractorsCarousel(){
+    private CarrouselPanel getInteractorsCarrousel(){
         List<Slide> slidesList = new LinkedList<>();
         slidesList.add(new Slide(RESOURCES.interactorsSlide01(),"Reactome can include interaction data from IntAct<br>when performing an analysis","white"));
         slidesList.add(new Slide(RESOURCES.interactorsSlide02(),"When interactors are found for the selected resource<br>proteins that have interactors are displayed like this","white"));
@@ -113,13 +113,13 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
         slidesList.add(new Slide(RESOURCES.interactorsSlide05(),"Curated entities and interactors backgrounds may overlap (e.g. entities<br>can interact with themselves (dimers) or with other entities in the diagram)","white"));
         slidesList.add(new Slide(RESOURCES.interactorsSlide06(),"The analysis result uses the <b>union</b> of both backgrounds.<br>Entities in the overlapping area are only counted once","white"));
 
-        CarouselPanel carouselPanel = new CarouselPanel(slidesList, 500, 300, "azure");
-        carouselPanel.getElement().getStyle().setMarginLeft(50, Style.Unit.PX);
-        carouselPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        return carouselPanel;
+        CarrouselPanel carrouselPanel = new CarrouselPanel(slidesList, 500, 300, "azure");
+        carrouselPanel.getElement().getStyle().setMarginLeft(50, Style.Unit.PX);
+        carrouselPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
+        return carrouselPanel;
     }
 
-    private CarouselPanel getProjectionCarousel(){
+    private CarrouselPanel getProjectionCarrousel(){
         Slide slide1 = new Slide(RESOURCES.projectionSlide01(),"Every species has its own set of identifiers<br>(genes, proteins, chemicals, mRNA, etc...)","white");
         String infers = " <a style=\"color:white\" target=\"_blank\" href=\"http://www.reactome.org/pages/documentation/electronically-inferred-events/\">infers</a> ";
         Slide slide2 = new Slide(RESOURCES.projectionSlide02(),"Reactome curates human pathways and" + infers + "their existence in other<br>species using ortholgy information from the ENSEMBL Compara database","white");
@@ -129,9 +129,9 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
         slidesList.add(slide2);
         slidesList.add(slide3);
 
-        CarouselPanel carouselPanel = new CarouselPanel(slidesList, 500, 300, "azure");
-        carouselPanel.getElement().getStyle().setMarginLeft(50, Style.Unit.PX);
-        return carouselPanel;
+        CarrouselPanel carrouselPanel = new CarrouselPanel(slidesList, 500, 300, "azure");
+        carrouselPanel.getElement().getStyle().setMarginLeft(50, Style.Unit.PX);
+        return carrouselPanel;
     }
 
 

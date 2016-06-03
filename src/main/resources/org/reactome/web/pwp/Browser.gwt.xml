@@ -22,6 +22,7 @@
     <inherits name="uk.ac.ebi.pwp.widgets.rhea.Rhea"/>
     <inherits name="uk.ac.ebi.pwp.utils.analytics.GoogleAnalytics"/>
     <inherits name="org.reactome.web.analysis.Analysis"/>
+    <inherits name="org.reactome.web.carrousel.Carrousel"/>
 
     <!-- Specify the app entry point class.                         -->
     <entry-point class='org.reactome.web.pwp.client.Browser'/>
