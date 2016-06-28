@@ -15,7 +15,6 @@ import org.reactome.web.analysis.client.exceptions.AnalysisModelException;
 import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.factory.AnalysisModelFactory;
-import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
@@ -107,11 +106,19 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
         } catch (AnalysisModelException e) {
             //Nothing here
         }
+
         try {
             AnalysisError analysisError = AnalysisModelFactory.getModelObject(AnalysisError.class, json);
             analysisError(analysisError);
         } catch (AnalysisModelException e1) {
-            Console.error("Oops! This is unexpected", this);
+            progress.getElement().getStyle().setOpacity(0);
+            error.getElement().getStyle().setOpacity(1);
+            back.getElement().getStyle().setOpacity(1);
+            error.clear();
+            error.add(new HTML("Oops! This is unexpected!"));
+            error.add(new HTML(""));
+            error.add(new HTML("Please get in touch with our help desk"));
+            error.add(new Anchor("help@reactome.org", "mailto:help@reactome.org", "_blank"));
         }
     }
 
