@@ -4,25 +4,20 @@
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="com.google.web.bindery.autobean.AutoBean"/>
 
-    <!-- Inherit the default GWT style sheet.  You can change       -->
-    <!-- the theme of your GWT application by uncommenting          -->
-    <!-- any one of the following lines.                            -->
-    <!--<inherits name='com.google.gwt.user.theme.clean.Clean'/>-->
+    <!-- Inherit the default GWT style sheet                        -->
     <inherits name='com.google.gwt.user.theme.standard.Standard'/>
-    <!--<inherits name='com.google.gwt.user.theme.chrome.Chrome'/>-->
-    <!--<inherits name='com.google.gwt.user.theme.dark.Dark'/>-->
 
     <!-- Other module inherits                                      -->
-    <inherits name='org.reactome.web.pwp.model.PathwayPortalModel'/>
-    <inherits name="org.reactome.web.fireworks.Fireworks"/>
+    <inherits name="org.reactome.web.analysis.Analysis"/>
+    <inherits name="org.reactome.web.carrousel.Carrousel"/>
     <inherits name="org.reactome.web.diagram.DiagramViewer"/>
+    <inherits name="org.reactome.web.fireworks.Fireworks"/>
+    <inherits name='org.reactome.web.pwp.model.PathwayPortalModel'/>
+    <inherits name="org.reactome.web.utils.analytics.GoogleAnalytics"/>
     <inherits name="uk.ac.ebi.pwp.widgets.chebi.ChEBI"/>
     <inherits name="uk.ac.ebi.pwp.widgets.gxa.GXA"/>
     <inherits name="uk.ac.ebi.pwp.widgets.pdb.PDB"/>
     <inherits name="uk.ac.ebi.pwp.widgets.rhea.Rhea"/>
-    <inherits name="uk.ac.ebi.pwp.utils.analytics.GoogleAnalytics"/>
-    <inherits name="org.reactome.web.analysis.Analysis"/>
-    <inherits name="org.reactome.web.carrousel.Carrousel"/>
 
     <!-- Specify the app entry point class.                         -->
     <entry-point class='org.reactome.web.pwp.client.Browser'/>
