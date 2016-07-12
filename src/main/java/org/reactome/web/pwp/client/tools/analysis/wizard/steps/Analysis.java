@@ -102,7 +102,10 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
         String json = label.getInnerText();
         try {
             AnalysisResult result = AnalysisModelFactory.getModelObject(AnalysisResult.class, json);
-            if (result.getSummary() != null)  analysisCompleted(result);
+            if (result.getSummary() != null){
+                analysisCompleted(result);
+                return;
+            }
         } catch (AnalysisModelException e) {
             //Nothing here
         }
