@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.viewport.fireworks;
 import com.google.gwt.core.client.Duration;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.*;
+import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.*;
@@ -19,6 +20,8 @@ import org.reactome.web.pwp.model.classes.Species;
 import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
 import org.reactome.web.pwp.model.util.Path;
+
+import java.util.Objects;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -37,6 +40,7 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
     private Species currentSpecies;
     private Pathway selected;
     private AnalysisStatus analysisStatus;
+    private String flag;
 
     private Fireworks.Display display;
 
@@ -85,6 +89,12 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
             toSelect = (Pathway) databaseObject;
         } else {
             toSelect = event.getState().getPathway();
+        }
+
+        String flag = event.getState().getFlag();
+        if(!Objects.equals(flag, this.flag)) {
+            this.flag = flag;
+            this.display.flag(this.flag);
         }
 
         if (this.display.isVisible()) {
@@ -164,6 +174,15 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
     @Override
     public void resetAnalysis() {
         eventBus.fireEventFromSource(new AnalysisResetEvent(), this);
+    }
+
+    @Override
+    public void resetFlag() {
+        if (this.flag != null) {
+            this.flag = null;
+            //Using the DiagramObjectsFlagResetEvent for convenience
+            eventBus.fireEventFromSource(new DiagramObjectsFlagResetEvent(), this);
+        }
     }
 
     @Override

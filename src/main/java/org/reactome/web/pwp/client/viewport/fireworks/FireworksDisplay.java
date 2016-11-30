@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Display, AnalysisResetHandler,
         NodeHoverHandler, NodeSelectedHandler, NodeSelectedResetHandler, NodeHoverResetHandler, NodeOpenedHandler,
-        ProfileChangedHandler {
+        ProfileChangedHandler, NodeFlaggedResetHandler {
 
     private FireworksViewer fireworks;
     private Fireworks.Presenter presenter;
@@ -35,6 +35,7 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
     private Pathway toHighlight;
     private Pathway toSelect;
     private Pathway toOpen;
+    private String flag;
 
     public FireworksDisplay() {
         super(Style.Unit.PX);
@@ -48,6 +49,7 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
 //        FireworksFactory.EVENT_BUS_VERBOSE = true;
         this.fireworks = FireworksFactory.createFireworksViewer(speciesJson);
         handlers.add(this.fireworks.addAnalysisResetHandler(this));
+        handlers.add(this.fireworks.addNodeFlaggedResetHandler(this));
         handlers.add(this.fireworks.addNodeHoverHandler(this));
         handlers.add(this.fireworks.addNodeOpenedHandler(this));
         handlers.add(this.fireworks.addNodeSelectedHandler(this));
@@ -63,6 +65,14 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
                 applyCarriedActions();
             }
         });
+    }
+
+    @Override
+    public void flag(String flag) {
+        if (this.fireworks != null) {
+            this.fireworks.flagItems(flag);
+        }
+        this.flag = flag;
     }
 
     @Override
@@ -85,6 +95,10 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
         if(this.toHighlight!=null){
             this.fireworks.highlightNode(this.toHighlight.getDbId());
             this.toHighlight = null;
+        }
+        if(this.flag!=null){
+            this.fireworks.flagItems(this.flag);
+            this.flag = null;
         }
         //Please note there is no checking to analysisStatus because reset is an option :)
         this.fireworks.setAnalysisToken(this.analysisStatus.getToken(), this.analysisStatus.getResource());
@@ -174,6 +188,11 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
     @Override
     public void onAnalysisReset() {
         this.presenter.resetAnalysis();
+    }
+
+    @Override
+    public void onNodeFlaggedReset() {
+        this.presenter.resetFlag();
     }
 
     @Override
