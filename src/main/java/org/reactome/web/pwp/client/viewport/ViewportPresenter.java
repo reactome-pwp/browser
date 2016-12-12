@@ -36,12 +36,9 @@ public class ViewportPresenter extends AbstractPresenter implements Viewport.Pre
                 display.showWelcome();
             } else {
                 display.showFireworks();
-                Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        currentViewportTool = ViewportToolType.FIREWORKS;
-                        eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
-                    }
+                Scheduler.get().scheduleDeferred(() -> {
+                    currentViewportTool = ViewportToolType.FIREWORKS;
+                    eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
                 });
             }
         } else if(AppConfig.getIsCurator()) {
@@ -53,25 +50,19 @@ public class ViewportPresenter extends AbstractPresenter implements Viewport.Pre
 
     @Override
     public void onPathwayDiagramOpened(PathwayDiagramOpenedEvent event) {
-        display.showDiagram();
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                currentViewportTool = ViewportToolType.DIAGRAM;
-                eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.DIAGRAM), ViewportPresenter.this);
-            }
+        Scheduler.get().scheduleDeferred(() -> {
+            currentViewportTool = ViewportToolType.DIAGRAM;
+            eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.DIAGRAM), ViewportPresenter.this);
+            display.showDiagram(); //Moved here so the user doesn't see the previous diagram before loading the new one
         });
     }
 
     @Override
     public void onFireworksOpened(FireworksOpenedEvent event) {
         display.showFireworks();
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                currentViewportTool = ViewportToolType.FIREWORKS;
-                eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
-            }
+        Scheduler.get().scheduleDeferred(() -> {
+            currentViewportTool = ViewportToolType.FIREWORKS;
+            eventBus.fireEventFromSource(new ViewportChangedEvent(ViewportToolType.FIREWORKS), ViewportPresenter.this);
         });
     }
 }
