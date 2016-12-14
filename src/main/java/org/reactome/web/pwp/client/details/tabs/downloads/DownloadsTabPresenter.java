@@ -1,13 +1,14 @@
 package org.reactome.web.pwp.client.details.tabs.downloads;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.http.client.*;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.RESTFulClient;
+import org.reactome.web.pwp.model.client.handlers.DBNameRetrievedHandler;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
 
 /**
@@ -61,34 +62,17 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
         }
     }
 
-    private void requestDBName(){
-        String url = "/ReactomeRESTfulAPI/RESTfulWS/getDBName";
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
-        try {
-            requestBuilder.sendRequest(null, new RequestCallback() {
-                @Override
-                public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
-                        case Response.SC_OK:
-                            String name = response.getText().trim();
-                            display.setDbName(name);
-                            break;
-                        default:
-                            String errorMsg = "Error retrieving the database name. ERROR " + response.getStatusText();
-                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
-                    }
-                }
+    private void requestDBName() {
+        RESTFulClient.getDBName(new DBNameRetrievedHandler() {
+            @Override
+            public void onDBNameRetrieved(String name) {
+                display.setDbName(name);
+            }
 
-                @Override
-                public void onError(Request request, Throwable exception) {
-                    String errorMsg = "The database name could not be retrieved.";
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
-                }
-            });
-        }
-        catch (RequestException ex) {
-            String errorMsg = "The database name could not be retrieved.";
-            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
-        }
+            @Override
+            public void onDBNameRetrievedError(Throwable throwable) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent(throwable.getMessage()), DownloadsTabPresenter.this);
+            }
+        });
     }
 }

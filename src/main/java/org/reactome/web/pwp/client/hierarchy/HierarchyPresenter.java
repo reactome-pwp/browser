@@ -10,12 +10,13 @@ import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.client.hierarchy.delgates.FrontPagesItemsLoader;
 import org.reactome.web.pwp.client.hierarchy.delgates.HierarchyPathLoader;
 import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.model.classes.Pathway;
 import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.RESTFulClient;
+import org.reactome.web.pwp.model.handlers.DatabaseObjectsLoadedHandler;
 import org.reactome.web.pwp.model.util.Path;
 
 import java.util.*;
@@ -144,16 +145,17 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
 
     @Override
     public void retrieveData(final Species species) {
-        FrontPagesItemsLoader.loadFrontPageItems(species, new FrontPagesItemsLoader.FrontPagesItemsLoadedHandler() {
+        RESTFulClient.getFrontPageItems(species, new DatabaseObjectsLoadedHandler<Event>() {
             @Override
-            public void onFrontPagesItemsLoaded(List<Event> frontPageItems) {
-                display.setData(species, frontPageItems);
+            public void onDatabaseObjectLoaded(List<Event> objects) {
+                display.setData(species, objects);
+
             }
 
             @Override
-            public void onFrontPagesItemsLoadingError(String msg) {
-                Console.error(msg, HierarchyPresenter.this);
-                eventBus.fireEventFromSource(new ErrorMessageEvent(msg), this);
+            public void onDatabaseObjectError(Throwable ex) {
+                Console.error(ex.getMessage(), HierarchyPresenter.this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(ex.getMessage()), this);
             }
         });
     }

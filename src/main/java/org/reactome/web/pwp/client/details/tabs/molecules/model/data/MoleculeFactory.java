@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.molecules.model.data;
 import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
+import org.reactome.web.pwp.model.client.RESTFulClient;
 import org.reactome.web.pwp.model.factory.DatabaseObjectUtils;
 import org.reactome.web.pwp.model.factory.SchemaClass;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
@@ -13,7 +14,7 @@ import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
 public class MoleculeFactory {
 
     public static void load(final Molecule molecule, final DatabaseObjectLoadedHandler handler) {
-        String url = "/ReactomeRESTfulAPI/RESTfulWS/queryById/ReferenceEntity/" + molecule.getDbId();
+        String url = RESTFulClient.SERVER + RESTFulClient.CONTENT_SERVICE_PATH + "queryById/ReferenceEntity/" + molecule.getDbId();
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         requestBuilder.setHeader("Accept", "application/json");
         try {

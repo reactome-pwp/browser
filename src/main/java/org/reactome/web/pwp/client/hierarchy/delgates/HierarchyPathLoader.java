@@ -4,6 +4,8 @@ import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.RESTFulClient;
+import org.reactome.web.pwp.model.client.handlers.AncestorsCreatedHandler;
 import org.reactome.web.pwp.model.util.Ancestors;
 import org.reactome.web.pwp.model.util.Path;
 
@@ -33,15 +35,15 @@ public class HierarchyPathLoader {
         if (event == null){
             Console.error("Event cannot be null here", this);
         }else {
-            AncestorsLoader.loadAncestors(event.getDbId(), new AncestorsLoader.AncestorsLoadedHandler() {
+            RESTFulClient.getAncestors(event, new AncestorsCreatedHandler() {
                 @Override
                 public void onAncestorsLoaded(Ancestors ancestors) {
                     setAncestorsListToExpand(ancestors, path, event);
                 }
 
                 @Override
-                public void onAncestorsLoadingError(String msg) {
-                    Console.error(msg, HierarchyPathLoader.this);
+                public void onAncestorsError(Throwable exception) {
+                    Console.error(exception.getMessage(), HierarchyPathLoader.this);
                 }
             });
         }

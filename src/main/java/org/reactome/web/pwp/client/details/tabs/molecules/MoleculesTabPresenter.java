@@ -25,6 +25,7 @@ import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.RESTFulClient;
 import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
 import org.reactome.web.pwp.model.factory.SchemaClass;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
@@ -97,8 +98,8 @@ public class MoleculesTabPresenter extends AbstractPresenter implements Molecule
      */
     @Override
     public void getMoleculesData() {
-        String urlPathway  = "/ReactomeRESTfulAPI/RESTfulWS/getParticipantsToReferenceEntityMaps/" + currentPathway.getDbId();
-        String urlReaction = "/ReactomeRESTfulAPI/RESTfulWS/referenceEntity/" + currentDatabaseObject.getDbId();
+        String urlPathway  = RESTFulClient.CONTENT_SERVICE_PATH + "getParticipantsToReferenceEntityMaps/" + currentPathway.getDbId();
+        String urlReaction = RESTFulClient.CONTENT_SERVICE_PATH + "referenceEntity/" + currentDatabaseObject.getDbId();
         if(cachePathway.containsKey(currentPathway)){
             Result result = cachePathway.get(currentPathway);
             if(currentPathway.getDbId().equals(currentDatabaseObject.getDbId())){
@@ -126,7 +127,7 @@ public class MoleculesTabPresenter extends AbstractPresenter implements Molecule
      */
     @Override
     public void updateMoleculesData() {
-        String urlReaction = "/ReactomeRESTfulAPI/RESTfulWS/referenceEntity/" + currentDatabaseObject.getDbId();
+        String urlReaction = RESTFulClient.CONTENT_SERVICE_PATH + "referenceEntity/" + currentDatabaseObject.getDbId();
 
         Result result = cachePathway.get(currentPathway);
         result.undoHighlighting();

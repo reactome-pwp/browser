@@ -1,17 +1,15 @@
 package org.reactome.web.pwp.client.details.tabs.expression;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.http.client.*;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.model.classes.*;
+import org.reactome.web.pwp.model.client.RESTFulClient;
 import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectsCreatedHandler;
+import org.reactome.web.pwp.model.handlers.DatabaseObjectsLoadedHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -64,52 +62,18 @@ public class ExpressionTabPresenter extends AbstractPresenter implements Express
 
     @Override
     public void getReferenceSequences(final DatabaseObject databaseObject) {
-        String url = "/ReactomeRESTfulAPI/RESTfulWS/referenceEntity/" + databaseObject.getDbId();
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
-        requestBuilder.setHeader("Accept", "application/json");
-        try {
-            requestBuilder.sendRequest(null, new RequestCallback() {
-                @Override
-                public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
-                        case Response.SC_OK:
-                            try {
-                                JSONArray jsonArray = JSONParser.parseStrict(response.getText()).isArray();
-                                List<ReferenceSequence> referenceSequenceList = new LinkedList<>();
-                                for (int i = 0; i < jsonArray.size(); i++) {
-                                    JSONObject json = jsonArray.get(i).isObject();
-                                    DatabaseObject databaseObject = DatabaseObjectFactory.create(json);
-                                    if (databaseObject instanceof ReferenceSequence) {
-                                        referenceSequenceList.add((ReferenceSequence) databaseObject);
-                                    }
-                                }
-                                processReferenceSequences(databaseObject, referenceSequenceList);
-                            } catch (Exception ex) {
-                                String errorMsg =  "The received data for the reference entities of '" + databaseObject.getDisplayName() + "' is empty or faulty and could not be parsed.";
-                                display.showErrorMessage(errorMsg);
-                                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, ex), ExpressionTabPresenter.this);
-                            }
-                            break;
-                        default:
-                            String errorMsg = "There was an error processing the request. ERROR: " + response.getStatusText();
-                            display.showErrorMessage(errorMsg);
-                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), ExpressionTabPresenter.this);
-                    }
+        RESTFulClient.loadReferenceSequences(databaseObject, new DatabaseObjectsLoadedHandler<ReferenceSequence>() {
+            @Override
+            public void onDatabaseObjectLoaded(List<ReferenceSequence> objects) {
+                processReferenceSequences(databaseObject, objects);
+            }
 
-                }
-
-                @Override
-                public void onError(Request request, Throwable exception) {
-                    String errorMsg = "The request for '" + databaseObject.getDisplayName() + "' in the Expression Tab received an error instead of a valid response.";
-                    display.showErrorMessage(errorMsg);
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), ExpressionTabPresenter.this);
-                }
-            });
-        } catch (RequestException ex) {
-            String errorMsg = "The required data for the Expression of '" + databaseObject.getDisplayName() + "' could not be received";
-            display.showErrorMessage(errorMsg);
-            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, ex), ExpressionTabPresenter.this);
-        }
+            @Override
+            public void onDatabaseObjectError(Throwable ex) {
+                display.showErrorMessage(ex.getMessage());
+                eventBus.fireEventFromSource(new ErrorMessageEvent(ex.getMessage(), ex), ExpressionTabPresenter.this);
+            }
+        });
     }
 
     private void processReferenceSequences(final DatabaseObject databaseObject, List<ReferenceSequence> referenceSequenceList){

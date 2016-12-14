@@ -81,7 +81,7 @@ public class ExpressionTabDisplay extends ResizeComposite implements ExpressionT
     public void showReferenceSequences(DatabaseObject databaseObject, List<ReferenceSequence> referenceSequenceList) {
         GXAViewer gxaViewer = new GXAViewer();
         this.cache.put(databaseObject, gxaViewer);
-        List<String> uniProtIDs = new LinkedList<String>();
+        List<String> uniProtIDs = new LinkedList<>();
         for (ReferenceSequence referenceSequence : referenceSequenceList) {
             if (referenceSequence.getIdentifier() == null) continue;
             uniProtIDs.add(referenceSequence.getIdentifier());

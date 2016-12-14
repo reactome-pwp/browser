@@ -16,7 +16,7 @@ import org.reactome.web.pwp.client.manager.title.event.TitleChangedEvent;
  */
 public class Browser implements EntryPoint {
 
-    public static final String VERSION = "3.2";
+    public static final String VERSION = "3.3";
     public static final Boolean BETA = false;
 
     public static boolean VERBOSE = true;
@@ -26,13 +26,10 @@ public class Browser implements EntryPoint {
      */
     public void onModuleLoad() {
         initConfig();
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                AppController appViewer = new AppController();
-                appViewer.go(RootLayoutPanel.get());
-                removeLoadingMessage();
-            }
+        Scheduler.get().scheduleDeferred(() -> {
+            AppController appViewer = new AppController();
+            appViewer.go(RootLayoutPanel.get());
+            removeLoadingMessage();
         });
     }
 
