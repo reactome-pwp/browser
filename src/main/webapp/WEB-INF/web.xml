@@ -20,8 +20,8 @@
         <init-param>
             <param-name>proxyHost</param-name>
             <!--<param-value>localhost</param-value>-->
-            <param-value>www.reactome.org</param-value>
-            <!--<param-value>reactomedev.oicr.on.ca</param-value>-->
+            <!--<param-value>reactome.org</param-value>-->
+            <param-value>reactomedev.oicr.on.ca</param-value>
             <!--<param-value>reactomecurator.oicr.on.ca</param-value>-->
             <!--<param-value>reactomerelease.oicr.on.ca</param-value>-->
         </init-param>
@@ -168,8 +168,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>DiagramSVGProxy</servlet-name>
-        <!--<url-pattern>/download/current/svg/*</url-pattern>-->
-        <url-pattern>/svg/*</url-pattern>
+        <url-pattern>/download/current/ehld/*</url-pattern>
     </servlet-mapping>
 
     <!-- Reactome IMAGES (ONLY USED IN DEV MODE) -->
