@@ -91,9 +91,10 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     @Override
     public void databaseObjectHovered(final Long dbId) {
+        if (Objects.equals(this.hovered, dbId)) return;
         this.hovered = dbId;
-        if(timer!=null && timer.isRunning()) timer.cancel();
-        if(dbId!=null){
+        if (timer != null && timer.isRunning()) timer.cancel();
+        if (dbId != null) {
             timer = new Timer() {
                 @Override
                 public void run() {
@@ -112,7 +113,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
                 }
             };
             timer.schedule(HOVER_DELAY);
-        }else{
+        } else {
             this.eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(), DiagramPresenter.this);
         }
     }
@@ -171,10 +172,10 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
             @Override
             public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
                 displayedPathway = (Pathway) databaseObject;
-                if (Objects.equals(DiagramPresenter.this.pathway, displayedPathway)) {
+                if (Objects.equals(pathway, displayedPathway)) {
                     updateView();
                 } else {
-                    DiagramPresenter.this.pathway = displayedPathway;
+                    pathway = displayedPathway;
                     Selection selection = new Selection(pathway, new Path());
                     eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
                 }

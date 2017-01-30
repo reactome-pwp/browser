@@ -154,11 +154,11 @@ public class AppController implements BrowserReadyHandler {
     }
 
     private IsWidget getViewport(){
+        Diagram.Display diagram = new DiagramDisplay();
+        new DiagramPresenter(this.eventBus, diagram);
+
         Viewport.Display viewport;
         if (AppConfig.getIsCurator()) {
-            Diagram.Display diagram = new DiagramDisplay();
-            new DiagramPresenter(this.eventBus, diagram);
-
             Welcome.Display welcome = new WelcomeDisplay();
             new WelcomePresenter(this.eventBus, welcome);
 
@@ -166,9 +166,6 @@ public class AppController implements BrowserReadyHandler {
         } else {
             Fireworks.Display fireworks = new FireworksDisplay();
             new FireworksPresenter(this.eventBus, fireworks);
-
-            Diagram.Display diagram = new DiagramDisplay();
-            new DiagramPresenter(this.eventBus, diagram);
 
             viewport = new ViewportDisplay(diagram, fireworks);
         }
