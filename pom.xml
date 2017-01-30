@@ -11,12 +11,31 @@
     <version>3.3.0-SNAPSHOT</version>
     <name>Reactome Pathway Portal</name>
 
+    <description>
+        The Pathway Browser is Reactome’s primary means of viewing and interacting with specific pathways
+    </description>
+
+    <organization>
+        <name>The European Bioinformatics Institute</name>
+        <url>http://www.ebi.ac.uk/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>fabregat</id>
+            <name>Antonio Fabregat</name>
+            <email>fabregat@ebi.ac.uk</email>
+            <organization>http://www.ebi.ac.uk/</organization>
+        </developer>
+    </developers>
+
     <properties>
         <!-- Name that will be used to generate the war file -->
         <fileName>PathwayBrowser</fileName>
 
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.8.0</gwtVersion>
+        <gwtStyle>OBF</gwtStyle> <!-- OBF | PRETTY | DETAILED -->
 
         <!-- GWT needs at least java 1.8 -->
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -27,13 +46,16 @@
         <reactome.web.analyitics>2.0.1</reactome.web.analyitics>
         <reactome.web.analysis-client>1.2.0-SNAPSHOT</reactome.web.analysis-client>
         <reactome.web.carrousel>1.0.0</reactome.web.carrousel>
-        <reactome.web.diagram>3.3.0-SNAPSHOT</reactome.web.diagram>
-        <reactome.web.fireworks>1.3.2</reactome.web.fireworks>
-        <reactome.web.model>1.2.0-SNAPSHOT</reactome.web.model><!--<reactome.web.model>2.0.0-SNAPSHOT</reactome.web.model>-->
+        <reactome.web.diagram>3.3.1-SNAPSHOT</reactome.web.diagram>
+        <reactome.web.fireworks>1.3.4-SNAPSHOT</reactome.web.fireworks>
+        <reactome.web.model>1.2.0</reactome.web.model><!--<reactome.web.model>2.0.0-SNAPSHOT</reactome.web.model>-->
         <reactome.web.pdb>2.2.0</reactome.web.pdb>
         <reactome.web.quadtree>1.1.0</reactome.web.quadtree>
 
-        <reactome.utils.version>1.0.2</reactome.utils.version>
+        <reactome.utils.version>1.0.3</reactome.utils.version>
+
+        <appModule>org.reactome.web.pwp.Browser</appModule>
+        <appName>${appModule}</appName>
     </properties>
 
     <dependencyManagement>
@@ -51,15 +73,17 @@
     <dependencies>
         <dependency>
             <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-servlet</artifactId>
-            <version>${gwtVersion}</version>
-            <scope>runtime</scope>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwtVersion}</version>
+            <artifactId>gwt-codeserver</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
         </dependency>
 
         <dependency>
@@ -127,35 +151,65 @@
             <artifactId>reactome-utils</artifactId>
             <version>${reactome.utils.version}</version>
         </dependency>
+
+        <!-- logging dependencies, delegate all to slf4j and use logback -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.22</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.7.22</version>
+        </dependency>
     </dependencies>
 
     <build>
         <!-- Output classes directly into the webapp, so that IDEs and "mvn process-classes" update them in DevMode -->
         <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
         <finalName>${fileName}-${project.version}</finalName>
-        <plugins>
 
-            <!-- GWT Maven Plugin -->
+        <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>net.ltgt.gwt.maven</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwtVersion}</version>
+                <version>1.0-rc-6</version>
                 <executions>
                     <execution>
                         <goals>
+                            <goal>import-sources</goal>
                             <goal>compile</goal>
-                            <goal>test</goal>
-                            <goal>generateAsync</goal>
                         </goals>
                     </execution>
                 </executions>
-                <!-- Plugin configuration. There are many available options, see
-                  gwt-maven-plugin documentation at codehaus.org -->
                 <configuration>
-                    <runTarget>Browser.html</runTarget>
-                    <modules>
-                        <module>org.reactome.web.pwp.Browser</module>
-                    </modules>
+                    <moduleName>${appModule}</moduleName>
+                    <moduleShortName>${appName}</moduleShortName>
+                    <failOnError>true</failOnError>
+                    <compilerArgs>
+                        <arg>-compileReport</arg>
+                        <arg>-XcompilerMetrics</arg>
+                        <arg>-optimize</arg>
+                        <arg>9</arg>
+                        <arg>-style</arg>
+                        <arg>${gwtStyle}</arg>
+                    </compilerArgs>
+                    <devmodeArgs>
+                        <arg>-bindAddress</arg>
+                        <arg>0.0.0.0</arg>
+                    </devmodeArgs>
+                    <codeserverArgs>
+                        <arg>-bindAddress</arg>
+                        <arg>0.0.0.0</arg>
+                        <arg>-gen</arg>
+                        <arg>${project.build.directory}/.generated</arg>
+                    </codeserverArgs>
+                    <warDir>${project.build.directory}/${project.build.finalName}</warDir>
+                    <classpathScope>compile+runtime</classpathScope>
+                    <startupUrls>
+                        <startupUrl>index.html</startupUrl>
+                    </startupUrls>
                 </configuration>
             </plugin>
         </plugins>
