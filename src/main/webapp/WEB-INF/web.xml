@@ -100,32 +100,6 @@
         <url-pattern>/ContentService/*</url-pattern>
     </servlet-mapping>
 
-
-    <!--&lt;!&ndash; Reactome Fireworks static files local server (ONLY USED IN DEV MODE) &ndash;&gt;-->
-    <!--<servlet>-->
-        <!--<servlet-name>DownloadsProxy</servlet-name>-->
-        <!--<servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>-->
-        <!--<init-param>-->
-            <!--<param-name>proxyHost</param-name>-->
-            <!--&lt;!&ndash;<param-value>www.reactome.org</param-value>&ndash;&gt;-->
-            <!--&lt;!&ndash;<param-value>reactomedev.oicr.on.ca</param-value>&ndash;&gt;-->
-            <!--<param-value>reactomerelease.oicr.on.ca</param-value>-->
-        <!--</init-param>-->
-        <!--<init-param>-->
-            <!--<param-name>proxyPort</param-name>-->
-            <!--<param-value>80</param-value>-->
-        <!--</init-param>-->
-        <!--<init-param>-->
-            <!--<param-name>proxyPath</param-name>-->
-            <!--<param-value>/download</param-value>-->
-        <!--</init-param>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>DownloadsProxy</servlet-name>-->
-        <!--<url-pattern>/download/*</url-pattern>-->
-    <!--</servlet-mapping>-->
-
-
     <!-- Reactome Fireworks static files local server (ONLY USED IN DEV MODE) -->
     <!-- Please note a "reactome" user (or a symlink) needs to be set up -->
     <servlet>
