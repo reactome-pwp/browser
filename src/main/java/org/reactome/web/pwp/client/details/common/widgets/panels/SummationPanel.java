@@ -3,10 +3,10 @@ package org.reactome.web.pwp.client.details.common.widgets.panels;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.model.classes.Publication;
 import org.reactome.web.pwp.model.classes.Summation;
-import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
 
 /**
@@ -59,7 +59,7 @@ public class SummationPanel extends DetailsPanel {
         vp.add(content);
 
         if(!this.summation.getLiteratureReference().isEmpty()){
-            DisclosurePanel literatureReferences = new DisclosurePanel("Literature references...");
+            DisclosurePanel literatureReferences = new DisclosurePanel("Background literature references...");
             literatureReferences.setWidth("100%");
             VerticalPanel aux = new VerticalPanel();
             aux.setWidth("100%");

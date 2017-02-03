@@ -7,13 +7,10 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.client.details.delegates.InstanceSelectedDelegate;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.classes.Summation;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosureHeader;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
+import org.reactome.web.pwp.client.details.delegates.InstanceSelectedDelegate;
+import org.reactome.web.pwp.model.classes.*;
 import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
 
 /**
@@ -88,6 +85,20 @@ public class EventPanel extends DetailsPanel implements ClickHandler {
                 aux.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
                 vp.add(aux);
             }
+        }
+
+        if(!this.event.getLiteratureReference().isEmpty()){
+            DisclosurePanel literatureReferences = new DisclosurePanel("Published experimental evidence...");
+            literatureReferences.setWidth("100%");
+            VerticalPanel aux = new VerticalPanel();
+            aux.setWidth("100%");
+            for (Publication publication : this.event.getLiteratureReference()) {
+                PublicationPanel pp = new PublicationPanel(this, publication);
+                pp.setWidth("99%");
+                aux.add(pp);
+            }
+            literatureReferences.setContent(aux);
+            vp.add(literatureReferences);
         }
         this.disclosurePanel.setContent(vp);
     }
