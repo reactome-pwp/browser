@@ -54,7 +54,8 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     @Override
     public void databaseObjectSelected(final Long dbId) {
-        if(dbId!=null){
+        if (timer != null && timer.isRunning()) timer.cancel();
+        if (dbId != null) {
             DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
                 @Override
                 public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
@@ -68,8 +69,8 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
                     eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DiagramPresenter.this);
                 }
             });
-        }else{
-            if(selected!=null) {
+        } else {
+            if (selected != null) {
                 this.selected = null;
                 Selection selection = new Selection(this.pathway, this.path);
                 this.eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
@@ -101,7 +102,9 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
                     DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
                         @Override
                         public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
-                            eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(databaseObject), DiagramPresenter.this);
+                            if(!Objects.equals(selected, databaseObject)) {
+                                eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(databaseObject), DiagramPresenter.this);
+                            }
                         }
 
                         @Override
