@@ -121,7 +121,7 @@ public class Options extends DockLayoutPanel implements ClickHandler, NextStepSe
 
     private CarrouselPanel getProjectionCarrousel(){
         Slide slide1 = new Slide(RESOURCES.projectionSlide01(),"Every species has its own set of identifiers<br>(genes, proteins, chemicals, mRNA, etc...)","white");
-        String infers = " <a style=\"color:white\" target=\"_blank\" href=\"http://www.reactome.org/pages/documentation/electronically-inferred-events/\">infers</a> ";
+        String infers = " <a style=\"color:white\" target=\"_blank\" href=\"//www.reactome.org/pages/documentation/electronically-inferred-events/\">infers</a> ";
         Slide slide2 = new Slide(RESOURCES.projectionSlide02(),"Reactome curates human pathways and" + infers + "their existence in other<br>species using ortholgy information from the ENSEMBL Compara database","white");
         Slide slide3 = new Slide(RESOURCES.projectionSlide03(),"When this option is selected, all non-human identifiers in your sample<br>are mapped to their human equivalents before the analysis is performed","white");
         List<Slide> slidesList = new LinkedList<>();

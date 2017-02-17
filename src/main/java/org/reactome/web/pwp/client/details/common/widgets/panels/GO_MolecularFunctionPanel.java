@@ -66,7 +66,7 @@ public class GO_MolecularFunctionPanel extends DetailsPanel implements OpenHandl
 
         String accession = this.goMolecularFunction.getAccession();
         flexTable.setWidget(0, 0, new Label("Accession"));
-        Anchor link = new Anchor("GO:"+accession, "http://www.ebi.ac.uk/QuickGO/GTerm?id=GO:"+accession);
+        Anchor link = new Anchor("GO:"+accession, "//www.ebi.ac.uk/QuickGO/GTerm?id=GO:"+accession);
         link.setTarget("_blank");
         link.setTitle("Go to QuickGO for GO:" + accession);
         flexTable.setWidget(0, 1, link);
