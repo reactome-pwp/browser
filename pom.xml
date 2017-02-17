@@ -49,7 +49,10 @@
         <reactome.web.diagram>3.3.2</reactome.web.diagram>
         <reactome.web.fireworks>1.3.4</reactome.web.fireworks>
         <reactome.web.model>1.2.0</reactome.web.model><!--<reactome.web.model>2.0.0-SNAPSHOT</reactome.web.model>-->
-        <reactome.web.pdb>2.2.0</reactome.web.pdb>
+        <reactome.web.pdb>2.3.0</reactome.web.pdb>
+        <reactome.web.chebi>1.0.1</reactome.web.chebi>
+        <reactome.web.rhea>1.2.0</reactome.web.rhea>
+        <reactome.web.gxa>3.0.1</reactome.web.gxa>
         <reactome.web.quadtree>1.1.0</reactome.web.quadtree>
 
         <reactome.utils.version>1.0.3</reactome.utils.version>
@@ -119,19 +122,19 @@
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>chebi</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${reactome.web.chebi}</version>
         </dependency>
 
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>rhea</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>${reactome.web.rhea}</version>
         </dependency>
 
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>gxa</artifactId>
-            <version>3.0.1</version>
+            <version>${reactome.web.gxa}</version>
         </dependency>
 
         <dependency>
