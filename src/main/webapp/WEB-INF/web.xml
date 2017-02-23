@@ -195,7 +195,7 @@
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
-            <param-value>www.ebi.ac.uk</param-value>
+            <param-value>www.rhea-db.org</param-value>
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
@@ -203,12 +203,12 @@
         </init-param>
         <init-param>
             <param-name>proxyPath</param-name>
-            <param-value>/rhea/rest/1.0/ws/reaction</param-value>
+            <param-value>/rest/</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>RheaProxy</servlet-name>
-        <url-pattern>/rhea/rest/1.0/ws/reaction/*</url-pattern>
+        <url-pattern>/rhea/rest/*</url-pattern>
     </servlet-mapping>
 
 </web-app>
