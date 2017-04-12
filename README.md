@@ -1,6 +1,5 @@
 <img src=https://cloud.githubusercontent.com/assets/6883670/22938783/bbef4474-f2d4-11e6-92a5-07c1a6964491.png width=220 height=100 />
 
-# Reactome Graph Database
 # Pathway Browser Portal
 The Pathway Browser Portal (PWP) is Reactome’s primary means of viewing and interacting with specific pathways. 
 [Reactome](http://www.reactome.org/) is a free, open-source, curated and peer-reviewed knowledge-base of biomolecular pathways 
