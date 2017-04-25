@@ -225,7 +225,7 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
         this.hierarchyContainer.addHierarchyTree(species, this.hierarchyTree);
 
         try {
-            this.hierarchyTree.loadPathwayChildren(null, tlps, RESOURCES.ehldPathway());
+            this.hierarchyTree.loadPathwayChildren(null, tlps);
             this.presenter.hierarchyChanged(species);
         } catch (Exception e) {
             e.printStackTrace();
@@ -242,7 +242,7 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
                 public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
                     Pathway pathway = databaseObject.cast();
                     try {
-                        hierarchyTree.loadPathwayChildren(item, pathway.getHasEvent(), RESOURCES.ehldPathway());
+                        hierarchyTree.loadPathwayChildren(item, pathway.getHasEvent());
                         presenter.pathwayExpanded(pathway);
                     } catch (Exception e) {
                         e.printStackTrace();

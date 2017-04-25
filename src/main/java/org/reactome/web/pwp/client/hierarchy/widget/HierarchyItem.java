@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.analysis.client.model.EntityStatistics;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.CommonImages;
+import org.reactome.web.pwp.client.hierarchy.HierarchyDisplay;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemDoubleClickedEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOutEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOverEvent;
@@ -42,10 +43,10 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
     private FlowPanel textContainer;
     private InlineLabel analysisData;
 
-    public HierarchyItem(Species species, Event event, ImageResource icon) {
+    public HierarchyItem(Species species, Event event, boolean ehld) {
         super();
         setUserObject(event);
-        init(species, event, icon);
+        init(species, event, ehld);
         initHandlers();
     }
 
@@ -61,11 +62,18 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         return handlerManager.addHandler(HierarchyItemMouseOutEvent.TYPE, handler);
     }
 
-    private void init(Species species, Event event, ImageResource icon){
+    private void init(Species species, Event event, boolean ehld){
         FlowPanel itemContent = new FlowPanel();
         itemContent.setStyleName(RESOURCES.getCSS().hierarchyItem());
 
-        this.icon = new Image(icon);
+        //A regular icon corresponding to the type of event has to be created first
+        this.icon = new Image(event.getImageResource());
+        if (ehld) {
+            setEHLD();
+        } else {
+            this.icon.setTitle(event.getSchemaClass().name);
+        }
+
         itemContent.add(this.icon);
 
         ImageResource status = event.getStatusIcon();
@@ -185,8 +193,9 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         }
     }
 
-    public void setIcon(ImageResource icon){
-        this.icon.setResource(icon);
+    public void setEHLD(){
+        this.icon.setResource(HierarchyDisplay.RESOURCES.ehldPathway());
+        this.icon.setTitle("Pathway with an enhanced diagram");
     }
 
     public void setChildrenLoaded(boolean childrenLoaded) {

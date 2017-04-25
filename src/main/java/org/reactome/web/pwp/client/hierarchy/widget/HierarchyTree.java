@@ -2,12 +2,10 @@ package org.reactome.web.pwp.client.hierarchy.widget;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.*;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.CustomTree;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.common.utils.MapSet;
-import org.reactome.web.pwp.client.hierarchy.HierarchyDisplay;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemDoubleClickedEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOutEvent;
 import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOverEvent;
@@ -49,7 +47,7 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
                         //In case there are HierarchyItems already loaded, these might need to be updated
                         for (HierarchyItem hierarchyItem : treeItems.getValues()) {
                             if(ehlds.contains(hierarchyItem.getEvent().getDbId())) {
-                                hierarchyItem.setIcon(HierarchyDisplay.RESOURCES.ehldPathway());
+                                hierarchyItem.setEHLD();
                             }
                         }
                     } else {
@@ -168,14 +166,14 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
         return rtn;
     }
 
-    public void loadPathwayChildren(HierarchyItem item, List<Event> children, ImageResource ehld) throws Exception {
+    public void loadPathwayChildren(HierarchyItem item, List<Event> children) throws Exception {
         if (item != null) {
             item.removeItems();
             item.setChildrenLoaded(true);
         }
         for (Event child : children) {
-            ImageResource icon = (ehlds.contains(child.getDbId())) ? ehld : child.getImageResource();
-            HierarchyItem hi = new HierarchyItem(species, child, icon);
+            boolean ehld = ehlds.contains(child.getDbId());
+            HierarchyItem hi = new HierarchyItem(species, child, ehld);
             hi.addHierarchyItemDoubleClickedHandler(this);
             hi.addHierarchyItemMouseOverHandler(this);
             hi.addHierarchyItemMouseOutHandler(this);
