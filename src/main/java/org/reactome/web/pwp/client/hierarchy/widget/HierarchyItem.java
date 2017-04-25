@@ -37,14 +37,15 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
 
     private HandlerManager handlerManager = new HandlerManager(this);
 
+    private Image icon;
     private boolean childrenLoaded = false;
     private FlowPanel textContainer;
     private InlineLabel analysisData;
 
-    public HierarchyItem(Species species, Event event) {
+    public HierarchyItem(Species species, Event event, ImageResource icon) {
         super();
         setUserObject(event);
-        init(species, event);
+        init(species, event, icon);
         initHandlers();
     }
 
@@ -60,11 +61,12 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         return handlerManager.addHandler(HierarchyItemMouseOutEvent.TYPE, handler);
     }
 
-    private void init(Species species, Event event){
+    private void init(Species species, Event event, ImageResource icon){
         FlowPanel itemContent = new FlowPanel();
         itemContent.setStyleName(RESOURCES.getCSS().hierarchyItem());
 
-        itemContent.add(new Image(event.getImageResource()));
+        this.icon = new Image(icon);
+        itemContent.add(this.icon);
 
         ImageResource status = event.getStatusIcon();
         if(status!=null){
@@ -181,6 +183,10 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         if(getParentItem()!=null){
             ((HierarchyItem) getParentItem()).highlightPath();
         }
+    }
+
+    public void setIcon(ImageResource icon){
+        this.icon.setResource(icon);
     }
 
     public void setChildrenLoaded(boolean childrenLoaded) {
