@@ -50,6 +50,14 @@ public class MapSet<S,T> {
         return rtn;
     }
 
+    public Set<T> getValues(){
+        Set<T> rtn = new HashSet<T>();
+        for (S s : map.keySet()) {
+            rtn.addAll(getElements(s));
+        }
+        return rtn;
+    }
+
     private Set<T> getOrCreate(S identifier){
         Set<T> set = map.get(identifier);
         if(set == null){
