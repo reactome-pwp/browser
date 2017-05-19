@@ -34,7 +34,7 @@
         <fileName>PathwayBrowser</fileName>
 
         <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.8.0</gwtVersion>
+        <gwtVersion>2.8.1</gwtVersion>
         <gwtStyle>OBF</gwtStyle> <!-- OBF | PRETTY | DETAILED -->
 
         <!-- GWT needs at least java 1.8 -->
@@ -52,7 +52,7 @@
         <reactome.web.pdb>2.3.0</reactome.web.pdb>
         <reactome.web.chebi>1.0.1</reactome.web.chebi>
         <reactome.web.rhea>1.3.1</reactome.web.rhea>
-        <reactome.web.gxa>3.0.1</reactome.web.gxa>
+        <reactome.web.gxa>3.0.3</reactome.web.gxa>
 
         <reactome.utils.version>1.0.3</reactome.utils.version>
 
