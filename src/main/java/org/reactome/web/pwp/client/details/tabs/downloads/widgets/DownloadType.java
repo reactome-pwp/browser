@@ -6,7 +6,7 @@ import org.reactome.web.pwp.model.client.RESTFulClient;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public enum DownloadType {
-    SBML        ("SBML", RESTFulClient.CONTENT_SERVICE_PATH + "sbmlExporter/__ID__", "SMBL"),
+    SBML        ("SBML", "/ContentService/exporter/sbml/__ID__.xml", "SMBL"),
     SBGN        ("SBGN", RESTFulClient.CONTENT_SERVICE_PATH + "sbgnExporter/__ID__", "SBGN"),
     BIOPAX_2    ("BIOPAX 2", RESTFulClient.CONTENT_SERVICE_PATH + "biopaxExporter/Level2/__ID__", "Biopax 2"),
     BIOPAX_3    ("BIOPAX 3", RESTFulClient.CONTENT_SERVICE_PATH + "biopaxExporter/Level3/__ID__", "Biopax 3"),
@@ -18,7 +18,7 @@ public enum DownloadType {
     private String url;
     private String tooltip;
 
-    private DownloadType(String name, String url, String tooltip) {
+    DownloadType(String name, String url, String tooltip) {
         this.name = name;
         this.url = url;
         this.tooltip = tooltip;
