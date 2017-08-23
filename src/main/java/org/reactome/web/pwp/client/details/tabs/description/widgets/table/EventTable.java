@@ -1,9 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.model.classes.Event;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
+import org.reactome.web.pwp.model.classes.Event;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -41,9 +41,9 @@ public class EventTable extends OverviewTable {
             case CELLULAR_COMPARTMENT:
                 return TableRowFactory.getGOCellularComponentRow(title, this.event.getCompartment());
             case POSITIVELY_REGULATED:
-                return TableRowFactory.getRegulatorRow(title, this.event.getPositiveRegulators());
+                return TableRowFactory.getRegulationRow(title, this.event.getPositiveRegulations());
             case NEGATIVELY_REGULATED:
-                return TableRowFactory.getRegulatorRow(title, this.event.getNegativeRegulators());
+                return TableRowFactory.getRegulationRow(title, this.event.getNegativeRegulations());
             case CROSS_REFERENCES:
                 return TableRowFactory.getDatabaseIdentifierRow(title, this.event.getCrossReference());
             case REFERENCES:
