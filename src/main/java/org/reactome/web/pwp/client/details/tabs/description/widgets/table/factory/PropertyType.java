@@ -16,6 +16,8 @@ public enum PropertyType {
     INPUT("Input"),
     CATALYST("Catalyst Activity"),
     OUTPUT("Output"),
+    POSITIVELY_REGULATED("Positively regulated by"),
+    NEGATIVELY_REGULATED("Negatively regulated by"),
     PRECEDING_EVENTS("Preceding Event(s)"),
     FOLLOWING_EVENTS("Following Event(s)"),
     MODIFICATION("Post-translational modification"),
@@ -42,8 +44,6 @@ public enum PropertyType {
     REQUIRED_INPUT("Required input components"),
 
     REGULATOR("Has regulators"), //NOTE: REGULATOR and REGULATION are different concepts
-    POSITIVELY_REGULATED("Positively regulated by"),
-    NEGATIVELY_REGULATED("Negatively regulated by"),
 
     MAX_UNITS("Max units count"),
     MIN_UNITS("Min units count"),
