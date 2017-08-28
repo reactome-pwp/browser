@@ -16,7 +16,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.Analysi
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
 import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.List;
 

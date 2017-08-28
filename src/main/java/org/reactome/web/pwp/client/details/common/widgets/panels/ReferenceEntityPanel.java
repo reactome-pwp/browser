@@ -5,12 +5,13 @@ import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.model.classes.DatabaseIdentifier;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.ReferenceEntity;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseIdentifier;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.List;
 
@@ -45,14 +46,19 @@ public class ReferenceEntityPanel extends DetailsPanel implements OpenHandler<Di
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded())
-            this.referenceEntity.load(new DatabaseObjectLoadedHandler() {
+            this.referenceEntity.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedData(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     disclosurePanel.setContent(getErrorMessage());
                 }
             });

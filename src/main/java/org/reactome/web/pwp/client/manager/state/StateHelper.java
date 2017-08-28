@@ -1,13 +1,13 @@
 package org.reactome.web.pwp.client.manager.state;
 
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.client.handlers.AncestorsCreatedHandler;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
-import org.reactome.web.pwp.model.util.Ancestors;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Ancestors;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +31,7 @@ public abstract class StateHelper {
 
     public interface PathwayWithDiagramHandler {
         void setPathwayWithDiagram(Pathway pathway, Path path);
-        void onPathwayWithDiagramRetrievalError(Throwable throwable);
+        void onPathwayWithDiagramRetrievalError(String errorMessage);
     }
 
     public static void getPathwayWithDiagram(Event event, Path path, final PathwayWithDiagramHandler handler){
@@ -44,21 +44,27 @@ public abstract class StateHelper {
             }
         }
 
-        RESTFulClient.getAncestors(event, new AncestorsCreatedHandler() {
+        ContentClient.getAncestors(event, new ContentClientHandler.AncestorsLoaded() {
             @Override
             public void onAncestorsLoaded(Ancestors ancestors) {
                 for (final Path ancestor : ancestors) {
                     Pathway diagram = ancestor.getLastPathwayWithDiagram();
                     if (diagram != null) { //The pathway with diagram object needs to be filled before sending it back
-                        diagram.load(new DatabaseObjectLoadedHandler() {
+                        diagram.load(new ObjectLoaded() {
                             @Override
-                            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                            public void onObjectLoaded(DatabaseObject databaseObject) {
                                 handler.setPathwayWithDiagram((Pathway) databaseObject, ancestor);
                             }
 
                             @Override
-                            public void onDatabaseObjectError(Throwable trThrowable) {
-                                handler.onPathwayWithDiagramRetrievalError(trThrowable);
+                            public void onContentClientException(Type type, String message) {
+                                handler.onPathwayWithDiagramRetrievalError(message);
+                            }
+
+                            @Override
+                            public void onContentClientError(ContentClientError error) {
+                                handler.onPathwayWithDiagramRetrievalError(error.getReason());
+
                             }
                         });
                         return;
@@ -68,9 +74,19 @@ public abstract class StateHelper {
             }
 
             @Override
-            public void onAncestorsError(Throwable exception) {
-                handler.onPathwayWithDiagramRetrievalError(exception);
+            public void onContentClientException(Type type, String message) {
+                //TODO
             }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                //TODO
+            }
+
+//            @Override
+//            public void onAncestorsError(Throwable exception) {
+//                handler.onPathwayWithDiagramRetrievalError(error);
+//            }
         });
     }
 }

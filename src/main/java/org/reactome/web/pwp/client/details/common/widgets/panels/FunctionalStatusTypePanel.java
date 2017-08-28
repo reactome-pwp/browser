@@ -4,10 +4,11 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.FunctionalStatusType;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.FunctionalStatusType;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.List;
 
@@ -43,14 +44,19 @@ public class FunctionalStatusTypePanel extends DetailsPanel implements OpenHandl
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded())
-            this.functionalStatusType.load(new DatabaseObjectLoadedHandler() {
+            this.functionalStatusType.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedData(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     disclosurePanel.setContent(getErrorMessage());
                 }
             });

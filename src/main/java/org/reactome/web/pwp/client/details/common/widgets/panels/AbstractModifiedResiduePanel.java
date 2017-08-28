@@ -8,8 +8,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.classes.*;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.*;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -41,14 +42,19 @@ public class AbstractModifiedResiduePanel extends DetailsPanel implements OpenHa
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded())
-            this.modifiedResidue.load(new DatabaseObjectLoadedHandler() {
+            this.modifiedResidue.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedData(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     disclosurePanel.setContent(getErrorMessage());
                 }
             });

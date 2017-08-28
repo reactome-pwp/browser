@@ -6,10 +6,11 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.GO_CellularComponent;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.GO_CellularComponent;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 
 /**
@@ -44,14 +45,19 @@ public class GO_CellularComponentPanel extends DetailsPanel implements OpenHandl
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded())
-            this.goCellularComponent.load(new DatabaseObjectLoadedHandler() {
+            this.goCellularComponent.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedData(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     disclosurePanel.setContent(getErrorMessage());
                 }
             });

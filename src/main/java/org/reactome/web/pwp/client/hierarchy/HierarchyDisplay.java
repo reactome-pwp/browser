@@ -21,12 +21,13 @@ import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOverHand
 import org.reactome.web.pwp.client.hierarchy.widget.HierarchyContainer;
 import org.reactome.web.pwp.client.hierarchy.widget.HierarchyItem;
 import org.reactome.web.pwp.client.hierarchy.widget.HierarchyTree;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.HashSet;
 import java.util.List;
@@ -107,14 +108,19 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
             final Event event = pathway.equals(aux) ? null : aux;
             final Path path = pwd.getPath();
             //This is needed because the State will be checking the species of the pathway and it needs to be ready
-            pathway.load(new DatabaseObjectLoadedHandler() {
+            pathway.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     presenter.eventSelected((Pathway) databaseObject, event, path);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    Console.error("There has been an error retrieving data for " + pathway.getDisplayName(), HierarchyDisplay.this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     Console.error("There has been an error retrieving data for " + pathway.getDisplayName(), HierarchyDisplay.this);
                 }
             });
@@ -212,7 +218,7 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
 
 
     @Override
-    public void setData(Species species, List<Event> tlps) {
+    public void setData(Species species, List<? extends Event> tlps) {
         this.hierarchyTree = new HierarchyTree(species);
         this.hierarchyTree.getElement().getStyle().setProperty("borderRadius","0 15px 0 0");
         this.hierarchyTree.setScrollOnSelectEnabled(true);
@@ -237,9 +243,9 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
     private void onOpen(final HierarchyItem item) {
         final Pathway pathway = (Pathway) item.getEvent();
         if (!item.isChildrenLoaded()) {
-            pathway.load(new DatabaseObjectLoadedHandler() {
+            pathway.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     Pathway pathway = databaseObject.cast();
                     try {
                         hierarchyTree.loadPathwayChildren(item, pathway.getHasEvent());
@@ -250,7 +256,12 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    Console.error("Error loading " + pathway, HierarchyDisplay.this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     Console.error("Error loading " + pathway, HierarchyDisplay.this);
                 }
             });

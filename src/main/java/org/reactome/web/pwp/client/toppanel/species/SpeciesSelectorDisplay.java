@@ -8,7 +8,7 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.ListBox;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.List;
 

@@ -15,11 +15,12 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.client.manager.state.State;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.Objects;
 
@@ -70,9 +71,9 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
 
     @Override
     public void onPathwayHovered(final Long dbId) {
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 Pathway pathway = (Pathway) databaseObject;
                 if(!Objects.equals(pathway, AnalysisTabPresenter.this.selected)) {
                     eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(pathway), AnalysisTabPresenter.this);
@@ -80,8 +81,13 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
-                eventBus.fireEventFromSource(new ErrorMessageEvent("Error retrieving data for " + dbId, exception), AnalysisTabPresenter.this);
+            public void onContentClientException(Type type, String message) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent("Error retrieving data for " + dbId), AnalysisTabPresenter.this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent("Error retrieving data for " + dbId), AnalysisTabPresenter.this);
             }
         });
     }
@@ -93,9 +99,9 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
 
     @Override
     public void onPathwaySelected(final Long dbId) {
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 Pathway pathway = (Pathway) databaseObject;
                 if(!Objects.equals(pathway, AnalysisTabPresenter.this.selected)) {
                     Selection selection = new Selection(pathway, new Path());
@@ -104,8 +110,13 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
-                eventBus.fireEventFromSource(new ErrorMessageEvent("Error retrieving data for " + dbId, exception), AnalysisTabPresenter.this);
+            public void onContentClientException(Type type, String message) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent("Error retrieving data for " + dbId), AnalysisTabPresenter.this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent("Error retrieving data for " + dbId), AnalysisTabPresenter.this);
             }
         });
     }
@@ -121,9 +132,9 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
             public void onAnalysisResult(final AnalysisResult result, long time) {
                 Long speciesId = result.getSummary().getSpecies();
                 if (speciesId != null) {
-                    DatabaseObjectFactory.get(result.getSummary().getSpecies(), new DatabaseObjectCreatedHandler() {
+                    ContentClient.query(result.getSummary().getSpecies(), new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
                         @Override
-                        public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                        public void onObjectLoaded(DatabaseObject databaseObject) {
                             result.getSummary().setSpeciesName(databaseObject.getDisplayName());
                             display.clearSelection();
                             display.showResult(result, resource);
@@ -131,9 +142,16 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
                         }
 
                         @Override
-                        public void onDatabaseObjectError(Throwable exception) {
-                            String errorMsg = "No species information available for '" + resource + "'. ERROR: " + exception.getMessage();
-                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), AnalysisTabPresenter.this);
+                        public void onContentClientException(Type type, String message) {
+                            String errorMsg = "No species information available for '" + resource + "'. ERROR: " + message;
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), AnalysisTabPresenter.this);
+                            display.setInitialState();
+                        }
+
+                        @Override
+                        public void onContentClientError(ContentClientError error) {
+                            String errorMsg = "No species information available for '" + resource + "'. ERROR: " + error.getReason();
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), AnalysisTabPresenter.this);
                             display.setInitialState();
                         }
                     });

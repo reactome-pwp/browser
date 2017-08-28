@@ -6,8 +6,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
-import org.reactome.web.pwp.model.classes.Figure;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Figure;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

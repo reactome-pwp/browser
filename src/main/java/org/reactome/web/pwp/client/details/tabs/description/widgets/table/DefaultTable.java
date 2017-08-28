@@ -2,9 +2,9 @@ package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.details.common.widgets.panels.TextPanel;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
+import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

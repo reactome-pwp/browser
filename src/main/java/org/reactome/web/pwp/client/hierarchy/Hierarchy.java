@@ -3,10 +3,10 @@ package org.reactome.web.pwp.client.hierarchy;
 
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.List;
 import java.util.Set;
@@ -52,6 +52,6 @@ public interface Hierarchy {
 
         void select(Event event, Path path);
 
-        void setData(Species species, List<Event> tlps);
+        void setData(Species species, List<? extends Event> tlps);
     }
 }

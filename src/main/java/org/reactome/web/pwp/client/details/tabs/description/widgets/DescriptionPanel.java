@@ -7,10 +7,10 @@ import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.help.HelpPopupImage;
 import org.reactome.web.pwp.client.details.common.help.InstanceTypeExplanation;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.OverviewTableFactory;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.PhysicalEntity;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.PhysicalEntity;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.List;
 

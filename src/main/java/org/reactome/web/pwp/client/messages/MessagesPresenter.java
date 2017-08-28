@@ -27,6 +27,6 @@ public class MessagesPresenter extends AbstractPresenter implements Messages.Pre
 
     @Override
     public void onInternalMessage(ErrorMessageEvent event) {
-        this.display.showErrorMessage(event.getMessage(), event.getThrowable());
+        this.display.showErrorMessage(event.getMessage());
     }
 }

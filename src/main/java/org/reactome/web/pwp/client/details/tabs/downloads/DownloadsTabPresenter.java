@@ -1,15 +1,16 @@
 package org.reactome.web.pwp.client.details.tabs.downloads;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.*;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.manager.state.State;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.client.handlers.DBNameRetrievedHandler;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -42,19 +43,26 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
 
         //Show the data
         final DatabaseObject databaseObject = state.getPathway(); //IMPORTANT! We only show information related to the selected Pathway!
+        //noinspection Duplicates
         if(databaseObject==null){
             currentlyShown = null;
             display.setInitialState();
         }else if(!databaseObject.equals(currentlyShown)) {
-            databaseObject.load(new DatabaseObjectLoadedHandler() {
+            databaseObject.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     currentlyShown = databaseObject;
                     display.showDetails(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    currentlyShown = null;
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(databaseObject.getDisplayName() + " details could not be retrieved from the server."), this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     currentlyShown = null;
                     eventBus.fireEventFromSource(new ErrorMessageEvent(databaseObject.getDisplayName() + " details could not be retrieved from the server."), this);
                 }
@@ -63,16 +71,32 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
     }
 
     private void requestDBName() {
-        RESTFulClient.getDBName(new DBNameRetrievedHandler() {
-            @Override
-            public void onDBNameRetrieved(String name) {
-                display.setDbName(name);
-            }
+        String url = ContentClient.SERVER + "/ReactomeRESTfulAPI/RESTfulWS/getDBName";
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
+        try {
+            requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    switch (response.getStatusCode()) {
+                        case Response.SC_OK:
+                            String name = response.getText().trim();
+                            display.setDbName(name);
+                            break;
+                        default:
+                            String errorMsg = "Error retrieving the database name. ERROR " + response.getStatusText();
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
+                    }
+                }
 
-            @Override
-            public void onDBNameRetrievedError(Throwable throwable) {
-                eventBus.fireEventFromSource(new ErrorMessageEvent(throwable.getMessage()), DownloadsTabPresenter.this);
-            }
-        });
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    String errorMsg = "The database name could not be retrieved.";
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
+                }
+            });
+        } catch (RequestException ex) {
+            String errorMsg = "The database name could not be retrieved.";
+            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
+        }
     }
 }

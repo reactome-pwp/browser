@@ -12,11 +12,11 @@ import org.reactome.web.pwp.client.hierarchy.events.HierarchyItemMouseOverEvent;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemDoubleClickedHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOutHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOverHandler;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.ReactionLikeEvent;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.ReactionLikeEvent;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.*;
 
@@ -166,7 +166,7 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
         return rtn;
     }
 
-    public void loadPathwayChildren(HierarchyItem item, List<Event> children) throws Exception {
+    public void loadPathwayChildren(HierarchyItem item, List<? extends Event> children) throws Exception {
         if (item != null) {
             item.removeItems();
             item.setChildrenLoaded(true);

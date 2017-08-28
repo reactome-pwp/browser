@@ -3,7 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
-import org.reactome.web.pwp.model.classes.Reaction;
+import org.reactome.web.pwp.model.client.classes.Reaction;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

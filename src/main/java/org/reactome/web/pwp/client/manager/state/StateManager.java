@@ -20,8 +20,8 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handler
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.manager.state.token.TokenMalformedException;
 import org.reactome.web.pwp.client.manager.title.TitleManager;
-import org.reactome.web.pwp.model.classes.*;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.*;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.List;
 

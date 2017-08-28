@@ -5,9 +5,10 @@ import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.SpeciesSelectedEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectsLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,19 +60,26 @@ public class SpeciesSelectorPresenter extends AbstractPresenter implements Speci
 
     private void retrieveSpeciesList() {
         this.speciesList = new LinkedList<>();
-        RESTFulClient.getSpeciesList(new DatabaseObjectsLoadedHandler<Species>() {
+        ContentClient.getSpeciesList(new ContentClientHandler.ObjectListLoaded<Species>() {
             @Override
-            public void onDatabaseObjectLoaded(List<Species> species) {
-                speciesList = species;
+            public void onObjectListLoaded(List<Species> list) {
+                speciesList = list;
                 display.setData(speciesList);
                 loaded = true;
                 switchDisplayToSpecies(currentSpecies);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable ex) {
+            public void onContentClientException(Type type, String message) {
                 display.setData(speciesList);
-                eventBus.fireEventFromSource(new ErrorMessageEvent(ex.getMessage()), this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(message), this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                display.setData(speciesList);
+                //TODO
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage().get(0)), this);
             }
         });
     }

@@ -5,8 +5,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import org.reactome.web.pwp.model.classes.DatabaseIdentifier;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.DatabaseIdentifier;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 import java.util.HashSet;
 import java.util.List;

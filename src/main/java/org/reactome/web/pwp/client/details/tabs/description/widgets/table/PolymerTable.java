@@ -1,9 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.model.classes.Polymer;
-import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
+import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
+import org.reactome.web.pwp.model.client.classes.Polymer;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -25,7 +25,7 @@ public class PolymerTable extends PhysicalEntityTable {
             case MIN_UNITS:
                 return TableRowFactory.getTextPanelRow(title, this.polymer.getMinUnitCount());
             case REPEATED_UNITS:
-                return TableRowFactory.getPhysicalEntityRow(title, this.polymer.getRepeatedUnits());
+                return TableRowFactory.getPhysicalEntityRow(title, this.polymer.getRepeatedUnit());
             default:
                 return super.getTableRow(propertyType);
         }

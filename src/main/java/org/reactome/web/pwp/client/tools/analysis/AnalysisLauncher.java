@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.tools.analysis;
 
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.List;
 

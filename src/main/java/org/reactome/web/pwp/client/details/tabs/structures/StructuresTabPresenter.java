@@ -5,12 +5,12 @@ import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.manager.state.State;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.ReferenceSequence;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectsCreatedHandler;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectsLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
+import org.reactome.web.pwp.model.client.classes.ReferenceSequence;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,29 +53,35 @@ public class StructuresTabPresenter extends AbstractPresenter implements Structu
 
     @Override
     public void getReferenceSequences(final DatabaseObject databaseObject) {
-        RESTFulClient.loadReferenceSequences(databaseObject, new DatabaseObjectsLoadedHandler<ReferenceSequence>() {
+        ContentClient.getReferenceSequences(databaseObject, new ContentClientHandler.ObjectListLoaded<ReferenceEntity>() {
             @Override
-            public void onDatabaseObjectLoaded(List<ReferenceSequence> referenceSequenceList) {
-                processReferenceSequences(databaseObject, referenceSequenceList);
+            public void onObjectListLoaded(List<ReferenceEntity> list) {
+                processReferenceSequences(databaseObject, list);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable ex) {
-                display.showErrorMessage(ex.getMessage());
-                eventBus.fireEventFromSource(new ErrorMessageEvent(ex.getMessage(), ex), StructuresTabPresenter.this);
+            public void onContentClientException(Type type, String message) {
+                display.showErrorMessage(message);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(message), StructuresTabPresenter.this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                display.showErrorMessage(error.getReason());
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getReason()), StructuresTabPresenter.this);
             }
         });
     }
 
-    private void processReferenceSequences(final DatabaseObject databaseObject, List<ReferenceSequence> referenceSequenceList){
+    private void processReferenceSequences(final DatabaseObject databaseObject, List<ReferenceEntity> referenceSequenceList){
         if (referenceSequenceList.isEmpty()) {
             display.showReferenceSequences(databaseObject, referenceSequenceList);
         } else {
-            DatabaseObjectFactory.get(referenceSequenceList, new DatabaseObjectsCreatedHandler() {
+            ContentClient.query(referenceSequenceList, new ContentClientHandler.ObjectMapLoaded() {
                 @Override
-                public void onDatabaseObjectsLoaded(Map<String, DatabaseObject> databaseObjects) {
-                    List<ReferenceSequence> rtn = new LinkedList<>();
-                    for (DatabaseObject object : databaseObjects.values()) {
+                public void onObjectMapLoaded(Map<String, DatabaseObject> map) {
+                    List<ReferenceEntity> rtn = new LinkedList<>();
+                    for (DatabaseObject object : map.values()) {
                         if (object instanceof ReferenceSequence) {
                             rtn.add((ReferenceSequence) object);
                         }
@@ -90,13 +96,19 @@ public class StructuresTabPresenter extends AbstractPresenter implements Structu
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable exception) {
+                public void onContentClientException(Type type, String message) {
                     String errorMsg = "There is not information available for " + databaseObject.getDisplayName();
                     display.showErrorMessage(errorMsg);
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), StructuresTabPresenter.this);
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), StructuresTabPresenter.this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
+                    String errorMsg = "There is not information available for " + databaseObject.getDisplayName();
+                    display.showErrorMessage(errorMsg);
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), StructuresTabPresenter.this);
                 }
             });
-
         }
     }
 }

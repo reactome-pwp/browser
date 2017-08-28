@@ -6,10 +6,11 @@ import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.ReferenceSequence;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 import uk.ac.ebi.pwp.widgets.gxa.ui.GXAViewer;
 
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class ExpressionTabDisplay extends ResizeComposite implements ExpressionT
     public void showDetails(DatabaseObject databaseObject) {
         GXAViewer gxaViewer = new GXAViewer();
         cache.put(databaseObject, gxaViewer);
-        String reactomeID = databaseObject.getStableIdentifier().getDisplayName().split("\\.")[0];
+        String reactomeID = databaseObject.getReactomeIdentifier().split("\\.")[0];
         gxaViewer.setReactomeID(reactomeID);
 
         this.container.clear();
@@ -78,11 +79,11 @@ public class ExpressionTabDisplay extends ResizeComposite implements ExpressionT
     }
 
     @Override
-    public void showReferenceSequences(DatabaseObject databaseObject, List<ReferenceSequence> referenceSequenceList) {
+    public void showReferenceSequences(DatabaseObject databaseObject, List<ReferenceEntity> referenceSequenceList) {
         GXAViewer gxaViewer = new GXAViewer();
         this.cache.put(databaseObject, gxaViewer);
         List<String> uniProtIDs = new LinkedList<>();
-        for (ReferenceSequence referenceSequence : referenceSequenceList) {
+        for (ReferenceEntity referenceSequence : referenceSequenceList) {
             if (referenceSequence.getIdentifier() == null) continue;
             uniProtIDs.add(referenceSequence.getIdentifier());
         }
@@ -102,14 +103,19 @@ public class ExpressionTabDisplay extends ResizeComposite implements ExpressionT
             this.container.clear();
             this.container.add(this.cache.get(pathway));
         }else {
-            pathway.load(new DatabaseObjectLoadedHandler() {
+            pathway.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     showDetails(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    Console.error(pathway.getDisplayName() + " details could not be retrieved from the server.", ExpressionTabDisplay.this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     Console.error(pathway.getDisplayName() + " details could not be retrieved from the server.", ExpressionTabDisplay.this);
                 }
             });

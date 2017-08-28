@@ -1,9 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.model.classes.*;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
+import org.reactome.web.pwp.model.client.classes.*;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class PhysicalEntityTable extends OverviewTable {
         String title = propertyType.getTitle();
         switch (propertyType){
             case STABLE_IDENTIFIER:
-                return TableRowFactory.getStableIdentifierRow(title, this.physicalEntity.getStableIdentifier());
+                return TableRowFactory.getStableIdentifierRow(title, this.physicalEntity.getStId());
             case CELLULAR_COMPARTMENT:
                 return TableRowFactory.getGOCellularComponentRow(title, this.physicalEntity.getCompartment());
             case DEDUCED_FROM:

@@ -10,8 +10,9 @@ import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosureHeader;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.client.details.delegates.InstanceSelectedDelegate;
-import org.reactome.web.pwp.model.classes.*;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.*;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -31,14 +32,19 @@ public class EventPanel extends DetailsPanel implements ClickHandler {
         //Data required of "this.event" will provide the panel with a complete information of the loaded event
         //and that is needed because the species names have to be placed after the name in the "title" of the
         //disclosure panel    "Event displayname [species1, species2, ...]       [X]  [+]"
-        this.event.load(new DatabaseObjectLoadedHandler() {
+        this.event.load(new ContentClientHandler.ObjectLoaded() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 setReceivedData(databaseObject);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable trThrowable) {
+            public void onContentClientException(Type type, String message) {
+                disclosurePanel.setContent(getErrorMessage());
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 disclosurePanel.setContent(getErrorMessage());
             }
         });

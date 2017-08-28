@@ -8,10 +8,10 @@ import org.reactome.web.pwp.client.details.delegates.InstanceSelectedHandler;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.DescriptionPanel;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.HashMap;
 import java.util.Map;

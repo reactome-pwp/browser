@@ -1,13 +1,14 @@
 package org.reactome.web.pwp.client.hierarchy.delgates;
 
 import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.client.handlers.AncestorsCreatedHandler;
-import org.reactome.web.pwp.model.util.Ancestors;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Ancestors;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.List;
 
@@ -35,15 +36,20 @@ public class HierarchyPathLoader {
         if (event == null){
             Console.error("Event cannot be null here", this);
         }else {
-            RESTFulClient.getAncestors(event, new AncestorsCreatedHandler() {
+            ContentClient.getAncestors(event, new ContentClientHandler.AncestorsLoaded() {
                 @Override
                 public void onAncestorsLoaded(Ancestors ancestors) {
                     setAncestorsListToExpand(ancestors, path, event);
                 }
 
                 @Override
-                public void onAncestorsError(Throwable exception) {
-                    Console.error(exception.getMessage(), HierarchyPathLoader.this);
+                public void onContentClientException(Type type, String message) {
+                    Console.error(message, HierarchyPathLoader.this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
+                    Console.error(error.getReason(), HierarchyPathLoader.this);
                 }
             });
         }

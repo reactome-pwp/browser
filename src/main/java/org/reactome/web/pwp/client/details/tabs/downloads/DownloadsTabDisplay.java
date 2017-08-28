@@ -11,7 +11,7 @@ import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadPanel;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadType;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

@@ -3,7 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
-import org.reactome.web.pwp.model.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Event;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -20,21 +20,21 @@ public class EventTable extends OverviewTable {
         String title = propertyType.getTitle();
         switch (propertyType){
             case STABLE_IDENTIFIER:
-                return TableRowFactory.getStableIdentifierRow(title, this.event.getStableIdentifier());
+                return TableRowFactory.getStableIdentifierRow(title, this.event.getStId());
             case SUMMATION:
                 return TableRowFactory.getSummationRow(title, this.event.getSummation());
             case DISEASE:
                 return TableRowFactory.getExternalOntologyRow(title, this.event.getDisease());
             case PRECEDING_EVENTS:
                 return TableRowFactory.getEventRow(title, this.event.getPrecedingEvent());
-            case FOLLOWING_EVENTS:
-                return TableRowFactory.getEventRow(title, this.event.getFollowingEvent());
+//            case FOLLOWING_EVENTS:
+//                return TableRowFactory.getEventRow(title, this.event.getFollowingEvent());
             case GO_BIOLOGICAL_PROCESS:
                 return TableRowFactory.getGOBiologicalProcessRow(title, this.event.getGoBiologicalProcess());
             case INFERRED_FROM:
                 return TableRowFactory.getEventRow(title, this.event.getInferredFrom());
             case INFERRED_TO:
-                if(!this.event.isInferred() && !this.event.getOrthologousEvent().isEmpty()){
+                if(!this.event.getInferred() && !this.event.getOrthologousEvent().isEmpty()){
                     return TableRowFactory.getOrthologousEventRow(title, this.event.getOrthologousEvent());
                 }
                 return null;

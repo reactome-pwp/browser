@@ -5,11 +5,12 @@ import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.InstanceEdit;
-import org.reactome.web.pwp.model.classes.Person;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.InstanceEdit;
+import org.reactome.web.pwp.model.client.classes.Person;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -37,15 +38,20 @@ public class InstanceEditPanel extends DetailsPanel implements OpenHandler<Discl
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded())
-            this.instanceEdit.load(new DatabaseObjectLoadedHandler() {
+            this.instanceEdit.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedData(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
                     disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
+                    //TODO
                 }
             });
     }

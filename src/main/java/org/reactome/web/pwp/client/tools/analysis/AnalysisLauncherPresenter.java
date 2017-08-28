@@ -5,9 +5,10 @@ import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectsLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -57,16 +58,23 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     }
 
     private void retrieveSpeciesList() {
-        RESTFulClient.getSpeciesList(new DatabaseObjectsLoadedHandler<Species>() {
+        ContentClient.getSpeciesList(new ContentClientHandler.ObjectListLoaded<Species>() {
             @Override
-            public void onDatabaseObjectLoaded(List<Species> list) {
+            public void onObjectListLoaded(List<Species> list) {
                 display.setSpeciesList(list);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable throwable) {
+            public void onContentClientException(Type type, String message) {
                 display.setSpeciesList(new LinkedList<>());
-                eventBus.fireEventFromSource(new ErrorMessageEvent(throwable.getMessage()), this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(message), this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                display.setSpeciesList(new LinkedList<>());
+                //TODO
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage().get(0)), this);
             }
         });
     }

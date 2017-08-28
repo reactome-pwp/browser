@@ -10,8 +10,9 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.client.handlers.VersionRetrievedHandler;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -76,16 +77,21 @@ public class LogoPanel extends Composite {
     }
 
     private void setDataVersion() {
-        RESTFulClient.getVersion(new VersionRetrievedHandler() {
+        ContentClient.getDatabaseVersion(new ContentClientHandler.Version() {
             @Override
-            public void onVersionRetrieved(String version) {
+            public void onVersionLoaded(String version) {
                 releasePanel.clear();
                 releasePanel.add(getReactomeReleasePanel(version, "Reactome database release " + version));
             }
 
             @Override
-            public void onVersionRetrievedError(Throwable ex) {
-                Console.error(ex.getMessage(), ex);
+            public void onContentClientException(Type type, String message) {
+                Console.error(message);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                Console.error(error.getMessage().toString());
             }
         });
     }

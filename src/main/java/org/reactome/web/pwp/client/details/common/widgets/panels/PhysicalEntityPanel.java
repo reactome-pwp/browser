@@ -9,8 +9,9 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.client.details.delegates.InstanceSelectedDelegate;
-import org.reactome.web.pwp.model.classes.*;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.*;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,14 +59,19 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded())
-            this.physicalEntity.load(new DatabaseObjectLoadedHandler() {
+            this.physicalEntity.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedData(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     disclosurePanel.setContent(getErrorMessage());
                 }
             });

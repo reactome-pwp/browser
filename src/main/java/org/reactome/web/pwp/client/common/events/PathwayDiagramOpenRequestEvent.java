@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.common.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.pwp.client.common.handlers.PathwayDiagramOpenRequestHandler;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

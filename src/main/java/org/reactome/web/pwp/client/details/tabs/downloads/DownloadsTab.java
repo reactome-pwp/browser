@@ -1,8 +1,8 @@
 package org.reactome.web.pwp.client.details.tabs.downloads;
 
 import org.reactome.web.pwp.client.details.tabs.DetailsTab;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

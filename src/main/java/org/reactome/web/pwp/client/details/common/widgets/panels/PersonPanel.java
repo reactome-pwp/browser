@@ -6,13 +6,13 @@ import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.classes.DatabaseIdentifier;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Person;
-import org.reactome.web.pwp.model.classes.Publication;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.client.handlers.LiteratureReferencesLoadedHandler;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseIdentifier;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Person;
+import org.reactome.web.pwp.model.client.classes.Publication;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.List;
 
@@ -44,14 +44,19 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded()){
-            this.person.load(new DatabaseObjectLoadedHandler() {
+            this.person.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedData(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     disclosurePanel.setContent(getErrorMessage());
                 }
             });
@@ -65,14 +70,19 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
 
     public void setReceivedData(DatabaseObject data) {
         this.person = (Person) data;
-        RESTFulClient.loadPublications(this.person, new LiteratureReferencesLoadedHandler() {
+        ContentClient.loadPersonPublications(this.person, new ContentClientHandler.ObjectLoaded<Person>() {
             @Override
-            public void onLiteratureReferencesLoaded(Person person) {
+            public void onObjectLoaded(Person databaseObject) {
                 setReceivedReferences(person.getPublications());
             }
 
             @Override
-            public void onLiteratureReferencesError(Throwable throwable) {
+            public void onContentClientException(Type type, String message) {
+                disclosurePanel.setContent(getErrorMessage());
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 disclosurePanel.setContent(getErrorMessage());
             }
         });

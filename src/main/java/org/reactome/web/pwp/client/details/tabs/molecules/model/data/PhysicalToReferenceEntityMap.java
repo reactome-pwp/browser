@@ -2,11 +2,9 @@ package org.reactome.web.pwp.client.details.tabs.molecules.model.data;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONObject;
-
-import org.reactome.web.pwp.model.classes.StableIdentifier;
 import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.model.factory.DatabaseObjectUtils;
-import org.reactome.web.pwp.model.factory.SchemaClass;
+import org.reactome.web.pwp.model.client.factory.DatabaseObjectUtils;
+import org.reactome.web.pwp.model.client.factory.SchemaClass;
 
 /**
  * Instead of adding peDbId to the Class DatabaseObject PhysicalToReferenceEntityMap was created.
@@ -17,7 +15,7 @@ import org.reactome.web.pwp.model.factory.SchemaClass;
 public class PhysicalToReferenceEntityMap {
     private Long dbId;
     private String _displayName;
-    private StableIdentifier stableIdentifier;
+    private String stableIdentifier;
 
     private Long peDbId;
     private String displayName;
@@ -25,26 +23,14 @@ public class PhysicalToReferenceEntityMap {
     private SchemaClass schemaClass;
 
     public PhysicalToReferenceEntityMap(JSONObject jsonObject) {
-        if(jsonObject.containsKey("dbId")){
-            this.dbId = DatabaseObjectUtils.getLongValue(jsonObject, "dbId");
-        }
 
-        if(jsonObject.containsKey("_displayName")){
-            this._displayName = DatabaseObjectUtils.getStringValue(jsonObject, "_displayName");
-        }
-
-        if(jsonObject.containsKey("displayName")){
-            this.displayName = DatabaseObjectUtils.getStringValue(jsonObject, "displayName");
-        }
+        this.dbId = DatabaseObjectUtils.getLongValue(jsonObject, "dbId");
+        this._displayName = DatabaseObjectUtils.getStringValue(jsonObject, "_displayName");
+        this.displayName = DatabaseObjectUtils.getStringValue(jsonObject, "displayName");
 
         this.schemaClass = DatabaseObjectUtils.getSchemaClass(jsonObject);
-
-        if(jsonObject.containsKey("stableIdentifier")){
-            this.stableIdentifier = DatabaseObjectUtils.getDatabaseObject(jsonObject, "stableIdentifier");
-        }
-        if(jsonObject.containsKey("peDbId")){
-            this.peDbId = DatabaseObjectUtils.getLongValue(jsonObject, "peDbId");
-        }
+        this.stableIdentifier = DatabaseObjectUtils.getStringValue(jsonObject, "stableIdentifier");
+        this.peDbId = DatabaseObjectUtils.getLongValue(jsonObject, "peDbId");
 
         /*Changes for disease flag
         for (JSONObject object : FactoryUtils.getObjectList(jsonObject, "disease")) {
@@ -76,9 +62,9 @@ public class PhysicalToReferenceEntityMap {
         return schemaClass;
     }
 
-    public StableIdentifier getStableIdentifier() {
-        return stableIdentifier;
-    }
+//    public StableIdentifier getStableIdentifier() {
+//        return stableIdentifier;
+//    }
 
     public Long getPeDbId() {
         return peDbId;

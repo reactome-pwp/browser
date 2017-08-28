@@ -1,9 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.expression;
 
 import org.reactome.web.pwp.client.details.tabs.DetailsTab;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.ReferenceSequence;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface ExpressionTab {
     interface Display extends DetailsTab.Display<Presenter> {
         void showDetails(DatabaseObject databaseObject);
         void showProteins(DatabaseObject databaseObject);
-        void showReferenceSequences(DatabaseObject databaseObject, List<ReferenceSequence> referenceSequenceList);
+        void showReferenceSequences(DatabaseObject databaseObject, List<ReferenceEntity> referenceSequenceList);
         void showPathway(Pathway pathway);
     }
 }

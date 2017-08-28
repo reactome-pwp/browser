@@ -13,13 +13,14 @@ import org.reactome.web.pwp.client.common.handlers.PathwayDiagramOpenRequestHand
 import org.reactome.web.pwp.client.common.handlers.ViewportChangedHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.viewport.ViewportToolType;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.ReactionLikeEvent;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.ReactionLikeEvent;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.Objects;
 
@@ -127,16 +128,21 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
     @Override
     public void selectPathway(final Long dbId) {
         if (this.selected != null && dbId.equals(this.selected.getDbId())) return;
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 selected = (Pathway) databaseObject;
                 Selection selection = new Selection(selected, new Path());
                 eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), FireworksPresenter.this);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
+            public void onContentClientException(Type type, String message) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent("There was a problem loading the pathway with dbId:" + dbId), FireworksPresenter.this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 eventBus.fireEventFromSource(new ErrorMessageEvent("There was a problem loading the pathway with dbId:" + dbId), FireworksPresenter.this);
             }
         });
@@ -153,14 +159,19 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
 
     @Override
     public void highlightPathway(final Long dbId) {
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(databaseObject), FireworksPresenter.this);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
+            public void onContentClientException(Type type, String message) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent("There was a problem loading the pathway with dbId:" + dbId), FireworksPresenter.this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 eventBus.fireEventFromSource(new ErrorMessageEvent("There was a problem loading the pathway with dbId:" + dbId), FireworksPresenter.this);
             }
         });
@@ -192,14 +203,19 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
 
     @Override
     public void showPathwayDiagram(final Long dbId) {
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 eventBus.fireEventFromSource(new PathwayDiagramOpenedEvent((Pathway) databaseObject), FireworksPresenter.this);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
+            public void onContentClientException(Type type, String message) {
+                eventBus.fireEventFromSource(new ErrorMessageEvent("There was a problem loading the pathway with dbId:" + dbId), FireworksPresenter.this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 eventBus.fireEventFromSource(new ErrorMessageEvent("There was a problem loading the pathway with dbId:" + dbId), FireworksPresenter.this);
             }
         });

@@ -4,10 +4,11 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Publication;
-import org.reactome.web.pwp.model.classes.Summation;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Publication;
+import org.reactome.web.pwp.model.client.classes.Summation;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -32,14 +33,20 @@ public class SummationPanel extends DetailsPanel {
         vp.addStyleName("elv-Details-OverviewDisclosure-Advanced");
         vp.setWidth("100%");
         initWidget(vp);
-        this.summation.load(new DatabaseObjectLoadedHandler() {
+        this.summation.load(new ContentClientHandler.ObjectLoaded() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 setReceivedData(databaseObject);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable trThrowable) {
+            public void onContentClientException(Type type, String message) {
+                vp.clear();
+                vp.add(getErrorMessage());
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 vp.clear();
                 vp.add(getErrorMessage());
             }

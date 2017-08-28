@@ -1,9 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.model.classes.ReactionLikeEvent;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
+import org.reactome.web.pwp.model.client.classes.ReactionLikeEvent;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -26,8 +26,8 @@ public class ReactionLikeEventTable extends EventTable {
                 return TableRowFactory.getCatalystActivityRow(title, this.reactionLikeEvent.getCatalystActivities());
             case OUTPUT:
                 return TableRowFactory.getPhysicalEntityRow(title, this.reactionLikeEvent.getOutputs());
-            case HAS_MEMBER:
-                return TableRowFactory.getEventRow(title, this.reactionLikeEvent.getHasMember());
+//            case HAS_MEMBER:
+//                return TableRowFactory.getEventRow(title, this.reactionLikeEvent.getHasMember());
             case ENTITY_FUNCTIONAL_STATUS:
                 return TableRowFactory.getEntityFunctionalStatusRow(title, this.reactionLikeEvent.getEntityFunctionalStatus());
             case ENTITY_ON_OTHER_CELL:

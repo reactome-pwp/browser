@@ -8,12 +8,13 @@ import org.reactome.web.pwp.client.common.handlers.SpeciesSelectedHandler;
 import org.reactome.web.pwp.client.common.handlers.StateChangedHandler;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
 import org.reactome.web.pwp.client.manager.state.State;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.handlers.MapLoadedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -57,16 +58,37 @@ public class OrthologyManager implements BrowserModule.Manager, StateChangedHand
             }
         }
         if (!list.isEmpty()) {
-            RESTFulClient.getOrthologous(list, event.getSpecies(), new MapLoadedHandler<Long, DatabaseObject>() {
+            ContentClient.getOrthologousMap(list, event.getSpecies(), new ContentClientHandler.ObjectMapLoaded() {
                 @Override
-                public void onMapLoaded(Map<Long, DatabaseObject> map) {
+                public void onObjectMapLoaded(Map<String, DatabaseObject> map) {
                     onOrthologousRetrieved(map);
+                }
+
+                @Override
+                public void onContentClientException(Type type, String message) {
 
                 }
 
                 @Override
-                public void onMapError(Throwable ex) {
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(ex.getMessage()), this);
+                public void onContentClientError(ContentClientError error) {
+
+                }
+            });
+            ContentClient.getOrthologousMap(list, event.getSpecies(), new ContentClientHandler.ObjectMapLoaded() {
+                @Override
+                public void onObjectMapLoaded(Map<String, DatabaseObject> map) {
+                    onOrthologousRetrieved(map);
+                }
+
+                @Override
+                public void onContentClientException(Type type, String message) {
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(message), this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
+                    //TODO
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage().get(0)), this);
                 }
             });
         } else {
@@ -79,7 +101,7 @@ public class OrthologyManager implements BrowserModule.Manager, StateChangedHand
         this.currentState = event.getState();
     }
 
-    private void onOrthologousRetrieved(Map<Long, DatabaseObject> map) {
+    private void onOrthologousRetrieved(Map<String, DatabaseObject> map) {
         Pathway pathway = this.currentState.getPathway();
         if (pathway != null) { //Not really needed because we have check it above
             if (map.containsKey(pathway.getDbId())) {

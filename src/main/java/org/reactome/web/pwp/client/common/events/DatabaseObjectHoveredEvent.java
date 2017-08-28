@@ -2,8 +2,8 @@ package org.reactome.web.pwp.client.common.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.pwp.client.common.handlers.DatabaseObjectHoveredHandler;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.util.Path;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

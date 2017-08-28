@@ -5,20 +5,20 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.help.HelpPopup;
 import org.reactome.web.pwp.client.details.common.help.HelpPopupImage;
 import org.reactome.web.pwp.client.details.common.help.InstanceTypeExplanation;
+import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosureImages;
 import org.reactome.web.pwp.client.details.tabs.molecules.MoleculesTab;
+import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Result;
 import org.reactome.web.pwp.client.details.tabs.molecules.widget.MoleculesDownloadPanel;
 import org.reactome.web.pwp.client.details.tabs.molecules.widget.MoleculesViewPanel;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.PhysicalEntity;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Result;
-import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.PhysicalEntity;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.List;
 

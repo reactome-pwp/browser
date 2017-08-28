@@ -3,11 +3,11 @@ package org.reactome.web.pwp.client.details.common.widgets.panels;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import org.reactome.web.pwp.model.classes.CrosslinkedResidue;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
-
+import org.reactome.web.pwp.model.client.classes.CrosslinkedResidue;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -32,14 +32,20 @@ public class CrosslinkedResiduePanel extends DetailsPanel {
         this.contentPanel.add(DisclosurePanelFactory.getLoadingMessage());
         this.contentPanel.setWidth("99%");
         initWidget(this.contentPanel);
-        this.crosslinkedResidue.load(new DatabaseObjectLoadedHandler() {
+        this.crosslinkedResidue.load(new ContentClientHandler.ObjectLoaded() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 setReceivedData(databaseObject);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable trThrowable) {
+            public void onContentClientException(Type type, String message) {
+                contentPanel.clear();
+                contentPanel.add(getErrorMessage());
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 contentPanel.clear();
                 contentPanel.add(getErrorMessage());
             }

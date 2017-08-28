@@ -3,12 +3,10 @@ package org.reactome.web.pwp.client.details.tabs.molecules.model.data;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.resources.client.ImageResource;
 import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-
-import org.reactome.web.pwp.model.classes.ReferenceEntity;
-import org.reactome.web.pwp.model.factory.SchemaClass;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
-import org.reactome.web.pwp.model.images.DatabaseObjectImages;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
+import org.reactome.web.pwp.model.client.factory.DatabaseObjectImages;
+import org.reactome.web.pwp.model.client.factory.SchemaClass;
 
 import java.util.List;
 
@@ -102,16 +100,6 @@ public class Molecule extends ReferenceEntity implements Comparable<Molecule>{
         Console.warn("No resource found for " + this.schemaClass, this);
         return DatabaseObjectImages.INSTANCE.exclamation();
     }
-
-    @Override
-    public void load(DatabaseObjectLoadedHandler handler) {
-        MoleculeFactory.load(this, handler);
-    }
-
-    /*Changes for disease flag
-    public boolean isDisease() {
-        return disease;
-    }*/
 
     @Override
     public int compareTo(Molecule o) {

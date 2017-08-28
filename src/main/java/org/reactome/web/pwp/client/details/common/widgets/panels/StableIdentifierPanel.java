@@ -1,35 +1,33 @@
 package org.reactome.web.pwp.client.details.common.widgets.panels;
 
 import com.google.gwt.user.client.ui.Anchor;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.StableIdentifier;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class StableIdentifierPanel extends DetailsPanel implements TransparentPanel {
-    private  StableIdentifier stableIdentifier;
+    private  String stableIdentifier;
 
-    public StableIdentifierPanel(StableIdentifier stableIdentifier) {
+    public StableIdentifierPanel(String stableIdentifier) {
         this(null, stableIdentifier);
     }
 
-    public StableIdentifierPanel(DetailsPanel parentPanel, StableIdentifier stableIdentifier) {
+    public StableIdentifierPanel(DetailsPanel parentPanel, String stableIdentifier) {
         super(parentPanel);
         this.stableIdentifier = stableIdentifier;
         initialize();
     }
 
     private void initialize(){
-        String identifier = stableIdentifier.getDisplayName();
-        Anchor link = new Anchor(identifier, "/cgi-bin/control_panel_st_id?ST_ID=" + identifier);
+        Anchor link = new Anchor(stableIdentifier, "/cgi-bin/control_panel_st_id?ST_ID=" + stableIdentifier);
         link.setTarget("_blank");
-        link.setTitle("Go to REACTOME control panel for " + identifier);
+        link.setTitle("Go to REACTOME control panel for " + stableIdentifier);
         initWidget(link);
     }
 
     @Override
     public DatabaseObject getDatabaseObject() {
-        return this.stableIdentifier;
+        return null;
     }
 }

@@ -12,12 +12,14 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.hierarchy.delgates.HierarchyPathLoader;
 import org.reactome.web.pwp.client.manager.state.State;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.client.RESTFulClient;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectsLoadedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.classes.TopLevelPathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.*;
 
@@ -145,17 +147,22 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
 
     @Override
     public void retrieveData(final Species species) {
-        RESTFulClient.getFrontPageItems(species, new DatabaseObjectsLoadedHandler<Event>() {
+        ContentClient.getTopLevelPathways(species.getDisplayName(), new ContentClientHandler.ObjectListLoaded<TopLevelPathway>() {
             @Override
-            public void onDatabaseObjectLoaded(List<Event> objects) {
-                display.setData(species, objects);
-
+            public void onObjectListLoaded(List<TopLevelPathway> list) {
+                display.setData(species, list);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable ex) {
-                Console.error(ex.getMessage(), HierarchyPresenter.this);
-                eventBus.fireEventFromSource(new ErrorMessageEvent(ex.getMessage()), this);
+            public void onContentClientException(Type type, String message) {
+                Console.error(message, HierarchyPresenter.this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(message), this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                Console.error(error.getReason());
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getReason()), this);
             }
         });
     }
@@ -184,7 +191,7 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
 
             @Override
             public void onPathwaySummariesNotFound(long time) {
-                display.showAnalysisResult(new LinkedList<PathwaySummary>());
+                display.showAnalysisResult(new LinkedList<>());
             }
 
             @Override

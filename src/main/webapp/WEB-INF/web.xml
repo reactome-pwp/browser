@@ -13,36 +13,32 @@
     </welcome-file-list>
 
 
-    <!-- RESTFul WS PROXY Configuration (ONLY USED IN DEV MODE) -->
+    <!-- Reactome Content Service Configuration (ONLY USED IN DEV MODE) -->
     <servlet>
-        <servlet-name>ReactomeRESTfulAPI</servlet-name>
+        <servlet-name>ContentServiceProxy</servlet-name>
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
-            <!--<param-value>localhost</param-value>-->
+            <param-value>localhost</param-value>
+            <!--<param-value>reactomedev.oicr.on.ca</param-value>-->
             <!--<param-value>reactome.org</param-value>-->
-            <param-value>reactomedev.oicr.on.ca</param-value>
             <!--<param-value>reactomecurator.oicr.on.ca</param-value>-->
-            <!--<param-value>reactomerelease.oicr.on.ca</param-value>-->
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
-            <!--<param-value>9090</param-value>-->
-            <param-value>80</param-value>
+            <param-value>8686</param-value>
+            <!--<param-value>80</param-value>-->
             <!--<param-value>8080</param-value>-->
         </init-param>
         <init-param>
             <param-name>proxyPath</param-name>
-            <param-value>/ReactomeRESTfulAPI/RESTfulWS</param-value>
+            <param-value>/</param-value>
+            <!--<param-value>/ContentService/</param-value>-->
         </init-param>
-        <!--<init-param>-->
-        <!--<param-name>maxFileUploadSize</param-name>-->
-        <!--<param-value></param-value>-->
-        <!--</init-param>-->
     </servlet>
     <servlet-mapping>
-        <servlet-name>ReactomeRESTfulAPI</servlet-name>
-        <url-pattern>/ReactomeRESTfulAPI/RESTfulWS/*</url-pattern>
+        <servlet-name>ContentServiceProxy</servlet-name>
+        <url-pattern>/ContentService/*</url-pattern>
     </servlet-mapping>
 
     <!-- RESTFul WS PROXY Configuration (ONLY USED IN DEV MODE) -->
@@ -72,32 +68,32 @@
         <url-pattern>/AnalysisService/*</url-pattern>
     </servlet-mapping>
 
-    <!-- Reactome Content Service Configuration (ONLY USED IN DEV MODE) -->
+    <!-- RESTFul WS PROXY Configuration (ONLY USED IN DEV MODE) -->
     <servlet>
-        <servlet-name>ContentServiceProxy</servlet-name>
+        <servlet-name>ReactomeRESTfulAPI</servlet-name>
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
             <!--<param-value>localhost</param-value>-->
-            <param-value>reactomedev.oicr.on.ca</param-value>
-            <!--<param-value>reactome.org</param-value>-->
+            <param-value>reactome.org</param-value>
+            <!--<param-value>reactomedev.oicr.on.ca</param-value>-->
             <!--<param-value>reactomecurator.oicr.on.ca</param-value>-->
+            <!--<param-value>reactomerelease.oicr.on.ca</param-value>-->
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
-            <!--<param-value>8585</param-value>-->
+            <!--<param-value>9090</param-value>-->
             <param-value>80</param-value>
             <!--<param-value>8080</param-value>-->
         </init-param>
         <init-param>
             <param-name>proxyPath</param-name>
-            <!--<param-value>/</param-value>-->
-            <param-value>/ContentService/</param-value>
+            <param-value>/ReactomeRESTfulAPI/RESTfulWS</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ContentServiceProxy</servlet-name>
-        <url-pattern>/ContentService/*</url-pattern>
+        <servlet-name>ReactomeRESTfulAPI</servlet-name>
+        <url-pattern>/ReactomeRESTfulAPI/RESTfulWS/*</url-pattern>
     </servlet-mapping>
 
     <!-- Reactome Fireworks static files local server (ONLY USED IN DEV MODE) -->

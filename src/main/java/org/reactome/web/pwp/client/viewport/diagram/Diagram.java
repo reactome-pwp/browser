@@ -3,8 +3,8 @@ package org.reactome.web.pwp.client.viewport.diagram;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

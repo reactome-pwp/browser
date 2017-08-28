@@ -9,11 +9,10 @@ import org.reactome.web.diagram.data.loader.LayoutLoader;
 import org.reactome.web.diagram.events.*;
 import org.reactome.web.diagram.handlers.*;
 import org.reactome.web.pwp.client.AppConfig;
-import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.viewport.ViewportDisplay;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -29,8 +28,8 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
     public DiagramDisplay() {
         super(Style.Unit.PX);
 
-        DiagramFactory.CONSOLE_VERBOSE = Browser.VERBOSE;
-        DiagramFactory.EVENT_BUS_VERBOSE = Browser.VERBOSE;
+        DiagramFactory.CONSOLE_VERBOSE = false;
+        DiagramFactory.EVENT_BUS_VERBOSE = false;
         DiagramFactory.SHOW_INFO = false;
         DiagramFactory.WATERMARK = false;
 
@@ -62,7 +61,7 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
 
     @Override
     public void loadPathway(Pathway pathway) {
-        this.diagram.loadDiagram(pathway.getIdentifier());
+        this.diagram.loadDiagram(pathway.getReactomeIdentifier());
     }
 
     @Override

@@ -2,8 +2,8 @@ package org.reactome.web.pwp.client.details.tabs.molecules;
 
 import org.reactome.web.pwp.client.details.tabs.DetailsTab;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Result;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 /**
  * @author Kerstin Hausmann <khaus@ebi.ac.uk>

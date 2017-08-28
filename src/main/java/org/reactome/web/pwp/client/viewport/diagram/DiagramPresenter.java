@@ -12,11 +12,12 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.client.viewport.ViewportToolType;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectCreatedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.Objects;
 
@@ -56,15 +57,21 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     public void databaseObjectSelected(final Long dbId) {
         if (timer != null && timer.isRunning()) timer.cancel();
         if (dbId != null) {
-            DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+            ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     Selection selection = new Selection(pathway, databaseObject, path);
                     eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable exception) {
+                public void onContentClientException(Type type, String message) {
+                    String errorMsg = "An error has occurred while retrieving data for " + dbId;
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DiagramPresenter.this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     String errorMsg = "An error has occurred while retrieving data for " + dbId;
                     eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DiagramPresenter.this);
                 }
@@ -99,16 +106,22 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
             timer = new Timer() {
                 @Override
                 public void run() {
-                    DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+                    ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
                         @Override
-                        public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                        public void onObjectLoaded(DatabaseObject databaseObject) {
                             if(!Objects.equals(selected, databaseObject)) {
                                 eventBus.fireEventFromSource(new DatabaseObjectHoveredEvent(databaseObject), DiagramPresenter.this);
                             }
                         }
 
                         @Override
-                        public void onDatabaseObjectError(Throwable exception) {
+                        public void onContentClientException(Type type, String message) {
+                            String errorMsg = "An error has occurred while retrieving data for " + dbId;
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DiagramPresenter.this);
+                        }
+
+                        @Override
+                        public void onContentClientError(ContentClientError error) {
                             String errorMsg = "An error has occurred while retrieving data for " + dbId;
                             eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DiagramPresenter.this);
                         }
@@ -123,20 +136,27 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     @Override
     public void fireworksOpened(final Long dbId) {
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 Pathway pathway = (Pathway) databaseObject;
                 eventBus.fireEventFromSource(new FireworksOpenedEvent(pathway), DiagramPresenter.this);
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
-                String errorMsg = "An error has occurred while retrieving data for " + dbId;
-                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), DiagramPresenter.this);
+            public void onContentClientException(Type type, String message) {
+                //TODO
+//                String errorMsg = "An error has occurred while retrieving data for " + dbId;
+//                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, exception), DiagramPresenter.this);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                //TODO
+//                String errorMsg = "An error has occurred while retrieving data for " + dbId;
+//                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg, error), DiagramPresenter.this);
             }
         });
-
     }
 
     @Override
@@ -171,9 +191,9 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
 
     @Override
     public void diagramLoaded(final Long dbId) {
-        DatabaseObjectFactory.get(dbId, new DatabaseObjectCreatedHandler() {
+        ContentClient.query(dbId, new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
             @Override
-            public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+            public void onObjectLoaded(DatabaseObject databaseObject) {
                 displayedPathway = (Pathway) databaseObject;
                 if (Objects.equals(pathway, displayedPathway)) {
                     updateView();
@@ -185,7 +205,12 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
+            public void onContentClientException(Type type, String message) {
+                displayedPathway = null;
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
                 displayedPathway = null;
             }
         });

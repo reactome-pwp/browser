@@ -13,7 +13,7 @@ import org.reactome.web.fireworks.events.ProfileChangedEvent;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosureImages;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 import java.util.LinkedList;
 import java.util.List;

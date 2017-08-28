@@ -8,12 +8,13 @@ import org.reactome.web.pwp.client.common.events.SpeciesSelectedEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.manager.state.State;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -42,15 +43,21 @@ public class DescriptionTabPresenter extends AbstractPresenter implements Descri
             currentlyShown = null;
             display.setInitialState();
         }else if(!databaseObject.equals(currentlyShown)) {
-            databaseObject.load(new DatabaseObjectLoadedHandler() {
+            databaseObject.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     currentlyShown = databaseObject;
                     display.showDetails(databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable trThrowable) {
+                public void onContentClientException(Type type, String message) {
+                    currentlyShown = null;
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(databaseObject.getDisplayName() + " details could not be retrieved from the server."), DescriptionTabPresenter.this);
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     currentlyShown = null;
                     eventBus.fireEventFromSource(new ErrorMessageEvent(databaseObject.getDisplayName() + " details could not be retrieved from the server."), DescriptionTabPresenter.this);
                 }

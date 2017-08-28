@@ -20,7 +20,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.OptionSelectedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ResourceChangedHandler;
-import org.reactome.web.pwp.model.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Pathway;
 
 import java.util.LinkedList;
 import java.util.List;

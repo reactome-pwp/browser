@@ -25,7 +25,7 @@ public class MessagesDisplay extends PopupPanel implements Messages.Display {
     }
 
     @Override
-    public void showErrorMessage(String errorMsg, Throwable internalError) {
+    public void showErrorMessage(String errorMsg) {
         this.clear();
         this.add(getErrorMessagePanel(errorMsg));
         this.show();

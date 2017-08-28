@@ -24,11 +24,11 @@ import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemDoubleClicked
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOutHandler;
 import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOverHandler;
 import org.reactome.web.pwp.client.manager.state.token.Token;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.util.Path;
 
 
 /**
@@ -95,7 +95,7 @@ public class HierarchyItem extends TreeItem implements HasHandlers, MouseOverHan
         }
 
         ImageResource disease = event.getDiseaseIcon();
-        if(event.isInDisease()){
+        if(event.getInDisease()){
             Image diseaseIcon = new Image(disease);
             diseaseIcon.setTitle("Is a disease");
             itemContent.add(diseaseIcon);

@@ -1,7 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory;
 
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.*;
-import org.reactome.web.pwp.model.classes.*;
+import org.reactome.web.pwp.model.client.classes.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

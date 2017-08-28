@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.details.common.widgets.panels.*;
-import org.reactome.web.pwp.model.classes.*;
+import org.reactome.web.pwp.model.client.classes.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -221,7 +221,7 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getStableIdentifierRow(String title, StableIdentifier stableIdentifier){
+    public static Widget getStableIdentifierRow(String title, String stableIdentifier){
         List<DetailsPanel> panels = new LinkedList<>();
         if(stableIdentifier!=null){
             panels.add(new StableIdentifierPanel(stableIdentifier));

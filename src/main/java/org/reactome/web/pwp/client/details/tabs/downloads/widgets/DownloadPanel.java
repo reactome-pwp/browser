@@ -5,7 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

@@ -11,7 +11,7 @@ public interface Messages {
     }
 
     interface Display extends BrowserModule.Display {
-        void showErrorMessage(String errorMsg, Throwable internalError);
+        void showErrorMessage(String errorMsg);
 
         void setPresenter(Presenter presenter);
     }

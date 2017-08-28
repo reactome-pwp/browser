@@ -13,10 +13,11 @@ import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosureP
 import org.reactome.web.pwp.client.details.delegates.MoleculeSelectedListener;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Molecule;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.PhysicalToReferenceEntityMap;
-import org.reactome.web.pwp.model.classes.DatabaseIdentifier;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.factory.SchemaClass;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseIdentifier;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.factory.SchemaClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,14 +117,19 @@ public class MoleculePanel extends DetailsPanel implements OpenHandler<Disclosur
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
         if(!isLoaded()){
-            this.molecule.load(new DatabaseObjectLoadedHandler() {
+            this.molecule.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
-                public void onDatabaseObjectLoaded(DatabaseObject databaseObject) {
+                public void onObjectLoaded(DatabaseObject databaseObject) {
                     setReceivedMoleculeData((Molecule) databaseObject);
                 }
 
                 @Override
-                public void onDatabaseObjectError(Throwable throwable) {
+                public void onContentClientException(Type type, String message) {
+                    disclosurePanel.setContent(getErrorMessage());
+                }
+
+                @Override
+                public void onContentClientError(ContentClientError error) {
                     disclosurePanel.setContent(getErrorMessage());
                 }
             });

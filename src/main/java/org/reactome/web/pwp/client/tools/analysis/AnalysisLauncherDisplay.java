@@ -19,7 +19,7 @@ import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
 import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.LinkedList;
 import java.util.List;

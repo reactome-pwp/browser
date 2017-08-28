@@ -1,7 +1,7 @@
 package org.reactome.web.pwp.client.toppanel.species;
 
 import org.reactome.web.pwp.client.common.module.BrowserModule;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.List;
 

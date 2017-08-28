@@ -3,9 +3,6 @@ package org.reactome.web.pwp.client.common.events;
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.handlers.DatabaseObjectSelectedHandler;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.util.Path;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

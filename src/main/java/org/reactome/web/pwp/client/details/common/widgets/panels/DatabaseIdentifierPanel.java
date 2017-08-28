@@ -2,9 +2,8 @@ package org.reactome.web.pwp.client.details.common.widgets.panels;
 
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.TreeItem;
-import org.reactome.web.pwp.model.classes.DatabaseIdentifier;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectLoadedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseIdentifier;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

@@ -6,13 +6,14 @@ import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.manager.state.token.Token;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
-import org.reactome.web.pwp.model.classes.Event;
-import org.reactome.web.pwp.model.classes.Pathway;
-import org.reactome.web.pwp.model.classes.Species;
-import org.reactome.web.pwp.model.factory.DatabaseObjectFactory;
-import org.reactome.web.pwp.model.handlers.DatabaseObjectsCreatedHandler;
-import org.reactome.web.pwp.model.util.Path;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
+import org.reactome.web.pwp.model.client.classes.Pathway;
+import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Path;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -52,27 +53,27 @@ public class State {
     public State(Token token, final StateLoadedHandler handler) {
         List<String> toLoad = token.getToLoad();
         final Map<StateKey, String> parameters = token.getParameters();
-        DatabaseObjectFactory.get(toLoad, new DatabaseObjectsCreatedHandler() {
+        ContentClient.query(toLoad, new ContentClientHandler.ObjectMapLoaded() {
             private String token;
             private String resource = "TOTAL";
 
             @Override
-            public void onDatabaseObjectsLoaded(Map<String, DatabaseObject> databaseObjects) {
+            public void onObjectMapLoaded(Map<String, DatabaseObject> map) {
                 for (StateKey key : parameters.keySet()) {
                     try {
                         String identifier = parameters.get(key);
                         switch (key) {
                             case SPECIES:
-                                species = (Species) databaseObjects.get(identifier);
+                                species = (Species) map.get(identifier);
                                 break;
                             case PATHWAY:
-                                event = (Event) databaseObjects.get(identifier);
+                                event = (Event) map.get(identifier);
                                 break;
                             case SELECTED:
-                                selected = databaseObjects.get(identifier);
+                                selected = map.get(identifier);
                                 break;
                             case PATH:
-                                path = new Path(StateHelper.getEvents(identifier.split(","), databaseObjects));
+                                path = new Path(StateHelper.getEvents(identifier.split(","), map));
                                 break;
                             case DETAILS_TAB:
                                 detailsTab = DetailsTabType.getByCode(identifier);
@@ -104,9 +105,13 @@ public class State {
             }
 
             @Override
-            public void onDatabaseObjectError(Throwable exception) {
-                //TODO: Treat the exception
-                exception.printStackTrace();
+            public void onContentClientException(Type type, String message) {
+                Console.error(message);
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                Console.error(error.getReason());
             }
         });
     }
@@ -140,8 +145,8 @@ public class State {
                     }
 
                     @Override
-                    public void onPathwayWithDiagramRetrievalError(Throwable throwable) {
-                        Console.error("on Pathway with diagram retrieval error: " + throwable.getMessage());
+                    public void onPathwayWithDiagramRetrievalError(String errorMessage) {
+                        Console.error("on Pathway with diagram retrieval error: " + errorMessage);
                     }
                 });
             }
@@ -233,23 +238,23 @@ public class State {
         if (event == null && species != null && !species.getDbId().equals(Token.DEFAULT_SPECIES_ID)) {
             token.append(StateKey.SPECIES.getDefaultKey());
             token.append("=");
-            token.append(species.getIdentifier());
+            token.append(species.getReactomeIdentifier());
             addDelimiter = true;
         }
         if (event != null) {
             if (addDelimiter) token.append(Token.DELIMITER);
-            if (!Token.isSingleIdentifier(event.getIdentifier())) {
+            if (!Token.isSingleIdentifier(event.getReactomeIdentifier())) {
                 token.append(StateKey.PATHWAY.getDefaultKey());
                 token.append("=");
             }
-            token.append(event.getIdentifier());
+            token.append(event.getReactomeIdentifier());
             addDelimiter = true;
         }
         if (selected != null) {
             if (addDelimiter) token.append(Token.DELIMITER);
             token.append(StateKey.SELECTED.getDefaultKey());
             token.append("=");
-            token.append(selected.getIdentifier());
+            token.append(selected.getReactomeIdentifier());
             addDelimiter = true;
         }
         if (path != null && !path.isEmpty()) {
@@ -257,7 +262,7 @@ public class State {
             token.append(StateKey.PATH.getDefaultKey());
             token.append("=");
             for (Event event : path) {
-                token.append(event.getIdentifier());
+                token.append(event.getReactomeIdentifier());
                 token.append(",");
             }
             token.deleteCharAt(token.length() - 1);

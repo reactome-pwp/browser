@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.common.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.pwp.client.common.handlers.SpeciesSelectedHandler;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

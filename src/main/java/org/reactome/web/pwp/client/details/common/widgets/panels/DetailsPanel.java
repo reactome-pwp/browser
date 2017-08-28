@@ -2,7 +2,7 @@ package org.reactome.web.pwp.client.details.common.widgets.panels;
 
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.model.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>

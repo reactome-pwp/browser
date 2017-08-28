@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.model.classes.Species;
+import org.reactome.web.pwp.model.client.classes.Species;
 
 /**
  * Shows a message depending on the action done over the hierarchy tree
