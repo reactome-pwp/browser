@@ -76,19 +76,26 @@ public class ReferenceEntityPanel extends DetailsPanel implements OpenHandler<Di
             vp.add(getNamesPanel(names));
         }
 
+        TreeItem references = new TreeItem(SafeHtmlUtils.fromString("External cross-references"));
+
+        DatabaseIdentifierPanel dbIdPanel = new DatabaseIdentifierPanel(referenceEntity);
+        TreeItem reference = dbIdPanel.asTreeItem();
+        reference.setState(true, false);
+        references.addItem(reference);
+
         if(!this.referenceEntity.getCrossReference().isEmpty()){
-            Tree referencesTree = new Tree();
-            TreeItem references = new TreeItem(SafeHtmlUtils.fromString("External cross-references"));
             for (DatabaseIdentifier databaseIdentifier : this.referenceEntity.getCrossReference()) {
-                DatabaseIdentifierPanel dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);
-                TreeItem reference = dbIdPanel.asTreeItem();
+                dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);
+                reference = dbIdPanel.asTreeItem();
                 reference.setState(true, false);
                 references.addItem(reference);
             }
-            referencesTree.clear();
-            referencesTree.addItem(references);
-            vp.add(referencesTree);
         }
+
+        Tree referencesTree = new Tree();
+        referencesTree.clear();
+        referencesTree.addItem(references);
+        vp.add(referencesTree);
 
         if(vp.getWidgetCount()==0){
             vp.add(getErrorMessage("No more information available"));

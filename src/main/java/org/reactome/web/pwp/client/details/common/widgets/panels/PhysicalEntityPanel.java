@@ -112,7 +112,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         }
 
         if(!this.physicalEntity.getCrossReference().isEmpty()){
-            vp.add(getCrossReferenceTree(this.physicalEntity.getCrossReference()));
+            vp.add(getCrossReferenceTree());
         }
 
         disclosurePanel.setContent(vp);
@@ -125,18 +125,26 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         InstanceSelectedDelegate.get().instanceSelected(this.physicalEntity);
     }
 
-    private Widget getCrossReferenceTree(List<DatabaseIdentifier> identifiers){
-        Tree referencesTree = new Tree();
+    private Widget getCrossReferenceTree(){
         TreeItem references = new TreeItem(SafeHtmlUtils.fromString("External cross-references"));
-        for (DatabaseIdentifier databaseIdentifier : identifiers) {
-            DatabaseIdentifierPanel dbIdPanel = new DatabaseIdentifierPanel(this, databaseIdentifier);
-            TreeItem reference = dbIdPanel.asTreeItem();
-            reference.setState(true, false);
-            references.addItem(reference);
+
+        DatabaseIdentifierPanel dbIdPanel = new DatabaseIdentifierPanel(physicalEntity);
+        TreeItem reference = dbIdPanel.asTreeItem();
+        reference.setState(true, false);
+        references.addItem(reference);
+
+        if(!this.physicalEntity.getCrossReference().isEmpty()){
+            for (DatabaseIdentifier databaseIdentifier : this.physicalEntity.getCrossReference()) {
+                dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);
+                reference = dbIdPanel.asTreeItem();
+                reference.setState(true, false);
+                references.addItem(reference);
+            }
         }
+
+        Tree referencesTree = new Tree();
         referencesTree.clear();
         referencesTree.addItem(references);
-
         return referencesTree;
     }
 
