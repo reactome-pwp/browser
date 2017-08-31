@@ -15,6 +15,9 @@ public abstract class InstanceTypeExplanation {
                 explanation = "Shortcut reactions that make the connection between input and output, but don't provide complete mechanistic detail.<p>" +
                         "Used for reactions that do not balance, or complicated processes for which we either don't know all the details, or we choose not to represent every step. (e.g. degradation of a protein)";
                 break;
+            case CHEMICAL_DRUG:
+                explanation = "A therapeutic agent that is a chemically synthesized substance";
+                break;
             //case CONCEPTUAL_EVENT: //DEPRECATED
             case DEPOLYMERISATION:
                 explanation = "Reactions that follow the pattern: Polymer -> Polymer + Unit  (there may be a catalyst involved).<p>" +

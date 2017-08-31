@@ -118,8 +118,8 @@
         <servlet-class>org.reactome.server.utils.proxy.StaticFilesProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyFilePath</param-name>
-            <!--<param-value>/Users/reactome/Reactome/diagram/static</param-value>-->
-            <param-value>/Users/reactome/Reactome/diagram/slice</param-value>
+            <param-value>/Users/reactome/Reactome/diagram/static</param-value>
+            <!--<param-value>/Users/reactome/Reactome/diagram/slice</param-value>-->
         </init-param>
     </servlet>
     <servlet-mapping>

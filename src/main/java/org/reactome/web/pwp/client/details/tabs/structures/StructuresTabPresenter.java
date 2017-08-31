@@ -79,7 +79,7 @@ public class StructuresTabPresenter extends AbstractPresenter implements Structu
         } else {
             ContentClient.query(referenceSequenceList, new ContentClientHandler.ObjectMapLoaded() {
                 @Override
-                public void onObjectMapLoaded(Map<String, DatabaseObject> map) {
+                public void onObjectMapLoaded(Map<String, ? extends DatabaseObject> map) {
                     List<ReferenceEntity> rtn = new LinkedList<>();
                     for (DatabaseObject object : map.values()) {
                         if (object instanceof ReferenceSequence) {
