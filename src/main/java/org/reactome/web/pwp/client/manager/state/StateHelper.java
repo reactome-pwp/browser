@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public abstract class StateHelper {
 
-    public static List<Event> getEvents(String[] identifiers, Map<String, DatabaseObject> map) {
+    public static List<Event> getEvents(String[] identifiers, Map<String, ? extends DatabaseObject> map) {
         List<Event> rtn = new LinkedList<>();
         for (String identifier : identifiers) {
             DatabaseObject databaseObject = map.get(identifier);
