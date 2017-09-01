@@ -9,7 +9,7 @@ import org.reactome.web.pwp.model.client.classes.*;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class DatabaseIdentifierPanel extends DetailsPanel {
-    //    private DatabaseIdentifier databaseIdentifier;
+
     private String reference;
     private String id;
     private String url;
@@ -45,7 +45,7 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
         }
 
         if (re != null){
-            this.reference = re.getDisplayName();
+            this.reference = re.getDatabaseName();
             this.id = re.getIdentifier();
             this.url = re.getUrl();
             initialize();
@@ -60,7 +60,7 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
 
     public DatabaseIdentifierPanel(DetailsPanel parentPanel, ReferenceEntity re) {
         super(parentPanel);
-        this.reference = re.getDisplayName();
+        this.reference = re.getDatabaseName();
         this.id = re.getIdentifier();
         this.url = re.getUrl();
         initialize();
@@ -84,22 +84,18 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
 
     private HTMLPanel getReference(){
         //noinspection NonJREEmulationClassesInClientCode
-        StringBuilder builder = new StringBuilder(reference);
-        builder.append("&nbsp;&nbsp;>>&nbsp;&nbsp;<span class=\"");
-        //noinspection NonJREEmulationClassesInClientCode
-        builder.append(reference.replaceAll(" ",""));
-        builder.append("\">");
-        builder.append(reference.substring(0, 1));
-        builder.append("</span>");
-        builder.append("&nbsp;&nbsp;[<a title=\"Go to ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("-&nbsp;<a title=\"Go to ");
         builder.append(reference);
-        builder.append(": ");
+        builder.append(":");
         builder.append(id);
         builder.append("\" target=\"_blank\" href=\"");
         builder.append(url);
         builder.append("\">");
+        builder.append(reference);
+        builder.append(":");
         builder.append(id);
-        builder.append("</a>]");
+        builder.append("</a>");
 
         return new HTMLPanel(builder.toString());
     }
