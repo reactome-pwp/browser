@@ -120,7 +120,7 @@ body {
 
 /*####################### DETAILS TAB [BEGIN] ########################################################################*/
 .elv-Details-Content {
-    /*background-color: #daf0e8;*/
+
 }
 
 .elv-Details-Tab{
@@ -151,16 +151,10 @@ body {
 }
 
 .elv-Details-OverviewPanel {
-    /*border-radius: 7px;*/
-    /*border: 1px solid grey;*/
-    /*margin: 5px;*/
-    /*padding: 2px;*/
+
 }
 
 .elv-Details-OverviewRow{
-    /*background-color: #ffede0;*/
-    /*border-radius: 5px;*/
-    /*border: 1px solid white;*/
     border-left: 3px solid #1e94d0;
 
     margin: 0 0 5px 5px;
@@ -216,9 +210,6 @@ body {
 }
 
 .elv-Details-OverviewDisclosure-even {
-    /*border: 1px solid grey;*/
-    /*background-color: #e4eefe;*/
-    /*box-shadow: 2px 2px 1px #888;*/
     background-color: #E1F5FE;
 }
 
@@ -227,9 +218,7 @@ body {
 }
 
 .elv-Details-OverviewDisclosure-odd {
-    /*border: 1px solid grey;*/
     background-color: #B3E5FC;
-    /*box-shadow: 2px 2px 1px #888;*/
 }
 
 .elv-Details-OverviewDisclosure-odd:hover {
@@ -472,7 +461,6 @@ body {
 .elv-Molecules-ButtonBar{
     height: 30px;
     margin: 0 0 5px 2px;
-    /*padding: 4px 10px 4px 10px;*/
     float: left;
 }
 
@@ -487,7 +475,6 @@ body {
     border: 1px solid white;
 
     margin: 6px 0 5px 5px;
-    /*padding: 1px 5px 2px 5px;*/
     float: left;
 }
 
