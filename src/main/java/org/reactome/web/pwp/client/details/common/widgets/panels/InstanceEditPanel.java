@@ -51,7 +51,7 @@ public class InstanceEditPanel extends DetailsPanel implements OpenHandler<Discl
 
                 @Override
                 public void onContentClientError(ContentClientError error) {
-                    //TODO
+                    disclosurePanel.setContent(getErrorMessage());
                 }
             });
     }
