@@ -105,6 +105,7 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
         }
 
         VerticalPanel content = new VerticalPanel();
+        content.setWidth("100%");
         for (DatabaseIdentifier databaseIdentifier : person.getCrossReference()) {
             content.add(getDatabaseIdentifier(databaseIdentifier));
         }
