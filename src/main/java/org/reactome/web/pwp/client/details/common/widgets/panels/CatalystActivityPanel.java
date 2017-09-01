@@ -71,7 +71,7 @@ public class CatalystActivityPanel extends DetailsPanel implements OpenHandler<D
         vp.setWidth("99%");
 
         vp.add(new Label("Physical Entity:"));
-        Widget pPanel = new PhysicalEntityPanel(this.catalystActivity.getPhysicalEntity());
+        Widget pPanel = new PhysicalEntityPanel(this, this.catalystActivity.getPhysicalEntity());
         pPanel.setWidth("98%");
         pPanel.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
         vp.add(pPanel);
