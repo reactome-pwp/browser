@@ -64,7 +64,6 @@ public class PublicationPanel extends DetailsPanel implements OpenHandler<Disclo
     public void setReceivedData(DatabaseObject data) {
         setLoaded(true);
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("100%");
         vp.getElement().getStyle().setPaddingRight(5, Style.Unit.PX);
 
@@ -102,7 +101,6 @@ public class PublicationPanel extends DetailsPanel implements OpenHandler<Disclo
 
     private Widget getPublicationAuthors(Publication data){
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("100%");
 
         for (Person person : data.getAuthors()) {

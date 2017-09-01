@@ -111,7 +111,6 @@ public class AbstractModifiedResiduePanel extends DetailsPanel implements OpenHa
     private Widget getReferenceSequencePanel(ReferenceSequence referenceSequence){
         VerticalPanel vp = new VerticalPanel();
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("98%");
 
         vp.add(new Label("Reference Entity:"));

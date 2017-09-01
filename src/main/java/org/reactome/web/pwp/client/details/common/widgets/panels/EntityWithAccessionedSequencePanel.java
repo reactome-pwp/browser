@@ -33,7 +33,6 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
     private void initialize(){
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("100%");
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         if(this.ewas.getStartCoordinate()!=null && this.ewas.getEndCoordinate()!=null){
             vp.add(getCoordinatesPanel(this.ewas.getStartCoordinate(), this.ewas.getEndCoordinate()));
         }
@@ -51,7 +50,6 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
 
     private Widget getModifiedResiduePanel(List<AbstractModifiedResidue> modifiedResidueList){
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
         vp.setWidth("99%");
 
@@ -67,7 +65,6 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
 
     private Widget getReferenceSequencePanel(ReferenceSequence referenceSequence){
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
         vp.setWidth("99%");
 
@@ -82,7 +79,6 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
 
     private Widget getCoordinatesPanel(int start, int end){
         HorizontalPanel panel = new HorizontalPanel();
-        panel.addStyleName("elv-Details-OverviewDisclosure-content");
         panel.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
 
         Label title = new Label("Coordinates in the Reference Sequence:");

@@ -67,7 +67,6 @@ public class CatalystActivityPanel extends DetailsPanel implements OpenHandler<D
         this.catalystActivity = (CatalystActivity) data;
 
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("99%");
 
         vp.add(new Label("Physical Entity:"));

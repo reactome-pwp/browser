@@ -81,7 +81,6 @@ public class EventPanel extends DetailsPanel implements ClickHandler {
     private void setContent(){
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("99%");
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
 
         if(!this.event.getSummation().isEmpty()){
             vp.add(new Label("Summation:"));

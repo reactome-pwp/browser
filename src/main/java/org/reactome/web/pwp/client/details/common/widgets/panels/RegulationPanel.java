@@ -66,7 +66,6 @@ public class RegulationPanel extends DetailsPanel implements OpenHandler<Disclos
 
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
 
         DatabaseObject regulator = this.regulation.getRegulator();
         if(regulator != null) {

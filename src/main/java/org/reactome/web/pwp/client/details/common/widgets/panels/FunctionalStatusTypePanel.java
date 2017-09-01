@@ -66,7 +66,6 @@ public class FunctionalStatusTypePanel extends DetailsPanel implements OpenHandl
         this.functionalStatusType = (FunctionalStatusType) data;
 
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("98%");
 
         if(this.functionalStatusType.getDefinition()!=null){

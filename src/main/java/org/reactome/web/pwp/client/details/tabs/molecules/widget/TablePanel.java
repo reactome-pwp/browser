@@ -39,6 +39,8 @@ class TablePanel extends Composite implements OpenHandler<DisclosurePanel>, Clos
         }
 
         this.disclosurePanel = DisclosurePanelFactory.getAdvancedDisclosurePanel(displayText, null);
+        this.disclosurePanel.removeStyleName("elv-Details-OverviewDisclosure-Advanced");
+        this.disclosurePanel.addStyleName("elv-Details-OverviewDisclosure-Molecules");
 
         //set loadingMessage
         disclosurePanel.setContent(getLoadingMessage());

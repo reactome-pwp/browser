@@ -15,7 +15,7 @@ public abstract class DisclosurePanelFactory {
 
     public static DisclosurePanel getAdvancedDisclosurePanel(FlowPanel panel, ClickHandler instanceSelector){
         DisclosurePanel dp = new DisclosurePanel();
-        dp.addStyleName("elv-Details-OverviewDisclosure-Advanced");
+        dp.setStyleName("elv-Details-OverviewDisclosure-Advanced");
         dp.setWidth("100%"); //DO NOT CHANGE THIS VALUE
 
         DisclosureHeader header = new DisclosureHeader(panel, instanceSelector);
@@ -29,7 +29,7 @@ public abstract class DisclosurePanelFactory {
 
     public static DisclosurePanel getAdvancedDisclosurePanel(String text, ClickHandler instanceSelector){
         DisclosurePanel dp = new DisclosurePanel();
-        dp.addStyleName("elv-Details-OverviewDisclosure-Advanced");
+        dp.setStyleName("elv-Details-OverviewDisclosure-Advanced");
         dp.setWidth("100%"); //DO NOT CHANGE THIS VALUE
 
         DisclosureHeader header = new DisclosureHeader(text, instanceSelector);
@@ -43,7 +43,7 @@ public abstract class DisclosurePanelFactory {
 
     public static DisclosurePanel getDisclosurePanel(String text){
         DisclosurePanel dp = new DisclosurePanel(text);
-        dp.addStyleName("elv-Details-OverviewDisclosure");
+        dp.setStyleName("elv-Details-OverviewDisclosure");
         dp.setWidth("100%"); //DO NOT CHANGE THIS VALUE
 
         dp.setAnimationEnabled(true);

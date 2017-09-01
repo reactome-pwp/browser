@@ -65,7 +65,6 @@ public class InstanceEditPanel extends DetailsPanel implements OpenHandler<Discl
         setLoaded(true);
         InstanceEdit instanceEdit = (InstanceEdit) data;
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("100%");
         vp.getElement().getStyle().setPaddingRight(5, Style.Unit.PX);
         for (Person person : instanceEdit.getAuthor()) {

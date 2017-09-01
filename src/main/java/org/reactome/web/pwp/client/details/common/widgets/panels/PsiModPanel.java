@@ -71,7 +71,6 @@ public class PsiModPanel extends DetailsPanel implements OpenHandler<DisclosureP
         }
 
         FlexTable flexTable = new FlexTable();
-        flexTable.addStyleName("elv-Details-OverviewDisclosure-content");
         flexTable.setWidth("98%");
         flexTable.getColumnFormatter().setWidth(0, "75px");
         flexTable.setWidget(0, 0, new Label("Name"));

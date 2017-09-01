@@ -40,7 +40,6 @@ public class SpeciesPanel extends DetailsPanel implements TransparentPanel {
         hp.add(new HTMLPanel(sb.toString()));
 
         initWidget(hp);
-        addStyleName("elv-Details-OverviewDisclosure-content");
     }
 
     public SpeciesPanel(DetailsPanel parentPanel, Species species) {
@@ -48,7 +47,6 @@ public class SpeciesPanel extends DetailsPanel implements TransparentPanel {
         this.species = species;
 
         initWidget(new HTMLPanel(species.getDisplayName()));
-        addStyleName("elv-Details-OverviewDisclosure-content");
     }
 
     @Override

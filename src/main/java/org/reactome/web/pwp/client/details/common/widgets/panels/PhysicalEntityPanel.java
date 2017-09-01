@@ -80,7 +80,6 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
     public void setReceivedData(DatabaseObject data) {
         this.physicalEntity = (PhysicalEntity) data;
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("98%");
 
         if(!this.physicalEntity.getSpecies().isEmpty()){
@@ -96,7 +95,9 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
         if(this.physicalEntity instanceof EntitySet) {
             EntitySet entitySet = (EntitySet) this.physicalEntity;
-            vp.add(getHasComponentsPanel("Has members:", entitySet.getHasMember()));
+            if (!entitySet.getHasMember().isEmpty() ) {
+                vp.add(getHasComponentsPanel("Has members:", entitySet.getHasMember()));
+            }
         }
 
         if(this.physicalEntity instanceof CandidateSet){

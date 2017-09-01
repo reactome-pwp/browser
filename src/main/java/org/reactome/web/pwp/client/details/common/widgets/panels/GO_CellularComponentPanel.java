@@ -69,7 +69,6 @@ public class GO_CellularComponentPanel extends DetailsPanel implements OpenHandl
 
         FlexTable flexTable = new FlexTable();
         flexTable.setWidth("98%");
-        flexTable.addStyleName("elv-Details-OverviewDisclosure-content");
         flexTable.getColumnFormatter().setWidth(0, "75px");
 
         flexTable.setWidget(0, 0, new Label("Accession"));

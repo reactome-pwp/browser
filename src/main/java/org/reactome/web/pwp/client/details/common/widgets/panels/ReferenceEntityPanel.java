@@ -69,7 +69,6 @@ public class ReferenceEntityPanel extends DetailsPanel implements OpenHandler<Di
 
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
 
         List<String> names = this.referenceEntity.getName();
         if(!names.isEmpty()){

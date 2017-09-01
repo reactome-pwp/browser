@@ -146,7 +146,6 @@ public class MoleculePanel extends DetailsPanel implements OpenHandler<Disclosur
 
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
 
         //Building up the tree for External cross-references.
         if(!this.molecule.getCrossReference().isEmpty()){

@@ -93,7 +93,6 @@ public class PersonPanel extends DetailsPanel implements OpenHandler<DisclosureP
         setLoaded(true);
 
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("100%");
 
         vp.add(getPositionBasedTitle());

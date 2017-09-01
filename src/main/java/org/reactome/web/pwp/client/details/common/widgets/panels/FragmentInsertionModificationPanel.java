@@ -57,7 +57,6 @@ public class FragmentInsertionModificationPanel extends DetailsPanel {
         this.fragmentInsertionModification = (FragmentInsertionModification) data;
 
         FlexTable flexTable = new FlexTable();
-        flexTable.addStyleName("elv-Details-OverviewDisclosure-content");
         flexTable.setWidth("98%");
         flexTable.getColumnFormatter().setWidth(0, "75px");
         flexTable.setCellPadding(0);

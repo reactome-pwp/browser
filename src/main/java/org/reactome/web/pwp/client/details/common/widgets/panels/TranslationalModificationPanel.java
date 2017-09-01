@@ -27,7 +27,6 @@ public class TranslationalModificationPanel extends DetailsPanel implements Tran
 
     private void initialize(){
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("99%");
 
         if(this.translationalModification.getCoordinate()!=null){

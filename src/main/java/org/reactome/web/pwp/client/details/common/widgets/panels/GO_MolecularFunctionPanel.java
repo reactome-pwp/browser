@@ -67,7 +67,6 @@ public class GO_MolecularFunctionPanel extends DetailsPanel implements OpenHandl
 
         FlexTable flexTable = new FlexTable();
         flexTable.setWidth("98%");
-        flexTable.addStyleName("elv-Details-OverviewDisclosure-content");
         flexTable.getColumnFormatter().setWidth(0, "75px");
 
         String accession = this.goMolecularFunction.getAccession();

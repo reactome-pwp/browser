@@ -65,7 +65,6 @@ public class ExternalOntologyPanel extends DetailsPanel implements OpenHandler<D
         this.externalOntology = (ExternalOntology) data;
 
         VerticalPanel vp = new VerticalPanel();
-        vp.addStyleName("elv-Details-OverviewDisclosure-content");
         vp.setWidth("98%");
 
         vp.add(getDefinitionPanel(this.externalOntology.getDefinition()));
