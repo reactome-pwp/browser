@@ -26,9 +26,9 @@ public class PhysicalEntityTable extends OverviewTable {
             case CELLULAR_COMPARTMENT:
                 return TableRowFactory.getGOCellularComponentRow(title, this.physicalEntity.getCompartment());
             case DEDUCED_FROM:
-                return TableRowFactory.getPhysicalEntityRow(title, this.physicalEntity.getInferredFrom());
+                return TableRowFactory.getInferredFromPhysicalEntityRow(title, this.physicalEntity.getInferredFrom());
             case DEDUCED_ON:
-                return TableRowFactory.getPhysicalEntityRow(title, this.physicalEntity.getInferredTo());
+                return TableRowFactory.getOrthologousPhysicalEntityRow(title, this.physicalEntity.getInferredTo());
             case REFERENCES:
                 return TableRowFactory.getLiteratureReferencesRow(title, this.physicalEntity.getLiteratureReference());
             case CROSS_REFERENCES:

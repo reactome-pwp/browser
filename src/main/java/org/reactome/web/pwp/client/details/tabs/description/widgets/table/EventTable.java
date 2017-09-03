@@ -34,10 +34,7 @@ public class EventTable extends OverviewTable {
             case INFERRED_FROM:
                 return TableRowFactory.getEventRow(title, this.event.getInferredFrom());
             case INFERRED_TO:
-                if(!this.event.getInferred() && !this.event.getOrthologousEvent().isEmpty()){
-                    return TableRowFactory.getOrthologousEventRow(title, this.event.getOrthologousEvent());
-                }
-                return null;
+                return TableRowFactory.getOrthologousEventRow(title, this.event.getOrthologousEvent());
             case CELLULAR_COMPARTMENT:
                 return TableRowFactory.getGOCellularComponentRow(title, this.event.getCompartment());
             case POSITIVELY_REGULATED:

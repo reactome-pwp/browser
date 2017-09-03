@@ -90,7 +90,6 @@
         <init-param>
             <param-name>proxyFilePath</param-name>
             <param-value>/Users/reactome/Reactome/diagram/static</param-value>
-            <!--<param-value>/Users/reactome/Reactome/diagram/slice</param-value>-->
         </init-param>
     </servlet>
     <servlet-mapping>

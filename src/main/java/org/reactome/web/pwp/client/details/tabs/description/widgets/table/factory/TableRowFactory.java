@@ -19,7 +19,7 @@ import java.util.Map;
 public abstract class TableRowFactory {
     private static final boolean EMPTY_ROWS_AS_NA = !GWT.isScript();
 
-    public static Widget getAbstractModifiedResidue(String title, List<AbstractModifiedResidue> modifiedResidues){
+    public static Widget getAbstractModifiedResidue(String title, List<AbstractModifiedResidue> modifiedResidues) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (AbstractModifiedResidue modifiedResidue : modifiedResidues) {
             panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
@@ -27,7 +27,7 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getCatalystActivityRow(String title, List<CatalystActivity> catalystActivities){
+    public static Widget getCatalystActivityRow(String title, List<CatalystActivity> catalystActivities) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (CatalystActivity catalystActivity : catalystActivities) {
             panels.add(new CatalystActivityPanel(catalystActivity));
@@ -35,8 +35,8 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getCoordinatesRow(String title, EntityWithAccessionedSequence ewas){
-        if(ewas.getStartCoordinate()!=null && ewas.getEndCoordinate()!=null){
+    public static Widget getCoordinatesRow(String title, EntityWithAccessionedSequence ewas) {
+        if (ewas.getStartCoordinate() != null && ewas.getEndCoordinate() != null) {
             StringBuilder sb = new StringBuilder();
             sb.append(ewas.getStartCoordinate()).append(" .. ").append(ewas.getEndCoordinate());
             return getTextPanelRow(title, sb.toString());
@@ -44,15 +44,15 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, new LinkedList<>());
     }
 
-    public static Widget getDatabaseIdentifierRow(String title, List<DatabaseIdentifier> databaseIdentifiers){
+    public static Widget getDatabaseIdentifierRow(String title, List<DatabaseIdentifier> databaseIdentifiers) {
         List<DetailsPanel> panels = new LinkedList<>();
-        if(!databaseIdentifiers.isEmpty()){
+        if (!databaseIdentifiers.isEmpty()) {
             panels.add(new ExternalIdentifierPanel(databaseIdentifiers));
         }
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getEntityFunctionalStatusRow(String title, List<EntityFunctionalStatus> entityFunctionalStatus){
+    public static Widget getEntityFunctionalStatusRow(String title, List<EntityFunctionalStatus> entityFunctionalStatus) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (EntityFunctionalStatus efs : entityFunctionalStatus) {
             panels.add(new EntityFunctionalStatusPanel(efs));
@@ -60,15 +60,15 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getExternalOntologyRow(String title, ExternalOntology externalOntology){
+    public static Widget getExternalOntologyRow(String title, ExternalOntology externalOntology) {
         List<ExternalOntology> externalOntologies = new LinkedList<>();
-        if(externalOntology!=null){
+        if (externalOntology != null) {
             externalOntologies.add(externalOntology);
         }
         return getExternalOntologyRow(title, externalOntologies);
     }
 
-    public static Widget getExternalOntologyRow(String title, List<? extends  ExternalOntology> externalOntologies){
+    public static Widget getExternalOntologyRow(String title, List<? extends ExternalOntology> externalOntologies) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (ExternalOntology disease : externalOntologies) {
             panels.add(new ExternalOntologyPanel(disease));
@@ -76,15 +76,15 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getEventRow(String title, Event event){
+    public static Widget getEventRow(String title, Event event) {
         List<Event> events = new LinkedList<Event>();
-        if(event!=null){
+        if (event != null) {
             events.add(event);
         }
         return getEventRow(title, events);
     }
 
-    public static Widget getEventRow(String title, List<Event> events){
+    public static Widget getEventRow(String title, List<Event> events) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Event event : events) {
             panels.add(new EventPanel(event));
@@ -92,15 +92,15 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getGOBiologicalProcessRow(String title, GO_BiologicalProcess goBiologicalProcess){
+    public static Widget getGOBiologicalProcessRow(String title, GO_BiologicalProcess goBiologicalProcess) {
         List<DetailsPanel> panels = new LinkedList<>();
-        if(goBiologicalProcess!=null){
+        if (goBiologicalProcess != null) {
             panels.add(new GO_BiologicalProcessPanel(goBiologicalProcess));
         }
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getGOCellularComponentRow(String title, List<? extends GO_CellularComponent> goCellularComponents){
+    public static Widget getGOCellularComponentRow(String title, List<? extends GO_CellularComponent> goCellularComponents) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (GO_CellularComponent goCellularComponent : goCellularComponents) {
             panels.add(new GO_CellularComponentPanel(goCellularComponent));
@@ -108,7 +108,7 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getInstanceEditRow(String title, List<InstanceEdit> authored){
+    public static Widget getInstanceEditRow(String title, List<InstanceEdit> authored) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (InstanceEdit instanceEdit : authored) {
             panels.add(new InstanceEditPanel(instanceEdit));
@@ -116,7 +116,7 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getLiteratureReferencesRow(String title, List<Publication> literatureReferences){
+    public static Widget getLiteratureReferencesRow(String title, List<Publication> literatureReferences) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Publication literatureReference : literatureReferences) {
             panels.add(new PublicationPanel(literatureReference));
@@ -124,25 +124,55 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getOrthologousEventRow(String title, List<Event> orthologousEvents){
-        return getOverviewRow(title, new OrthologousEventPanel(orthologousEvents));
+    public static Widget getOrthologousEventRow(String title, List<Event> orthologousEvents) {
+        if (!orthologousEvents.isEmpty()) {
+            return getOverviewRow(title, new OrthologousEventPanel(orthologousEvents));
+        } else {
+            return null;
+        }
     }
 
-    public static Widget getOverviewRow(String title, DetailsPanel panelList ){
+    public static Widget getOrthologousPhysicalEntityRow(String title, List<PhysicalEntity> orthologous) {
+        if (!orthologous.isEmpty()) {
+            return getOverviewRow(title, new OrthologousPhysicalEntityPanel(orthologous));
+        } else {
+            return null;
+        }
+    }
+
+    public static Widget getInferredFromPhysicalEntityRow(String title, List<PhysicalEntity> inferredFrom) {
+        //Processing the list to avoid duplicates (and count the number of times that the same PE appear)
+        Map<PhysicalEntity, Integer> map = new HashMap<>();
+        for (PhysicalEntity physicalEntity : inferredFrom) {
+            int num = 1;
+            if (map.containsKey(physicalEntity)) {
+                num = map.get(physicalEntity) + 1;
+            }
+            map.put(physicalEntity, num);
+        }
+
+        List<DetailsPanel> panels = new LinkedList<>();
+        for (PhysicalEntity physicalEntity : map.keySet()) {
+            panels.add(new PhysicalEntitySpeciesSelectorPanel(physicalEntity, map.get(physicalEntity)));
+        }
+        return getOverviewRow(title, panels);
+    }
+
+    public static Widget getOverviewRow(String title, DetailsPanel panelList) {
         List<DetailsPanel> list = new LinkedList<>();
         list.add(panelList);
         return getOverviewRow(title, list);
     }
 
-    public static OverviewRow getOverviewRow(String title, List<DetailsPanel> panelList ){
+    public static OverviewRow getOverviewRow(String title, List<DetailsPanel> panelList) {
         Widget cont;
-        if(panelList==null || panelList.isEmpty()){
-            if(EMPTY_ROWS_AS_NA){
+        if (panelList == null || panelList.isEmpty()) {
+            if (EMPTY_ROWS_AS_NA) {
                 cont = new HTMLPanel("N/A");
-            }else{
+            } else {
                 return null; //by returning null, the OverviewTable class will understand that nothing needs to be added
             }
-        }else{
+        } else {
             cont = new VerticalPanel();
             for (DetailsPanel detailsPanel : panelList) {
                 ((VerticalPanel) cont).add(detailsPanel);
@@ -157,12 +187,12 @@ public abstract class TableRowFactory {
         return container;
     }
 
-    public static OverviewRow getPhysicalEntityRow(String title, List<PhysicalEntity> physicalEntities){
+    public static OverviewRow getPhysicalEntityRow(String title, List<PhysicalEntity> physicalEntities) {
         //Processing the list to avoid duplicates (and count the number of times that the same PE appear)
         Map<PhysicalEntity, Integer> map = new HashMap<>();
         for (PhysicalEntity physicalEntity : physicalEntities) {
             int num = 1;
-            if(map.containsKey(physicalEntity)){
+            if (map.containsKey(physicalEntity)) {
                 num = map.get(physicalEntity) + 1;
             }
             map.put(physicalEntity, num);
@@ -175,7 +205,7 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static OverviewRow getNormalReactionLikeEventRow(String title, List<ReactionLikeEvent> reactionLikeEvents){
+    public static OverviewRow getNormalReactionLikeEventRow(String title, List<ReactionLikeEvent> reactionLikeEvents) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (ReactionLikeEvent reactionLikeEvent : reactionLikeEvents) {
             panels.add(new EventPanel(reactionLikeEvent));
@@ -183,7 +213,7 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static OverviewRow getReactionLikeEventRow(String title, List<ReactionLikeEvent> reactionLikeEvents){
+    public static OverviewRow getReactionLikeEventRow(String title, List<ReactionLikeEvent> reactionLikeEvents) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (ReactionLikeEvent reactionLikeEvent : reactionLikeEvents) {
             panels.add(new EventPanel(reactionLikeEvent));
@@ -191,15 +221,15 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static OverviewRow getReferenceEntityRow(String title, ReferenceEntity referenceEntity){
+    public static OverviewRow getReferenceEntityRow(String title, ReferenceEntity referenceEntity) {
         List<DetailsPanel> panels = new LinkedList<>();
-        if(referenceEntity!=null){
+        if (referenceEntity != null) {
             panels.add(new ReferenceEntityPanel(referenceEntity));
         }
         return getOverviewRow(title, panels);
     }
 
-    public static OverviewRow getRegulationRow(String title, List<? extends Regulation> regulations){
+    public static OverviewRow getRegulationRow(String title, List<? extends Regulation> regulations) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Regulation regulation : regulations) {
             panels.add(new RegulationPanel(regulation));
@@ -207,13 +237,13 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getSpeciesRow(String title, Species species){
+    public static Widget getSpeciesRow(String title, Species species) {
         List<Species> list = new LinkedList<>();
         list.add(species);
         return getSpeciesRow(title, list);
     }
 
-    public static Widget getSpeciesRow(String title, List<Species> species){
+    public static Widget getSpeciesRow(String title, List<Species> species) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Species s : species) {
             panels.add(new SpeciesPanel(s));
@@ -221,15 +251,15 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getStableIdentifierRow(String title, String stableIdentifier){
+    public static Widget getStableIdentifierRow(String title, String stableIdentifier) {
         List<DetailsPanel> panels = new LinkedList<>();
-        if(stableIdentifier!=null){
+        if (stableIdentifier != null) {
             panels.add(new StableIdentifierPanel(stableIdentifier));
         }
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getSummationRow(String title, List<Summation> summations){
+    public static Widget getSummationRow(String title, List<Summation> summations) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Summation summation : summations) {
             panels.add(new SummationPanel(summation));
@@ -237,13 +267,13 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getTextPanelRow(String title, Integer number){
-        String txt = ( number == null ) ? null : number.toString() ;
+    public static Widget getTextPanelRow(String title, Integer number) {
+        String txt = (number == null) ? null : number.toString();
         return getTextPanelRow(title, txt);
     }
 
-    public static Widget getTextPanelRow(String title, String name){
-        if(name==null){
+    public static Widget getTextPanelRow(String title, String name) {
+        if (name == null) {
             //With that a row with an empty content is retrieved and so can be detected
             //and removed in production time (instead of showing the "N/A")
             return getOverviewRow(title, new LinkedList<>());

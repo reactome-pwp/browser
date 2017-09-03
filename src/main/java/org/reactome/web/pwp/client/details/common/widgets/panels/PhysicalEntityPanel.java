@@ -21,8 +21,8 @@ import java.util.Map;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<DisclosurePanel>, ClickHandler {
-    private PhysicalEntity physicalEntity;
-    private DisclosurePanel disclosurePanel;
+    PhysicalEntity physicalEntity;
+    DisclosurePanel disclosurePanel;
 
     public PhysicalEntityPanel(PhysicalEntity physicalEntity) {
         this(null, physicalEntity, 1);
@@ -126,7 +126,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         InstanceSelectedDelegate.get().instanceSelected(this.physicalEntity);
     }
 
-    private Widget getCrossReferenceTree(){
+    Widget getCrossReferenceTree(){
         TreeItem references = new TreeItem(SafeHtmlUtils.fromString("External cross-references"));
 
         DatabaseIdentifierPanel dbIdPanel = new DatabaseIdentifierPanel(physicalEntity);
