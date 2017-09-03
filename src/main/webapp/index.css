@@ -129,10 +129,21 @@ body {
 }
 
 .elv-Details-Title{
-    background-color: azure;
+    background-color: #8ec5cf;
     border-radius: 5px;
     border: 1px solid grey;
-    color: #063da0;
+    color: #4e707a;
+    font-weight: bolder;
+    height: 30px;
+    margin: 0 0 5px 5px;
+    padding: 4px 10px 4px 10px;
+}
+
+.elv-Details-StId{
+    background-color: #908aca;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: #5c5685;
     font-weight: bolder;
     height: 30px;
     margin: 0 0 5px 5px;
@@ -140,10 +151,10 @@ body {
 }
 
 .elv-Details-Species{
-    background-color: #eeffe4;
+    background-color: #8bce95;
     border-radius: 5px;
     border: 1px solid grey;
-    color: #0a6a50;
+    color: #598362;
     font-weight: bolder;
     height: 30px;
     margin: 0 0 5px 5px;

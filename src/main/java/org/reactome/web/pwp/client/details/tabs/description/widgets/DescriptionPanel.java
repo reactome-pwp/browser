@@ -25,6 +25,9 @@ public class DescriptionPanel extends DockLayoutPanel {
 
         HorizontalPanel topBar = new HorizontalPanel();
         topBar.add(getTitle(databaseObject));
+        if (databaseObject.getStId()!=null) {
+            topBar.add(getStableId(databaseObject));
+        }
         topBar.add(getSpecies(databaseObject));
         addNorth(topBar, 35);
 
@@ -85,5 +88,12 @@ public class DescriptionPanel extends DockLayoutPanel {
             speciesPanel.add(new HTMLPanel("Species: " + species));
         }
         return speciesPanel;
+    }
+
+    private Widget getStableId(DatabaseObject databaseObject){
+        HorizontalPanel stIdPanel = new HorizontalPanel();
+        stIdPanel.setStyleName("elv-Details-StId");
+        stIdPanel.add(new HTMLPanel("Stable Identifier: " + databaseObject.getStId()));
+        return stIdPanel;
     }
 }
