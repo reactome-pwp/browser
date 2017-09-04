@@ -141,7 +141,7 @@ body {
 
 .elv-Details-Title div {
     overflow: hidden;
-    max-width: 400px;
+    max-width: 500px;
     white-space: nowrap;
     text-overflow: ellipsis;
 }

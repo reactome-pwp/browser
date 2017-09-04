@@ -62,6 +62,7 @@ public class DescriptionPanel extends DockLayoutPanel {
         }
         HTMLPanel title = new HTMLPanel(databaseObject.getDisplayName());
         title.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+        title.setTitle(databaseObject.getDisplayName());
         titlePanel.add(title);
 
         return titlePanel;
