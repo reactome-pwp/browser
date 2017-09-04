@@ -90,9 +90,15 @@ public class DescriptionPanel extends DockLayoutPanel {
     }
 
     private Widget getStableId(DatabaseObject databaseObject){
+        String stId = databaseObject.getStId();
+        Anchor link = new Anchor(stId, "/cgi-bin/control_panel_st_id?ST_ID=" + stId);
+        link.setTarget("_blank");
+        link.setTitle("Go to REACTOME control panel for " + stId);
+
         HorizontalPanel stIdPanel = new HorizontalPanel();
         stIdPanel.setStyleName("elv-Details-StId");
-        stIdPanel.add(new HTMLPanel("Stable Identifier: " + databaseObject.getStId()));
+        stIdPanel.add(new HTMLPanel("Stable Identifier: "));
+        stIdPanel.add(link);
         return stIdPanel;
     }
 }

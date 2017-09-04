@@ -128,33 +128,44 @@ body {
     padding: 50px;
 }
 
-.elv-Details-Title{
+.elv-Details-Title {
     background-color: #8ec5cf;
     border-radius: 5px;
     border: 1px solid grey;
-    color: #4e707a;
+    color: #2b5e6d;
     font-weight: bolder;
     height: 30px;
     margin: 0 0 5px 5px;
     padding: 4px 10px 4px 10px;
 }
 
-.elv-Details-StId{
+.elv-Details-Title div {
+    overflow: hidden;
+    max-width: 400px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.elv-Details-StId {
     background-color: #908aca;
     border-radius: 5px;
     border: 1px solid grey;
-    color: #5c5685;
+    color: #3f3586;
     font-weight: bolder;
     height: 30px;
     margin: 0 0 5px 5px;
     padding: 4px 10px 4px 10px;
 }
 
-.elv-Details-Species{
+.elv-Details-StId div {
+    margin-right: 3px;
+}
+
+.elv-Details-Species {
     background-color: #8bce95;
     border-radius: 5px;
     border: 1px solid grey;
-    color: #598362;
+    color: #23462a;
     font-weight: bolder;
     height: 30px;
     margin: 0 0 5px 5px;
