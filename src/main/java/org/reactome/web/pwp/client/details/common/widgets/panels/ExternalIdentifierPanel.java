@@ -8,9 +8,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import org.reactome.web.pwp.model.client.classes.DatabaseIdentifier;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -23,31 +22,21 @@ public class ExternalIdentifierPanel extends DetailsPanel {
 
     public ExternalIdentifierPanel(DetailsPanel parentPanel, List<DatabaseIdentifier> databaseIdentifiers) {
         super(parentPanel);
-        //Converting it to a set is because there is a temporary problem in the db
-        //and the data for some cross references is stored twice. This can be removed
-        //when the problem is fixed in the data base
-        Set<DatabaseIdentifier> aux = new HashSet<DatabaseIdentifier>();
-        for (DatabaseIdentifier databaseIdentifier : databaseIdentifiers) {
-            aux.add(databaseIdentifier);
-        }
-        initialize(aux);
+        initialize(databaseIdentifiers);
     }
 
-    private void initialize(Set<DatabaseIdentifier> databaseIdentifiers){
+    private void initialize(Collection<DatabaseIdentifier> databaseIdentifiers) {
         VerticalPanel vp = new VerticalPanel();
         vp.addStyleName("elv-Details-OverviewDisclosure-Advanced");
 
         vp.setWidth("100%");
         for (DatabaseIdentifier databaseIdentifier : databaseIdentifiers) {
-            String[] aux = databaseIdentifier.getDisplayName().split(":");
-            InlineLabel label = new InlineLabel(aux[0]);
+            InlineLabel label = new InlineLabel(databaseIdentifier.getDatabaseName());
             FlowPanel fp = new FlowPanel();
             fp.add(label);
-            if(aux.length>=2){
-                Anchor link = new Anchor(aux[1], databaseIdentifier.getUrl(), "_blank");
-                link.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
-                fp.add(link);
-            }
+            Anchor link = new Anchor(databaseIdentifier.getIdentifier(), databaseIdentifier.getUrl(), "_blank");
+            link.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+            fp.add(link);
             vp.add(fp);
         }
         initWidget(vp);

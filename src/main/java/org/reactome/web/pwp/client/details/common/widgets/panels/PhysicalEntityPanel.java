@@ -13,6 +13,7 @@ import org.reactome.web.pwp.model.client.classes.*;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,6 +136,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         references.addItem(reference);
 
         if(!this.physicalEntity.getCrossReference().isEmpty()){
+            Collections.sort(physicalEntity.getCrossReference());
             for (DatabaseIdentifier databaseIdentifier : this.physicalEntity.getCrossReference()) {
                 dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);
                 reference = dbIdPanel.asTreeItem();

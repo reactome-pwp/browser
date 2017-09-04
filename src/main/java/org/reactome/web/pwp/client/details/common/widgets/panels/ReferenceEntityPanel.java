@@ -13,6 +13,7 @@ import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -83,6 +84,7 @@ public class ReferenceEntityPanel extends DetailsPanel implements OpenHandler<Di
         references.addItem(reference);
 
         if(!this.referenceEntity.getCrossReference().isEmpty()){
+            Collections.sort(referenceEntity.getCrossReference());
             for (DatabaseIdentifier databaseIdentifier : this.referenceEntity.getCrossReference()) {
                 dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);
                 reference = dbIdPanel.asTreeItem();
