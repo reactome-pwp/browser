@@ -125,7 +125,6 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
             titlePanel.add(new HelpPopupImage(img, helpTitle, helpContent));
         }catch (Exception e){
             Console.error(e.getMessage());
-            e.printStackTrace();
             //ToDo: Look into new Error Handling
         }
         HTMLPanel title = new HTMLPanel(databaseObject.getDisplayName());

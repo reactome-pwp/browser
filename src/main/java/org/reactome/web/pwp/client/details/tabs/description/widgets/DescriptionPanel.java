@@ -57,7 +57,6 @@ public class DescriptionPanel extends DockLayoutPanel {
             HTMLPanel helpContent = new HTMLPanel(InstanceTypeExplanation.getExplanation(databaseObject.getSchemaClass()));
             titlePanel.add(new HelpPopupImage(img, helpTitle, helpContent));
         }catch (Exception e){
-            e.printStackTrace();
             Console.error(getClass() + ": " + e.getMessage());
             //ToDo: Look into new Error Handling
         }

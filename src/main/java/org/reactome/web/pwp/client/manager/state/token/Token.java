@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.manager.state.token;
 
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.manager.state.StateKey;
 
 import java.util.*;
@@ -46,7 +47,7 @@ public class Token {
                 this.parameters.put(StateKey.SPECIES, DEFAULT_SPECIES_ID.toString());
             }
         }catch (Exception e){
-            e.printStackTrace();
+            Console.error(e.getLocalizedMessage());
             throw new TokenMalformedException();
         }
     }
