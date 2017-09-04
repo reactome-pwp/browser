@@ -147,8 +147,8 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
 
     public Set<Pathway> getHierarchyPathwaysWithReactionsLoaded(){
         Set<Pathway> rtn = new HashSet<>();
-        for (Long eventId : this.treeItems.keySet()) {
-            for (HierarchyItem item : this.treeItems.getElements(eventId)) {
+        for (Long eventId : treeItems.keySet()) {
+            for (HierarchyItem item : treeItems.getElements(eventId)) {
                 if(item.getEvent() instanceof ReactionLikeEvent){
                     HierarchyItem parent = (HierarchyItem) item.getParentItem();
                     rtn.add((Pathway)parent.getEvent());
@@ -160,8 +160,8 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
 
     public Set<HierarchyItem> getHierarchyItems() {
         Set<HierarchyItem> rtn = new HashSet<>();
-        for (Long id : this.treeItems.keySet()) {
-            rtn.addAll(this.treeItems.getElements(id));
+        for (Long id : treeItems.keySet()) {
+            rtn.addAll(treeItems.getElements(id));
         }
         return rtn;
     }
@@ -177,7 +177,7 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
             hi.addHierarchyItemDoubleClickedHandler(this);
             hi.addHierarchyItemMouseOverHandler(this);
             hi.addHierarchyItemMouseOutHandler(this);
-            this.treeItems.add(child.getDbId(), hi);
+            treeItems.add(child.getDbId(), hi);
             if (item == null) {
                 addItem(hi);
             } else {
