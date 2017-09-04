@@ -97,7 +97,7 @@ public class DescriptionPanel extends DockLayoutPanel {
 
         HorizontalPanel stIdPanel = new HorizontalPanel();
         stIdPanel.setStyleName("elv-Details-StId");
-        stIdPanel.add(new HTMLPanel("Stable Identifier: "));
+        stIdPanel.add(new HTMLPanel("Id: "));
         stIdPanel.add(link);
         return stIdPanel;
     }
