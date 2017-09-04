@@ -251,14 +251,6 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getStableIdentifierRow(String title, String stableIdentifier) {
-        List<DetailsPanel> panels = new LinkedList<>();
-        if (stableIdentifier != null) {
-            panels.add(new StableIdentifierPanel(stableIdentifier));
-        }
-        return getOverviewRow(title, panels);
-    }
-
     public static Widget getSummationRow(String title, List<Summation> summations) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Summation summation : summations) {

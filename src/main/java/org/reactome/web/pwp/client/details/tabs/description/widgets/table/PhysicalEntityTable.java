@@ -3,8 +3,12 @@ package org.reactome.web.pwp.client.details.tabs.description.widgets.table;
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.TableRowFactory;
-import org.reactome.web.pwp.model.client.classes.*;
+import org.reactome.web.pwp.model.client.classes.DatabaseIdentifier;
+import org.reactome.web.pwp.model.client.classes.PhysicalEntity;
+import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,9 +24,7 @@ public class PhysicalEntityTable extends OverviewTable {
     @Override
     protected Widget getTableRow(PropertyType propertyType) {
         String title = propertyType.getTitle();
-        switch (propertyType){
-            case STABLE_IDENTIFIER:
-                return TableRowFactory.getStableIdentifierRow(title, this.physicalEntity.getStId());
+        switch (propertyType) {
             case CELLULAR_COMPARTMENT:
                 return TableRowFactory.getGOCellularComponentRow(title, this.physicalEntity.getCompartment());
             case DEDUCED_FROM:
@@ -32,15 +34,10 @@ public class PhysicalEntityTable extends OverviewTable {
             case REFERENCES:
                 return TableRowFactory.getLiteratureReferencesRow(title, this.physicalEntity.getLiteratureReference());
             case CROSS_REFERENCES:
-                List<DatabaseIdentifier> xrefs = this.physicalEntity.getCrossReference();
-                if(this.physicalEntity instanceof EntityWithAccessionedSequence){
-                    xrefs.addAll(((EntityWithAccessionedSequence) this.physicalEntity).getReferenceEntity().getCrossReference());
-                }else if(this.physicalEntity instanceof OpenSet){
-                    ReferenceEntity referenceEntity = ((OpenSet) this.physicalEntity).getReferenceEntity();
-                    if(referenceEntity!=null){
-                        xrefs.addAll(referenceEntity.getCrossReference());
-                    }
-                }
+                ReferenceEntity re = physicalEntity.getReferenceEntity();
+                List<DatabaseIdentifier> xrefs = re != null ? re.getCrossReference() : new LinkedList<>();
+                Collections.sort(xrefs);
+                if (re != null) xrefs.add(0, new DatabaseIdentifier(re));
                 return TableRowFactory.getDatabaseIdentifierRow(title, xrefs);
             default:
                 return null;

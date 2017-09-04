@@ -19,8 +19,6 @@ public class EventTable extends OverviewTable {
     protected Widget getTableRow(PropertyType propertyType) {
         String title = propertyType.getTitle();
         switch (propertyType){
-            case STABLE_IDENTIFIER:
-                return TableRowFactory.getStableIdentifierRow(title, this.event.getStId());
             case SUMMATION:
                 return TableRowFactory.getSummationRow(title, this.event.getSummation());
             case DISEASE:

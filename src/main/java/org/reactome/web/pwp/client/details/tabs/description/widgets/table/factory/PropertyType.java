@@ -6,7 +6,6 @@ package org.reactome.web.pwp.client.details.tabs.description.widgets.table.facto
 public enum PropertyType {
 
     DOI("DOI"),
-    STABLE_IDENTIFIER("Stable Identifier"),
     SUMMATION("Summation"),
     DISEASE("Disease"),
     CROSS_REFERENCES("External identifiers"),
