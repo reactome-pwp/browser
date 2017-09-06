@@ -14,7 +14,6 @@ import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -56,7 +55,19 @@ public class StructuresTabPresenter extends AbstractPresenter implements Structu
         ContentClient.getReferenceSequences(databaseObject, new ContentClientHandler.ObjectListLoaded<ReferenceEntity>() {
             @Override
             public void onObjectListLoaded(List<ReferenceEntity> list) {
-                processReferenceSequences(databaseObject, list);
+                List<ReferenceEntity> rtn = new LinkedList<>();
+                for (ReferenceEntity referenceEntity : list) {
+                    if (referenceEntity instanceof ReferenceSequence) {
+                        rtn.add(referenceEntity);
+                    }
+                }
+                if (!rtn.isEmpty()) {
+                    display.showReferenceSequences(databaseObject, rtn);
+                } else {
+                    String errorMsg = "There is not information available for " + databaseObject.getDisplayName();
+                    display.showErrorMessage(errorMsg);
+                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), StructuresTabPresenter.this);
+                }
             }
 
             @Override
@@ -73,42 +84,4 @@ public class StructuresTabPresenter extends AbstractPresenter implements Structu
         });
     }
 
-    private void processReferenceSequences(final DatabaseObject databaseObject, List<ReferenceEntity> referenceSequenceList){
-        if (referenceSequenceList.isEmpty()) {
-            display.showReferenceSequences(databaseObject, referenceSequenceList);
-        } else {
-            ContentClient.query(referenceSequenceList, new ContentClientHandler.ObjectMapLoaded() {
-                @Override
-                public void onObjectMapLoaded(Map<String, ? extends DatabaseObject> map) {
-                    List<ReferenceEntity> rtn = new LinkedList<>();
-                    for (DatabaseObject object : map.values()) {
-                        if (object instanceof ReferenceSequence) {
-                            rtn.add((ReferenceSequence) object);
-                        }
-                    }
-                    if (!rtn.isEmpty()) {
-                        display.showReferenceSequences(databaseObject, rtn);
-                    } else {
-                        String errorMsg = "There is not information available for " + databaseObject.getDisplayName();
-                        display.showErrorMessage(errorMsg);
-                        eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), StructuresTabPresenter.this);
-                    }
-                }
-
-                @Override
-                public void onContentClientException(Type type, String message) {
-                    String errorMsg = "There is not information available for " + databaseObject.getDisplayName();
-                    display.showErrorMessage(errorMsg);
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), StructuresTabPresenter.this);
-                }
-
-                @Override
-                public void onContentClientError(ContentClientError error) {
-                    String errorMsg = "There is not information available for " + databaseObject.getDisplayName();
-                    display.showErrorMessage(errorMsg);
-                    eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), StructuresTabPresenter.this);
-                }
-            });
-        }
-    }
 }
