@@ -86,7 +86,7 @@ public class ExpressionTabPresenter extends AbstractPresenter implements Express
             @Override
             public void onContentClientError(ContentClientError error) {
                 display.showErrorMessage(error.getReason());
-                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getReason()), ExpressionTabPresenter.this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage()), ExpressionTabPresenter.this);
             }
         });
     }

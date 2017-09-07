@@ -162,7 +162,7 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
             @Override
             public void onContentClientError(ContentClientError error) {
                 Console.error(error.getReason());
-                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getReason()), this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage()), this);
             }
         });
     }

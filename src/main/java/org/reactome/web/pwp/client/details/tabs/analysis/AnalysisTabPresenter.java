@@ -150,8 +150,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
 
                         @Override
                         public void onContentClientError(ContentClientError error) {
-                            String errorMsg = "No species information available for '" + resource + "'. ERROR: " + error.getReason();
-                            eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), AnalysisTabPresenter.this);
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage()), AnalysisTabPresenter.this);
                             display.setInitialState();
                         }
                     });
@@ -164,8 +163,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
 
             @Override
             public void onAnalysisError(AnalysisError error) {
-                String errorMsg = "The request for '" + resource + "' received an error instead of a valid response. ERROR: " + error.getReason();
-                eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), AnalysisTabPresenter.this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessages()), AnalysisTabPresenter.this);
                 display.setInitialState();
             }
 

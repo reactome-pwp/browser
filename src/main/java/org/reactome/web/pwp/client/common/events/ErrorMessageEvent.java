@@ -3,20 +3,32 @@ package org.reactome.web.pwp.client.common.events;
 import com.google.gwt.event.shared.GwtEvent;
 import org.reactome.web.pwp.client.common.handlers.ErrorMessageHandler;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class ErrorMessageEvent extends GwtEvent<ErrorMessageHandler> {
     public static final Type<ErrorMessageHandler> TYPE = new Type<>();
 
-    private String message;
+    private List<String> message;
     private Throwable throwable;
 
     public ErrorMessageEvent(String message) {
+        this.message = Collections.singletonList(message);
+    }
+
+    public ErrorMessageEvent(List<String> message) {
         this.message = message;
     }
 
     public ErrorMessageEvent(String message, Throwable throwable) {
+        this.message = Collections.singletonList(message);
+        this.throwable = throwable;
+    }
+
+    public ErrorMessageEvent(List<String> message, Throwable throwable) {
         this.message = message;
         this.throwable = throwable;
     }
@@ -32,7 +44,11 @@ public class ErrorMessageEvent extends GwtEvent<ErrorMessageHandler> {
     }
 
     public String getMessage() {
-        return message;
+        StringBuilder rtn = new StringBuilder();
+        for (String s : message) {
+            rtn.append(s).append("\n");
+        }
+        return rtn.toString();
     }
 
     public Throwable getThrowable() {

@@ -79,7 +79,7 @@ public class StructuresTabPresenter extends AbstractPresenter implements Structu
             @Override
             public void onContentClientError(ContentClientError error) {
                 display.showErrorMessage(error.getReason());
-                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getReason()), StructuresTabPresenter.this);
+                eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage()), StructuresTabPresenter.this);
             }
         });
     }
