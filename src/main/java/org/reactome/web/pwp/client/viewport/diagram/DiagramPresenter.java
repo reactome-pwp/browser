@@ -17,8 +17,10 @@ import org.reactome.web.pwp.model.client.classes.Pathway;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.Ancestors;
 import org.reactome.web.pwp.model.client.util.Path;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -198,9 +200,26 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
                 if (Objects.equals(pathway, displayedPathway)) {
                     updateView();
                 } else {
-                    pathway = displayedPathway;
-                    Selection selection = new Selection(pathway, new Path());
-                    eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
+                    ContentClient.getAncestors(pathway, new AncestorsLoaded() {
+                        @Override
+                        public void onAncestorsLoaded(Ancestors ancestors) {
+                            List<Path> paths = ancestors.getPathsContaining(pathway);
+                            Path path = !paths.isEmpty() ? paths.get(0) : new Path();
+                            pathway = displayedPathway;
+                            Selection selection = new Selection(pathway, path);
+                            eventBus.fireEventFromSource(new DatabaseObjectSelectedEvent(selection), DiagramPresenter.this);
+                        }
+
+                        @Override
+                        public void onContentClientException(Type type, String message) {
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(message), DiagramPresenter.this);
+                        }
+
+                        @Override
+                        public void onContentClientError(ContentClientError error) {
+                            eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage()), DiagramPresenter.this);
+                        }
+                    });
                 }
             }
 
