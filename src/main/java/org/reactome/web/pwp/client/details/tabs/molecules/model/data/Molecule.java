@@ -86,6 +86,8 @@ public class Molecule extends ReferenceEntity implements Comparable<Molecule>{
                 return DatabaseObjectImages.INSTANCE.entityWithAccessionedSequence();
             case SIMPLE_ENTITY:
                 return DatabaseObjectImages.INSTANCE.simpleEntity();
+            case CHEMICAL_DRUG:
+                return DatabaseObjectImages.INSTANCE.chemicalDrug();
             case GENOME_ENCODED_ENTITY:
                 return DatabaseObjectImages.INSTANCE.genomeEncodeEntity();
             case OTHER_ENTITY:
