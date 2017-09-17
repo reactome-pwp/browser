@@ -1,7 +1,10 @@
 package org.reactome.web.pwp.client.details.tabs.molecules.model;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
@@ -64,29 +67,25 @@ public class MoleculesPanel extends DockLayoutPanel implements MouseOverHandler,
         moleculeBtn.setTitle("Go back to Molecules-View");
 
         //ClickHandler for DownloadBtn
-        downloadBtn.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                swapPanel.removeFromParent();
-                downloads.initialise(result);
-                swapPanel = downloads;
+        downloadBtn.addClickHandler(event -> {
+            swapPanel.removeFromParent();
+            downloads.initialise(result);
+            swapPanel = downloads;
 
-                add(swapPanel);
-                buttonBar.clear();
-                buttonBar.add(moleculeBtn);
-            }
+            add(swapPanel);
+            buttonBar.clear();
+            buttonBar.add(moleculeBtn);
         });
 
         //ClickHandler for MoleculeBtn
-        moleculeBtn.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                swapPanel.removeFromParent();
-                view.update(result);
-                swapPanel = view;
+        moleculeBtn.addClickHandler(event -> {
+            swapPanel.removeFromParent();
+            view.update(result);
+            swapPanel = view;
 
-                add(swapPanel);
-                buttonBar.clear();
-                buttonBar.add(downloadBtn);
-            }
+            add(swapPanel);
+            buttonBar.clear();
+            buttonBar.add(downloadBtn);
         });
 
         //Setting same style for both buttons
