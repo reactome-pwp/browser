@@ -3,6 +3,12 @@
     margin: 2px 0 0 4px;
 }
 
+.logoImg {
+    height: 40px;
+    width: auto;
+    margin-right: 5px;
+}
+
 .logo img {
     outline: none;
     border: 0;      /* for IE 9 compatibility */
@@ -17,7 +23,7 @@
 
 .versionsPanel {
     float: right;
-    margin-left: 10px;
+    margin: 3px 0 0 10px;
 }
 
 .versionsPanel img {
@@ -47,7 +53,7 @@
 }
 
 .dataVersion {
-    margin-top: 14px;
+    margin-top: 8px;
     color: white;
 
     font-size: 10px;
