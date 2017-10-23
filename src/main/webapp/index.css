@@ -153,6 +153,7 @@ body {
     color: #3f3586;
     font-weight: bolder;
     height: 30px;
+    white-space:nowrap;
     margin: 0 0 5px 5px;
     padding: 4px 10px 4px 10px;
 }
@@ -169,6 +170,7 @@ body {
     font-weight: bolder;
     height: 30px;
     margin: 0 0 5px 5px;
+    white-space:nowrap;
     padding: 4px 10px 4px 10px;
 }
 
