@@ -280,10 +280,10 @@ body {
 }
 
 .elv-Download-Title{
-    background-color: azure;
+    background-color: #8ec5cf;
     border-radius: 5px;
     border: 1px solid grey;
-    color: #063da0;
+    color: #2b5e6d;
     font-weight: bolder;
     height: 30px;
     margin: 0 0 5px 5px;
@@ -291,10 +291,10 @@ body {
 }
 
 .elv-Download-Explanation{
-    background-color: #eeffe4;
+    background-color: #8bce95;
     border-radius: 5px;
     border: 1px solid grey;
-    color: black;
+    color: #23462a;
     font-size: small;
     height: 18px;
     margin: 5px 0 5px 5px;
@@ -309,6 +309,7 @@ body {
 
 .elv-Download-Item {
     color: blue;
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
 }
 /*####################### DOWNLOAD TAB [END] #########################################################################*/
 

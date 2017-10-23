@@ -1,7 +1,5 @@
 package org.reactome.web.pwp.client.details.tabs.downloads.widgets;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
 import org.reactome.web.pwp.client.details.tabs.downloads.DownloadsTab;
@@ -18,12 +16,9 @@ public class DownloadMolecule extends CustomButton {
         this.setWidth("100px");
         this.setText("Molecules");
         this.setResource(CommonImages.INSTANCE.download());
-        this.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                //swap to Molecules download
-                presenter.swapToMolecules(pathway);
-            }
+        this.addClickHandler(clickEvent -> {
+            //swap to Molecules download
+            presenter.swapToMolecules(pathway);
         });
         this.setTitle("View/download participating molecules.");
     }

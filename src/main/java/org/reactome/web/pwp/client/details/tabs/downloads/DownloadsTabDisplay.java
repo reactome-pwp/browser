@@ -1,7 +1,12 @@
 package org.reactome.web.pwp.client.details.tabs.downloads;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.utils.Console;
@@ -9,7 +14,6 @@ import org.reactome.web.pwp.client.details.common.help.HelpPopupImage;
 import org.reactome.web.pwp.client.details.common.help.InstanceTypeExplanation;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
-import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadPanel;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadType;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
@@ -77,11 +81,8 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
         FlowPanel flowPanel = new FlowPanel();
         for (DownloadType downloadType : DownloadType.values()) {
-            DownloadPanel dp = new DownloadPanel(this.dbName, downloadType, databaseObject);
-            dp.getElement().getStyle().setMarginLeft(30, Style.Unit.PX);
-            dp.getElement().getStyle().setMarginRight(30, Style.Unit.PX);
-            dp.getElement().getStyle().setMarginTop(15, Style.Unit.PX);
-            dp.getElement().getStyle().setMarginBottom(15, Style.Unit.PX);
+            Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject);
+            dp.setStyleName(RESOURCES.getCSS().downloadItem());
             flowPanel.add(dp);
         }
 
@@ -113,6 +114,14 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
         this.container.clear();
         this.container.add(message);
+    }
+
+    private Anchor getDownloadAnchor(final String dbName, final DownloadType type, final DatabaseObject databaseObject) {
+        SafeHtml image = SafeHtmlUtils.fromSafeConstant(new Image(type.getIcon()).toString());
+        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject.getDbId()), "_blank");
+        rtn.addStyleName("elv-Download-Item");
+        rtn.setTitle("View/download in " + type.getTooltip() + " format");
+        return rtn;
     }
 
     private Widget getTitle(DatabaseObject databaseObject){
@@ -158,5 +167,27 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     @Override
     public void setDbName(String dbName) {
         this.dbName = dbName;
+    }
+
+
+    public static Resources RESOURCES;
+    static {
+        RESOURCES = GWT.create(Resources.class);
+        RESOURCES.getCSS().ensureInjected();
+    }
+
+    public interface Resources extends ClientBundle {
+        @Source(ResourceCSS.CSS)
+        ResourceCSS getCSS();
+    }
+
+    @CssResource.ImportedWithPrefix("diagram-DownloadsTabDisplay")
+    public interface ResourceCSS extends CssResource {
+        /**
+         * The path to the default CSS styles used by this resource.
+         */
+        String CSS = "org/reactome/web/pwp/client/details/tabs/downloads/DownloadsTabDisplay.css";
+
+        String downloadItem();
     }
 }

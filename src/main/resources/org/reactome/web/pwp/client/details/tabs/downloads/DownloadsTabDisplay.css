@@ -1,0 +1,31 @@
+.downloadItem {
+    height: 85px;
+    width: 85px;
+    margin: 15px 30px 15px 30px;
+    background-color: #58c3e5;
+    text-decoration: none;
+    color: white;
+    padding: 6px;
+    display: inline-block;
+    border-radius: 15px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.downloadItem:hover {
+    height: 85px;
+    width: 85px;
+    margin: 15px 30px 15px 30px;
+    background-color: #5cccee;
+    text-decoration: none;
+    color: white;
+    padding: 6px;
+    display: inline-block;
+    border-radius: 15px;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.35);
+    transform: scale(1.1, 1.1);
+}

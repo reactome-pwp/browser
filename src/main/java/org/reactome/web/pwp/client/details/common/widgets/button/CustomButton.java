@@ -39,7 +39,7 @@ public class CustomButton extends Button {
     public void setResource(ImageResource imageResource){
         Image img = new Image(imageResource);
         String definedStyles = img.getElement().getAttribute("style");
-        img.getElement().setAttribute("style", definedStyles + "; vertical-align:middle; margin-bottom:2px; margin-top:2px");
+        img.getElement().setAttribute("style", definedStyles + "; vertical-align:middle; margin-bottom:2px; margin-top:2px;-webkit-user-drag: none;");
         DOM.insertBefore(getElement(), img.getElement(), DOM.getFirstChild(getElement()));
     }
 
