@@ -9,11 +9,12 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.common.widgets.DialogBoxFactory;
 import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
+import org.reactome.web.pwp.client.details.common.widgets.panels.TextPanel;
 import org.reactome.web.pwp.client.details.tabs.molecules.MoleculesTab;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Molecule;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.data.Result;
 import org.reactome.web.pwp.client.details.tabs.molecules.model.type.PropertyType;
-import org.reactome.web.pwp.client.details.common.widgets.panels.TextPanel;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -23,6 +24,7 @@ import java.util.Random;
  */
 public class MoleculesDownloadPanel extends DockLayoutPanel {
     private Result result;
+    private DatabaseObject databaseObject;
     private final CheckBox typeTB;
     private final CheckBox nameTB;
     private final CheckBox identifierTB;
@@ -37,9 +39,10 @@ public class MoleculesDownloadPanel extends DockLayoutPanel {
     private final CustomButton startGenomeSpaceDownloadBtn = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Save to GenomeSpace");
     private final MoleculesTab.Presenter presenter;
 
-    public MoleculesDownloadPanel(Result result, MoleculesTab.Presenter presenter) {
+    public MoleculesDownloadPanel(Result result, DatabaseObject databaseObject, MoleculesTab.Presenter presenter) {
         super(Style.Unit.PX);
         this.result = result;
+        this.databaseObject = databaseObject;
         this.presenter = presenter;
         this.setWidth("99%");
         this.textArea = new TextArea();
@@ -149,7 +152,7 @@ public class MoleculesDownloadPanel extends DockLayoutPanel {
             public void onClick(ClickEvent event) {
                 if((chemTB.getValue() || protTB.getValue() || sequTB.getValue() || otheTB.getValue())
                         && (typeTB.getValue() || nameTB.getValue() || identifierTB.getValue())){
-                	alertDownload(textArea.getText());
+                	alertDownload("Participating Molecules [" + databaseObject.getStId() + "].tsv", textArea.getText());
                 }else{
                     DialogBoxFactory.alert("Molecules Download", "You are trying to download an empty file.\n" +
                             "Please select at least one type of molecules AND one field for the download.");
@@ -205,13 +208,13 @@ public class MoleculesDownloadPanel extends DockLayoutPanel {
      * Uses files in resources/public to enable download.
      * @param text from preview
      */
-    public static native void alertDownload(String text) /*-{
+    public static native void alertDownload(String filename, String text) /*-{
         $wnd.saveAs(
             new Blob(
                 [text]
                 , {type: "text/plain;charset=utf-8;"}
             )
-            , "participatingMolecules.tsv"
+            , filename
         );
     }-*/;
 
