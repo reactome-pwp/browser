@@ -290,22 +290,10 @@ body {
     height: 30px;
     margin: 0 0 5px 5px;
     padding: 4px 10px 4px 10px;
-}
-
-.elv-Download-Explanation{
-    background-color: #8bce95;
-    border-radius: 5px;
-    border: 1px solid grey;
-    color: #23462a;
-    font-size: small;
-    height: 18px;
-    margin: 5px 0 5px 5px;
-    padding: 4px 10px 4px 10px;
+    float: left;
 }
 
 .elv-Download-ItemsPanel {
-    border-radius: 7px;
-    border: 1px solid grey;
     margin: 5px;
 }
 

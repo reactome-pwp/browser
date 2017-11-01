@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.downloads;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
@@ -74,11 +75,13 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
         DockLayoutPanel aux = new DockLayoutPanel(Style.Unit.PX);
 
-        VerticalPanel vp = new VerticalPanel();
-        vp.add(getTitle(databaseObject));
-        vp.add(getExplanation());
-        aux.addNorth(vp, 78);
+        FlowPanel titlePanel = new FlowPanel();
+        titlePanel.add(getTitle(databaseObject));
+        Widget explanation = getExplanation();
+        titlePanel.add(explanation);
+        aux.addNorth(titlePanel, 33);
 
+        //Molecules Download
         FlowPanel flowPanel = new FlowPanel();
         for (DownloadType downloadType : DownloadType.values()) {
             Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject);
@@ -86,20 +89,14 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
             flowPanel.add(dp);
         }
 
-        //Molecules Download
-//        DownloadMolecule dm = new DownloadMolecule(this.presenter, databaseObject);
-//        dm.getElement().getStyle().setMarginLeft(30, Style.Unit.PX);
-//        dm.getElement().getStyle().setMarginRight(30, Style.Unit.PX);
-//        dm.getElement().getStyle().setMarginTop(15, Style.Unit.PX);
-//        dm.getElement().getStyle().setMarginBottom(15, Style.Unit.PX);
-//        flowPanel.add(dm);
-
         ScrollPanel sp = new ScrollPanel(flowPanel);
         sp.setStyleName("elv-Download-ItemsPanel");
         aux.add(sp);
 
         this.container.clear();
         this.container.add(aux);
+
+        Scheduler.get().scheduleDeferred(() -> explanation.addStyleName(RESOURCES.getCSS().explanationPanelExpanded()));
     }
 
     @Override
@@ -144,9 +141,11 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     }
 
     private Widget getExplanation(){
-        HTMLPanel explanation = new HTMLPanel("The download options below are for the selected pathway, " +
-                "not individual events or entities selected in it.");
-        explanation.setStyleName("elv-Download-Explanation");
+        FlowPanel explanation = new FlowPanel();
+        explanation.add(new Image(RESOURCES.info()));
+        explanation.add(new Label("The download options below are for the selected pathway, " +
+                "not individual events or entities selected in it."));
+        explanation.setStyleName(RESOURCES.getCSS().explanationPanel());
         return explanation;
     }
 
@@ -179,6 +178,10 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     public interface Resources extends ClientBundle {
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
+
+        @Source("widgets/images/info.png")
+        ImageResource info();
+
     }
 
     @CssResource.ImportedWithPrefix("diagram-DownloadsTabDisplay")
@@ -187,6 +190,10 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
          * The path to the default CSS styles used by this resource.
          */
         String CSS = "org/reactome/web/pwp/client/details/tabs/downloads/DownloadsTabDisplay.css";
+
+        String explanationPanel();
+
+        String explanationPanelExpanded();
 
         String downloadItem();
     }
