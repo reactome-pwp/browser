@@ -54,7 +54,7 @@
         <reactome.web.rhea>1.3.1</reactome.web.rhea>
         <reactome.web.gxa>3.0.3</reactome.web.gxa>
 
-        <reactome.utils.version>1.0.6</reactome.utils.version>
+        <reactome.utils.version>1.0.7</reactome.utils.version>
 
         <appModule>org.reactome.web.pwp.Browser</appModule>
         <appName>${appModule}</appName>
