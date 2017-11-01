@@ -1,7 +1,6 @@
 package org.reactome.web.pwp.client.details.tabs.downloads;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
@@ -77,9 +76,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
         FlowPanel titlePanel = new FlowPanel();
         titlePanel.add(getTitle(databaseObject));
-        Widget explanation = getExplanation();
-        titlePanel.add(explanation);
-        aux.addNorth(titlePanel, 68);
+        aux.addNorth(titlePanel, 33);
 
         //Molecules Download
         FlowPanel flowPanel = new FlowPanel();
@@ -89,14 +86,15 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
             flowPanel.add(dp);
         }
 
+        Widget explanation = getExplanation();
+        flowPanel.add(explanation);
+
         ScrollPanel sp = new ScrollPanel(flowPanel);
         sp.setStyleName("elv-Download-ItemsPanel");
         aux.add(sp);
 
         this.container.clear();
         this.container.add(aux);
-
-        Scheduler.get().scheduleDeferred(() -> explanation.addStyleName(RESOURCES.getCSS().explanationPanelExpanded()));
     }
 
     @Override
@@ -192,8 +190,6 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         String CSS = "org/reactome/web/pwp/client/details/tabs/downloads/DownloadsTabDisplay.css";
 
         String explanationPanel();
-
-        String explanationPanelExpanded();
 
         String downloadItem();
     }
