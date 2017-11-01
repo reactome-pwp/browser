@@ -79,7 +79,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         titlePanel.add(getTitle(databaseObject));
         Widget explanation = getExplanation();
         titlePanel.add(explanation);
-        aux.addNorth(titlePanel, 33);
+        aux.addNorth(titlePanel, 68);
 
         //Molecules Download
         FlowPanel flowPanel = new FlowPanel();
