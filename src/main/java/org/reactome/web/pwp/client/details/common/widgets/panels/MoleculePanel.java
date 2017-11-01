@@ -67,19 +67,14 @@ public class MoleculePanel extends DetailsPanel implements OpenHandler<Disclosur
         }
         refName = refName + " (" + molecule.getOccurrenceInPathway() + "x)";
         TextPanel name = new TextPanel(refName);
-        name.setTitle("refDbID, Name, Occurrences in Pathway");
+        name.setTitle(refName);
 
         //Link to external reference database.
         String identifier  = this.molecule.getIdentifier();
         //String string = this.referenceEntity.getReferenceDatabase().getUrl(); => NULL
         Anchor ref = new Anchor(identifier, this.molecule.getUrl(), "_blank");
         ref.setTitle("Link to main external reference DB");
-        ref.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                Window.open(molecule.getUrl(), "_blank", "");
-            }
-        });
+        ref.addClickHandler(clickEvent -> Window.open(molecule.getUrl(), "_blank", ""));
 
         overview.add(ref); //First adding ref because length of name differs enormously!!!
         ref.asWidget().getElement().getStyle().setFloat(Style.Float.LEFT);

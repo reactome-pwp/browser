@@ -452,7 +452,12 @@ body {
 .elv-Details-Name-MoleculesRow{
     position: absolute;
     left: 250px;
+    max-height: 1.5em;
     margin-top: 5px;
+    margin-right: 55px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .elv-Molecules-InfoPanel{

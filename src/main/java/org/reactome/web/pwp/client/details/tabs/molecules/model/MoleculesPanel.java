@@ -50,7 +50,7 @@ public class MoleculesPanel extends DockLayoutPanel implements MouseOverHandler,
         this.result = result;
         this.swapPanel = new DockLayoutPanel(Style.Unit.PX);
         this.view = new MoleculesViewPanel(result);
-        this.downloads = new MoleculesDownloadPanel(result, presenter);
+        this.downloads = new MoleculesDownloadPanel(result, databaseObject,  presenter);
 
         //Creating TopBar with a "self made" ToggleButton for switching between Molecule and Download View.
         HorizontalPanel topBar = new HorizontalPanel();
