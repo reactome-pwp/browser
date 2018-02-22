@@ -105,8 +105,9 @@
 
 .postSubmitter textarea {
     border: 1px solid gray;
-    height: 265px;
-    overflow-x: scroll;
+    height: 260px;
+    white-space: nowrap;
+    overflow: auto;
     margin-left: 5px;
     width: 98%;
 }
@@ -124,7 +125,7 @@
     font-size: 13px;
     margin: 0 5px 4px 0;
     width: 220px;
-    height: 30px;
+    height: 26px;
     outline: none;
     padding: 0 !important;
 }

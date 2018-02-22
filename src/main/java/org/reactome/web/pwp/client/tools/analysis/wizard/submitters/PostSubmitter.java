@@ -135,6 +135,12 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
                 textArea.setText(AnalysisExamples.EXAMPLES.getCancerGeneCensus().getText());
             }
         }));
+        examples.add(new Button("Normal Tissue Expression (HPA)", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                textArea.setText(AnalysisExamples.EXAMPLES.getHPANormalTissueExpression().getText());
+            }
+        }));
         return examples;
     }
 
@@ -174,5 +180,9 @@ public class PostSubmitter extends DockLayoutPanel implements ClickHandler {
 
         @Source("metabolomics.txt")
         TextResource getMetabolomics();
+
+        @Source("HPANormalTissueExpressionIHC.txt")
+        TextResource getHPANormalTissueExpression();
+
     }
 }
