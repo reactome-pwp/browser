@@ -31,7 +31,7 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
 
         boolean speciesComparison = summary.getSpecies()!=null;
         this.selectorPanel = new TableSelectorPanel(analysisResult.getIdentifiersNotFound(), speciesComparison);
-        this.addEast(this.selectorPanel, 305);
+        this.addEast(this.selectorPanel, 330);
 
         FlowPanel fp = new FlowPanel();
         fp.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().analysisTabSummary());
