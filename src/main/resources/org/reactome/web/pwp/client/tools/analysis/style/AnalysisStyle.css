@@ -106,7 +106,7 @@
 .postSubmitter textarea {
     border: 1px solid gray;
     height: 260px;
-    white-space: nowrap;
+    white-space: pre;
     overflow: auto;
     margin-left: 5px;
     width: 98%;
