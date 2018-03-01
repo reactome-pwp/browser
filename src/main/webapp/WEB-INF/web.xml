@@ -22,13 +22,17 @@
             <!--<param-value>localhost</param-value>-->
             <param-value>reactomedev.oicr.on.ca</param-value>
             <!--<param-value>reactome.org</param-value>-->
-            <!--<param-value>reactomecurator.oicr.on.ca</param-value>-->
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
             <!--<param-value>8686</param-value>-->
             <param-value>80</param-value>
         </init-param>
+        <!-- ONLY when connecting to localhost -->
+        <!--<init-param>-->
+            <!--<param-name>proxyProtocol</param-name>-->
+            <!--<param-value>http</param-value>-->
+        <!--</init-param>-->
         <init-param>
             <param-name>proxyPath</param-name>
             <!--<param-value>/</param-value>-->
@@ -52,14 +56,18 @@
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
-            <!--<param-value>8080</param-value>-->
-            <param-value>80</param-value>
-            <!--<param-value>7080</param-value>-->
+            <param-value>8080</param-value>
+            <!--<param-value>80</param-value>-->
         </init-param>
+        <!-- ONLY when connecting to localhost -->
+        <!--<init-param>-->
+            <!--<param-name>proxyProtocol</param-name>-->
+            <!--<param-value>http</param-value>-->
+        <!--</init-param>-->
         <init-param>
             <param-name>proxyPath</param-name>
-            <!--<param-value>/</param-value>-->
-            <param-value>/AnalysisService</param-value>
+            <param-value>/</param-value>
+            <!--<param-value>/AnalysisService</param-value>-->
         </init-param>
     </servlet>
     <servlet-mapping>
@@ -90,6 +98,7 @@
         <init-param>
             <param-name>proxyFilePath</param-name>
             <param-value>/Users/reactome/Reactome/diagram/static</param-value>
+            <!--<param-value>/Users/reactome/Reactome/diagram/slice</param-value>-->
         </init-param>
     </servlet>
     <servlet-mapping>
@@ -118,7 +127,7 @@
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
-            <param-value>www.reactome.org</param-value>
+            <param-value>reactome.org</param-value>
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
@@ -187,8 +196,8 @@
         <init-param>
             <param-name>proxyHost</param-name>
             <!--<param-value>localhost</param-value>-->
-            <param-value>reactome.org</param-value>
-            <!--<param-value>reactomedev.oicr.on.ca</param-value>-->
+            <!--<param-value>reactome.org</param-value>-->
+            <param-value>reactomedev.oicr.on.ca</param-value>
             <!--<param-value>reactomecurator.oicr.on.ca</param-value>-->
             <!--<param-value>reactomerelease.oicr.on.ca</param-value>-->
         </init-param>
@@ -208,4 +217,24 @@
         <url-pattern>/ReactomeRESTfulAPI/RESTfulWS/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Templates</servlet-name>
+        <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>reactomedev.oicr.on.ca</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>80</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/templates</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Templates</servlet-name>
+        <url-pattern>/templates/*</url-pattern>
+    </servlet-mapping>
 </web-app>
