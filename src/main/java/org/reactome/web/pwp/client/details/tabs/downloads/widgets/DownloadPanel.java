@@ -15,7 +15,7 @@ public class DownloadPanel extends CustomButton {
         this.setWidth("100px");
         this.setText(type.getName());
         this.setResource(type.getIcon());
-        this.addClickHandler(clickEvent -> Window.open(type.getUrl(dbName, databaseObject.getDbId()), "_blank", ""));
+        this.addClickHandler(clickEvent -> Window.open(type.getUrl(dbName, databaseObject.getDbId(), null), "_blank", ""));
         this.setTitle("View/download in " + type.getTooltip() + " format");
     }
 

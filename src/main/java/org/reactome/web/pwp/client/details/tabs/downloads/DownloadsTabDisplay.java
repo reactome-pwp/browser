@@ -8,6 +8,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.help.HelpPopupImage;
@@ -25,6 +26,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     DownloadsTab.Presenter presenter;
 
     private String dbName = null;
+    private AnalysisStatus analysisStatus = null;
     private DockLayoutPanel container;
     private DetailsTabTitle title;
 
@@ -81,7 +83,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         //Molecules Download
         FlowPanel flowPanel = new FlowPanel();
         for (DownloadType downloadType : DownloadType.values()) {
-            Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject);
+            Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject, this.analysisStatus);
             dp.setStyleName(RESOURCES.getCSS().downloadItem());
             flowPanel.add(dp);
         }
@@ -111,9 +113,9 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         this.container.add(message);
     }
 
-    private Anchor getDownloadAnchor(final String dbName, final DownloadType type, final DatabaseObject databaseObject) {
+    private Anchor getDownloadAnchor(final String dbName, final DownloadType type, final DatabaseObject databaseObject, final AnalysisStatus status) {
         SafeHtml image = SafeHtmlUtils.fromSafeConstant(new Image(type.getIcon()).toString());
-        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject.getDbId()), "_blank");
+        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject.getDbId(), status), "_blank");
         rtn.addStyleName("elv-Download-Item");
         rtn.setTitle("View/download in " + type.getTooltip() + " format");
         return rtn;
@@ -141,7 +143,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     private Widget getExplanation(){
         FlowPanel explanation = new FlowPanel();
         explanation.add(new Image(RESOURCES.info()));
-        explanation.add(new Label("The download options below are for the selected pathway, " +
+        explanation.add(new Label("The download options above are for the selected pathway, " +
                 "not individual events or entities selected in it."));
         explanation.setStyleName(RESOURCES.getCSS().explanationPanel());
         return explanation;
@@ -164,6 +166,11 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     @Override
     public void setDbName(String dbName) {
         this.dbName = dbName;
+    }
+
+    @Override
+    public void setAnalysisStatus(AnalysisStatus status) {
+        this.analysisStatus = status;
     }
 
 

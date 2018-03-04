@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.details.tabs.downloads;
 
+import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.details.tabs.DetailsTab;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 import org.reactome.web.pwp.model.client.classes.Pathway;
@@ -15,6 +16,8 @@ public interface DownloadsTab {
 
     interface Display extends DetailsTab.Display<Presenter> {
         void setDbName(String dbName);
+
+        void setAnalysisStatus(AnalysisStatus status);
 
         void showDetails(DatabaseObject databaseObject);
     }

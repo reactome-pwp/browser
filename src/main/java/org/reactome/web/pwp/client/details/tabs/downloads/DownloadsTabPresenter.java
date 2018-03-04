@@ -2,6 +2,7 @@ package org.reactome.web.pwp.client.details.tabs.downloads;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.*;
+import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
@@ -19,6 +20,7 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
 
     private DownloadsTab.Display display;
     private DatabaseObject currentlyShown;
+    private AnalysisStatus currentlyShownAnalysis;
 
     public DownloadsTabPresenter(final EventBus eventBus, DownloadsTab.Display display) {
         super(eventBus);
@@ -41,17 +43,23 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
         //Is it me the one to show data?
         if(!state.getDetailsTab().equals(display.getDetailTabType())) return;
 
+        //Get the analysisStatus from the state
+        final AnalysisStatus analysisStatus = state.getAnalysisStatus();
+        display.setAnalysisStatus(analysisStatus);
+
         //Show the data
         final DatabaseObject databaseObject = state.getPathway(); //IMPORTANT! We only show information related to the selected Pathway!
         //noinspection Duplicates
-        if(databaseObject==null){
+        if (databaseObject == null) {
             currentlyShown = null;
             display.setInitialState();
-        }else if(!databaseObject.equals(currentlyShown)) {
+        } else if (!databaseObject.equals(currentlyShown) || !analysisStatus.equals(currentlyShownAnalysis)) {
+            //The download tab should be updated in case of any analysis-related state change
             databaseObject.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
                 public void onObjectLoaded(DatabaseObject databaseObject) {
                     currentlyShown = databaseObject;
+                    currentlyShownAnalysis = analysisStatus;
                     display.showDetails(databaseObject);
                 }
 

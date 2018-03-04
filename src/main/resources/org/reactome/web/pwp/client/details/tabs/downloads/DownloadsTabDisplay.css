@@ -5,10 +5,9 @@
     /*border-radius: 5px;*/
     /*border: 1px solid rgb(88, 195, 230);*/
     font-size: small;
-    overflow: hidden;
     line-height: 30px;
-    height: 28px;
-    width: 630px;
+    height: 30px;
+    max-height: 60px;
 }
 
 .explanationPanel img{
@@ -19,8 +18,10 @@
 }
 
 .explanationPanel div {
-    float: left;
+    /*float: left;*/
     font-weight: bold;
+    overflow: auto;
+    word-wrap: break-word;
 }
 
 .downloadItem {
