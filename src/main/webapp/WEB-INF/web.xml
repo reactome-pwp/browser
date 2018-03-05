@@ -56,8 +56,8 @@
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
-            <param-value>8080</param-value>
-            <!--<param-value>80</param-value>-->
+            <!--<param-value>8080</param-value>-->
+            <param-value>80</param-value>
         </init-param>
         <!-- ONLY when connecting to localhost -->
         <!--<init-param>-->
@@ -66,8 +66,8 @@
         <!--</init-param>-->
         <init-param>
             <param-name>proxyPath</param-name>
-            <param-value>/</param-value>
-            <!--<param-value>/AnalysisService</param-value>-->
+            <!--<param-value>/</param-value>-->
+            <param-value>/AnalysisService</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
