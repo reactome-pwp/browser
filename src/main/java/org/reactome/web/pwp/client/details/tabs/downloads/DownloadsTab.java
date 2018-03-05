@@ -15,9 +15,13 @@ public interface DownloadsTab {
     }
 
     interface Display extends DetailsTab.Display<Presenter> {
+        void setAnalysisStatus(AnalysisStatus status);
+
         void setDbName(String dbName);
 
-        void setAnalysisStatus(AnalysisStatus status);
+        void setSelected(DatabaseObject selected);
+
+        void setFlag(String flag);
 
         void showDetails(DatabaseObject databaseObject);
     }

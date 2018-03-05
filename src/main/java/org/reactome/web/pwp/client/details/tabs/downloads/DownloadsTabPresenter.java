@@ -21,6 +21,8 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
     private DownloadsTab.Display display;
     private DatabaseObject currentlyShown;
     private AnalysisStatus currentlyShownAnalysis;
+    private DatabaseObject currentlySelected;
+//    private String currentlyFlagged;
 
     public DownloadsTabPresenter(final EventBus eventBus, DownloadsTab.Display display) {
         super(eventBus);
@@ -47,19 +49,32 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
         final AnalysisStatus analysisStatus = state.getAnalysisStatus();
         display.setAnalysisStatus(analysisStatus);
 
+        //Get the selected entity
+        final DatabaseObject selected = state.getSelected();
+        display.setSelected(selected);
+
+////        Get the flagged entity
+//        final String flag = state.getFlag();
+//        display.setFlag(flag);
+
         //Show the data
         final DatabaseObject databaseObject = state.getPathway(); //IMPORTANT! We only show information related to the selected Pathway!
         //noinspection Duplicates
         if (databaseObject == null) {
             currentlyShown = null;
             display.setInitialState();
-        } else if (!databaseObject.equals(currentlyShown) || !analysisStatus.equals(currentlyShownAnalysis)) {
+        } else if (!databaseObject.equals(currentlyShown)
+                || !analysisStatus.equals(currentlyShownAnalysis)
+                || databaseObject != currentlySelected) {
             //The download tab should be updated in case of any analysis-related state change
             databaseObject.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
                 public void onObjectLoaded(DatabaseObject databaseObject) {
                     currentlyShown = databaseObject;
                     currentlyShownAnalysis = analysisStatus;
+                    currentlySelected = selected;
+//                    currentlyFlagged = flag;
+
                     display.showDetails(databaseObject);
                 }
 
@@ -106,5 +121,15 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
             String errorMsg = "The database name could not be retrieved.";
             eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
         }
+    }
+
+    private boolean areEqual(String a, String b) {
+        boolean rtn = false;
+        if (a == null) {
+            rtn = b == null;
+        } else {
+            rtn = a.equals(b);
+        }
+        return rtn;
     }
 }

@@ -27,6 +27,9 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
     private String dbName = null;
     private AnalysisStatus analysisStatus = null;
+    private String selected;
+    private String flag;
+
     private DockLayoutPanel container;
     private DetailsTabTitle title;
 
@@ -83,7 +86,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         //Molecules Download
         FlowPanel flowPanel = new FlowPanel();
         for (DownloadType downloadType : DownloadType.values()) {
-            Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject, this.analysisStatus);
+            Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject, this.analysisStatus, this.selected, this.flag);
             dp.setStyleName(RESOURCES.getCSS().downloadItem());
             flowPanel.add(dp);
         }
@@ -113,9 +116,14 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         this.container.add(message);
     }
 
-    private Anchor getDownloadAnchor(final String dbName, final DownloadType type, final DatabaseObject databaseObject, final AnalysisStatus status) {
+    private Anchor getDownloadAnchor(final String dbName,
+                                     final DownloadType type,
+                                     final DatabaseObject databaseObject,
+                                     final AnalysisStatus status,
+                                     final String selected,
+                                     final String flag) {
         SafeHtml image = SafeHtmlUtils.fromSafeConstant(new Image(type.getIcon()).toString());
-        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject.getDbId(), status), "_blank");
+        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject, status, selected, flag), "_blank");
         rtn.addStyleName("elv-Download-Item");
         rtn.setTitle("View/download in " + type.getTooltip() + " format");
         return rtn;
@@ -164,15 +172,24 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     }
 
     @Override
+    public void setAnalysisStatus(AnalysisStatus status) {
+        this.analysisStatus = status;
+    }
+
+    @Override
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
 
     @Override
-    public void setAnalysisStatus(AnalysisStatus status) {
-        this.analysisStatus = status;
+    public void setSelected(DatabaseObject selected) {
+        this.selected = selected == null ?  null : selected.getStId();
     }
 
+    @Override
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
 
     public static Resources RESOURCES;
     static {
