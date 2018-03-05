@@ -22,8 +22,8 @@ public enum DownloadType {
     PDF         ("PDF", "/cgi-bin/pdfexporter?DB=__DB__&ID=__ID__", "PDF", DownloadIcons.INSTANCE.PDFIcon()),
     WORD        ("Word", "/cgi-bin/rtfexporter?DB=__DB__&ID=__ID__", "RTF", DownloadIcons.INSTANCE.WordIcon()),
     PROTEGE     ("Protege", "/cgi-bin/protegeexporter?DB=__DB__&ID=__ID__", "OWL", DownloadIcons.INSTANCE.ProtegeIcon()),
-    PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon()),
     SVG         ("SVG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.svg__PARAMS__", "SVG", DownloadIcons.INSTANCE.SVGIcon()),
+    PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon()),
     JPEG        ("JPEG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.jpeg__PARAMS__", "JPEG", DownloadIcons.INSTANCE.JPEGIcon()),
     GIF         ("GIF", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.gif__PARAMS__", "GIF", DownloadIcons.INSTANCE.GIFIcon());
 
