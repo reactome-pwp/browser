@@ -15,6 +15,7 @@ import org.reactome.web.pwp.client.details.common.help.HelpPopupImage;
 import org.reactome.web.pwp.client.details.common.help.InstanceTypeExplanation;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
+import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadGroupPanel;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadType;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 
@@ -83,16 +84,26 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         titlePanel.add(getTitle(databaseObject));
         aux.addNorth(titlePanel, 33);
 
-        //Molecules Download
-        FlowPanel flowPanel = new FlowPanel();
+        DownloadGroupPanel formatGroup = new DownloadGroupPanel(
+                "Format",
+                "The download options above are for the selected pathway, not individual events or entities selected in it.");
+        DownloadGroupPanel diagramGroup = new DownloadGroupPanel(
+                "Diagram",
+                "The download options above are for the selected pathway, not individual events or entities selected in it.");
+
         for (DownloadType downloadType : DownloadType.values()) {
             Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject, this.analysisStatus, this.selected, this.flag);
             dp.setStyleName(RESOURCES.getCSS().downloadItem());
-            flowPanel.add(dp);
+            if (downloadType.getGroup() == DownloadType.Group.FORMAT) {
+                formatGroup.insert(dp);
+            } else if (downloadType.getGroup() == DownloadType.Group.DIAGRAM) {
+                diagramGroup.insert(dp);
+            }
         }
 
-        Widget explanation = getExplanation();
-        flowPanel.add(explanation);
+        FlowPanel flowPanel = new FlowPanel();
+        flowPanel.add(formatGroup);
+        flowPanel.add(diagramGroup);
 
         ScrollPanel sp = new ScrollPanel(flowPanel);
         sp.setStyleName("elv-Download-ItemsPanel");
@@ -146,15 +157,6 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         titlePanel.add(title);
 
         return titlePanel;
-    }
-
-    private Widget getExplanation(){
-        FlowPanel explanation = new FlowPanel();
-        explanation.add(new Image(RESOURCES.info()));
-        explanation.add(new Label("The download options above are for the selected pathway, " +
-                "not individual events or entities selected in it."));
-        explanation.setStyleName(RESOURCES.getCSS().explanationPanel());
-        return explanation;
     }
 
     @Override
@@ -212,8 +214,6 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
          * The path to the default CSS styles used by this resource.
          */
         String CSS = "org/reactome/web/pwp/client/details/tabs/downloads/DownloadsTabDisplay.css";
-
-        String explanationPanel();
 
         String downloadItem();
     }

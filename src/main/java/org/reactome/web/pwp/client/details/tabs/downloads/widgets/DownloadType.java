@@ -15,28 +15,36 @@ import java.util.stream.Collectors;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public enum DownloadType {
-    SBML        ("SBML", ContentClientAbstract.CONTENT_SERVICE + "exporter/sbml/__ID__.xml", "SMBL", DownloadIcons.INSTANCE.SBMLIcon()),
-    SBGN        ("SBGN", "/ReactomeRESTfulAPI/RESTfulWS/sbgnExporter/__ID__", "SBGN", DownloadIcons.INSTANCE.SBGNIcon()),
-    BIOPAX_2    ("BIOPAX 2", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level2/__ID__", "Biopax 2", DownloadIcons.INSTANCE.BioPAX2Icon()),
-    BIOPAX_3    ("BIOPAX 3", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level3/__ID__", "Biopax 3", DownloadIcons.INSTANCE.BioPAX3Icon()),
-    PDF         ("PDF", "/cgi-bin/pdfexporter?DB=__DB__&ID=__ID__", "PDF", DownloadIcons.INSTANCE.PDFIcon()),
-    WORD        ("Word", "/cgi-bin/rtfexporter?DB=__DB__&ID=__ID__", "RTF", DownloadIcons.INSTANCE.WordIcon()),
-    PROTEGE     ("Protege", "/cgi-bin/protegeexporter?DB=__DB__&ID=__ID__", "OWL", DownloadIcons.INSTANCE.ProtegeIcon()),
-    SVG         ("SVG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.svg__PARAMS__", "SVG", DownloadIcons.INSTANCE.SVGIcon()),
-    PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon()),
-    JPEG        ("JPEG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.jpeg__PARAMS__", "JPEG", DownloadIcons.INSTANCE.JPEGIcon()),
-    GIF         ("GIF", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.gif__PARAMS__", "GIF", DownloadIcons.INSTANCE.GIFIcon());
+    SBML        ("SBML", ContentClientAbstract.CONTENT_SERVICE + "exporter/sbml/__ID__.xml", "SMBL", DownloadIcons.INSTANCE.SBMLIcon(), Group.FORMAT),
+    SBGN        ("SBGN", "/ReactomeRESTfulAPI/RESTfulWS/sbgnExporter/__ID__", "SBGN", DownloadIcons.INSTANCE.SBGNIcon(), Group.FORMAT),
+    BIOPAX_2    ("BIOPAX 2", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level2/__ID__", "Biopax 2", DownloadIcons.INSTANCE.BioPAX2Icon(), Group.FORMAT ),
+    BIOPAX_3    ("BIOPAX 3", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level3/__ID__", "Biopax 3", DownloadIcons.INSTANCE.BioPAX3Icon(), Group.FORMAT),
+    PDF         ("PDF", "/cgi-bin/pdfexporter?DB=__DB__&ID=__ID__", "PDF", DownloadIcons.INSTANCE.PDFIcon(), Group.FORMAT),
+    WORD        ("Word", "/cgi-bin/rtfexporter?DB=__DB__&ID=__ID__", "RTF", DownloadIcons.INSTANCE.WordIcon(), Group.FORMAT),
+    PROTEGE     ("Protege", "/cgi-bin/protegeexporter?DB=__DB__&ID=__ID__", "OWL", DownloadIcons.INSTANCE.ProtegeIcon(), Group.FORMAT),
+    SVG         ("SVG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.svg__PARAMS__", "SVG", DownloadIcons.INSTANCE.SVGIcon(), Group.DIAGRAM),
+    PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon(), Group.DIAGRAM),
+    JPEG        ("JPEG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.jpeg__PARAMS__", "JPEG", DownloadIcons.INSTANCE.JPEGIcon(), Group.DIAGRAM),
+    GIF         ("GIF", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.gif__PARAMS__", "GIF", DownloadIcons.INSTANCE.GIFIcon(), Group.DIAGRAM);
 
     private String name;
     private String url;
     private String tooltip;
     private transient ImageResource icon;
+    private Group group;
 
-    DownloadType(String name, String url, String tooltip, ImageResource icon) {
+    public enum Group {
+        FORMAT,
+        DIAGRAM
+
+    }
+
+    DownloadType(String name, String url, String tooltip, ImageResource icon, Group group) {
         this.name = name;
         this.url = url;
         this.tooltip = tooltip;
         this.icon = icon;
+        this.group = group;
     }
 
     public String getName() {
@@ -67,6 +75,10 @@ public enum DownloadType {
 
     public ImageResource getIcon() {
         return icon;
+    }
+
+    public Group getGroup() {
+        return group;
     }
 
     public interface DownloadIcons extends ClientBundle {

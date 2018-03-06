@@ -1,0 +1,117 @@
+.main {
+    display: inline-block;
+    position: relative;
+    width: 99%;
+    margin-bottom: 5px;
+
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+    font-size: medium !important;
+}
+
+.titlePanel {
+    display: block;
+    background-color: #1e94d0;
+    width: 90%;
+    max-width: 654px;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 2px 0 2px 0;
+}
+
+.titleLabel {
+    float: left;
+    font-weight: bold;
+    margin-left: 4px;
+    color: #FFFFFF;
+}
+
+.infoBtn {
+    background-color: white;
+    border: none;
+    border-radius: 11px;
+    margin-right: 4px;
+    float: right;
+    padding: 1px 1px 0 1px;
+    outline: none;
+    opacity: 0.8;
+    width: 22px;
+    height: 22px;
+}
+
+.infoBtn span {
+    vertical-align: middle !important;
+    display: inline-block;
+}
+
+.infoBtn img {
+    height: 20px;
+    width: auto;
+
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.infoBtn:hover {
+    cursor: pointer !important;
+    opacity: 0.9;
+}
+
+.infoBtn:active:hover {
+    cursor: pointer !important;
+    opacity: 1;
+}
+
+.optionsParent {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 654px;
+    overflow-x: scroll;
+    overflow-y: hidden;;
+    height: 100px;
+}
+
+.optionsInner {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    height: 100px;
+}
+
+.infoPanel {
+    position: absolute;
+    overflow: hidden;
+    width: 90%;
+    max-width: 654px;
+    margin: 0 auto;
+    height: 0;
+    top: 25px;
+    /*left: 0;*/
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #1e94d0;
+    opacity: 0.5;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.infoPanel div {
+    color: #ffffff;
+    font-size: large;
+    padding: 5px;
+    margin-top: 10px;
+
+    word-wrap: normal;
+}
+
+.infoPanelExpanded {
+    height: 80%;
+    opacity: 0.9;
+}
