@@ -22,6 +22,7 @@ public enum DownloadType {
     PDF         ("PDF", "/cgi-bin/pdfexporter?DB=__DB__&ID=__ID__", "PDF", DownloadIcons.INSTANCE.PDFIcon(), Group.FORMAT),
     WORD        ("Word", "/cgi-bin/rtfexporter?DB=__DB__&ID=__ID__", "RTF", DownloadIcons.INSTANCE.WordIcon(), Group.FORMAT),
     PROTEGE     ("Protege", "/cgi-bin/protegeexporter?DB=__DB__&ID=__ID__", "OWL", DownloadIcons.INSTANCE.ProtegeIcon(), Group.FORMAT),
+    POWERPOINT  ("Powerpoint", "exporter/diagram/__STID__.pptx__PARAMS__", "PPTX", DownloadIcons.INSTANCE.PowerPointIcon(), Group.FORMAT),
     SVG         ("SVG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.svg__PARAMS__", "SVG", DownloadIcons.INSTANCE.SVGIcon(), Group.DIAGRAM),
     PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon(), Group.DIAGRAM),
     JPEG        ("JPEG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.jpeg__PARAMS__", "JPEG", DownloadIcons.INSTANCE.JPEGIcon(), Group.DIAGRAM),
@@ -62,6 +63,7 @@ public enum DownloadType {
             List<String> params = new ArrayList<>();
 
             params.add("diagramProfile=" + diagramProfile);
+            params.add("profile=" + diagramProfile); //TODO this should be removed as soon as the pptx exporter uses the same parameter name
             if (selected != null)   params.add("sel=" + selected);
             if (flag != null)       params.add("flg=" + flag);
             if (!status.isEmpty())  params.add("analysisProfile=" + analysisProfile);
@@ -108,6 +110,9 @@ public enum DownloadType {
 
         @Source("images/Protege_download.png")
         ImageResource ProtegeIcon();
+
+        @Source("images/PowerPoint_download.png")
+        ImageResource PowerPointIcon();
 
         @Source("images/PNG_download.png")
         ImageResource PNGIcon();
