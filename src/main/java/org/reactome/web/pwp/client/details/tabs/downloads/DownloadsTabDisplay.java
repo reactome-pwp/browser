@@ -85,11 +85,11 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         aux.addNorth(titlePanel, 33);
 
         DownloadGroupPanel formatGroup = new DownloadGroupPanel(
-                "Format",
-                "The download options above are for the selected pathway, not individual events or entities selected in it.");
+                "Pathway Format",
+                "These download options are for the selected pathway, not individual events or entities selected in it.");
         DownloadGroupPanel diagramGroup = new DownloadGroupPanel(
-                "Diagram",
-                "The download options above are for the selected pathway, not individual events or entities selected in it.");
+                "Pathway Diagram",
+                "These download options are for the selected pathway diagram and include any individual events or entities selected along with any overlaid analysis results.");
 
         for (DownloadType downloadType : DownloadType.values()) {
             Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject, this.analysisStatus, this.selected, this.flag);

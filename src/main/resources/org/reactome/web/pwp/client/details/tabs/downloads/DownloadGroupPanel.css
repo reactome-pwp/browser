@@ -11,8 +11,8 @@
 .titlePanel {
     display: block;
     background-color: #1e94d0;
-    width: 90%;
-    max-width: 654px;
+    width: 100%;
+    /*max-width: 654px;*/
     margin: 0 auto;
     overflow: auto;
     padding: 2px 0 2px 0;
@@ -21,7 +21,7 @@
 .titleLabel {
     float: left;
     font-weight: bold;
-    margin-left: 4px;
+    margin-left: 8px;
     color: #FFFFFF;
 }
 
@@ -29,8 +29,8 @@
     background-color: white;
     border: none;
     border-radius: 11px;
-    margin-right: 4px;
-    float: right;
+    margin-left: 4px;
+    float: left;
     padding: 1px 1px 0 1px;
     outline: none;
     opacity: 0.8;
@@ -67,8 +67,8 @@
 
 .optionsParent {
     margin: 0 auto;
-    width: 90%;
-    max-width: 654px;
+    width: 100%;
+    /*max-width: 654px;*/
     overflow-x: scroll;
     overflow-y: hidden;;
     height: 100px;
@@ -84,8 +84,8 @@
 .infoPanel {
     position: absolute;
     overflow: hidden;
-    width: 90%;
-    max-width: 654px;
+    width: 100%;
+    /*max-width: 654px;*/
     margin: 0 auto;
     height: 0;
     top: 25px;

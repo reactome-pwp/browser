@@ -20,20 +20,19 @@ public class DownloadGroupPanel extends FlowPanel {
         super();
         setStyleName(RESOURCES.getCSS().main());
 
-        Label titleLabel = new Label(title);
-        titleLabel.setStyleName(RESOURCES.getCSS().titleLabel());
-        titleLabel.addClickHandler(e -> showHideInfo());
-
         IconToggleButton infoBtn = new IconToggleButton("", RESOURCES.info(), RESOURCES.cancel());
         infoBtn.setStyleName(RESOURCES.getCSS().infoBtn());
         infoBtn.setVisible(true);
         infoBtn.setTitle("More information");
         infoBtn.addClickHandler(e -> showHideInfo());
 
+        Label titleLabel = new Label(title);
+        titleLabel.setStyleName(RESOURCES.getCSS().titleLabel());
+
         FlowPanel titlePanel = new FlowPanel();
         titlePanel.setStyleName(RESOURCES.getCSS().titlePanel());
-        titlePanel.add(titleLabel);
         titlePanel.add(infoBtn);
+        titlePanel.add(titleLabel);
 
         optionsInner = new FlowPanel();
         optionsInner.setStyleName(RESOURCES.getCSS().optionsInner());
