@@ -1,6 +1,8 @@
 package org.reactome.web.pwp.client.viewport.diagram;
 
+import org.reactome.web.diagram.events.AnalysisProfileChangedEvent;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
+import org.reactome.web.diagram.events.DiagramProfileChangedEvent;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
@@ -23,6 +25,10 @@ public interface Diagram {
         void fireworksOpened(Long dbId);
 
         void resetFlag(DiagramObjectsFlagResetEvent event);
+
+        void diagramProfileChanged(DiagramProfileChangedEvent event);
+
+        void analysisProfileChanged(AnalysisProfileChangedEvent event);
     }
 
     interface Display extends BrowserModule.Display {

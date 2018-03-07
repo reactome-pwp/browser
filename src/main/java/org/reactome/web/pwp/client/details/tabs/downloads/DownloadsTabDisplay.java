@@ -30,6 +30,9 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     private AnalysisStatus analysisStatus = null;
     private String selected;
     private String flag;
+    private String diagramProfile;
+    private String analysisProfile;
+
 
     private DockLayoutPanel container;
     private DetailsTabTitle title;
@@ -92,7 +95,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
                 "These download options are for the selected pathway diagram and include any individual events or entities selected along with any overlaid analysis results.");
 
         for (DownloadType downloadType : DownloadType.values()) {
-            Anchor dp = getDownloadAnchor(this.dbName, downloadType, databaseObject, this.analysisStatus, this.selected, this.flag);
+            Anchor dp = getDownloadAnchor(dbName, downloadType, databaseObject, analysisStatus, selected, flag, diagramProfile, analysisProfile);
             dp.setStyleName(RESOURCES.getCSS().downloadItem());
             if (downloadType.getGroup() == DownloadType.Group.FORMAT) {
                 formatGroup.insert(dp);
@@ -132,9 +135,11 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
                                      final DatabaseObject databaseObject,
                                      final AnalysisStatus status,
                                      final String selected,
-                                     final String flag) {
+                                     final String flag,
+                                     final String diagramProfile,
+                                     final String analysisProfile) {
         SafeHtml image = SafeHtmlUtils.fromSafeConstant(new Image(type.getIcon()).toString());
-        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject, status, selected, flag), "_blank");
+        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject, status, selected, flag, diagramProfile, analysisProfile), "_blank");
         rtn.addStyleName("elv-Download-Item");
         rtn.setTitle("View/download in " + type.getTooltip() + " format");
         return rtn;
@@ -191,6 +196,16 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     @Override
     public void setFlag(String flag) {
         this.flag = flag;
+    }
+
+    @Override
+    public void setDiagramProfile(String profile) {
+        this.diagramProfile = profile;
+    }
+
+    @Override
+    public void setAnalysisProfile(String profile) {
+        this.analysisProfile = profile;
     }
 
     public static Resources RESOURCES;

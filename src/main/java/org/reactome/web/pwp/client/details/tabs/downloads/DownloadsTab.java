@@ -23,6 +23,10 @@ public interface DownloadsTab {
 
         void setFlag(String flag);
 
+        void setDiagramProfile(String profile);
+
+        void setAnalysisProfile(String profile);
+
         void showDetails(DatabaseObject databaseObject);
     }
 }

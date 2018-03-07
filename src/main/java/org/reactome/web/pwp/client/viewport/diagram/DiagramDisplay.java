@@ -19,7 +19,7 @@ import org.reactome.web.pwp.model.client.classes.Pathway;
  */
 public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
         ContentLoadedHandler, GraphObjectSelectedHandler, GraphObjectHoveredHandler, DiagramObjectsFlagResetHandler,
-        AnalysisResetHandler, FireworksOpenedHandler {
+        AnalysisResetHandler, FireworksOpenedHandler, DiagramProfileChangedHandler, AnalysisProfileChangedHandler {
 
     private Diagram.Presenter presenter;
 
@@ -57,6 +57,9 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
         this.diagram.addAnalysisResetHandler(this);
         this.diagram.addFireworksOpenedHandler(this);
         this.diagram.addDiagramObjectsFlagResetHandler(this);
+
+        this.diagram.addDiagramProfileChangedHandler(this);
+        this.diagram.addAnalysisProfileChangedHandler(this);
     }
 
     @Override
@@ -144,5 +147,15 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         this.diagram.setVisible(visible);
+    }
+
+    @Override
+    public void onAnalysisProfileChanged(AnalysisProfileChangedEvent event) {
+        presenter.analysisProfileChanged(event);
+    }
+
+    @Override
+    public void onDiagramProfileChanged(DiagramProfileChangedEvent event) {
+        presenter.diagramProfileChanged(event);
     }
 }

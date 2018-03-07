@@ -55,13 +55,16 @@ public enum DownloadType {
         return tooltip;
     }
 
-    public String getUrl(String db, DatabaseObject pathway, AnalysisStatus status, String selected, String flag){
+    public String getUrl(String db, DatabaseObject pathway, AnalysisStatus status, String selected, String flag, String diagramProfile, String analysisProfile){
         String url = this.url.replace("__DB__",db).replace("__ID__", String.valueOf(pathway.getDbId())).replace("__STID__", pathway.getStId());
 
         if (url.contains("__PARAMS__")) {
             List<String> params = new ArrayList<>();
+
+            params.add("diagramProfile=" + diagramProfile);
             if (selected != null)   params.add("sel=" + selected);
             if (flag != null)       params.add("flg=" + flag);
+            if (!status.isEmpty())  params.add("analysisProfile=" + analysisProfile);
             if (!status.isEmpty())  params.add("token=" + status.getToken());
 
             String paramsStr ="";

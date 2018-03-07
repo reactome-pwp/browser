@@ -2,7 +2,9 @@ package org.reactome.web.pwp.client.viewport.diagram;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Timer;
+import org.reactome.web.diagram.events.AnalysisProfileChangedEvent;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
+import org.reactome.web.diagram.events.DiagramProfileChangedEvent;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.*;
@@ -164,6 +166,16 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     @Override
     public void resetFlag(DiagramObjectsFlagResetEvent event) {
         this.eventBus.fireEventFromSource(event, this);
+    }
+
+    @Override
+    public void diagramProfileChanged(DiagramProfileChangedEvent event) {
+        eventBus.fireEventFromSource(event, this);
+    }
+
+    @Override
+    public void analysisProfileChanged(AnalysisProfileChangedEvent event) {
+        eventBus.fireEventFromSource(event, this);
     }
 
     @Override

@@ -2,6 +2,12 @@ package org.reactome.web.pwp.client.details.tabs.downloads;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.*;
+import org.reactome.web.diagram.events.AnalysisProfileChangedEvent;
+import org.reactome.web.diagram.events.DiagramProfileChangedEvent;
+import org.reactome.web.diagram.handlers.AnalysisProfileChangedHandler;
+import org.reactome.web.diagram.handlers.DiagramProfileChangedHandler;
+import org.reactome.web.diagram.profiles.analysis.AnalysisColours;
+import org.reactome.web.diagram.profiles.diagram.DiagramColours;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
@@ -16,19 +22,23 @@ import org.reactome.web.pwp.model.client.content.ContentClientError;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class DownloadsTabPresenter extends AbstractPresenter implements DownloadsTab.Presenter {
+public class DownloadsTabPresenter extends AbstractPresenter implements DownloadsTab.Presenter,
+        DiagramProfileChangedHandler, AnalysisProfileChangedHandler {
 
     private DownloadsTab.Display display;
     private DatabaseObject currentlyShown;
     private AnalysisStatus currentlyShownAnalysis;
     private DatabaseObject currentlySelected;
-//    private String currentlyFlagged;
+    private String currentlyFlagged;
 
-    public DownloadsTabPresenter(final EventBus eventBus, DownloadsTab.Display display) {
+    public DownloadsTabPresenter(EventBus eventBus, DownloadsTab.Display display) {
         super(eventBus);
         this.display = display;
         this.display.setPresenter(this);
         this.requestDBName();
+
+        eventBus.addHandler(DiagramProfileChangedEvent.TYPE, this);
+        eventBus.addHandler(AnalysisProfileChangedEvent.TYPE, this);
     }
 
     @Override
@@ -53,9 +63,12 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
         final DatabaseObject selected = state.getSelected();
         display.setSelected(selected);
 
-////        Get the flagged entity
-//        final String flag = state.getFlag();
-//        display.setFlag(flag);
+        //Get the flagged entity
+        final String flag = state.getFlag();
+        display.setFlag(flag);
+
+        display.setDiagramProfile(DiagramColours.get().PROFILE.getName());
+        display.setAnalysisProfile(AnalysisColours.get().PROFILE.getName());
 
         //Show the data
         final DatabaseObject databaseObject = state.getPathway(); //IMPORTANT! We only show information related to the selected Pathway!
@@ -65,7 +78,8 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
             display.setInitialState();
         } else if (!databaseObject.equals(currentlyShown)
                 || !analysisStatus.equals(currentlyShownAnalysis)
-                || databaseObject != currentlySelected) {
+                || databaseObject != currentlySelected
+                || !areEqual(flag, currentlyFlagged)) {
             //The download tab should be updated in case of any analysis-related state change
             databaseObject.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
@@ -73,7 +87,7 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
                     currentlyShown = databaseObject;
                     currentlyShownAnalysis = analysisStatus;
                     currentlySelected = selected;
-//                    currentlyFlagged = flag;
+                    currentlyFlagged = flag;
 
                     display.showDetails(databaseObject);
                 }
@@ -91,6 +105,18 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
                 }
             });
         }
+    }
+
+    @Override
+    public void onAnalysisProfileChanged(AnalysisProfileChangedEvent event) {
+        display.setAnalysisProfile(event.getAnalysisProfile().getName());
+        display.showDetails(currentlyShown);
+    }
+
+    @Override
+    public void onDiagramProfileChanged(DiagramProfileChangedEvent event) {
+        display.setDiagramProfile(event.getDiagramProfile().getName());
+        display.showDetails(currentlyShown);
     }
 
     private void requestDBName() {
@@ -124,7 +150,7 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
     }
 
     private boolean areEqual(String a, String b) {
-        boolean rtn = false;
+        boolean rtn;
         if (a == null) {
             rtn = b == null;
         } else {
