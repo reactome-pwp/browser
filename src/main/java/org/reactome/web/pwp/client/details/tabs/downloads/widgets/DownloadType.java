@@ -61,9 +61,11 @@ public enum DownloadType {
 
         if (url.contains("__PARAMS__")) {
             List<String> params = new ArrayList<>();
-
-            params.add("diagramProfile=" + diagramProfile);
-            params.add("profile=" + diagramProfile); //TODO this should be removed as soon as the pptx exporter uses the same parameter name
+            if (this.getName() == "Powerpoint") {
+                params.add("profile=" + diagramProfile); //TODO this should be removed as soon as the pptx exporter uses the same parameter name
+            } else {
+                params.add("diagramProfile=" + diagramProfile);
+            }
             if (selected != null)   params.add("sel=" + selected);
             if (flag != null)       params.add("flg=" + flag);
             if (!status.isEmpty())  params.add("analysisProfile=" + analysisProfile);
