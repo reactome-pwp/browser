@@ -1,0 +1,2 @@
+These download options are for the selected pathway diagram and include any individual events or entities selected
+along with any overlaid analysis results.

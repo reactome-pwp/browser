@@ -1,0 +1,1 @@
+These download options are for the selected pathway, not individual events or entities selected in it.

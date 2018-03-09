@@ -19,8 +19,8 @@ public enum DownloadType {
     PDF         ("PDF", "/cgi-bin/pdfexporter?DB=__DB__&ID=__ID__", "PDF", DownloadIcons.INSTANCE.PDFIcon(), Group.FORMAT),
     WORD        ("Word", "/cgi-bin/rtfexporter?DB=__DB__&ID=__ID__", "RTF", DownloadIcons.INSTANCE.WordIcon(), Group.FORMAT),
     PROTEGE     ("Protege", "/cgi-bin/protegeexporter?DB=__DB__&ID=__ID__", "OWL", DownloadIcons.INSTANCE.ProtegeIcon(), Group.FORMAT),
-//    POWERPOINT  ("Powerpoint", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.pptx__PARAMS__", "PPTX", DownloadIcons.INSTANCE.PowerPointIcon(), Group.FORMAT),
     SVG         ("SVG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.svg__PARAMS__", "SVG", DownloadIcons.INSTANCE.SVGIcon(), Group.DIAGRAM),
+    //    POWERPOINT  ("Powerpoint", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.pptx__PARAMS__", "PPTX", DownloadIcons.INSTANCE.PowerPointIcon(), Group.FORMAT),
     PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon(), Group.DIAGRAM, true),
     JPEG        ("JPEG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.jpeg__PARAMS__", "JPEG", DownloadIcons.INSTANCE.JPEGIcon(), Group.DIAGRAM, true),
     GIF         ("GIF", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.gif__PARAMS__", "GIF", DownloadIcons.INSTANCE.GIFIcon(), Group.DIAGRAM, true);

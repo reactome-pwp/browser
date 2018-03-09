@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.CommonImages;
@@ -90,10 +91,10 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
         DownloadGroupPanel formatGroup = new DownloadGroupPanel(
                 "Pathway Format",
-                "These download options are for the selected pathway, not individual events or entities selected in it.");
+                RESOURCES.formatInfo().getText());
         DownloadGroupPanel diagramGroup = new DownloadGroupPanel(
                 "Pathway Diagram",
-                "These download options are for the selected pathway diagram and include any individual events or entities selected along with any overlaid analysis results.");
+                RESOURCES.diagramInfo().getText());
 
         for (DownloadType downloadType : DownloadType.values()) {
             //
@@ -211,5 +212,10 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
         @Source("widgets/images/info.png")
         ImageResource info();
 
+        @Source("widgets/text/formatInfo.txt")
+        TextResource formatInfo();
+
+        @Source("widgets/text/diagramInfo.txt")
+        TextResource diagramInfo();
     }
 }
