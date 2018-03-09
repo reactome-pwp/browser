@@ -3,10 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.downloads;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.CommonImages;
@@ -16,8 +13,12 @@ import org.reactome.web.pwp.client.details.common.help.InstanceTypeExplanation;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadGroupPanel;
+import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadItem;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadType;
+import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadURLBuilder;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+
+import java.util.List;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -95,8 +96,15 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
                 "These download options are for the selected pathway diagram and include any individual events or entities selected along with any overlaid analysis results.");
 
         for (DownloadType downloadType : DownloadType.values()) {
-            Anchor dp = getDownloadAnchor(dbName, downloadType, databaseObject, analysisStatus, selected, flag, diagramProfile, analysisProfile);
-            dp.setStyleName(RESOURCES.getCSS().downloadItem());
+            //
+            List<String> urls  = new DownloadURLBuilder(downloadType, dbName, databaseObject, analysisStatus)
+                                                                    .setDiagramProfile(diagramProfile)
+                                                                    .setAnalysisProfile(analysisProfile)
+                                                                    .setSelected(selected)
+                                                                    .setFlagged(flag)
+                                                                    .generateUrlList();
+
+            DownloadItem dp = new DownloadItem(downloadType, urls);
             if (downloadType.getGroup() == DownloadType.Group.FORMAT) {
                 formatGroup.insert(dp);
             } else if (downloadType.getGroup() == DownloadType.Group.DIAGRAM) {
@@ -128,21 +136,6 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
         this.container.clear();
         this.container.add(message);
-    }
-
-    private Anchor getDownloadAnchor(final String dbName,
-                                     final DownloadType type,
-                                     final DatabaseObject databaseObject,
-                                     final AnalysisStatus status,
-                                     final String selected,
-                                     final String flag,
-                                     final String diagramProfile,
-                                     final String analysisProfile) {
-        SafeHtml image = SafeHtmlUtils.fromSafeConstant(new Image(type.getIcon()).toString());
-        Anchor rtn = new Anchor(image, type.getUrl(dbName, databaseObject, status, selected, flag, diagramProfile, analysisProfile), "_blank");
-        rtn.addStyleName("elv-Download-Item");
-        rtn.setTitle("View/download in " + type.getTooltip() + " format");
-        return rtn;
     }
 
     private Widget getTitle(DatabaseObject databaseObject){
@@ -211,25 +204,12 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     public static Resources RESOURCES;
     static {
         RESOURCES = GWT.create(Resources.class);
-        RESOURCES.getCSS().ensureInjected();
     }
 
     public interface Resources extends ClientBundle {
-        @Source(ResourceCSS.CSS)
-        ResourceCSS getCSS();
 
         @Source("widgets/images/info.png")
         ImageResource info();
 
-    }
-
-    @CssResource.ImportedWithPrefix("diagram-DownloadsTabDisplay")
-    public interface ResourceCSS extends CssResource {
-        /**
-         * The path to the default CSS styles used by this resource.
-         */
-        String CSS = "org/reactome/web/pwp/client/details/tabs/downloads/DownloadsTabDisplay.css";
-
-        String downloadItem();
     }
 }

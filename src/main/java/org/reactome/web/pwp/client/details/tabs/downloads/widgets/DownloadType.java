@@ -3,13 +3,10 @@ package org.reactome.web.pwp.client.details.tabs.downloads.widgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
-import org.reactome.web.pwp.client.common.AnalysisStatus;
-import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 import org.reactome.web.pwp.model.client.common.ContentClientAbstract;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -22,11 +19,14 @@ public enum DownloadType {
     PDF         ("PDF", "/cgi-bin/pdfexporter?DB=__DB__&ID=__ID__", "PDF", DownloadIcons.INSTANCE.PDFIcon(), Group.FORMAT),
     WORD        ("Word", "/cgi-bin/rtfexporter?DB=__DB__&ID=__ID__", "RTF", DownloadIcons.INSTANCE.WordIcon(), Group.FORMAT),
     PROTEGE     ("Protege", "/cgi-bin/protegeexporter?DB=__DB__&ID=__ID__", "OWL", DownloadIcons.INSTANCE.ProtegeIcon(), Group.FORMAT),
-    POWERPOINT  ("Powerpoint", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.pptx__PARAMS__", "PPTX", DownloadIcons.INSTANCE.PowerPointIcon(), Group.FORMAT),
+//    POWERPOINT  ("Powerpoint", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.pptx__PARAMS__", "PPTX", DownloadIcons.INSTANCE.PowerPointIcon(), Group.FORMAT),
     SVG         ("SVG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.svg__PARAMS__", "SVG", DownloadIcons.INSTANCE.SVGIcon(), Group.DIAGRAM),
-    PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon(), Group.DIAGRAM),
-    JPEG        ("JPEG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.jpeg__PARAMS__", "JPEG", DownloadIcons.INSTANCE.JPEGIcon(), Group.DIAGRAM),
-    GIF         ("GIF", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.gif__PARAMS__", "GIF", DownloadIcons.INSTANCE.GIFIcon(), Group.DIAGRAM);
+    PNG         ("PNG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.png__PARAMS__", "PNG", DownloadIcons.INSTANCE.PNGIcon(), Group.DIAGRAM, true),
+    JPEG        ("JPEG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.jpeg__PARAMS__", "JPEG", DownloadIcons.INSTANCE.JPEGIcon(), Group.DIAGRAM, true),
+    GIF         ("GIF", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.gif__PARAMS__", "GIF", DownloadIcons.INSTANCE.GIFIcon(), Group.DIAGRAM, true);
+
+    //NOTE: please put the quality values below in ascending order
+    public static final List<Integer> QUALITIES = Arrays.asList(2, 5, 7);
 
     private String name;
     private String url;
@@ -37,15 +37,20 @@ public enum DownloadType {
     public enum Group {
         FORMAT,
         DIAGRAM
-
     }
+    private boolean hasQualityOptions;
 
     DownloadType(String name, String url, String tooltip, ImageResource icon, Group group) {
+        this(name, url, tooltip, icon, group, false);
+    }
+
+    DownloadType(String name, String url, String tooltip, ImageResource icon, Group group, boolean hasQualityOptions) {
         this.name = name;
         this.url = url;
         this.tooltip = tooltip;
         this.icon = icon;
         this.group = group;
+        this.hasQualityOptions = hasQualityOptions;
     }
 
     public String getName() {
@@ -56,27 +61,7 @@ public enum DownloadType {
         return tooltip;
     }
 
-    public String getUrl(String db, DatabaseObject pathway, AnalysisStatus status, String selected, String flag, String diagramProfile, String analysisProfile){
-        String url = this.url.replace("__DB__",db).replace("__ID__", String.valueOf(pathway.getDbId())).replace("__STID__", pathway.getStId());
-
-        if (url.contains("__PARAMS__")) {
-            List<String> params = new ArrayList<>();
-            if (this.getName() == "Powerpoint") {
-                params.add("profile=" + diagramProfile); //TODO this should be removed as soon as the pptx exporter uses the same parameter name
-            } else {
-                params.add("diagramProfile=" + diagramProfile);
-            }
-            if (selected != null)   params.add("sel=" + selected);
-            if (flag != null)       params.add("flg=" + flag);
-            if (!status.isEmpty())  params.add("analysisProfile=" + analysisProfile);
-            if (!status.isEmpty())  params.add("token=" + status.getToken());
-
-            String paramsStr ="";
-            if (!params.isEmpty()) {
-                paramsStr = "?" + params.stream().collect(Collectors.joining("&"));
-            }
-            url = url.replace("__PARAMS__", paramsStr);
-        }
+    public String getUrl() {
         return url;
     }
 
@@ -86,6 +71,10 @@ public enum DownloadType {
 
     public Group getGroup() {
         return group;
+    }
+
+    public boolean hasQualityOptions() {
+        return hasQualityOptions;
     }
 
     public interface DownloadIcons extends ClientBundle {

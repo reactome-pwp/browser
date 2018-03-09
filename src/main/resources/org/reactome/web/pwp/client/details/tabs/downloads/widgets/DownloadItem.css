@@ -1,0 +1,68 @@
+.downloadItem {
+    height: 50px;
+    width: 50px;
+    margin: 15px 15px 15px 15px;
+    background-color: #58c3e5;
+    text-decoration: none;
+    color: white;
+    padding: 6px;
+    display: inline-block;
+    line-height: 1em;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+    overflow: hidden;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+
+    white-space: nowrap;
+    direction: rtl;     /* Change this to make the options appear from the right*/
+}
+
+.downloadItem img {
+    display: inline-block;
+    width: 100%;
+    max-width: 50px;
+    height: auto;
+}
+
+.downloadItem:hover {
+    background-color: #5cccee;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.35);
+}
+
+.downloadItemExpanded {
+    width: 115px;
+}
+
+.linkPanel {
+    display: inline-block;
+    width: 57px;
+    margin-right: 8px;
+    height: 50px;
+    vertical-align: top;
+}
+
+.linkItem {
+    background-color: #1e91d0;
+    display: block;
+    text-decoration: none;
+    font-size: small;
+    color: white;
+    border-radius: 3px;
+    text-align: center;
+    margin-top: 1px;
+}
+
+.linkItem:hover {
+    background-color: #0d57ab;
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+.linkItem:visited {
+    text-decoration: none;
+    color: white;
+}
