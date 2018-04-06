@@ -8,14 +8,14 @@ import org.reactome.web.pwp.model.client.classes.PhysicalEntity;
 import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class PhysicalEntityTable extends OverviewTable {
-    PhysicalEntity physicalEntity;
+
+    private PhysicalEntity physicalEntity;
 
     public PhysicalEntityTable(PhysicalEntity physicalEntity) {
         this.physicalEntity = physicalEntity;
@@ -34,8 +34,9 @@ public class PhysicalEntityTable extends OverviewTable {
             case REFERENCES:
                 return TableRowFactory.getLiteratureReferencesRow(title, this.physicalEntity.getLiteratureReference());
             case CROSS_REFERENCES:
+                List<DatabaseIdentifier> xrefs = physicalEntity.getCrossReference();
                 ReferenceEntity re = physicalEntity.getReferenceEntity();
-                List<DatabaseIdentifier> xrefs = re != null ? re.getCrossReference() : new LinkedList<>();
+                if (re != null) xrefs.addAll(re.getCrossReference());
                 Collections.sort(xrefs);
                 if (re != null) xrefs.add(0, new DatabaseIdentifier(re));
                 return TableRowFactory.getDatabaseIdentifierRow(title, xrefs);
