@@ -25,7 +25,6 @@ public class MoleculesTabDisplay extends ResizeComposite implements MoleculesTab
     private final LRUCache<Long, MoleculesPanel> panelsLoadedForPathways = new LRUCache<>();
 
     private MoleculesPanel currentPanel;
-    private DatabaseObject toShow;
     private DatabaseObject pathwayDiagram;
 
     public MoleculesTabDisplay() {
@@ -59,28 +58,16 @@ public class MoleculesTabDisplay extends ResizeComposite implements MoleculesTab
     }
 
     @Override
-    public void showDetails(Pathway pathway, DatabaseObject databaseObject){
-        toShow = databaseObject != null ? databaseObject : pathway;
+    public void showDetails(Pathway pathway){
         pathwayDiagram = pathway;
 
         if (!this.getPathwayDetailsIfExist(pathway)){
             showWaitingMessage();
-            if(toShow==null) return;
+            if(pathwayDiagram==null) return;
             this.presenter.getMoleculesData();
         }else{
             this.presenter.updateMoleculesData();
         }
-    }
-
-    @Override
-    public void updateDetailsIfLoaded(Pathway pathway, DatabaseObject databaseObject) {
-//        toShow = databaseObject != null ? databaseObject : pathway;
-//        pathwayDiagram = pathway;
-//        if (this.getPathwayDetailsIfExist(pathway)){
-//            this.presenter.updateMoleculesData();
-//        }else{
-//            this.titleContainer.setText(getDetailTabType().getTitle());
-//        }
     }
 
     @Override
@@ -155,7 +142,7 @@ public class MoleculesTabDisplay extends ResizeComposite implements MoleculesTab
      */
     @Override
     public void setMoleculesData(Result result) {
-        this.currentPanel = new MoleculesPanel(result, this.toShow, this.presenter);
+        this.currentPanel = new MoleculesPanel(result, this.pathwayDiagram, this.presenter);
         showMoleculesPanel(this.currentPanel);
         if(download){
             this.moleculesDownloadRequired();

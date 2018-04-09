@@ -65,13 +65,13 @@ public class MoleculesTabPresenter extends AbstractPresenter implements Molecule
         this.currentDatabaseObject = state.getTarget();
         this.currentPathway = state.getPathway();
 
-        if(this.currentPathway==null){
+        if (this.currentPathway == null) {
             this.display.setInitialState();
-        }else {
-            if(state.getDetailsTab().equals(display.getDetailTabType()) || previouslyLoaded.contains(this.currentPathway)) {
+        } else {
+            if (state.getDetailsTab().equals(display.getDetailTabType()) || previouslyLoaded.contains(this.currentPathway)) {
                 this.previouslyLoaded.add(this.currentPathway);
-                this.display.showDetails(this.currentPathway, state.getSelected());
-            }else{
+                this.display.showDetails(this.currentPathway);
+            } else {
                 this.display.setInitialState();
             }
         }
