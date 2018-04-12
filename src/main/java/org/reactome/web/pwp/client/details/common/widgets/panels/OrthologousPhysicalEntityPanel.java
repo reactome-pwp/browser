@@ -9,6 +9,7 @@ import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 import org.reactome.web.pwp.model.client.classes.PhysicalEntity;
 import org.reactome.web.pwp.model.client.classes.Species;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,10 +44,11 @@ public class OrthologousPhysicalEntityPanel extends DetailsPanel implements Chan
         this.speciesList = new LinkedList<>();
         for (PhysicalEntity pe : orthologous) {
             for (Species species : pe.getSpecies()) {
-                this.speciesList.add(species);
-                this.species.addItem(species.getDisplayName(), species.getDbId().toString());
+                if(!this.speciesList.contains(species)) this.speciesList.add(species);
             }
         }
+        this.speciesList.sort(Comparator.comparing(DatabaseObject::getDisplayName));
+        this.speciesList.forEach(species -> this.species.addItem(species.getDisplayName(), species.getDbId().toString()));
         panel.add(this.species);
         initWidget(panel);
     }
