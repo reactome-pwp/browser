@@ -35,10 +35,6 @@ public class EventTable extends OverviewTable {
                 return TableRowFactory.getOrthologousEventRow(title, this.event.getOrthologousEvent());
             case CELLULAR_COMPARTMENT:
                 return TableRowFactory.getGOCellularComponentRow(title, this.event.getCompartment());
-            case POSITIVELY_REGULATED:
-                return TableRowFactory.getRegulationRow(title, this.event.getPositiveRegulations());
-            case NEGATIVELY_REGULATED:
-                return TableRowFactory.getRegulationRow(title, this.event.getNegativeRegulations());
             case CROSS_REFERENCES:
                 return TableRowFactory.getDatabaseIdentifierRow(title, this.event.getCrossReference());
             case REFERENCES:

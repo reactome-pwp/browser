@@ -26,19 +26,16 @@ public class ReactionLikeEventTable extends EventTable {
                 return TableRowFactory.getCatalystActivityRow(title, this.reactionLikeEvent.getCatalystActivities());
             case OUTPUT:
                 return TableRowFactory.getPhysicalEntityRow(title, this.reactionLikeEvent.getOutputs());
-//            case HAS_MEMBER:
-//                return TableRowFactory.getEventRow(title, this.reactionLikeEvent.getHasMember());
             case ENTITY_FUNCTIONAL_STATUS:
                 return TableRowFactory.getEntityFunctionalStatusRow(title, this.reactionLikeEvent.getEntityFunctionalStatus());
             case ENTITY_ON_OTHER_CELL:
                 return TableRowFactory.getPhysicalEntityRow(title, this.reactionLikeEvent.getEntityOnOtherCell());
-//            case REQUIRED_INPUT:
-//                return TableRowFactory.getPhysicalEntityRow(title, this.reactionLikeEvent.getRequiredInputComponent());
-            /*case GO_MOLECULAR_FUNCTION:
-            //GO MOLECULAR FUNCTION belongs to CATALYST :)
-            break;*/
             case NORMAL_REACTION:
                 return TableRowFactory.getNormalReactionLikeEventRow(title, this.reactionLikeEvent.getNormalReaction());
+            case POSITIVELY_REGULATED:
+                return TableRowFactory.getRegulationRow(title, this.reactionLikeEvent.getPositiveRegulations());
+            case NEGATIVELY_REGULATED:
+                return TableRowFactory.getRegulationRow(title, this.reactionLikeEvent.getNegativeRegulations());
             default:
                 return super.getTableRow(propertyType);
         }
