@@ -24,6 +24,8 @@ public interface Diagram {
 
         void fireworksOpened(Long dbId);
 
+        void diagramFlagPerformed(String term);
+
         void resetFlag(DiagramObjectsFlagResetEvent event);
 
         void diagramProfileChanged(DiagramProfileChangedEvent event);
