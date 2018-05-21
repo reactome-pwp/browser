@@ -164,6 +164,11 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     }
 
     @Override
+    public void diagramFlagPerformed(String term) {
+        this.eventBus.fireEventFromSource(new TermFlaggedEvent(term), this);
+    }
+
+    @Override
     public void resetFlag(DiagramObjectsFlagResetEvent event) {
         this.eventBus.fireEventFromSource(event, this);
     }
