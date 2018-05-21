@@ -31,7 +31,7 @@ import java.util.List;
 public class StateManager implements BrowserModule.Manager, ValueChangeHandler<String>,
         State.StateLoadedHandler, StateChangedHandler, DatabaseObjectSelectedHandler, DetailsTabChangedHandler,
         DiagramObjectsFlagResetHandler, AnalysisCompletedHandler, AnalysisResetHandler, ResourceChangedHandler,
-        ToolSelectedHandler {
+        ToolSelectedHandler, TermFlaggedHandler {
 
     private EventBus eventBus;
 
@@ -51,6 +51,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
         this.eventBus.addHandler(DiagramObjectsFlagResetEvent.TYPE, this);
         this.eventBus.addHandler(ResourceChangedEvent.TYPE, this);
+        this.eventBus.addHandler(TermFlaggedEvent.TYPE, this);
     }
 
     @Override
@@ -103,7 +104,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
             //some further checking and detect when an odd case happens
             if (diagram == null) {
                 if (selected == null) {
-                    currentState.setPathway(null);
+                    currentState.setEvent(null);
                 } else {
                     Species species = null;
                     if(selected instanceof PhysicalEntity){
@@ -124,7 +125,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                     currentState.setSelected(selected);
                 }
             } else {
-                currentState.setPathway(diagram);
+                currentState.setEvent(diagram);
                 currentState.setPath(path);
             }
 
@@ -210,5 +211,12 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         try {
             new State(new Token(""), this); //Forcing to load the initial state at least
         } catch (TokenMalformedException e) {/*Nothing here*/}
+    }
+
+    @Override
+    public void onTermFlagged(TermFlaggedEvent event) {
+        State desiredState = new State(this.currentState);
+        desiredState.setFlag(event.getTerm());
+        this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 }
