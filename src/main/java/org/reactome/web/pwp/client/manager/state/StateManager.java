@@ -104,7 +104,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
             //some further checking and detect when an odd case happens
             if (diagram == null) {
                 if (selected == null) {
-                    currentState.setEvent(null);
+                    currentState.setPathway(null);
                 } else {
                     Species species = null;
                     if(selected instanceof PhysicalEntity){
@@ -125,7 +125,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                     currentState.setSelected(selected);
                 }
             } else {
-                currentState.setEvent(diagram);
+                currentState.setPathway(diagram);
                 currentState.setPath(path);
             }
 
