@@ -1,11 +1,10 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.results;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.cellview.client.RowHoverEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -15,7 +14,10 @@ import org.reactome.web.analysis.client.AnalysisHandler;
 import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.PathwaySummary;
+import org.reactome.web.diagram.profiles.analysis.AnalysisColours;
+import org.reactome.web.diagram.profiles.diagram.DiagramColours;
 import org.reactome.web.diagram.util.Console;
+import org.reactome.web.fireworks.profiles.FireworksColours;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
 import org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider;
@@ -36,6 +38,9 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     private Long candidateForSelection;
     private Long selected;
     private Long hovered;
+
+    private String species;
+
     private String resource;
 
     public AnalysisResultPanel() {
@@ -110,6 +115,10 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.resource = resource;
     }
 
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
     public void showPage(int page) {
         if(this.pager!=null){
             this.pager.setPage(page - 1);
@@ -136,21 +145,28 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         CustomButton downloadCVS = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Result");
         downloadCVS.setTitle("Click to download the pathway analysis results in Comma Separated Values format for " + resource);
         downloadCVS.getElement().getStyle().setFloat(Style.Float.LEFT);
-        downloadCVS.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                Window.open("/AnalysisService/download/" + analysisResult.getSummary().getToken() + "/pathways/" + resource + "/result.csv", "_self", "");
-            }
+        downloadCVS.addClickHandler(event -> {
+            String token = analysisResult.getSummary().getToken();
+            Window.open("/AnalysisService/download/" + token + "/pathways/" + resource + "/result.csv", "_self", "");
         });
 
         CustomButton downloadMapping = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Mapping");
         downloadMapping.setTitle("Click to download the identifier mapping between the submitted data and the selected resource (" + resource + ")");
         downloadMapping.getElement().getStyle().setFloat(Style.Float.LEFT);
-        downloadMapping.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                Window.open("/AnalysisService/download/" + analysisResult.getSummary().getToken() + "/entities/found/" + resource + "/mapping.csv", "_self", "");
-            }
+        downloadMapping.addClickHandler(event -> {
+            String token = analysisResult.getSummary().getToken();
+            Window.open("/AnalysisService/download/" + token + "/entities/found/" + resource + "/mapping.csv", "_self", "");
+        });
+
+        CustomButton pdfExport = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Report (PDF)");
+        pdfExport.setTitle("Click to download the most significant analysis results in PDF");
+        pdfExport.getElement().getStyle().setFloat(Style.Float.LEFT);
+        pdfExport.addClickHandler(event -> {
+            String diagramProfile = DiagramColours.get().PROFILE.getName();
+            String analysisProfile = AnalysisColours.get().PROFILE.getName();
+            String fireworksProfile = FireworksColours.getSelectedProfileName();
+            String token = analysisResult.getSummary().getToken();
+            Window.open("/AnalysisService/report/" + token + "/" + URL.encode(species) + "/report.pdf?resource=" + resource + "&diagramProfile=" + diagramProfile + "&analysisProfile=" + analysisProfile + "&fireworksProfile=" + fireworksProfile, "_blank", "");
         });
 
         this.clear();
@@ -159,6 +175,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         pagerPanel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
         pagerPanel.add(downloadCVS);
         pagerPanel.add(downloadMapping);
+        pagerPanel.add(pdfExport);
         pagerPanel.add(pager);
         this.addSouth(pagerPanel, 2);
 

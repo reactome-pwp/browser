@@ -164,6 +164,11 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     }
 
     @Override
+    public void setSpecies(String species) {
+        this.analysisResultPanel.setSpecies(species);
+    }
+
+    @Override
     public void setInitialState() {
         this.token = null;
         this.summaryPanel = null;

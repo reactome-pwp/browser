@@ -21,5 +21,6 @@ public interface AnalysisTab {
         void clearSelection();
         void selectPathway(Pathway pathway);
         void showResult(AnalysisResult analysisResult, String resource);
+        void setSpecies(String species);
     }
 }

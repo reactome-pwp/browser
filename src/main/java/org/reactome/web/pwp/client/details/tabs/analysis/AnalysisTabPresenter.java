@@ -61,6 +61,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         this.selected = (selected instanceof Pathway) ? (Pathway) selected : state.getPathway();
 
         display.selectPathway(this.selected);
+        display.setSpecies(state.getSpecies().getDisplayName());
 
         if(!analysisStatus.equals(this.analysisStatus)){
             if(this.analysisStatus.isEmpty()) display.showLoadingMessage();
