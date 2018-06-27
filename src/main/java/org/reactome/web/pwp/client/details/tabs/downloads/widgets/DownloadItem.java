@@ -30,7 +30,9 @@ public class DownloadItem extends FlowPanel {
 
         if(urls.size() == 1) {
             SafeHtml html = SafeHtmlUtils.fromTrustedString(container.toString());
-            add(new Anchor(html, urls.get(0), "_blank"));
+            Anchor anchor = new Anchor(html, urls.get(0), "_blank");
+            anchor.getElement().setAttribute("rel", "noindex,nofollow");
+            add(anchor);
         } else if (urls.size() > 1){
             container.add(getQualityLinks(urls));
             add(container);
@@ -52,6 +54,7 @@ public class DownloadItem extends FlowPanel {
         linksPanel.setStyleName(RESOURCES.getCSS().linkPanel());
         for (int i = 0; i < urls.size() ; i++) {
             Anchor link = new Anchor(labels.get(i), urls.get(i), "_blank");
+            link.getElement().setAttribute("rel", "noindex,nofollow");
             link.setTitle("View/download in " + labels.get(i).toLowerCase() + " quality");
             link.setStyleName(RESOURCES.getCSS().linkItem());
             linksPanel.add(link);
