@@ -165,6 +165,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
             String diagramProfile = DiagramColours.get().PROFILE.getName();
             String analysisProfile = AnalysisColours.get().PROFILE.getName();
             String fireworksProfile = FireworksColours.getSelectedProfileName();
+            if (fireworksProfile == null || fireworksProfile.equals("undefined")) fireworksProfile = FireworksColours.ProfileType.getStandard().getProfile().getName();
             String token = analysisResult.getSummary().getToken();
             Window.open("/AnalysisService/report/" + token + "/" + URL.encode(species) + "/report.pdf?resource=" + resource + "&diagramProfile=" + diagramProfile + "&analysisProfile=" + analysisProfile + "&fireworksProfile=" + fireworksProfile, "_blank", "");
         });
