@@ -300,3 +300,43 @@
     height: 45px;
     width: auto !important;
 }
+
+.tissuesGoButton {
+    background: #1e95cf;
+    color: white;
+    border-radius: 16px;
+    border: 1px solid #0e7cb3;
+    float: right;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 10px 25px;
+    outline: none;
+    margin-top: 5px;
+    /*padding: 0 !important;*/
+}
+
+.tissuesGoButton:hover {
+    background: #066b9e;
+    border: 1px solid #1e95cf;
+}
+
+.tissuesGoButton:active:hover {
+    color: #066b9e;
+    background: white;
+    border: 2px solid #066b9e;
+}
+
+.tissuesGoButton:disabled {
+    color: #066b9e;
+    background: #bfbfbf;
+    border: 2px solid #066b9e;
+}
+
+.tissuesLoading {
+    float: right;
+    margin: 15px 15px 0 0;
+}
+
+.tissuesError {
+    margin: 6px 0 0 6px;
+}
