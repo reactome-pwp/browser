@@ -18,6 +18,7 @@ import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
 import org.reactome.web.pwp.client.tools.analysis.tissues.TissueDistribution;
+import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
 import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 import org.reactome.web.pwp.model.client.classes.Species;
@@ -142,6 +143,16 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     @Override
     public void setSpeciesList(List<Species> speciesList) {
         speciesComparison.setSpeciesList(speciesList);
+    }
+
+    @Override
+    public void setExperimentSummaries(List<ExperimentSummary> summaries) {
+        tissueDistribution.setExperimentSummaries(summaries);
+    }
+
+    @Override
+    public void show() {
+        super.show();
     }
 
     private Button getButton(String text, ImageResource imageResource){

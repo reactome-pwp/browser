@@ -5,6 +5,9 @@ import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.client.tools.analysis.tissues.client.ExperimentSummariesClient;
+import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentError;
+import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
 import org.reactome.web.pwp.model.client.classes.Species;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
@@ -44,6 +47,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     @Override
     public void onBrowserReady(BrowserReadyEvent event) {
         retrieveSpeciesList();
+        retrieveExperimentSummaries();
     }
 
     @Override
@@ -75,6 +79,25 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
                 display.setSpeciesList(new LinkedList<>());
                 //TODO
                 eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage().get(0)), this);
+            }
+        });
+    }
+
+    private void retrieveExperimentSummaries() {
+        ExperimentSummariesClient.getSummaries(new ExperimentSummariesClient.Handler() {
+            @Override
+            public void onSummariesSuccess(List<ExperimentSummary> summaries) {
+                display.setExperimentSummaries(summaries);
+            }
+
+            @Override
+            public void onSummariesError(ExperimentError error) {
+                display.setExperimentSummaries(new LinkedList<>());
+            }
+
+            @Override
+            public void onSummariesException(String msg) {
+                display.setExperimentSummaries(new LinkedList<>());
             }
         });
     }

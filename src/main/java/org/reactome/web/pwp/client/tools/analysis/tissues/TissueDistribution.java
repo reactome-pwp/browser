@@ -16,8 +16,6 @@ import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
-import org.reactome.web.pwp.client.tools.analysis.tissues.client.ExperimentSummariesClient;
-import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentError;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
 import org.reactome.web.pwp.client.tools.analysis.tissues.listselector.ListSelector;
 import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
@@ -32,7 +30,7 @@ import java.util.stream.Collectors;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class TissueDistribution extends FlowPanel implements ClickHandler, ChangeHandler,
-        ExperimentSummariesClient.Handler, ListSelector.Handler<String> {
+        ListSelector.Handler<String> {
 
     private static String SAMPLE_URL = "https://127.0.0.1/ExperimentDigester/experiments/##EXPERIMENT_ID##/sample";
 
@@ -53,23 +51,15 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
     public TissueDistribution(AnalysisCompletedHandler handler) {
         this.handler = handler;
         initialiseUI();
-        ExperimentSummariesClient.getSummaries(this);
     }
 
-    @Override
-    public void onSummariesSuccess(List<ExperimentSummary> summaries) {
-        this.summaries = summaries.stream().collect(Collectors.toMap(ExperimentSummary::getId, Function.identity(), (a, b) -> a ));
-        setExperimentsList(summaries);
-    }
-
-    @Override
-    public void onSummariesError(ExperimentError error) {
-        showErrorMessage("Error retrieving the experiments from the Rectome server");
-    }
-
-    @Override
-    public void onSummariesException(String msg) {
-        showErrorMessage("Error retrieving the experiments from the Rectome server");
+    public void setExperimentSummaries(List<ExperimentSummary> summaries){
+        if(summaries.isEmpty()) {
+            showErrorMessage("Error retrieving the experiments from the Rectome server");
+        }else {
+            this.summaries = summaries.stream().collect(Collectors.toMap(ExperimentSummary::getId, Function.identity(), (a, b) -> a));
+            setExperimentsList(summaries);
+        }
     }
 
     @Override
