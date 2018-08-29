@@ -25,6 +25,8 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
 
     private List<Species> speciesList;
 
+    private boolean summariesRetrieved;
+
     public AnalysisLauncherPresenter(EventBus eventBus, AnalysisLauncher.Display display) {
         super(eventBus);
         this.display = display;
@@ -47,13 +49,15 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     @Override
     public void onBrowserReady(BrowserReadyEvent event) {
         retrieveSpeciesList();
-        retrieveExperimentSummaries();
     }
 
     @Override
     public void onStateChanged(StateChangedEvent event) {
         PathwayPortalTool tool = event.getState().getTool();
         if (tool.equals(PathwayPortalTool.ANALYSIS)) {
+            if(!summariesRetrieved) {
+                retrieveExperimentSummaries();
+            }
             display.show();
             display.center();
         } else {
@@ -88,6 +92,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             @Override
             public void onSummariesSuccess(List<ExperimentSummary> summaries) {
                 display.setExperimentSummaries(summaries);
+                summariesRetrieved = true;
             }
 
             @Override
