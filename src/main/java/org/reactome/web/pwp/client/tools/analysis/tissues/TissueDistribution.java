@@ -158,7 +158,12 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
 
 
         add(fp);
-        add(tissueSelector = new ListSelector<String>("Select at least one of the available tissues", this));
+        add(tissueSelector = new ListSelector<String>(
+                "Select at least one of the available tissues",
+                "Available Tissues:",
+                "Selected Tissues:",
+                this)
+        );
         add(goButton);
         add(loading);
         add(errorPanel = getErrorHolder());

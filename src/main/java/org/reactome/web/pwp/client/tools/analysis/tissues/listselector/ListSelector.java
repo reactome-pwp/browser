@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * Allows the user to select multiple items from a list following
+ * the "multiple selection listbox" paradigm.
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class ListSelector<T> extends FlowPanel implements ClickHandler {
@@ -41,13 +44,15 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
     private Button removeAllBtn;
 
     private Label headerLabel;
+    private Label leftListLabel;
+    private Label rightListLabel;
 
     private Handler handler;
     public interface Handler<T> {
         void onSelectedListChanged(List<T> selectedItems);
     }
 
-    public ListSelector(String headerTitle, Handler handler) {
+    public ListSelector(String headerTitle, String leftListHeader, String rightListHeader, Handler handler) {
         this.handler = handler;
         selectedItems = new ArrayList<>();
         setStyleName(RESOURCES.getCSS().panel());
@@ -64,22 +69,29 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
         leftListBox.addMouseUpHandler( e -> updateButtonStatus());
         rightListBox.addMouseUpHandler( e -> updateButtonStatus());
 
-        leftListWrapper = getListWrapper("Available Tissues:", leftListBox);
-        rightListWrapper = getListWrapper("Selected Tissues:", rightListBox);
+        leftListLabel = new Label(leftListHeader);
+        rightListLabel = new Label(rightListHeader);
+
+        leftListWrapper = getListWrapper(leftListLabel, leftListBox);
+        rightListWrapper = getListWrapper(rightListLabel, rightListBox);
 
         addBtn = new IconButton("Add", RESOURCES.addOneIcon());
+        addBtn.setTitle("Include the selected tissues");
         addBtn.setStyleName(RESOURCES.getCSS().addBtn());
         addBtn.addClickHandler(this);
 
         addAllBtn = new IconButton("Add all", RESOURCES.addAllIcon());
+        addAllBtn.setTitle("Include all the available tissues");
         addAllBtn.setStyleName(RESOURCES.getCSS().addBtn());
         addAllBtn.addClickHandler(this);
 
         removeBtn = new IconButton("Remove", RESOURCES.removeOneIcon());
+        removeBtn.setTitle("Remove the selected tissues");
         removeBtn.setStyleName(RESOURCES.getCSS().addBtn());
         removeBtn.addClickHandler(this);
 
         removeAllBtn = new IconButton("Remove all", RESOURCES.removeAllIcon());
+        removeAllBtn.setTitle("Remove all the selected tissues");
         removeAllBtn.setStyleName(RESOURCES.getCSS().addBtn());
         removeAllBtn.addClickHandler(this);
 
@@ -104,6 +116,14 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
 
     public void setHeaderTitle(String headerTitle) {
         headerLabel.setText(headerTitle);
+    }
+
+    public void setLeftListHeader(String leftListHeader) {
+        leftListLabel.setText(leftListHeader);
+    }
+
+    public void setRightListHeader(String rightListHeader) {
+        rightListLabel.setText(rightListHeader);
     }
 
     public List<T> getSelectedItems() {
@@ -174,13 +194,12 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
         return rtn;
     }
 
-    private FlowPanel getListWrapper(String title, ListBox wrappedListBox) {
-        Label titleLB = new Label(title);
-        titleLB.setStyleName(RESOURCES.getCSS().listWrapperLabel());
+    private FlowPanel getListWrapper(Label headerLabel, ListBox wrappedListBox) {
+        headerLabel.setStyleName(RESOURCES.getCSS().listWrapperLabel());
 
         FlowPanel rtn = new FlowPanel();
         rtn.setStyleName(RESOURCES.getCSS().listWrapper());
-        rtn.add(titleLB);
+        rtn.add(headerLabel);
         rtn.add(wrappedListBox);
         return rtn;
     }
@@ -207,6 +226,10 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
 
     private void updateButtonStatus() {
         addBtn.setEnabled(!getSelectedLeftListItems().isEmpty());
+        if (leftListBox.getItemCount() != 0) {
+            addAllBtn.setEnabled(rightListBox.getItemCount() < leftListBox.getItemCount());
+        }
+
         removeBtn.setEnabled(!getSelectedRightListItems().isEmpty());
         removeAllBtn.setEnabled(rightListBox.getItemCount() > 0);
     }
