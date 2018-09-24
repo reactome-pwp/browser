@@ -69,7 +69,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         buttonsPanel.addStyleName(RESOURCES.getCSS().unselectable());
         buttonsPanel.add(this.analysisBtn = getButton("Analyse your data", RESOURCES.analysisTabIcon()));
         buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
-        buttonsPanel.add(this.experimentsBtn = getButton("Overlay experiments", RESOURCES.tissuesTabIcon()));
+        buttonsPanel.add(this.experimentsBtn = getButton("Tissue Distribution", RESOURCES.tissuesTabIcon()));
         buttonsPanel.add(getVersionInfo());
         this.analysisBtn.addStyleName(RESOURCES.getCSS().buttonSelected());
 

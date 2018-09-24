@@ -21,6 +21,9 @@ import java.util.Optional;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class ListSelector<T> extends FlowPanel implements ClickHandler {
+
+    private static int DEFAULT_VISIBLE_LIST_ITEMS = 10;
+
     private List<T> listItems;
     private List<T> selectedItems;
 
@@ -60,22 +63,25 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
         leftListBox = getListBox(RESOURCES.getCSS().listBox());
         rightListBox = getListBox(RESOURCES.getCSS().listBox());
 
+        leftListBox.addMouseUpHandler( e -> updateButtonStatus());
+        rightListBox.addMouseUpHandler( e -> updateButtonStatus());
+
         leftListWrapper = getListWrapper("Available Tissues:", leftListBox);
         rightListWrapper = getListWrapper("Selected Tissues:", rightListBox);
 
-        addBtn = new IconButton("Add", RESOURCES.addIcon());
+        addBtn = new IconButton("Add", RESOURCES.addOneIcon());
         addBtn.setStyleName(RESOURCES.getCSS().addBtn());
         addBtn.addClickHandler(this);
 
-        addAllBtn = new IconButton("Add all", RESOURCES.addIcon());
+        addAllBtn = new IconButton("Add all", RESOURCES.addAllIcon());
         addAllBtn.setStyleName(RESOURCES.getCSS().addBtn());
         addAllBtn.addClickHandler(this);
 
-        removeBtn = new IconButton("Remove", RESOURCES.addIcon());
+        removeBtn = new IconButton("Remove", RESOURCES.removeOneIcon());
         removeBtn.setStyleName(RESOURCES.getCSS().addBtn());
         removeBtn.addClickHandler(this);
 
-        removeAllBtn = new IconButton("Remove all", RESOURCES.addIcon());
+        removeAllBtn = new IconButton("Remove all", RESOURCES.removeAllIcon());
         removeAllBtn.setStyleName(RESOURCES.getCSS().addBtn());
         removeAllBtn.addClickHandler(this);
 
@@ -94,6 +100,8 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
 
         add(header);
         add(container);
+
+        updateButtonStatus();
     }
 
     public void setHeaderTitle(String headerTitle) {
@@ -134,6 +142,7 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
             updateRightListFromSelected();
             handler.onSelectedListChanged(selectedItems);
         }
+        updateButtonStatus();
     }
 
     private void addSelectedItem(T T) {
@@ -162,7 +171,7 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
         ListBox rtn = new ListBox();
         rtn.setStyleName(style);
         rtn.setMultipleSelect(true);
-        rtn.setVisibleItemCount(10);
+        rtn.setVisibleItemCount(DEFAULT_VISIBLE_LIST_ITEMS);
 
         return rtn;
     }
@@ -198,6 +207,12 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
         return selectedItems;
     }
 
+    private void updateButtonStatus() {
+        addBtn.setEnabled(!getSelectedLeftListItems().isEmpty());
+        removeBtn.setEnabled(!getSelectedRightListItems().isEmpty());
+        removeAllBtn.setEnabled(rightListBox.getItemCount() > 0);
+    }
+
 
     public static Resources RESOURCES;
     static {
@@ -215,8 +230,18 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
         @Source(ListSelectorCSS.CSS)
         ListSelectorCSS getCSS();
 
-        @Source("images/ok.png")
-        ImageResource addIcon();
+        @Source("images/add_one.png")
+        ImageResource addOneIcon();
+
+        @Source("images/add_all.png")
+        ImageResource addAllIcon();
+
+        @Source("images/remove_one.png")
+        ImageResource removeOneIcon();
+
+        @Source("images/remove_all.png")
+        ImageResource removeAllIcon();
+
     }
 
     /**

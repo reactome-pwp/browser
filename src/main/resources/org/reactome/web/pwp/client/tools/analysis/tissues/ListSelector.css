@@ -88,3 +88,8 @@
     background-color: #07558b;
     cursor: pointer !important;
 }
+
+.addBtn:disabled, .addBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
+}
