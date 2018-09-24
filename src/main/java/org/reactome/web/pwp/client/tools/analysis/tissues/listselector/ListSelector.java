@@ -16,12 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class ListSelector<T> extends FlowPanel implements ClickHandler {
-
     private static int DEFAULT_VISIBLE_LIST_ITEMS = 10;
 
     private List<T> listItems;
