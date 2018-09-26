@@ -5,11 +5,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.model.client.classes.AbstractModifiedResidue;
-import org.reactome.web.pwp.model.client.classes.DatabaseObject;
-import org.reactome.web.pwp.model.client.classes.EntityWithAccessionedSequence;
-import org.reactome.web.pwp.model.client.classes.ReferenceSequence;
+import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
+import org.reactome.web.pwp.model.client.classes.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,11 +52,28 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
         vp.setWidth("99%");
 
-        vp.add(new Label("Post-translational modification:"));
-        for (AbstractModifiedResidue modifiedResidue : modifiedResidueList) {
-            Widget mPanel = new AbstractModifiedResiduePanel(this, modifiedResidue);
-            mPanel.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
-            vp.add(mPanel);
+        List<TranslationalModification> tms = new ArrayList<>();
+        List<GeneticallyModifiedResidue> gms = new ArrayList<>();
+        for (AbstractModifiedResidue residue : modifiedResidueList) {
+            if(residue instanceof GeneticallyModifiedResidue) gms.add((GeneticallyModifiedResidue) residue);
+            else tms.add((TranslationalModification) residue);
+        }
+
+        if (!tms.isEmpty()) {
+            vp.add(new Label(PropertyType.MODIFICATION.getTitle() + ":"));
+            for (AbstractModifiedResidue modifiedResidue : tms) {
+                Widget mPanel = new AbstractModifiedResiduePanel(this, modifiedResidue);
+                mPanel.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+                vp.add(mPanel);
+            }
+        }
+        if (!gms.isEmpty()) {
+            vp.add(new Label(PropertyType.MUTATION.getTitle() + ":"));
+            for (AbstractModifiedResidue modifiedResidue : gms) {
+                Widget mPanel = new AbstractModifiedResiduePanel(this, modifiedResidue);
+                mPanel.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+                vp.add(mPanel);
+            }
         }
 
         return vp;
