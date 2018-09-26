@@ -45,6 +45,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     private DeckLayoutPanel container;
 
+    private Label version;
+
     public AnalysisLauncherDisplay() {
         super();
         this.setAutoHideEnabled(true);
@@ -151,6 +153,11 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     }
 
     @Override
+    public void setVersionInfo(String info) {
+        version.setText(info);
+    }
+
+    @Override
     public void show() {
         super.show();
     }
@@ -179,12 +186,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         header.add(image);
         Label title = new Label("Analysis tools");
         title.setStyleName(RESOURCES.getCSS().headerText());
-        Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                AnalysisLauncherDisplay.this.hide();
-            }
-        });
+        Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), clickEvent -> AnalysisLauncherDisplay.this.hide());
         header.add(title);
         header.add(closeBtn);
         return header;
@@ -193,11 +195,11 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     private Widget getVersionInfo() {
         FlowPanel versionInfoPanel = new FlowPanel();
         versionInfoPanel.setStyleName(RESOURCES.getCSS().versionInfo());
-        versionInfoPanel.add(new Label("Release: 65"));
-        versionInfoPanel.add(new Label("10763 proteins"));
-        versionInfoPanel.add(new Label("11896 reactions"));
-        versionInfoPanel.add(new Label("2222 pathways"));
-        versionInfoPanel.add(new Label("11674 complexes"));
+        versionInfoPanel.add(version = new Label());
+//        versionInfoPanel.add(new Label("10763 proteins"));
+//        versionInfoPanel.add(new Label("11896 reactions"));
+//        versionInfoPanel.add(new Label("2222 pathways"));
+//        versionInfoPanel.add(new Label("11674 complexes"));
         return versionInfoPanel;
     }
 

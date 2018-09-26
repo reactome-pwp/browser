@@ -24,5 +24,6 @@ public interface AnalysisLauncher {
         void setPresenter(Presenter presenter);
         void setSpeciesList(List<Species> speciesList);
         void setExperimentSummaries(List<ExperimentSummary> summaries);
+        void setVersionInfo(String info);
     }
 }

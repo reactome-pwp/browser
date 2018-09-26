@@ -26,6 +26,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     private List<Species> speciesList;
 
     private boolean summariesRetrieved;
+    private boolean versionInfoRetrieved;
 
     public AnalysisLauncherPresenter(EventBus eventBus, AnalysisLauncher.Display display) {
         super(eventBus);
@@ -55,9 +56,8 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     public void onStateChanged(StateChangedEvent event) {
         PathwayPortalTool tool = event.getState().getTool();
         if (tool.equals(PathwayPortalTool.ANALYSIS)) {
-            if(!summariesRetrieved) {
-                retrieveExperimentSummaries();
-            }
+            if (!summariesRetrieved)        retrieveExperimentSummaries();
+            if (!versionInfoRetrieved)      retrieveVersionInfo();
             display.show();
             display.center();
         } else {
@@ -105,5 +105,11 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
                 display.setExperimentSummaries(new LinkedList<>());
             }
         });
+    }
+
+    private void retrieveVersionInfo() {
+        //TODO implement this according to the server side
+        display.setVersionInfo("Reactome vXX [June 13, 2018]");
+        versionInfoRetrieved = true;
     }
 }
