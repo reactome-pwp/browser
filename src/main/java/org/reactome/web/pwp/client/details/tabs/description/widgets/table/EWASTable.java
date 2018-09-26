@@ -25,7 +25,9 @@ public class EWASTable extends GenomeEncodedEntityTable {
 //            case REFERENCE_ENTITY:
 //                return TableRowFactory.getReferenceEntityRow(title, this.ewas.getReferenceEntity());
             case MODIFICATION:
-                return TableRowFactory.getAbstractModifiedResidue(title, this.ewas.getHasModifiedResidue());
+                return TableRowFactory.getTranslationalModification(title, this.ewas.getHasModifiedResidue());
+            case MUTATION:
+                return TableRowFactory.getGeneticallyModifiedResidue(title, this.ewas.getHasModifiedResidue());
             default:
                 return super.getTableRow(propertyType);
         }
