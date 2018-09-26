@@ -29,9 +29,12 @@ public class DownloadItem extends FlowPanel {
         container.add(new Image(type.getIcon()));
 
         if(urls.size() == 1) {
+            String url = urls.get(0);
+            String[] path = url.split("/");
             SafeHtml html = SafeHtmlUtils.fromTrustedString(container.toString());
-            Anchor anchor = new Anchor(html, urls.get(0), "_blank");
+            Anchor anchor = new Anchor(html, url, "_blank");
             anchor.getElement().setAttribute("rel", "noindex,nofollow");
+            anchor.getElement().setAttribute("download", path[path.length - 1]);
             add(anchor);
         } else if (urls.size() > 1){
             container.add(getQualityLinks(urls));

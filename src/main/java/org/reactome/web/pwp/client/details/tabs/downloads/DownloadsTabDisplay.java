@@ -69,20 +69,6 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
 
     @Override
     public void showDetails(DatabaseObject databaseObject) {
-//        this.showWaitingMessage();
-
-        //To continue ahead the dbName is needed. If it is null, the presenter should still
-        //be trying to retrieve that from the db
-//        if(this.dbName==null){
-//            (new Timer() {
-//                @Override
-//                public void run() {
-//                    showInstanceDetailsIfExists(pathway, databaseObject);
-//                }
-//            }).schedule(250);
-//            return;
-//        }
-
         DockLayoutPanel aux = new DockLayoutPanel(Style.Unit.PX);
 
         FlowPanel titlePanel = new FlowPanel();
@@ -97,7 +83,6 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
                 RESOURCES.diagramInfo().getText());
 
         for (DownloadType downloadType : DownloadType.values()) {
-            //
             List<String> urls  = new DownloadURLBuilder(downloadType, dbName, databaseObject, analysisStatus)
                                                                     .setDiagramProfile(diagramProfile)
                                                                     .setAnalysisProfile(analysisProfile)
