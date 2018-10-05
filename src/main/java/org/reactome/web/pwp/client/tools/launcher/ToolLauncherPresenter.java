@@ -4,20 +4,24 @@ import com.google.gwt.event.shared.EventBus;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
 import org.reactome.web.analysis.client.model.AnalysisError;
-import org.reactome.web.analysis.client.model.DBInfo;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
+import org.reactome.web.pwp.client.common.events.BrowserReadyEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.events.ToolSelectedEvent;
+import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.model.client.classes.DBInfo;
 
-import static org.reactome.web.pwp.client.tools.launcher.ToolLauncher.ToolStatus.ACTIVE;
-import static org.reactome.web.pwp.client.tools.launcher.ToolLauncher.ToolStatus.ERROR;
+import java.util.Objects;
+
+import static org.reactome.web.pwp.client.tools.launcher.ToolLauncher.ToolStatus.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class ToolLauncherPresenter extends AbstractPresenter implements ToolLauncher.Presenter {
+public class ToolLauncherPresenter extends AbstractPresenter implements ToolLauncher.Presenter, BrowserReadyHandler {
 
+    private DBInfo dbInfo;
     @SuppressWarnings("FieldCanBeLocal")
     private ToolLauncher.Display display;
 
@@ -26,7 +30,7 @@ public class ToolLauncherPresenter extends AbstractPresenter implements ToolLaun
         this.display = display;
         this.display.setPresenter(this);
 
-//        this.checkAnalysisStatus();
+        this.eventBus.addHandler(BrowserReadyEvent.TYPE, this);
     }
 
     @Override
@@ -42,8 +46,12 @@ public class ToolLauncherPresenter extends AbstractPresenter implements ToolLaun
     private void checkAnalysisStatus() {
         AnalysisClient.getDatabaseInformation(new AnalysisHandler.DatabaseInformation() {
             @Override
-            public void onDBInfoLoaded(DBInfo dbInfo) {
-                display.setStatus(ACTIVE);
+            public void onDBInfoLoaded(org.reactome.web.analysis.client.model.DBInfo dbInfo) {
+                if (!Objects.equals(ToolLauncherPresenter.this.dbInfo.getChecksum(), dbInfo.getChecksum())){
+                    display.setStatus(WARNING);
+                } else {
+                    display.setStatus(ACTIVE);
+                }
             }
 
             @Override
@@ -56,5 +64,11 @@ public class ToolLauncherPresenter extends AbstractPresenter implements ToolLaun
                 display.setStatus(ERROR);
             }
         });
+    }
+
+    @Override
+    public void onBrowserReady(BrowserReadyEvent event) {
+        this.dbInfo = event.getDbInfo();
+        this.checkAnalysisStatus();
     }
 }

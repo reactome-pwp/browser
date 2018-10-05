@@ -9,20 +9,18 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.model.client.classes.DBInfo;
-import org.reactome.web.pwp.model.client.common.ContentClientHandler;
-import org.reactome.web.pwp.model.client.content.ContentClient;
-import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class LogoPanel extends Composite {
 
+    private DBInfo dbInfo;
     private SimplePanel releasePanel;
 
-    public LogoPanel() {
+    public LogoPanel(DBInfo dbInfo) {
+        this.dbInfo = dbInfo;
         this.releasePanel = new SimplePanel();
         this.releasePanel.setStyleName(RESOURCES.getCSS().dataVersion());
 
@@ -79,24 +77,9 @@ public class LogoPanel extends Composite {
     }
 
     private void setDataVersion() {
-        ContentClient.getDatabaseInformation(new ContentClientHandler.DatabaseInfo() {
-            @Override
-            public void onDatabaseInfoLoaded(DBInfo dbInfo) {
-                releasePanel.clear();
-                String version = "" + dbInfo.getVersion();
-                releasePanel.add(getReactomeReleasePanel(version, "Reactome database release " + version));
-            }
-
-            @Override
-            public void onContentClientException(Type type, String message) {
-                Console.error(message);
-            }
-
-            @Override
-            public void onContentClientError(ContentClientError error) {
-                Console.error(error.getMessage().toString());
-            }
-        });
+        releasePanel.clear();
+        String version = "" + dbInfo.getVersion();
+        releasePanel.add(getReactomeReleasePanel(version, "Reactome database release " + version));
     }
 
 

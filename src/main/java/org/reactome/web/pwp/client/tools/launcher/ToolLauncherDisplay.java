@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import org.reactome.web.pwp.client.AppConfig;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 
 /**
@@ -45,8 +44,6 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
 
     @Override
     public void setStatus(ToolLauncher.ToolStatus status) {
-        Console.info("Setting statuts: " + status);
-
         switch (status) {
             case ACTIVE:
                 break;
@@ -80,15 +77,6 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
          */
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
-
-        @Source("images/analysis_clicked.png")
-        ImageResource analysisClicked();
-
-        @Source("images/analysis_hovered.png")
-        ImageResource analysisHovered();
-
-        @Source("images/analysis_normal.png")
-        ImageResource analysisNormal();
 
         @Source("images/analysis_button.png")
         ImageResource analysisButton();
