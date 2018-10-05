@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import org.reactome.web.pwp.client.AppConfig;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
+import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -19,12 +21,16 @@ import org.reactome.web.pwp.client.common.PathwayPortalTool;
 public class ToolLauncherDisplay extends Composite implements ToolLauncher.Display, ClickHandler /*, CloseHandler<PopupPanel>*/ {
 
     private ToolLauncher.Presenter presenter;
-    private LauncherButton analysisBtn;
+    private IconButton analysisBtn;
 
     public ToolLauncherDisplay() {
         FlowPanel flowPanel = new FlowPanel();
         flowPanel.setStyleName(RESOURCES.getCSS().launcherPanel());
-        this.analysisBtn= new LauncherButton("Analyse your data...", RESOURCES.getCSS().analysis(), this);
+        this.analysisBtn = new IconButton("", RESOURCES.analysisButton());
+        this.analysisBtn.setTitle("Analyse your data...");
+        this.analysisBtn.setStyleName(RESOURCES.getCSS().analysisBtn());
+        this.analysisBtn.addClickHandler(this);
+
         flowPanel.add(new SimplePanel(new InlineLabel("Analysis:")));
         flowPanel.add(this.analysisBtn);
         //The analysis tools are not available for the curation sites
@@ -37,10 +43,23 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         this.presenter = presenter;
     }
 
+    @Override
+    public void setStatus(ToolLauncher.ToolStatus status) {
+        Console.info("Setting statuts: " + status);
+
+        switch (status) {
+            case ACTIVE:
+                break;
+            case WARNING:
+                break;
+            case ERROR:
+                break;
+        }
+    }
 
     @Override
     public void onClick(ClickEvent event) {
-        LauncherButton btn = (LauncherButton) event.getSource();
+        IconButton btn = (IconButton) event.getSource();
         if(btn.equals(this.analysisBtn)){
             presenter.toolSelected(PathwayPortalTool.ANALYSIS);
         }
@@ -71,6 +90,9 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         @Source("images/analysis_normal.png")
         ImageResource analysisNormal();
 
+        @Source("images/analysis_button.png")
+        ImageResource analysisButton();
+
     }
 
     /**
@@ -86,6 +108,8 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         String launcherPanel();
 
         String analysis();
+
+        String analysisBtn();
 
     }
 }

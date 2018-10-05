@@ -8,11 +8,18 @@ import org.reactome.web.pwp.client.common.module.BrowserModule;
  */
 public interface ToolLauncher {
 
+    enum ToolStatus {
+        ACTIVE,
+        WARNING,
+        ERROR
+    }
+
     interface Presenter extends BrowserModule.Presenter {
         void toolSelected(PathwayPortalTool tool);
     }
 
     interface Display extends BrowserModule.Display {
         void setPresenter(Presenter presenter);
+        void setStatus(ToolStatus status);
     }
 }

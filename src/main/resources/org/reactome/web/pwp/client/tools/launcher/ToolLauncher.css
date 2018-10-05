@@ -7,7 +7,7 @@
     padding: 3px 8px 2px 10px;
 }
 
-.launcherPanel div {
+.launcherPanel>div {
     color: white;
     float: left;
     padding: 6px 8px 0 0;
@@ -31,4 +31,49 @@
 
 @sprite .analysis:active:hover {
     gwt-image: 'analysisClicked';
+}
+
+.analysisBtn {
+    background-color: rgb(30, 148, 208);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    /*padding: 2px 5px 2px 2px;*/
+    padding: 0;
+    outline: none;
+    /*font-size: medium !important;*/
+}
+
+.analysisBtn>div {
+    margin: 0;
+}
+
+.analysisBtn span {
+    /*vertical-align: middle !important;*/
+    display: none;
+    /*min-width: 84px;*/
+    /*max-width: 160px;*/
+}
+
+.analysisBtn img {
+    /*vertical-align: middle !important;*/
+    /*padding-right: 3px;*/
+    height: 28px;
+    width: auto;
+    margin: 0;
+}
+
+.analysisBtn:hover {
+    background-color: #177dc0;
+    cursor: pointer !important;
+}
+
+.analysisBtn:active:hover {
+    background-color: #07558b;
+    cursor: pointer !important;
+}
+
+.analysisBtn:disabled, .analysisBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
 }

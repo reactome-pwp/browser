@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.model.client.classes.DBInfo;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
@@ -78,10 +79,11 @@ public class LogoPanel extends Composite {
     }
 
     private void setDataVersion() {
-        ContentClient.getDatabaseVersion(new ContentClientHandler.Version() {
+        ContentClient.getDatabaseInformation(new ContentClientHandler.DatabaseInfo() {
             @Override
-            public void onVersionLoaded(String version) {
+            public void onDatabaseInfoLoaded(DBInfo dbInfo) {
                 releasePanel.clear();
+                String version = "" + dbInfo.getVersion();
                 releasePanel.add(getReactomeReleasePanel(version, "Reactome database release " + version));
             }
 
