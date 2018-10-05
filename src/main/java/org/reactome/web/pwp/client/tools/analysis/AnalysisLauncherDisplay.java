@@ -196,10 +196,9 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         FlowPanel versionInfoPanel = new FlowPanel();
         versionInfoPanel.setStyleName(RESOURCES.getCSS().versionInfo());
         versionInfoPanel.add(version = new Label());
-//        versionInfoPanel.add(new Label("10763 proteins"));
-//        versionInfoPanel.add(new Label("11896 reactions"));
-//        versionInfoPanel.add(new Label("2222 pathways"));
-//        versionInfoPanel.add(new Label("11674 complexes"));
+
+        String url = "/user/guide/analysis";
+        versionInfoPanel.add(new Anchor("Learn more about our analysis tools", url, "_blank"));
         return versionInfoPanel;
     }
 

@@ -32,6 +32,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
         super(eventBus);
         this.display = display;
         this.display.setPresenter(this);
+        this.display.setVersionInfo("...");
 
         this.eventBus.addHandler(BrowserReadyEvent.TYPE, this);
     }
@@ -108,8 +109,22 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     }
 
     private void retrieveVersionInfo() {
-        //TODO implement this according to the server side
-        display.setVersionInfo("Reactome vXX [June 13, 2018]");
-        versionInfoRetrieved = true;
+//        AnalysisClient.getDatabaseInformation(new AnalysisHandler.DatabaseInformation() {
+//            @Override
+//            public void onDBInfoLoaded(DBInfo dbInfo) {
+//                display.setVersionInfo("Reactome v" + dbInfo.getVersion());
+//                versionInfoRetrieved = true;
+//            }
+//
+//            @Override
+//            public void onDBInfoError(AnalysisError error) {
+//                versionInfoRetrieved = true;
+//            }
+//
+//            @Override
+//            public void onAnalysisServerException(String message) {
+//                versionInfoRetrieved = true;
+//            }
+//        });
     }
 }
