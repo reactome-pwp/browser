@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import org.reactome.web.pwp.client.AppConfig;
+import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 
@@ -21,6 +22,11 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
 
     private ToolLauncher.Presenter presenter;
     private IconButton analysisBtn;
+
+    private final static String TOOLTIP = "Analyse your data...";
+    private final static String TOOLTIP_WARNING = "The AnalysisService and the ContentService are running with different database versions.";
+    private final static String TOOLTIP_ERROR = "Unable to connect to the server.";
+
 
     public ToolLauncherDisplay() {
         FlowPanel flowPanel = new FlowPanel();
@@ -46,10 +52,16 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
     public void setStatus(ToolLauncher.ToolStatus status) {
         switch (status) {
             case ACTIVE:
+                analysisBtn.clearOverlayIcon();
+                this.analysisBtn.setTitle(TOOLTIP);
                 break;
             case WARNING:
+                analysisBtn.setOverlayIcon(CommonImages.INSTANCE.warning());
+                this.analysisBtn.setTitle(TOOLTIP_WARNING);
                 break;
             case ERROR:
+                analysisBtn.setOverlayIcon(CommonImages.INSTANCE.error());
+                this.analysisBtn.setTitle(TOOLTIP_ERROR);
                 break;
         }
     }
@@ -94,8 +106,6 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         String CSS = "org/reactome/web/pwp/client/tools/launcher/ToolLauncher.css";
 
         String launcherPanel();
-
-        String analysis();
 
         String analysisBtn();
 
