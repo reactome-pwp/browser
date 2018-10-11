@@ -213,6 +213,8 @@
 
 .errorMessage img {
     margin: 8px 0 8px 20px;
+    height: 16px;
+    width: auto;
     float: left !important;
 }
 
