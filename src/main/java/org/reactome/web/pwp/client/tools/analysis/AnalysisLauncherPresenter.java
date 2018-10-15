@@ -1,6 +1,9 @@
 package org.reactome.web.pwp.client.tools.analysis;
 
 import com.google.gwt.event.shared.EventBus;
+import org.reactome.web.analysis.client.AnalysisClient;
+import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
@@ -8,6 +11,7 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.ExperimentSummariesClient;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentError;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
+import org.reactome.web.pwp.model.client.classes.DBInfo;
 import org.reactome.web.pwp.model.client.classes.Species;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
@@ -15,6 +19,7 @@ import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -23,10 +28,10 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
 
     private AnalysisLauncher.Display display;
 
-    private List<Species> speciesList;
+    private DBInfo dbInfo;
+    private org.reactome.web.analysis.client.model.DBInfo analysisInfo;
 
     private boolean summariesRetrieved;
-    private boolean versionInfoRetrieved;
 
     public AnalysisLauncherPresenter(EventBus eventBus, AnalysisLauncher.Display display) {
         super(eventBus);
@@ -50,6 +55,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
 
     @Override
     public void onBrowserReady(BrowserReadyEvent event) {
+        this.dbInfo = event.getDbInfo();
         retrieveSpeciesList();
     }
 
@@ -58,7 +64,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
         PathwayPortalTool tool = event.getState().getTool();
         if (tool.equals(PathwayPortalTool.ANALYSIS)) {
             if (!summariesRetrieved)        retrieveExperimentSummaries();
-            if (!versionInfoRetrieved)      retrieveVersionInfo();
+            if (analysisInfo == null)       retrieveAnalysisInfo();
             display.show();
             display.center();
         } else {
@@ -108,23 +114,27 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
         });
     }
 
-    private void retrieveVersionInfo() {
-//        AnalysisClient.getDatabaseInformation(new AnalysisHandler.DatabaseInformation() {
-//            @Override
-//            public void onDBInfoLoaded(DBInfo dbInfo) {
-//                display.setVersionInfo("Reactome v" + dbInfo.getVersion());
-//                versionInfoRetrieved = true;
-//            }
-//
-//            @Override
-//            public void onDBInfoError(AnalysisError error) {
-//                versionInfoRetrieved = true;
-//            }
-//
-//            @Override
-//            public void onAnalysisServerException(String message) {
-//                versionInfoRetrieved = true;
-//            }
-//        });
+    private void retrieveAnalysisInfo() {
+        AnalysisClient.getDatabaseInformation(new AnalysisHandler.DatabaseInformation() {
+            @Override
+            public void onDBInfoLoaded(org.reactome.web.analysis.client.model.DBInfo dbInfo) {
+                analysisInfo = dbInfo;
+                if (!Objects.equals(AnalysisLauncherPresenter.this.dbInfo.getChecksum(), dbInfo.getChecksum())){
+                    display.setVersionInfo("Results may be compromised. Wrong version detected");
+                } else {
+                    display.setVersionInfo("Reactome v" + dbInfo.getVersion());
+                }
+            }
+
+            @Override
+            public void onDBInfoError(AnalysisError error) {
+                // Nothing here
+            }
+
+            @Override
+            public void onAnalysisServerException(String message) {
+                // Nothing here
+            }
+        });
     }
 }
