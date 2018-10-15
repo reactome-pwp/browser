@@ -51,12 +51,27 @@
         </div>
     </div>
 
-    <div id="appErrorMessage" class="app-Loader" style="display:none">
-        <div class="logoDiv">
-            <img class="logoIcon" src="static/images/logo.png" alt="Reactome logo">
+    <div id="appErrorMessage" class="app-Outage" style="display:none">
+        <div class="headerDiv">
+            <img class="headerLogo"src="static/images/logo.png" alt="Reactome logo">
         </div>
-        <div class="loaderDiv">
-            <img class="loaderIcon" src="static/images/loader_lines.gif" alt="loading..."> Oooops we did it again! An error happened...
+        <div class="mainDiv">
+            <div class="outageIconDiv">
+                <img src="static/images/outage_icon.png" alt="Reactome outage icon">
+            </div>
+            <div class="outageMessageDiv">
+                <div class="outageMessageTitle">Ooops!</div>
+                <div class="outageMessageSubtitle">This is unexpected...</div>
+                <div class="outageMessageText">
+                    <p>An error has occured and we are working to fix the problem.
+                        We'll be up and running shortly.<br>
+                        Thank you for your patience.<br>
+                        If you need immediate assistance please contact
+                        <a href="mailto:help@reactome.org">help@reactome.org</a>.
+                    </p>
+                </div>
+                <button class="retryButton" onclick="window.location.reload(true);">Try again</button>
+            </div>
         </div>
     </div>
 
