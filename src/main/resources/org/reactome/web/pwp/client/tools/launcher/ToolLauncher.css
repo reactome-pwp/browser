@@ -7,7 +7,7 @@
     padding: 3px 8px 2px 10px;
 }
 
-.launcherPanel div {
+.launcherPanel>div {
     color: white;
     float: left;
     padding: 6px 8px 0 0;
@@ -17,18 +17,43 @@
     margin: 0 2px 0 2px;
 }
 
-@sprite .analysis {
-    gwt-image: 'analysisNormal';
+.analysisBtn {
+    background-color: #58C3E5;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 0;
     outline: none;
-    background-repeat: no-repeat;
-    border: 0;
-    cursor: pointer;
 }
 
-@sprite .analysis:hover {
-    gwt-image: 'analysisHovered';
+.analysisBtn>div {
+    margin: 0;
+    position: relative;
 }
 
-@sprite .analysis:active:hover {
-    gwt-image: 'analysisClicked';
+.analysisBtn span {
+    display: none;
+}
+
+.analysisBtn img {
+    height: 28px;
+    width: auto;
+    margin: 0;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.analysisBtn:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
+}
+
+.analysisBtn:active:hover {
+    background-color: #066B9E;
+    cursor: pointer !important;
+}
+
+.analysisBtn:disabled, .analysisBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
 }

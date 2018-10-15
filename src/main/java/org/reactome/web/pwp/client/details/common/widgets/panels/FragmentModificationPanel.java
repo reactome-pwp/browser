@@ -58,7 +58,7 @@ public class FragmentModificationPanel extends DetailsPanel {
 
         FlexTable flexTable = new FlexTable();
         flexTable.setWidth("98%");
-        flexTable.getColumnFormatter().setWidth(0, "75px");
+        flexTable.getColumnFormatter().setWidth(0, "40%");
         flexTable.setCellPadding(0);
         flexTable.setCellSpacing(0);
 

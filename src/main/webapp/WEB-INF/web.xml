@@ -249,6 +249,33 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>UserGuide</servlet-name>
+        <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <!--<param-value>localhost</param-value>-->
+            <!--<param-value>reactome.org</param-value>-->
+            <param-value>reactomedev.oicr.on.ca</param-value>
+            <!--<param-value>reactomecurator.oicr.on.ca</param-value>-->
+            <!--<param-value>reactomerelease.oicr.on.ca</param-value>-->
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <!--<param-value>9090</param-value>-->
+            <param-value>80</param-value>
+            <!--<param-value>8080</param-value>-->
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/user/guide</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserGuide</servlet-name>
+        <url-pattern>/user/guide/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Templates</servlet-name>
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>

@@ -19,10 +19,18 @@ import java.util.Map;
 public abstract class TableRowFactory {
     private static final boolean EMPTY_ROWS_AS_NA = !GWT.isScript();
 
-    public static Widget getAbstractModifiedResidue(String title, List<AbstractModifiedResidue> modifiedResidues) {
+    public static Widget getTranslationalModification(String title, List<AbstractModifiedResidue> abstractModifiedResidues) {
         List<DetailsPanel> panels = new LinkedList<>();
-        for (AbstractModifiedResidue modifiedResidue : modifiedResidues) {
-            panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
+        for (AbstractModifiedResidue modifiedResidue : abstractModifiedResidues) {
+            if(modifiedResidue instanceof TranslationalModification) panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
+        }
+        return getOverviewRow(title, panels);
+    }
+
+    public static Widget getGeneticallyModifiedResidue(String title, List<AbstractModifiedResidue> abstractModifiedResidues) {
+        List<DetailsPanel> panels = new LinkedList<>();
+        for (AbstractModifiedResidue modifiedResidue : abstractModifiedResidues) {
+            if(modifiedResidue instanceof GeneticallyModifiedResidue) panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
         }
         return getOverviewRow(title, panels);
     }
