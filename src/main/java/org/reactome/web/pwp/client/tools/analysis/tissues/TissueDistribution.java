@@ -36,8 +36,9 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
 
     private Map<Integer, ExperimentSummary> summaries;
     private ExperimentSummary selectedSummary;
-    private ListBox experimentSelector;
 
+    private FlowPanel selectionPanel;
+    private ListBox experimentSelector;
     private ListSelector tissueSelector;
     private Button goButton;
 
@@ -55,7 +56,7 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
 
     public void setExperimentSummaries(List<ExperimentSummary> summaries){
         if(summaries.isEmpty()) {
-            showErrorMessage("Error retrieving the experiments from the Rectome server");
+            noExperimentsLoaded();
         }else {
             this.summaries = summaries.stream().collect(Collectors.toMap(ExperimentSummary::getId, Function.identity(), (a, b) -> a));
             setExperimentsList(summaries);
@@ -142,12 +143,12 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
         explanation.setStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisText());
         add(explanation);
 
-        FlowPanel fp = new FlowPanel();
-        fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisSubmission());
-        fp.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisMainSubmitter());
-        fp.add(new InlineLabel("Selected experiment:"));
+        selectionPanel = new FlowPanel();
+        selectionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisSubmission());
+        selectionPanel.addStyleName(AnalysisStyleFactory.getAnalysisStyle().analysisMainSubmitter());
+        selectionPanel.add(new InlineLabel("Selected experiment:"));
 
-        fp.add(experimentSelector = new ListBox());
+        selectionPanel.add(experimentSelector = new ListBox());
         experimentSelector.setMultipleSelect(false);
 
         loading = new Image(CommonImages.INSTANCE.loader());
@@ -157,7 +158,7 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
         goButton.setStyleName(AnalysisStyleFactory.getAnalysisStyle().tissuesGoButton());
 
 
-        add(fp);
+        add(selectionPanel);
         add(tissueSelector = new ListSelector<String>(
                 "Select at least one of the available tissues",
                 "Available Tissues:",
@@ -173,7 +174,13 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
         loading.setVisible(false);
         goButton.setVisible(false);
         goButton.setEnabled(false);
+    }
 
+    private void noExperimentsLoaded() {
+        selectionPanel.setVisible(false);
+        errorHolder.setText("Error retrieving the experiments from the Rectome server");
+        errorPanel.getElement().getStyle().setOpacity(1);
+        errorPanel.getElement().getStyle().setOpacity(1);
     }
 
     private void updateUI() {
