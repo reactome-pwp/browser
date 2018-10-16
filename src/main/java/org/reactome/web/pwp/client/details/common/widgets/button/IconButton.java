@@ -68,6 +68,7 @@ public class IconButton extends Button {
     public void clearOverlayIcon() {
         if(overlay!=null) {
             overlay.removeFromParent();
+            updateHTML();
         }
     }
 
