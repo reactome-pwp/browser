@@ -12,6 +12,12 @@ import java.util.List;
  */
 public interface AnalysisLauncher {
 
+    enum Status {
+        ACTIVE,
+        WARNING,
+        ERROR
+    }
+
     interface Presenter extends BrowserModule.Presenter {
         void displayClosed();
         void analysisCompleted(AnalysisCompletedEvent event);
@@ -24,6 +30,7 @@ public interface AnalysisLauncher {
         void setPresenter(Presenter presenter);
         void setSpeciesList(List<Species> speciesList);
         void setExperimentSummaries(List<ExperimentSummary> summaries);
-        void setVersionInfo(String info);
+        void setVersionInfo(String version);
+        void setStatus(Status status);
     }
 }

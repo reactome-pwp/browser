@@ -14,6 +14,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
@@ -25,6 +26,8 @@ import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.reactome.web.pwp.client.tools.analysis.AnalysisLauncher.Status;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -46,6 +49,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     private DeckLayoutPanel container;
 
     private Label version;
+    private Image statusIcon;
 
     public AnalysisLauncherDisplay() {
         super();
@@ -158,6 +162,24 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     }
 
     @Override
+    public void setStatus(Status status) {
+        switch (status) {
+            case ACTIVE:
+                statusIcon.setVisible(false);
+                break;
+            case WARNING:
+                statusIcon.setResource(CommonImages.INSTANCE.warning());
+                statusIcon.setTitle("Results may be compromised. Wrong version detected");
+                statusIcon.setVisible(true);
+                break;
+            case ERROR:
+                statusIcon.setResource(CommonImages.INSTANCE.error());
+                statusIcon.setTitle("There might be a problem with the Analysis service");
+                statusIcon.setVisible(true);
+        }
+    }
+
+    @Override
     public void show() {
         super.show();
     }
@@ -193,9 +215,13 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     }
 
     private Widget getVersionInfo() {
+        FlowPanel firstLine = new FlowPanel();
+        firstLine.add(version = new Label());
+        firstLine.add(statusIcon = new Image());
+
         FlowPanel versionInfoPanel = new FlowPanel();
         versionInfoPanel.setStyleName(RESOURCES.getCSS().versionInfo());
-        versionInfoPanel.add(version = new Label());
+        versionInfoPanel.add(firstLine);
 
         String url = "/user/guide/analysis";
         versionInfoPanel.add(new Anchor("Learn more about our analysis tools", url, "_blank"));

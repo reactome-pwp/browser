@@ -118,7 +118,7 @@
 }
 
 .versionInfo {
-    width: 100%;
+    width: 95%;
     min-width: 80px;
 
     color: white;
@@ -132,6 +132,14 @@
     align-items: stretch;
 }
 
-.versionInfo div{
+.versionInfo>div>div {
+    font-size: small;
     text-align: left;
+    display: inline-block;
+    margin-right: 2px;
+}
+
+.versionInfo img {
+    height: 14px;
+    width: auto;
 }

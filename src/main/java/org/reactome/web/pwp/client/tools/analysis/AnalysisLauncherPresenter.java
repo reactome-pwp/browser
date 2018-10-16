@@ -21,6 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.reactome.web.pwp.client.tools.analysis.AnalysisLauncher.Status.*;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -37,7 +39,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
         super(eventBus);
         this.display = display;
         this.display.setPresenter(this);
-        this.display.setVersionInfo("...");
+        this.display.setVersionInfo("");
 
         this.eventBus.addHandler(BrowserReadyEvent.TYPE, this);
     }
@@ -119,21 +121,22 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             @Override
             public void onDBInfoLoaded(org.reactome.web.analysis.client.model.DBInfo dbInfo) {
                 analysisInfo = dbInfo;
+                display.setVersionInfo("Reactome v" + dbInfo.getVersion());
                 if (!Objects.equals(AnalysisLauncherPresenter.this.dbInfo.getChecksum(), dbInfo.getChecksum())){
-                    display.setVersionInfo("Results may be compromised. Wrong version detected");
+                    display.setStatus(WARNING);
                 } else {
-                    display.setVersionInfo("Reactome v" + dbInfo.getVersion());
+                    display.setStatus(ACTIVE);
                 }
             }
 
             @Override
             public void onDBInfoError(AnalysisError error) {
-                // Nothing here
+                display.setStatus(ERROR);
             }
 
             @Override
             public void onAnalysisServerException(String message) {
-                // Nothing here
+                display.setStatus(ERROR);
             }
         });
     }
