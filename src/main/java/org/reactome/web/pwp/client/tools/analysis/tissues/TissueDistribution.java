@@ -21,6 +21,7 @@ import org.reactome.web.pwp.client.tools.analysis.tissues.listselector.ListSelec
 import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -57,7 +58,8 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
     public void setExperimentSummaries(List<ExperimentSummary> summaries){
         if(summaries.isEmpty()) {
             noExperimentsLoaded();
-        }else {
+            this.summaries = new HashMap<>();
+        } else {
             this.summaries = summaries.stream().collect(Collectors.toMap(ExperimentSummary::getId, Function.identity(), (a, b) -> a));
             setExperimentsList(summaries);
         }

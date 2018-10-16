@@ -133,6 +133,7 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
     public void setAvailableListItems(List<T> listItems) {
         this.listItems = listItems;
         clearSelectedItems();
+        handler.onSelectedListChanged(selectedItems);
         if (listItems == null) {
             setVisible(false);
         } else {
@@ -140,6 +141,7 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
             listItems.forEach(item -> leftListBox.addItem(item.toString()));
             setVisible(true);
         }
+        updateButtonStatus();
     }
 
     @Override
@@ -206,9 +208,11 @@ public class ListSelector<T> extends FlowPanel implements ClickHandler {
 
     private List<T> getSelectedLeftListItems() {
         List<T> selectedItems = new ArrayList<>();
-        for (int i = 0; i < leftListBox.getItemCount(); i++) {
-            if (leftListBox.isItemSelected(i)) {
-                selectedItems.add(listItems.get(i));
+        if(listItems != null) {
+            for (int i = 0; i < leftListBox.getItemCount(); i++) {
+                if (leftListBox.isItemSelected(i)) {
+                    selectedItems.add(listItems.get(i));
+                }
             }
         }
         return selectedItems;
