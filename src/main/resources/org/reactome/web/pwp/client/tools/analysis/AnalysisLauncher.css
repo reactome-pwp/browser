@@ -123,7 +123,7 @@
 
     color: white;
     /*font-weight: bold;*/
-    font-size: x-small;
+    font-size: small;
     margin: 20px 0 0 6px;
 
     display: flex;
@@ -133,7 +133,7 @@
 }
 
 .versionInfo>div>div {
-    font-size: small;
+    font-weight: bold;
     text-align: left;
     display: inline-block;
     margin-right: 2px;
@@ -142,4 +142,15 @@
 .versionInfo img {
     height: 14px;
     width: auto;
+}
+
+.versionInfo a {
+    margin-top: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+.versionInfo a:hover {
+    color: white;
+    text-decoration: underline;
 }

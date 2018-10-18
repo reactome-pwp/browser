@@ -224,7 +224,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         versionInfoPanel.add(firstLine);
 
         String url = "/user/guide/analysis";
-        versionInfoPanel.add(new Anchor("Learn more about our analysis tools", url, "_blank"));
+        versionInfoPanel.add(new Anchor("Click to learn more about our analysis tools", url, "_blank"));
         return versionInfoPanel;
     }
 
