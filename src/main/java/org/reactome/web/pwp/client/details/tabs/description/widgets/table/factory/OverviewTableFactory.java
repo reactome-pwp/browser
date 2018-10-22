@@ -69,6 +69,10 @@ public abstract class OverviewTableFactory {
             return new SimpleEntityTable((SimpleEntity) databaseObject);
         }
 
+        if(databaseObject instanceof Drug){
+            return new DrugTable((Drug) databaseObject);
+        }
+
         if(databaseObject instanceof PhysicalEntity){
             return new PhysicalEntityTable((PhysicalEntity) databaseObject);
         }

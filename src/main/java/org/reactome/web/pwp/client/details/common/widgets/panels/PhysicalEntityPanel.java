@@ -113,6 +113,11 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
             vp.add(new EntityWithAccessionedSequencePanel(this, ewas));
         }
 
+        if(this.physicalEntity instanceof Drug){
+            Drug drug = (Drug) this.physicalEntity;
+            vp.add(new DrugPanel(this, drug));
+        }
+
         if(!this.physicalEntity.getCrossReference().isEmpty()){
             vp.add(getCrossReferenceTree());
         }
@@ -135,7 +140,9 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         reference.setState(true, false);
         references.addItem(reference);
 
-        if(!this.physicalEntity.getCrossReference().isEmpty()){
+        //Links to the complex portal have been added as cross references for Complexes but they
+        //do not have reference entity. The first condition is a hack to accommodate this case
+        if(!(this.physicalEntity instanceof Complex) && !this.physicalEntity.getCrossReference().isEmpty()){
             Collections.sort(physicalEntity.getCrossReference());
             for (DatabaseIdentifier databaseIdentifier : this.physicalEntity.getCrossReference()) {
                 dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);
