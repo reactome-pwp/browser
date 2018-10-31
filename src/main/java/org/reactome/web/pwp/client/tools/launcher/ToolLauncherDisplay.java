@@ -29,13 +29,13 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
 
 
     public ToolLauncherDisplay() {
-        FlowPanel flowPanel = new FlowPanel();
-        flowPanel.setStyleName(RESOURCES.getCSS().launcherPanel());
-        this.analysisBtn = new IconButton("", RESOURCES.analysisButton());
+        this.analysisBtn = new IconButton("", RESOURCES.analysisIcon());
         this.analysisBtn.setTitle("Analyse your data...");
         this.analysisBtn.setStyleName(RESOURCES.getCSS().analysisBtn());
         this.analysisBtn.addClickHandler(this);
 
+        FlowPanel flowPanel = new FlowPanel();
+        flowPanel.setStyleName(RESOURCES.getCSS().launcherPanel());
         flowPanel.add(new SimplePanel(new InlineLabel("Analysis:")));
         flowPanel.add(this.analysisBtn);
         //The analysis tools are not available for the curation sites
@@ -90,8 +90,8 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
 
-        @Source("images/analysis_button.png")
-        ImageResource analysisButton();
+        @Source("images/analysis.png")
+        ImageResource analysisIcon();
 
     }
 

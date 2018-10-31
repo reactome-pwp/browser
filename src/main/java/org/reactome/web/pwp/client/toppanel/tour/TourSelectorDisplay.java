@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import org.reactome.web.pwp.client.toppanel.layout.LayoutButton;
+import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -20,10 +20,16 @@ public class TourSelectorDisplay extends Composite implements TourSelector.Displ
     private TourSelector.Presenter presenter;
 
     public TourSelectorDisplay() {
+        IconButton tourBtn = new IconButton("", RESOURCES.tourIcon());
+        tourBtn.setTitle("Starts the tour...");
+        tourBtn.setStyleName(RESOURCES.getCSS().tourBtn());
+        tourBtn.addClickHandler(this);
+
         FlowPanel flowPanel = new FlowPanel();
         flowPanel.setStyleName(RESOURCES.getCSS().layoutPanel());
         flowPanel.add(new SimplePanel(new InlineLabel("Tour:")));
-        flowPanel.add(new LayoutButton("Starts the tour...", RESOURCES.getCSS().tour(), this));
+        flowPanel.add(tourBtn);
+
         initWidget(flowPanel);
     }
 
@@ -54,14 +60,8 @@ public class TourSelectorDisplay extends Composite implements TourSelector.Displ
         @Source(ResoruceCSS.CSS)
         ResoruceCSS getCSS();
 
-        @Source("images/tour_clicked.png")
-        ImageResource tourClicked();
-
-        @Source("images/tour_hovered.png")
-        ImageResource tourHovered();
-
-        @Source("images/tour_normal.png")
-        ImageResource tourNormal();
+        @Source("images/tour.png")
+        ImageResource tourIcon();
     }
 
     /**
@@ -76,6 +76,6 @@ public class TourSelectorDisplay extends Composite implements TourSelector.Displ
 
         String layoutPanel();
 
-        String tour();
+        String tourBtn();
     }
 }
