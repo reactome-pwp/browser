@@ -14,15 +14,20 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
+import org.reactome.web.pwp.client.tools.analysis.tissues.TissueDistribution;
+import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
 import org.reactome.web.pwp.client.tools.analysis.wizard.AnalysisWizard;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 import org.reactome.web.pwp.model.client.classes.Species;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.reactome.web.pwp.client.tools.analysis.AnalysisLauncher.Status;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -34,12 +39,17 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     private AnalysisLauncher.Presenter presenter;
 
     private SpeciesComparison speciesComparison;
+    private TissueDistribution tissueDistribution;
 
     private List<Button> btns = new LinkedList<>();
     private Button analysisBtn;
     private Button speciesBtn;
+    private Button experimentsBtn;
 
     private DeckLayoutPanel container;
+
+    private Label version;
+    private Image statusIcon;
 
     public AnalysisLauncherDisplay() {
         super();
@@ -65,6 +75,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         buttonsPanel.addStyleName(RESOURCES.getCSS().unselectable());
         buttonsPanel.add(this.analysisBtn = getButton("Analyse your data", RESOURCES.analysisTabIcon()));
         buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
+        buttonsPanel.add(this.experimentsBtn = getButton("Tissue Distribution", RESOURCES.tissuesTabIcon()));
+        buttonsPanel.add(getVersionInfo());
         this.analysisBtn.addStyleName(RESOURCES.getCSS().buttonSelected());
 
         this.container = new DeckLayoutPanel();                 // Main tab container
@@ -72,6 +84,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
         this.container.add(new AnalysisWizard(this));
         this.container.add(speciesComparison = new SpeciesComparison(this));
+        this.container.add(tissueDistribution = new TissueDistribution(this));
 
         this.container.showWidget(0);
         this.container.setAnimationVertical(true);
@@ -104,10 +117,12 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         }
         Button btn = (Button) event.getSource();
         btn.addStyleName(RESOURCES.getCSS().buttonSelected());
-        if(btn.equals(this.analysisBtn)){
+        if (btn.equals(this.analysisBtn)){
             this.container.showWidget(0);
-        }else if(btn.equals(this.speciesBtn)){
+        } else if(btn.equals(this.speciesBtn)){
             this.container.showWidget(1);
+        } else if(btn.equals(this.experimentsBtn)) {
+            this.container.showWidget(2);
         }
     }
 
@@ -136,10 +151,44 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         speciesComparison.setSpeciesList(speciesList);
     }
 
+    @Override
+    public void setExperimentSummaries(List<ExperimentSummary> summaries) {
+        tissueDistribution.setExperimentSummaries(summaries);
+    }
+
+    @Override
+    public void setVersionInfo(String info) {
+        version.setText(info);
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        switch (status) {
+            case ACTIVE:
+                statusIcon.setVisible(false);
+                break;
+            case WARNING:
+                statusIcon.setResource(CommonImages.INSTANCE.warning());
+                statusIcon.setTitle("Results may be compromised. Wrong version detected");
+                statusIcon.setVisible(true);
+                break;
+            case ERROR:
+                statusIcon.setResource(CommonImages.INSTANCE.error());
+                statusIcon.setTitle("There might be a problem with the Analysis service");
+                statusIcon.setVisible(true);
+        }
+    }
+
+    @Override
+    public void show() {
+        super.show();
+    }
+
     private Button getButton(String text, ImageResource imageResource){
         FlowPanel fp = new FlowPanel();
         Image image = new Image(imageResource);
         image.addStyleName(RESOURCES.getCSS().undraggable());
+        image.addStyleName(RESOURCES.getCSS().buttonImage());
         fp.add(image);
         fp.add(new Label(text));
 
@@ -148,6 +197,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.btns.add(btn);
         return btn;
     }
+
     private Widget setTitlePanel(){
         FlowPanel header = new FlowPanel();
         header.setStyleName(RESOURCES.getCSS().header());
@@ -158,15 +208,24 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         header.add(image);
         Label title = new Label("Analysis tools");
         title.setStyleName(RESOURCES.getCSS().headerText());
-        Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                AnalysisLauncherDisplay.this.hide();
-            }
-        });
+        Button closeBtn = new LauncherButton("Close analysis tools", RESOURCES.getCSS().close(), clickEvent -> AnalysisLauncherDisplay.this.hide());
         header.add(title);
         header.add(closeBtn);
         return header;
+    }
+
+    private Widget getVersionInfo() {
+        FlowPanel firstLine = new FlowPanel();
+        firstLine.add(version = new Label());
+        firstLine.add(statusIcon = new Image());
+
+        FlowPanel versionInfoPanel = new FlowPanel();
+        versionInfoPanel.setStyleName(RESOURCES.getCSS().versionInfo());
+        versionInfoPanel.add(firstLine);
+
+        String url = "/user/guide/analysis";
+        versionInfoPanel.add(new Anchor("Click to learn more about our analysis tools", url, "_blank"));
+        return versionInfoPanel;
     }
 
 
@@ -204,6 +263,9 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         @Source("images/speciesTabIcon.png")
         ImageResource speciesTabIcon();
 
+        @Source("images/tissuesTabIcon.png")
+        ImageResource tissuesTabIcon();
+
     }
 
     /**
@@ -232,6 +294,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
         String buttonsPanel();
 
+        String buttonImage();
+
         String unselectable();
 
         String undraggable();
@@ -239,5 +303,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         String buttonSelected();
 
         String container();
+
+        String versionInfo();
     }
 }

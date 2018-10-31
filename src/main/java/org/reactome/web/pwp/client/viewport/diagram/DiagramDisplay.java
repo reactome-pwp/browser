@@ -29,7 +29,7 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
     public DiagramDisplay() {
         super(Style.Unit.PX);
 
-        DiagramFactory.CONSOLE_VERBOSE = false;
+        DiagramFactory.CONSOLE_VERBOSE = true;
         DiagramFactory.EVENT_BUS_VERBOSE = false;
         DiagramFactory.SHOW_INFO = false;
         DiagramFactory.WATERMARK = false;

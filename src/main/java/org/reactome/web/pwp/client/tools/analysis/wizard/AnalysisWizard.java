@@ -111,6 +111,9 @@ public class AnalysisWizard extends DockLayoutPanel implements NextStepSelectedH
         @Source("SpeciesComparisonInfo.html")
         TextResource speciesComparisonInfo();
 
+        @Source("TissueDistributionInfo.html")
+        TextResource tissueDistributionInfo();
+
         @Source("top/wizard_top_step1.png")
         ImageResource wizardTopStep01();
 

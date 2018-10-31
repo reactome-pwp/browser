@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -18,17 +19,33 @@ public class LayoutSelectorDisplay extends Composite implements LayoutSelector.D
 
     private LayoutSelector.Presenter presenter;
 
-    private LayoutButton hierarchy;
-    private LayoutButton details;
-    private LayoutButton viewport;
+    private IconButton hierarchy;
+    private IconButton details;
+    private IconButton viewport;
 
     public LayoutSelectorDisplay() {
+        hierarchy = new IconButton("", RESOURCES.layoutIcon());
+        hierarchy.setTitle("show/hide hierarchy panel");
+        hierarchy.setStyleName(RESOURCES.getCSS().hierarchyBtn());
+        hierarchy.addClickHandler(this);
+
+        details = new IconButton("", RESOURCES.layoutIcon());
+        details.setTitle("show/hide details panel");
+        details.setStyleName(RESOURCES.getCSS().detailsBtn());
+        details.addClickHandler(this);
+
+        viewport = new IconButton("", RESOURCES.layoutIcon());
+        viewport.setTitle("expand/minimise centre display");
+        viewport.setStyleName(RESOURCES.getCSS().centreBtn());
+        viewport.addClickHandler(this);
+
         FlowPanel flowPanel = new FlowPanel();
         flowPanel.setStyleName(RESOURCES.getCSS().layoutPanel());
         flowPanel.add(new SimplePanel(new InlineLabel("Layout:")));
-        flowPanel.add(this.hierarchy = new LayoutButton("show/hide hierarchy panel", RESOURCES.getCSS().hierarchy(), this));
-        flowPanel.add(this.details = new LayoutButton("show/hide details panel", RESOURCES.getCSS().details(), this));
-        flowPanel.add(this.viewport = new LayoutButton("expand/minimise centre display", RESOURCES.getCSS().centre(), this));
+        flowPanel.add(this.hierarchy);
+        flowPanel.add(this.details);
+        flowPanel.add(this.viewport);
+
         initWidget(flowPanel);
     }
 
@@ -39,7 +56,7 @@ public class LayoutSelectorDisplay extends Composite implements LayoutSelector.D
 
     @Override
     public void onClick(ClickEvent event) {
-        LayoutButton btn = (LayoutButton) event.getSource();
+        IconButton btn = (IconButton) event.getSource();
         if (btn == this.hierarchy) {
             this.presenter.layoutSelectorChanged(LayoutSelectorType.HIERARCHY);
         } else if (btn == this.details) {
@@ -66,32 +83,8 @@ public class LayoutSelectorDisplay extends Composite implements LayoutSelector.D
         @Source(ResoruceCSS.CSS)
         ResoruceCSS getCSS();
 
-        @Source("images/hierarchy_clicked.png")
-        ImageResource hierarchyClicked();
-
-        @Source("images/hierarchy_hovered.png")
-        ImageResource hierarchyHovered();
-
-        @Source("images/hierarchy_normal.png")
-        ImageResource hierarchyNormal();
-
-        @Source("images/details_clicked.png")
-        ImageResource detailsClicked();
-
-        @Source("images/details_hovered.png")
-        ImageResource detailsHovered();
-
-        @Source("images/details_normal.png")
-        ImageResource detailsNormal();
-
-        @Source("images/centre_clicked.png")
-        ImageResource centreClicked();
-
-        @Source("images/centre_hovered.png")
-        ImageResource centreHovered();
-
-        @Source("images/centre_normal.png")
-        ImageResource centreNormal();
+        @Source("images/layout.png")
+        ImageResource layoutIcon();
     }
 
     /**
@@ -106,10 +99,11 @@ public class LayoutSelectorDisplay extends Composite implements LayoutSelector.D
 
         String layoutPanel();
 
-        String hierarchy();
+        String hierarchyBtn();
 
-        String details();
+        String detailsBtn();
 
-        String centre();
+        String centreBtn();
+
     }
 }

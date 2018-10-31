@@ -14,7 +14,7 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-top: -150px;
+    margin-top: -170px;
     margin-left:-300px;
     padding: 30px;
     text-align: center
@@ -46,6 +46,124 @@ body {
 
 /*####################### APP LOADER [END] ###########################################################################*/
 
+/*####################### APP OUTAGE [BEGIN] #########################################################################*/
+.app-Outage {
+    background-color: rgb(27, 135, 197);
+    border: 2px solid rgb(42, 147, 189);
+    color: white;
+    border-radius: 5px;
+    box-shadow: 4px 4px 2px #888;
+    height: 300px;
+    width: 560px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -170px;
+    margin-left:-300px;
+    /*padding: 30px;*/
+    text-align: center
+}
+
+.headerDiv {
+    text-align: center;
+    height: 11%;
+    width: 100%;
+}
+
+.headerLogo {
+    margin-top: 5px;
+    width: auto;
+    height: 70%;
+    float: left;
+    padding-left: 10px;
+}
+
+.mainDiv {
+    width: 100%;
+    height: 89%;
+    font-family: Arial Unicode MS, Arial, sans-serif;
+    font-size: medium;
+}
+
+.outageIconDiv {
+    width: 42%;
+    height: 100%;
+    overflow: auto;
+    float: left;
+}
+
+.outageIconDiv img {
+    height: 170px;
+    width: auto;
+    margin-top: 27px;
+}
+
+.outageMessageDiv {
+    width: 56%;
+    height: 100%;
+    overflow: auto;
+    float: left;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.outageMessageTitle {
+    font-size: xx-large;
+    text-align: left;
+    line-height: 0.9em;
+}
+
+.outageMessageSubtitle {
+    font-size: x-large;
+    text-align: left;
+}
+
+.outageMessageText {
+    text-align: left;
+    line-height: 1.2em;
+}
+
+.outageMessageText a {
+    color: white;
+}
+
+.outageMessageText a:hover {
+    color: #31e0ff;
+}
+
+.outageMessageText br {
+    content: "";
+    margin: 1.3em;
+    display: block;
+    font-size: 24%;
+}
+.retryButton {
+    margin-top: 2px;
+    height: 28px;
+
+    color: #b1b1b1;
+    border: 2px solid #b1b1b1;
+    background: transparent;
+
+    border-radius: 6px;
+
+    text-align: center;
+    font-size: 12px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+
+.retryButton:hover {
+    background-color: #008CBA;
+    border: 2px solid white;
+    color: white;
+}
+
+/*####################### APP OUTAGE [END] ###########################################################################*/
 
 /*####################### TAB and SPLIT Layout [BEGIN] ###############################################################*/
 .gwt-TabLayoutPanelContentContainer {
