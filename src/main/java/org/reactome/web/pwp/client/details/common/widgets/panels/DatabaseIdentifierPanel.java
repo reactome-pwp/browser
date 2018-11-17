@@ -42,6 +42,9 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
         } else if (pe instanceof SimpleEntity){
             SimpleEntity se = pe.cast();
             re = se.getReferenceEntity();
+        } else if (pe instanceof Drug) {
+            Drug drug = pe.cast();
+            re = drug.getReferenceEntity();
         }
 
         if (re != null){
@@ -49,6 +52,16 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
             this.id = re.getIdentifier();
             this.url = re.getUrl();
             initialize();
+        } else if (pe instanceof Complex) {
+            //Links to the complex portal have been added as cross references for Complexes but
+            //these do not have reference entity. This is a hack to accommodate this case
+            for (DatabaseIdentifier identifier : pe.getCrossReference()) {
+                this.reference = identifier.getDatabaseName();
+                this.id = identifier.getIdentifier();
+                this.url = identifier.getUrl();
+                initialize();
+                break;
+            }
         } else {
             initWidget(new Label("No reference entity"));
         }

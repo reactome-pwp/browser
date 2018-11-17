@@ -1,0 +1,95 @@
+.panel {
+    color: white;
+    background-color: #58c3e5;
+    border: 1px solid #0e7cb3;
+    border-radius: 5px;
+
+    font-size: medium;
+}
+
+.header {
+    /*background-color: cornflowerblue;*/
+    margin-bottom: 3px;
+    padding-left: 3px;
+}
+
+.container {
+    /*background-color: deepskyblue;*/
+    padding: 3px;
+
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.listWrapper {
+    flex-grow: 2;
+}
+
+.listWrapperLabel {
+    font-weight: bold;
+    text-align: center;
+    background-color: rgb(30, 123, 180);
+    border-radius: 5px 5px 0 0;
+}
+
+.listBox {
+    width: 100%;
+    min-width: 249px;
+    border: none;
+    border-radius: 0 0 5px 5px;
+
+    outline: none;
+    /*color: white;*/
+    font-size: medium;
+    font-weight: bold;
+}
+
+.buttonsPanel {
+    flex-grow: 1;
+    /*background-color: darkred;*/
+    padding: 3px;
+
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+}
+
+.addBtn {
+    background-color: rgb(30, 148, 208);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 2px 5px 2px 2px;
+    outline: none;
+    font-size: medium !important;
+}
+
+.addBtn span {
+    vertical-align: middle !important;
+    display: inline-block;
+    min-width: 84px;
+    max-width: 160px;
+}
+
+.addBtn img {
+    vertical-align: middle !important;
+    padding-right: 3px;
+    height: 24px;
+    width: auto;
+}
+
+.addBtn:hover {
+    background-color: #177dc0;
+    cursor: pointer !important;
+}
+
+.addBtn:active:hover {
+    background-color: #07558b;
+    cursor: pointer !important;
+}
+
+.addBtn:disabled, .addBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
+}

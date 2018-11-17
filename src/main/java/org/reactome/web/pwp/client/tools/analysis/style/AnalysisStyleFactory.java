@@ -68,6 +68,12 @@ public abstract class AnalysisStyleFactory {
         String analysisErrorButton();
 
         String wizardTop();
+
+        String tissuesGoButton();
+
+        String tissuesLoading();
+
+        String tissuesError();
     }
 
     public static AnalysisWizardStyle getAnalysisStyle(){

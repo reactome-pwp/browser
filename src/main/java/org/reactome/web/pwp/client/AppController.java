@@ -71,6 +71,7 @@ import org.reactome.web.pwp.client.viewport.fireworks.FireworksPresenter;
 import org.reactome.web.pwp.client.viewport.welcome.Welcome;
 import org.reactome.web.pwp.client.viewport.welcome.WelcomeDisplay;
 import org.reactome.web.pwp.client.viewport.welcome.WelcomePresenter;
+import org.reactome.web.pwp.model.client.classes.DBInfo;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -80,20 +81,24 @@ import java.util.List;
  */
 public class AppController implements BrowserReadyHandler {
 
+    private final DBInfo dbInfo;
     private final EventBus eventBus;
     private final IsWidget main;
 
-    public AppController() {
+    public AppController(DBInfo dbInfo) {
+        this.dbInfo = dbInfo;
         this.printMessage();
         this.eventBus = new BrowserEventBus();
         this.eventBus.addHandler(BrowserReadyEvent.TYPE, this);
         this.initManager();
         this.main = getDesktopBrowser();
+
+
     }
 
     public void go(HasWidgets container){
         container.add(this.main.asWidget());
-        this.eventBus.fireEventFromSource(new BrowserReadyEvent(), this);
+        this.eventBus.fireEventFromSource(new BrowserReadyEvent(dbInfo), this);
     }
 
     @Override
@@ -144,7 +149,7 @@ public class AppController implements BrowserReadyHandler {
 
         FlowPanel topPanel = new FlowPanel();
         topPanel.setStyleName("elv-Top-Panel");
-        topPanel.add(new LogoPanel());
+        topPanel.add(new LogoPanel(dbInfo));
         topPanel.add(species);
         topPanel.add(layoutSelector);
         topPanel.add(tour);

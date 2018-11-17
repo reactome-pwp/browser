@@ -67,8 +67,9 @@ public class ExternalOntologyPanel extends DetailsPanel implements OpenHandler<D
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
 
+        vp.add(getExternalIdentifier(this.externalOntology));
+
         vp.add(getDefinitionPanel(this.externalOntology.getDefinition()));
-//        vp.add(getIdentifierPanel(this.disease.getIdentifier()));
 
         if(!this.externalOntology.getInstanceOf().isEmpty())
             vp.add(getInstanceOfPanel(this.externalOntology.getInstanceOf()));
@@ -99,20 +100,17 @@ public class ExternalOntologyPanel extends DetailsPanel implements OpenHandler<D
         return vp;
     }
 
-//    private Widget getIdentifierPanel(String identifier){
-//        HorizontalPanel hp = new HorizontalPanel();
-//        hp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
-//
-//        Label title = new Label("Identifier:");
-//        Style titleStyle = title.getElement().getStyle();
-//        titleStyle.setFontWeight(Style.FontWeight.BOLD);
-//        titleStyle.setMarginRight(5, Style.Unit.PX);
-//        hp.add(title);
-//
-//        hp.add(new Label(identifier));
-//
-//        return hp;
-//    }
+    private Widget getExternalIdentifier(ExternalOntology eo){
+        InlineLabel label = new InlineLabel(eo.getDatabaseName());
+        Anchor link = new Anchor(eo.getIdentifier(), eo.getUrl(), "_blank");
+        link.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+
+        FlowPanel fp = new FlowPanel();
+        fp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
+        fp.add(label);
+        fp.add(link);
+        return fp;
+    }
 
     private Widget getInstanceOfPanel(List<ExternalOntology> instances){
         VerticalPanel vp = new VerticalPanel();

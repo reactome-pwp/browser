@@ -237,6 +237,14 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
+    public static OverviewRow getReferenceTherapeuticRow(String title, ReferenceTherapeutic referenceTherapeutic) {
+        List<DetailsPanel> panels = new LinkedList<>();
+        if (referenceTherapeutic != null) {
+            panels.add(new ReferenceTherapeuticPanel(referenceTherapeutic));
+        }
+        return getOverviewRow(title, panels);
+    }
+
     public static OverviewRow getRegulationRow(String title, List<? extends Regulation> regulations) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Regulation regulation : regulations) {

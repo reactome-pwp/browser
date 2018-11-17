@@ -4,10 +4,10 @@
     border: 1px solid white;
     border-radius: 5px;
     color: white;
-    padding: 3px 8px 2px 10px;
+    padding: 3px 8px 0 10px;
 }
 
-.launcherPanel div {
+.launcherPanel>div {
     color: white;
     float: left;
     padding: 6px 8px 0 0;
@@ -17,18 +17,46 @@
     margin: 0 2px 0 2px;
 }
 
-@sprite .analysis {
-    gwt-image: 'analysisNormal';
+.analysisBtn {
+    background-color: #58C3E5;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 0;
     outline: none;
-    background-repeat: no-repeat;
+}
+
+.analysisBtn>div {
+    margin: 0;
+    position: relative;
+}
+
+.analysisBtn span {
+    display: none;
+}
+
+.analysisBtn img {
+    display: block;
+    height: 30px;
+    width: auto;
+    margin: 0;
+    padding: 0;
     border: 0;
-    cursor: pointer;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
 }
 
-@sprite .analysis:hover {
-    gwt-image: 'analysisHovered';
+.analysisBtn:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
 }
 
-@sprite .analysis:active:hover {
-    gwt-image: 'analysisClicked';
+.analysisBtn:active:hover {
+    background-color: #066B9E;
+    cursor: pointer !important;
+}
+
+.analysisBtn:disabled, .analysisBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
 }

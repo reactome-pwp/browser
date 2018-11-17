@@ -11,7 +11,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import org.reactome.web.pwp.client.AppConfig;
+import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
+import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -19,12 +21,21 @@ import org.reactome.web.pwp.client.common.PathwayPortalTool;
 public class ToolLauncherDisplay extends Composite implements ToolLauncher.Display, ClickHandler /*, CloseHandler<PopupPanel>*/ {
 
     private ToolLauncher.Presenter presenter;
-    private LauncherButton analysisBtn;
+    private IconButton analysisBtn;
+
+    private final static String TOOLTIP = "Analyse your data...";
+    private final static String TOOLTIP_WARNING = "The AnalysisService and the ContentService are running with different database versions.";
+    private final static String TOOLTIP_ERROR = "Unable to connect to the server.";
+
 
     public ToolLauncherDisplay() {
+        this.analysisBtn = new IconButton("", RESOURCES.analysisIcon());
+        this.analysisBtn.setTitle("Analyse your data...");
+        this.analysisBtn.setStyleName(RESOURCES.getCSS().analysisBtn());
+        this.analysisBtn.addClickHandler(this);
+
         FlowPanel flowPanel = new FlowPanel();
         flowPanel.setStyleName(RESOURCES.getCSS().launcherPanel());
-        this.analysisBtn= new LauncherButton("Analyse your data...", RESOURCES.getCSS().analysis(), this);
         flowPanel.add(new SimplePanel(new InlineLabel("Analysis:")));
         flowPanel.add(this.analysisBtn);
         //The analysis tools are not available for the curation sites
@@ -37,10 +48,27 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         this.presenter = presenter;
     }
 
+    @Override
+    public void setStatus(ToolLauncher.ToolStatus status) {
+        switch (status) {
+            case ACTIVE:
+                analysisBtn.clearOverlayIcon();
+                this.analysisBtn.setTitle(TOOLTIP);
+                break;
+            case WARNING:
+                analysisBtn.setOverlayIcon(CommonImages.INSTANCE.warning());
+                this.analysisBtn.setTitle(TOOLTIP_WARNING);
+                break;
+            case ERROR:
+                analysisBtn.setOverlayIcon(CommonImages.INSTANCE.error());
+                this.analysisBtn.setTitle(TOOLTIP_ERROR);
+                break;
+        }
+    }
 
     @Override
     public void onClick(ClickEvent event) {
-        LauncherButton btn = (LauncherButton) event.getSource();
+        IconButton btn = (IconButton) event.getSource();
         if(btn.equals(this.analysisBtn)){
             presenter.toolSelected(PathwayPortalTool.ANALYSIS);
         }
@@ -62,14 +90,8 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
 
-        @Source("images/analysis_clicked.png")
-        ImageResource analysisClicked();
-
-        @Source("images/analysis_hovered.png")
-        ImageResource analysisHovered();
-
-        @Source("images/analysis_normal.png")
-        ImageResource analysisNormal();
+        @Source("images/analysis.png")
+        ImageResource analysisIcon();
 
     }
 
@@ -85,7 +107,7 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
 
         String launcherPanel();
 
-        String analysis();
+        String analysisBtn();
 
     }
 }

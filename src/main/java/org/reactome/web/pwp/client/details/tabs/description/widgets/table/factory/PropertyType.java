@@ -7,11 +7,11 @@ public enum PropertyType {
 
     DOI("DOI"),
     SUMMATION("Summation"),
-    DISEASE("Disease"),
     CROSS_REFERENCES("External identifiers"),
     REFERENCE_ENTITY("Links to this entry in other databases"),
     RELATED_IDENTIFIER("Other identifiers related to this sequence"),
     ENTITY_FUNCTIONAL_STATUS("Functional status"),
+    DISEASE("Disease"),
     INPUT("Input"),
     OUTPUT("Output"),
     CATALYST("Catalyst Activity"),

@@ -51,6 +51,30 @@
         </div>
     </div>
 
+    <div id="appErrorMessage" class="app-Outage" style="display:none">
+        <div class="headerDiv">
+            <img class="headerLogo"src="static/images/logo.png" alt="Reactome logo">
+        </div>
+        <div class="mainDiv">
+            <div class="outageIconDiv">
+                <img src="static/images/outage_icon.png" alt="Reactome outage icon">
+            </div>
+            <div class="outageMessageDiv">
+                <div class="outageMessageTitle">Ooops!</div>
+                <div class="outageMessageSubtitle">This is unexpected...</div>
+                <div class="outageMessageText">
+                    <p>An error has occured and we are working to fix the problem.
+                        We'll be up and running shortly.<br>
+                        Thank you for your patience.<br>
+                        If you need immediate assistance please contact
+                        <a href="mailto:help@reactome.org">help@reactome.org</a>.
+                    </p>
+                </div>
+                <button class="retryButton" onclick="window.location.reload(true);">Try again</button>
+            </div>
+        </div>
+    </div>
+
     <!-- history support -->
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
             style="position:absolute;width:0;height:0;border:0"></iframe>

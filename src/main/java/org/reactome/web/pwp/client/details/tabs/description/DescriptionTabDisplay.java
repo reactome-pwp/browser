@@ -86,6 +86,8 @@ public class DescriptionTabDisplay extends ResizeComposite implements Descriptio
     public void showErrorMessage(String message) {
         HorizontalPanel panel = new HorizontalPanel();
         Image loader = new Image(CommonImages.INSTANCE.warning());
+        loader.setHeight("16px");
+        loader.setWidth("auto");
         panel.add(loader);
 
         Label label = new Label(message);

@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class Molecule extends ReferenceEntity implements Comparable<Molecule>{
     private SchemaClass schemaClass;
+    private String icon;
     private String url;
     private boolean toHighlight; //whether the Molecule should be highlighted in the Molecules List
     private int occurrenceInPathway = 0;
@@ -36,6 +37,10 @@ public class Molecule extends ReferenceEntity implements Comparable<Molecule>{
         if(jsonObject.isObject().containsKey("url")){
             url = jsonObject.isObject().get("url").toString();
             url = url.substring(1, url.length()-1);
+        }
+
+        if(jsonObject.isObject().containsKey("icon")){
+            icon = jsonObject.isObject().get("icon").isString().stringValue();
         }
 
         /*To use the images for Molecules consistently in the Molecules tab and in the Overview tab it is necessary
@@ -81,9 +86,14 @@ public class Molecule extends ReferenceEntity implements Comparable<Molecule>{
 
     @Override
     public ImageResource getImageResource() {
-        switch (this.schemaClass){
+        switch (SchemaClass.getSchemaClass(this.icon)){
+            case REFERENCE_GENE_PRODUCT:
+            case REFERENCE_ISOFORM:
             case ENTITY_WITH_ACCESSIONED_SEQUENCE:
-                return DatabaseObjectImages.INSTANCE.entityWithAccessionedSequence();
+                return DatabaseObjectImages.INSTANCE.protein();
+            case PROTEIN_DRUG:
+                return DatabaseObjectImages.INSTANCE.proteinDrug();
+            case REFERENCE_MOLECULE:
             case SIMPLE_ENTITY:
                 return DatabaseObjectImages.INSTANCE.simpleEntity();
             case CHEMICAL_DRUG:
@@ -97,7 +107,9 @@ public class Molecule extends ReferenceEntity implements Comparable<Molecule>{
             case REFERENCE_DNA_SEQUENCE:
                 return DatabaseObjectImages.INSTANCE.referenceDNASequence();
             case REFERENCE_RNA_SEQUENCE:
-                return DatabaseObjectImages.INSTANCE.referenceRNASequence();
+                return DatabaseObjectImages.INSTANCE.RNA();
+            case RNA_DRUG:
+                return DatabaseObjectImages.INSTANCE.RNADrug();
         }
         Console.warn("No resource found for " + this.schemaClass, this);
         return DatabaseObjectImages.INSTANCE.exclamation();
