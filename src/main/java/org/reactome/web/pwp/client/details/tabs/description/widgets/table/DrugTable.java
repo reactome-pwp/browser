@@ -20,8 +20,6 @@ public class DrugTable extends PhysicalEntityTable {
     protected Widget getTableRow(PropertyType propertyType) {
         String title = propertyType.getTitle();
         switch (propertyType){
-            case REFERENCE_THERAPEUTIC:
-                return TableRowFactory.getReferenceTherapeuticRow(title, drug.getReferenceTherapeutic());
             case DISEASE:
                 return TableRowFactory.getExternalOntologyRow(title, drug.getDisease());
             default:

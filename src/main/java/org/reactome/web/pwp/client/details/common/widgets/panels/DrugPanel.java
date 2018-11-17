@@ -2,8 +2,10 @@ package org.reactome.web.pwp.client.details.common.widgets.panels;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.PropertyType;
-import org.reactome.web.pwp.model.client.classes.*;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Disease;
+import org.reactome.web.pwp.model.client.classes.Drug;
+import org.reactome.web.pwp.model.client.classes.ReferenceEntity;
 
 import java.util.List;
 
@@ -31,8 +33,6 @@ public class DrugPanel extends DetailsPanel implements TransparentPanel {
 
         if(this.drug.getReferenceEntity()!=null) vp.add(getExternalIdentifier(this.drug.getReferenceEntity()));
 
-        if(this.drug.getReferenceTherapeutic()!=null) vp.add(getReferenceTherapeuticPanel(drug.getReferenceTherapeutic()));
-
         if(this.drug.getDisease()!=null) vp.add(getDiseasePanel(this.drug.getDisease()));
 
         initWidget(vp);
@@ -53,20 +53,6 @@ public class DrugPanel extends DetailsPanel implements TransparentPanel {
         fp.add(label);
         fp.add(link);
         return fp;
-    }
-
-    private Widget getReferenceTherapeuticPanel(ReferenceTherapeutic referenceTherapeutic){
-        VerticalPanel vp = new VerticalPanel();
-        vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
-        vp.setWidth("99%");
-
-        vp.add(new Label(PropertyType.REFERENCE_THERAPEUTIC.getTitle() + ":"));
-        //We associate our parentPanel as the parent of the next panel because this panel is a kind of auxiliary panel
-        Widget pPanel = new ReferenceTherapeuticPanel(this, referenceTherapeutic);
-        pPanel.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
-        vp.add(pPanel);
-
-        return vp;
     }
 
     private Widget getDiseasePanel(List<Disease> diseaseList){

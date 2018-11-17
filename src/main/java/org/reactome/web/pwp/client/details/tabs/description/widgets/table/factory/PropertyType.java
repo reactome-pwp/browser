@@ -9,7 +9,6 @@ public enum PropertyType {
     SUMMATION("Summation"),
     CROSS_REFERENCES("External identifiers"),
     REFERENCE_ENTITY("Links to this entry in other databases"),
-    REFERENCE_THERAPEUTIC("External drug identifier"),
     RELATED_IDENTIFIER("Other identifiers related to this sequence"),
     ENTITY_FUNCTIONAL_STATUS("Functional status"),
     DISEASE("Disease"),

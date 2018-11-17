@@ -44,7 +44,7 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
             re = se.getReferenceEntity();
         } else if (pe instanceof Drug) {
             Drug drug = pe.cast();
-            re = drug.getReferenceTherapeutic();
+            re = drug.getReferenceEntity();
         }
 
         if (re != null){

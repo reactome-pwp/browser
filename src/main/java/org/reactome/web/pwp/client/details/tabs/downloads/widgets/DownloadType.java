@@ -9,11 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author Antonio Fabregat <fabregat@ebi.ac.uk>
+ * @author Antonio Fabregat (fabregat@ebi.ac.uk)
  */
 public enum DownloadType {
-    SBML        ("SBML", ContentClientAbstract.CONTENT_SERVICE + "exporter/sbml/__ID__.xml", "SMBL", DownloadIcons.INSTANCE.SBMLIcon(), Group.FORMAT),
-    SBGN        ("SBGN", "/download/current/diagram/sbgn/__STID__.sbgn", "SBGN", DownloadIcons.INSTANCE.SBGNIcon(), Group.FORMAT),
+    SBML        ("SBML", ContentClientAbstract.CONTENT_SERVICE + "exporter/event/__STID__.sbml", "SMBL", DownloadIcons.INSTANCE.SBMLIcon(), Group.FORMAT),
+    SBGN        ("SBGN", ContentClientAbstract.CONTENT_SERVICE + "exporter/event/__STID__.sbgn", "SBGN", DownloadIcons.INSTANCE.SBGNIcon(), Group.FORMAT),
     BIOPAX_2    ("BIOPAX 2", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level2/__ID__", "Biopax 2", DownloadIcons.INSTANCE.BioPAX2Icon(), Group.FORMAT ),
     BIOPAX_3    ("BIOPAX 3", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level3/__ID__", "Biopax 3", DownloadIcons.INSTANCE.BioPAX3Icon(), Group.FORMAT),
     PDF         ("PDF", "/cgi-bin/pdfexporter?DB=__DB__&ID=__ID__", "PDF", DownloadIcons.INSTANCE.PDFIcon(), Group.FORMAT),
