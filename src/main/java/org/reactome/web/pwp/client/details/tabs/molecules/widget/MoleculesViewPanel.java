@@ -17,6 +17,7 @@ public class MoleculesViewPanel extends DockLayoutPanel {
     private TablePanel chemicalsPanel;
     private TablePanel proteinsPanel;
     private TablePanel sequencesPanel;
+    private TablePanel drugsPanel;
     private TablePanel othersPanel;
 
     public MoleculesViewPanel(final Result result) {
@@ -61,6 +62,15 @@ public class MoleculesViewPanel extends DockLayoutPanel {
                 containerTP.add(sequencesPanel);
             }
 
+            size = result.getDrugs().size();
+            if(size > 0){
+                drugsPanel = new TablePanel(PropertyType.DRUG, size, result);
+                drugsPanel.addStyleName("elv-Details-OverviewRow");
+                drugsPanel.asWidget().setWidth("99%");
+
+                containerTP.add(drugsPanel);
+            }
+
             size = result.getOthers().size();
             if(size > 0){
                 othersPanel = new TablePanel(PropertyType.OTHERS, size, result);
@@ -99,6 +109,11 @@ public class MoleculesViewPanel extends DockLayoutPanel {
             size = result.getSequences().size();
             if(size > 0){
                 sequencesPanel.update(size, result);
+            }
+
+            size = result.getDrugs().size();
+            if(size > 0){
+                drugsPanel.update(size, result);
             }
 
             size = result.getOthers().size();

@@ -31,6 +31,7 @@ public class MoleculesDownloadPanel extends DockLayoutPanel {
     private final CheckBox chemTB;
     private final CheckBox protTB;
     private final CheckBox sequTB;
+    private final CheckBox drugTB;
     private final CheckBox otheTB;
     private TextArea textArea;
     private Random random = new Random();
@@ -59,6 +60,10 @@ public class MoleculesDownloadPanel extends DockLayoutPanel {
         sequTB = new CheckBox(PropertyType.SEQUENCES.getTitle());
         sequTB.setTitle("Show or hide " + PropertyType.SEQUENCES.getTitle());
         sequTB.setValue(true);
+
+        drugTB = new CheckBox(PropertyType.DRUG.getTitle());
+        drugTB.setTitle("Show or hide " + PropertyType.DRUG.getTitle());
+        drugTB.setValue(true);
 
         otheTB = new CheckBox(PropertyType.OTHERS.getTitle());
         otheTB.setTitle("Show or hide " + PropertyType.OTHERS.getTitle());
@@ -112,6 +117,11 @@ public class MoleculesDownloadPanel extends DockLayoutPanel {
         if(result.getSequences().size() > 0){
             requiredType.add(sequTB);
             sequTB.addClickHandler(updateText);
+        }
+
+        if(result.getDrugs().size() > 0){
+            requiredType.add(drugTB);
+            drugTB.addClickHandler(updateText);
         }
 
         if(result.getOthers().size() > 0){

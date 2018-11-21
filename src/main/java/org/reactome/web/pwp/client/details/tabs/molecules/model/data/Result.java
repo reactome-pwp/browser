@@ -16,6 +16,7 @@ public class Result {
     private HashSet<Molecule> chemicals = new HashSet<Molecule>();
     private HashSet<Molecule> proteins = new HashSet<Molecule>();
     private HashSet<Molecule> sequences = new HashSet<Molecule>();
+    private HashSet<Molecule> drugs = new HashSet<Molecule>();
     private HashSet<Molecule> others = new HashSet<Molecule>();
 
     //mapping each ReferenceEntity to a PhysicalEntityID
@@ -35,6 +36,9 @@ public class Result {
                 case SIMPLE_ENTITY:
                     chemicals.add(molecule);
                     break;
+                case REFERENCE_THERAPEUTIC:
+                    drugs.add(molecule);
+                    break;
                 default:
                     others.add(molecule);
             }
@@ -52,6 +56,10 @@ public class Result {
 
     public HashSet<Molecule> getSequences() {
         return sequences;
+    }
+
+    public HashSet<Molecule> getDrugs() {
+        return drugs;
     }
 
     public HashSet<Molecule> getOthers() {
@@ -79,6 +87,8 @@ public class Result {
                 return this.getSortedProteins();
             case SEQUENCES:
                 return this.getSortedSequences();
+            case DRUG:
+                return this.getSortedDrugs();
             default:
                 return this.getSortedOthers();
         }
@@ -118,6 +128,20 @@ public class Result {
      */
     private ArrayList<Molecule> getSortedSequences(){
         ArrayList<ArrayList<Molecule>> split = splitHighlighted(this.sequences);
+        ArrayList<Molecule> sortedColour = new ArrayList<Molecule>(split.get(0));
+        Collections.sort(sortedColour);
+        ArrayList<Molecule> sortedGrey = new ArrayList<Molecule>(split.get(1));
+        Collections.sort(sortedGrey);
+        sortedColour.addAll(sortedGrey);
+        return sortedColour;
+    }
+
+    /**
+     * Getter for sorted sequences, molecules are sorted according to their highlighting status and then there name.
+     * @return ArrayList<Molecule> with sorted sequences
+     */
+    private ArrayList<Molecule> getSortedDrugs(){
+        ArrayList<ArrayList<Molecule>> split = splitHighlighted(this.drugs);
         ArrayList<Molecule> sortedColour = new ArrayList<Molecule>(split.get(0));
         Collections.sort(sortedColour);
         ArrayList<Molecule> sortedGrey = new ArrayList<Molecule>(split.get(1));
@@ -182,6 +206,10 @@ public class Result {
             number += sequences.size();
         }
 
+        if(drugs != null){
+            number += drugs.size();
+        }
+
         if(others != null){
             number += others.size();
         }
@@ -204,6 +232,9 @@ public class Result {
         }else if(sequences.contains(molecule)){
             current = sequences;
             sequences = iterate(molecule, current);
+        }else if(drugs.contains(molecule)){
+            current = drugs;
+            drugs = iterate(molecule, current);
         }else if(others.contains(molecule)){
             current = others;
             others = iterate(molecule, current);
@@ -242,6 +273,10 @@ public class Result {
             m.setToHighlight(true);
         }
 
+        for(Molecule m : this.drugs){
+            m.setToHighlight(true);
+        }
+
         for(Molecule m : this.others){
             m.setToHighlight(true);
         }
@@ -263,6 +298,10 @@ public class Result {
             m.setToHighlight(false);
         }
 
+        for(Molecule m : this.drugs){
+            m.setToHighlight(false);
+        }
+
         for(Molecule m : this.others){
             m.setToHighlight(false);
         }
@@ -277,6 +316,7 @@ public class Result {
         numOfHighlightedMolecules += this.getNumHighlight(PropertyType.OTHERS);
         numOfHighlightedMolecules += this.getNumHighlight(PropertyType.SEQUENCES);
         numOfHighlightedMolecules += this.getNumHighlight(PropertyType.PROTEINS);
+        numOfHighlightedMolecules += this.getNumHighlight(PropertyType.DRUG);
         numOfHighlightedMolecules += this.getNumHighlight(PropertyType.CHEMICAL_COMPOUNDS);
 
         return numOfHighlightedMolecules;
@@ -298,6 +338,9 @@ public class Result {
                 break;
             case SEQUENCES:
                 numHighlight = numHighlight(sequences);
+                break;
+            case DRUG:
+                numHighlight = numHighlight(drugs);
                 break;
             case OTHERS:
                 numHighlight = numHighlight(others);
