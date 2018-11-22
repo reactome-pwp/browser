@@ -30,11 +30,10 @@ public class DownloadItem extends FlowPanel {
 
         if(urls.size() == 1) {
             String url = urls.get(0);
-            String[] path = url.split("/");
             SafeHtml html = SafeHtmlUtils.fromTrustedString(container.toString());
             Anchor anchor = new Anchor(html, url, "_blank");
             anchor.getElement().setAttribute("rel", "noindex,nofollow");
-            anchor.getElement().setAttribute("download", path[path.length - 1]);
+            anchor.getElement().setAttribute("download", getFilenameFromURL(url, "xml"));
             add(anchor);
         } else if (urls.size() > 1){
             container.add(getQualityLinks(urls));
@@ -58,11 +57,24 @@ public class DownloadItem extends FlowPanel {
         for (int i = 0; i < urls.size() ; i++) {
             Anchor link = new Anchor(labels.get(i), urls.get(i), "_blank");
             link.getElement().setAttribute("rel", "noindex,nofollow");
+            link.getElement().setAttribute("download", getFilenameFromURL(urls.get(i), "xml"));
             link.setTitle("View/download in " + labels.get(i).toLowerCase() + " quality");
             link.setStyleName(RESOURCES.getCSS().linkItem());
             linksPanel.add(link);
         }
         return linksPanel;
+    }
+
+    private String getFilenameFromURL(String url, String defaultExtension) {
+        String[] path = url.split("/");
+        String[] lastPart = path[path.length - 1].split("\\?");
+
+        int i = lastPart[0].lastIndexOf('.');
+        if (i < 0) {
+            lastPart[0] += "." + defaultExtension;
+        }
+
+        return lastPart[0];
     }
 
     public static Resources RESOURCES;
