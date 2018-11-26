@@ -33,10 +33,10 @@ public class DownloadItem extends FlowPanel {
             SafeHtml html = SafeHtmlUtils.fromTrustedString(container.toString());
             Anchor anchor = new Anchor(html, url, "_blank");
             anchor.getElement().setAttribute("rel", "noindex,nofollow");
-            anchor.getElement().setAttribute("download", getFilenameFromURL(url, "xml"));
+            anchor.getElement().setAttribute("download", getFilenameFromURL(url, type));
             add(anchor);
         } else if (urls.size() > 1){
-            container.add(getQualityLinks(urls));
+            container.add(getQualityLinks(urls, type));
             add(container);
             addDomHandler(event -> expandCollapse(), ClickEvent.getType());
         }
@@ -51,13 +51,13 @@ public class DownloadItem extends FlowPanel {
         isExpanded = !isExpanded;
     }
 
-    private FlowPanel getQualityLinks(final List<String> urls) {
+    private FlowPanel getQualityLinks(final List<String> urls, final DownloadType type) {
         FlowPanel linksPanel = new FlowPanel();
         linksPanel.setStyleName(RESOURCES.getCSS().linkPanel());
         for (int i = 0; i < urls.size() ; i++) {
             Anchor link = new Anchor(labels.get(i), urls.get(i), "_blank");
             link.getElement().setAttribute("rel", "noindex,nofollow");
-            link.getElement().setAttribute("download", getFilenameFromURL(urls.get(i), "xml"));
+            link.getElement().setAttribute("download", getFilenameFromURL(urls.get(i), type));
             link.setTitle("View/download in " + labels.get(i).toLowerCase() + " quality");
             link.setStyleName(RESOURCES.getCSS().linkItem());
             linksPanel.add(link);
@@ -65,13 +65,13 @@ public class DownloadItem extends FlowPanel {
         return linksPanel;
     }
 
-    private String getFilenameFromURL(String url, String defaultExtension) {
+    private String getFilenameFromURL(String url, final DownloadType type) {
         String[] path = url.split("/");
         String[] lastPart = path[path.length - 1].split("\\?");
 
         int i = lastPart[0].lastIndexOf('.');
         if (i < 0) {
-            lastPart[0] += "." + defaultExtension;
+            lastPart[0] += "." + (type.getTooltip().length() > 4 ? "xml" : type.getTooltip());
         }
 
         return lastPart[0];
