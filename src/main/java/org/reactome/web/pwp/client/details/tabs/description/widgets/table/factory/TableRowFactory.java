@@ -213,6 +213,14 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
+    public static OverviewRow getNormalReactionLikeEventRow(String title, ReactionLikeEvent reactionLikeEvent) {
+        List<DetailsPanel> panels = new LinkedList<>();
+        if (reactionLikeEvent != null) {
+            panels.add(new EventPanel(reactionLikeEvent));
+        }
+        return getOverviewRow(title, panels);
+    }
+
     public static OverviewRow getNormalReactionLikeEventRow(String title, List<ReactionLikeEvent> reactionLikeEvents) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (ReactionLikeEvent reactionLikeEvent : reactionLikeEvents) {

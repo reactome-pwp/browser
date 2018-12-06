@@ -180,8 +180,7 @@ public class MoleculePanel extends DetailsPanel implements OpenHandler<Disclosur
         for(PhysicalToReferenceEntityMap phyEntity : physicalEntities){
 
             if(phyEntity.getSchemaClass() != SchemaClass.COMPLEX && phyEntity.getSchemaClass() != SchemaClass.CANDIDATE_SET
-                    && phyEntity.getSchemaClass() != SchemaClass.DEFINED_SET && phyEntity.getSchemaClass() != SchemaClass.ENTITY_SET
-                    && phyEntity.getSchemaClass() != SchemaClass.OPEN_SET){
+                    && phyEntity.getSchemaClass() != SchemaClass.DEFINED_SET && phyEntity.getSchemaClass() != SchemaClass.ENTITY_SET){
 
                     select.add(0, phyEntity);
 

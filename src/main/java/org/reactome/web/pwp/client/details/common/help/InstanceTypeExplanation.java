@@ -71,10 +71,6 @@ public abstract class InstanceTypeExplanation {
             case GENOME_ENCODED_ENTITY:
                 explanation = "A peptide or polynucleotide whose sequence is unknown and thus cannot be linked to external sequence databases or used for orthology inference";
                 break;
-            case OPEN_SET:
-                explanation = "A group of entities that could be listed in principle but not in practice, such as mRNA or long-chain fatty acid.<p>" +
-                        "Examples can be specified as values of the hasMember slot, but are not an exhaustive list of the possible members. The referenceEntity slot indicates the chemical feature that is common to all the members of this class, e.g. The OpenSet  for Alcohol  would have the -OH group defined for referenceEntity";
-                break;
             case OTHER_ENTITY:
                 explanation = "Entities that we are unable or unwilling to describe in chemical detail and cannot be put in any other class.<p>" +
                         "Can be used to represent complex structures in the cell that take part in a reaction but which we cannot or do not want to define molecularly, e.g. cell membrane, Holliday structure";

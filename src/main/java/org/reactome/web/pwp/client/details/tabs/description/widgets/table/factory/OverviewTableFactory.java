@@ -49,10 +49,6 @@ public abstract class OverviewTableFactory {
             return new ComplexTable((Complex) databaseObject);
         }
 
-//        if(databaseObject instanceof OpenSet){
-//            return new OpenSetTable((OpenSet) databaseObject);
-//        }
-
         if(databaseObject instanceof CandidateSet){
             return new CandidateSetTable((CandidateSet) databaseObject);
         }

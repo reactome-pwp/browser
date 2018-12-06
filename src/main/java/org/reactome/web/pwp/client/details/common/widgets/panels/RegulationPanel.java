@@ -90,10 +90,6 @@ public class RegulationPanel extends DetailsPanel implements OpenHandler<Disclos
             vp.add(new GO_BiologicalProcessPanel(this, this.regulation.getGoBiologicalProcess()));
         }
 
-        if (!this.regulation.getName().isEmpty()) {
-            vp.add(getNamesPanel(this.regulation.getName()));
-        }
-
         if (!this.regulation.getSummation().isEmpty()) {
             vp.add(new Label("Summation:"));
             for (Summation summation : this.regulation.getSummation()) {
