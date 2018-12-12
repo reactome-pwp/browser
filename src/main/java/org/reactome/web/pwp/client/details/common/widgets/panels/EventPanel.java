@@ -12,7 +12,10 @@ import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosureP
 import org.reactome.web.pwp.client.details.delegates.InstanceSelectedDelegate;
 import org.reactome.web.pwp.model.client.classes.*;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
+
+import java.util.List;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -54,6 +57,28 @@ public class EventPanel extends DetailsPanel implements ClickHandler {
         //At the beginning only the displayName is placed into the disclosure panel, later on the species will be added
         this.disclosurePanel = DisclosurePanelFactory.getAdvancedDisclosurePanel(this.event.getDisplayName(), this);
         initWidget(this.disclosurePanel);
+
+        //In some cases, the event is inferred from an orphan (exclusively created to manually infer the current one)
+        //When it happens, the idea is hide the button. The following code is a workaround for that
+        ContentClient.query(this.event.getStId(), "eventOf", new ContentClientHandler.AttributesLoaded() {
+            @Override
+            public void onAttributesLoaded(List<String[]> attributes) {
+                if(attributes.isEmpty()){
+                    EventPanel.this.disclosurePanel.setHeader(DisclosurePanelFactory.getAdvancedDisclosurePanel(EventPanel.this.event.getDisplayName()).getHeader());
+                }
+            }
+
+            @Override
+            public void onContentClientException(Type type, String message) {
+                EventPanel.this.disclosurePanel.setHeader(DisclosurePanelFactory.getAdvancedDisclosurePanel(EventPanel.this.event.getDisplayName()).getHeader());
+            }
+
+            @Override
+            public void onContentClientError(ContentClientError error) {
+                EventPanel.this.disclosurePanel.setHeader(DisclosurePanelFactory.getAdvancedDisclosurePanel(EventPanel.this.event.getDisplayName()).getHeader());
+            }
+        });
+
     }
 
     @Override
