@@ -10,9 +10,11 @@ public class TermFlaggedEvent extends GwtEvent<TermFlaggedHandler> {
     public static final Type<TermFlaggedHandler> TYPE = new Type<>();
 
     private String term;
+    private Boolean includeInteractors;
 
-    public TermFlaggedEvent(String term) {
+    public TermFlaggedEvent(String term, Boolean includeInteractors) {
         this.term = term;
+        this.includeInteractors = includeInteractors;
     }
 
     @Override
@@ -27,6 +29,10 @@ public class TermFlaggedEvent extends GwtEvent<TermFlaggedHandler> {
 
     public String getTerm() {
         return term;
+    }
+
+    public Boolean getIncludeInteractors() {
+        return includeInteractors;
     }
 
     @Override

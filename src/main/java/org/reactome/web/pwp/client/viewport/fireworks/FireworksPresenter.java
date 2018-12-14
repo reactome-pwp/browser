@@ -41,7 +41,9 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
     private Species currentSpecies;
     private Pathway selected;
     private AnalysisStatus analysisStatus;
+
     private String flag;
+    private Boolean includeInteractors;
 
     private Fireworks.Display display;
 
@@ -93,9 +95,11 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
         }
 
         String flag = event.getState().getFlag();
-        if(!Objects.equals(flag, this.flag)) {
-            this.flag = flag;
-            this.display.flag(this.flag);
+        Boolean includeInteractors = event.getState().getFlagIncludeInteractors();
+        if(!Objects.equals(flag, this.flag) || !Objects.equals(includeInteractors, this.includeInteractors)) {
+            this.flag = event.getState().getFlag();
+            this.includeInteractors = event.getState().getFlagIncludeInteractors();
+            this.display.flag(this.flag, this.includeInteractors);
         }
 
         if (this.display.isVisible()) {
@@ -185,6 +189,11 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
     @Override
     public void resetAnalysis() {
         eventBus.fireEventFromSource(new AnalysisResetEvent(), this);
+    }
+
+    @Override
+    public void fireworksFlagPerformed(String term, Boolean includeInteractors) {
+        eventBus.fireEventFromSource(new TermFlaggedEvent(term, includeInteractors), this);
     }
 
     @Override

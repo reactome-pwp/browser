@@ -6,10 +6,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.fireworks.client.FireworksFactory;
 import org.reactome.web.fireworks.client.FireworksViewer;
-import org.reactome.web.fireworks.events.NodeHoverEvent;
-import org.reactome.web.fireworks.events.NodeOpenedEvent;
-import org.reactome.web.fireworks.events.NodeSelectedEvent;
-import org.reactome.web.fireworks.events.ProfileChangedEvent;
+import org.reactome.web.fireworks.events.*;
 import org.reactome.web.fireworks.handlers.*;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosureImages;
@@ -24,7 +21,7 @@ import java.util.Objects;
  */
 public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Display, AnalysisResetHandler,
         NodeHoverHandler, NodeSelectedHandler, NodeSelectedResetHandler, NodeHoverResetHandler, NodeOpenedHandler,
-        ProfileChangedHandler, NodeFlaggedResetHandler {
+        ProfileChangedHandler, NodeFlaggedHandler, NodeFlaggedResetHandler {
 
     private FireworksViewer fireworks;
     private Fireworks.Presenter presenter;
@@ -35,7 +32,9 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
     private Pathway toHighlight;
     private Pathway toSelect;
     private Pathway toOpen;
+
     private String flag;
+    private Boolean includeInteractors;
 
     public FireworksDisplay() {
         super(Style.Unit.PX);
@@ -49,6 +48,7 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
 //        FireworksFactory.EVENT_BUS_VERBOSE = true;
         this.fireworks = FireworksFactory.createFireworksViewer(speciesJson);
         handlers.add(this.fireworks.addAnalysisResetHandler(this));
+        handlers.add(this.fireworks.addNodeFlaggedHandler(this));
         handlers.add(this.fireworks.addNodeFlaggedResetHandler(this));
         handlers.add(this.fireworks.addNodeHoverHandler(this));
         handlers.add(this.fireworks.addNodeOpenedHandler(this));
@@ -68,12 +68,19 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
     }
 
     @Override
-    public void flag(String flag) {
+    public void flag(String flag, Boolean includeInteractors) {
         if (this.fireworks != null) {
-            this.fireworks.flagItems(flag);
+            if (flag != null && !flag.isEmpty()) {
+                this.fireworks.flagItems(flag, includeInteractors);
+            } else {
+                this.fireworks.resetFlaggedItems();
+            }
         }
         this.flag = flag;
+        this.includeInteractors = includeInteractors;
     }
+
+
 
     @Override
     public void setPresenter(Fireworks.Presenter presenter) {
@@ -82,22 +89,22 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
 
     private void applyCarriedActions(){
         //ORDER IS IMPORTANT IN THE FOLLOWING CONDITIONS
-        if(this.toOpen!=null){
+        if (this.toOpen != null) {
             this.fireworks.openPathway(this.toOpen.getDbId());
             this.toOpen = null;
             this.toSelect = null;
             this.toHighlight = null;
         }
-        if(this.toSelect!=null){
+        if (this.toSelect != null) {
             this.fireworks.selectNode(this.toSelect.getDbId());
             this.toSelect = null;
         }
-        if(this.toHighlight!=null){
+        if (this.toHighlight != null) {
             this.fireworks.highlightNode(this.toHighlight.getDbId());
             this.toHighlight = null;
         }
-        if(this.flag!=null){
-            this.fireworks.flagItems(this.flag);
+        if (this.flag != null) {
+            this.fireworks.flagItems(this.flag, includeInteractors);
             this.flag = null;
         }
         //Please note there is no checking to analysisStatus because reset is an option :)
@@ -188,6 +195,11 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
     @Override
     public void onAnalysisReset() {
         this.presenter.resetAnalysis();
+    }
+
+    @Override
+    public void onNodeFlagged(NodeFlaggedEvent event) {
+        this.presenter.fireworksFlagPerformed(event.getTerm(), event.getIncludeInteractors());
     }
 
     @Override

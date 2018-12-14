@@ -15,6 +15,7 @@ public interface Fireworks {
         void highlightPathway(Long dbId);
         void profileChanged(String profileName);
         void resetAnalysis();
+        void fireworksFlagPerformed(String term, Boolean includeInteractors);
         void resetFlag();
         void resetPathwayHighlighting();
         void showPathwayDiagram(Long dbId);
@@ -27,7 +28,7 @@ public interface Fireworks {
 
         void loadSpeciesFireworks(String speciesJson);
 
-        void flag(String flag);
+        void flag(String flag, Boolean includeInteractors);
 
         void highlightPathway(Pathway pathway);
 

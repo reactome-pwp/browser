@@ -7,15 +7,16 @@ import java.util.List;
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public enum StateKey {
-    SPECIES     ("SPECIES" , "FOCUS_SPECIES_ID"),
-    PATHWAY     ("PATHWAY", "DIAGRAM", "FOCUS_PATHWAY_ID"),
-    SELECTED    ("SEL", "ID"),
-    PATH        ("PATH"),
-    DETAILS_TAB ("DTAB", "DETAILS_TAB"),
-    TOOL        ("TOOL"),
-    ANALYSIS    ("ANALYSIS", "ANALYSIS_ID"),
-    RESOURCE    ("RESOURCE"),
-    FLAG        ("FLG", "FLAG", "ACC", "UNIPROT", "GENE", "CHEBI", "ENSEMBL");
+    SPECIES       ("SPECIES" , "FOCUS_SPECIES_ID"),
+    PATHWAY       ("PATHWAY", "DIAGRAM", "FOCUS_PATHWAY_ID"),
+    SELECTED      ("SEL", "ID"),
+    PATH          ("PATH"),
+    DETAILS_TAB   ("DTAB", "DETAILS_TAB"),
+    TOOL          ("TOOL"),
+    ANALYSIS      ("ANALYSIS", "ANALYSIS_ID"),
+    RESOURCE      ("RESOURCE"),
+    FLAG          ("FLG", "FLAG", "ACC", "UNIPROT", "GENE", "CHEBI", "ENSEMBL"),
+    FLAG_INT      ("FLGINT");
 
     List<String> keys;
 

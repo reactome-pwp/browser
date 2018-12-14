@@ -102,43 +102,40 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
             //The following code assumes that PE or Events of different species
             //are selected when showing them, so it is highly recommended to do
             //some further checking and detect when an odd case happens
+            currentState.setSelected(selected);
             if (diagram == null) {
                 if (selected == null) {
-                    currentState.setPathway(null);
+                    currentState.setEvent(null);
+                    currentState.setPath(null);
                 } else {
                     Species species = null;
-                    if(selected instanceof PhysicalEntity){
+                    if (selected instanceof PhysicalEntity) {
                         PhysicalEntity pe = (PhysicalEntity) selected;
-                        if(pe.getSpecies()!=null && !pe.getSpecies().isEmpty()) {
-                            species = pe.getSpecies().get(pe.getSpecies().size()-1);
+                        if (pe.getSpecies() != null && !pe.getSpecies().isEmpty()) {
+                            species = pe.getSpecies().get(pe.getSpecies().size() - 1);
                         }
-                    }else if(selected instanceof Event){
+                    } else if (selected instanceof Event) {
                         Event e = (Event) selected;
-                        if(e.getSpecies()!=null && !e.getSpecies().isEmpty()) {
-                            species = e.getSpecies().get(e.getSpecies().size()-1);
+                        if (e.getSpecies() != null && !e.getSpecies().isEmpty()) {
+                            species = e.getSpecies().get(e.getSpecies().size() - 1);
                         }
+                        currentState.setEvent(e);
+                        currentState.setPath(path);
                     }
-                    if (species!=null && !species.equals(currentState.getSpecies())) {
+                    if (species != null && !species.equals(currentState.getSpecies())) {
                         eventBus.fireEventFromSource(new SpeciesSelectedEvent(species), this);
                         return;
                     }
-                    currentState.setSelected(selected);
                 }
             } else {
-                currentState.setPathway(diagram);
+                currentState.setEvent(diagram);
                 currentState.setPath(path);
             }
 
-            currentState.setSelected(newSelection.getDatabaseObject());
-            currentState.setPath(newSelection.getPath());
-
-            currentState.doConsistencyCheck(new State.StateLoadedHandler() {
-                @Override
-                public void onStateLoaded(State state) {
-                    currentState = state;
-                    eventBus.fireEventFromSource(new StateChangedEvent(currentState), StateManager.this);
-                    History.newItem(currentState.toString(), false);
-                }
+            currentState.doConsistencyCheck(state -> {
+                currentState = state;
+                eventBus.fireEventFromSource(new StateChangedEvent(currentState), StateManager.this);
+                History.newItem(currentState.toString(), false);
             });
         }
     }
@@ -217,6 +214,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     public void onTermFlagged(TermFlaggedEvent event) {
         State desiredState = new State(this.currentState);
         desiredState.setFlag(event.getTerm());
+        desiredState.setFlagIncludeInteractors(event.getIncludeInteractors());
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 }

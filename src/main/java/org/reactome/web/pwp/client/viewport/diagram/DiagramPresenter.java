@@ -40,7 +40,9 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     private Path path;
     private AnalysisStatus analysisStatus = new AnalysisStatus();
     private Long hovered;
+
     private String flag;
+    private Boolean flagInteractors;
 
     public DiagramPresenter(EventBus eventBus, Diagram.Display display) {
         super(eventBus);
@@ -164,8 +166,8 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     }
 
     @Override
-    public void diagramFlagPerformed(String term) {
-        this.eventBus.fireEventFromSource(new TermFlaggedEvent(term), this);
+    public void diagramFlagPerformed(String term, Boolean includeInteractors) {
+        this.eventBus.fireEventFromSource(new TermFlaggedEvent(term, includeInteractors), this);
     }
 
     @Override
@@ -192,6 +194,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
         this.path = state.getPath();
         this.analysisStatus = state.getAnalysisStatus();
         this.flag = state.getFlag();
+        this.flagInteractors = state.getFlagIncludeInteractors();
         if(this.display.isVisible()) {
             if (isNewDiagram) {
                 this.loadCurrentPathway();
@@ -217,7 +220,7 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
                 if (Objects.equals(pathway, displayedPathway)) {
                     updateView();
                 } else {
-                    ContentClient.getAncestors(pathway, new AncestorsLoaded() {
+                    ContentClient.getAncestors(displayedPathway, new AncestorsLoaded() {
                         @Override
                         public void onAncestorsLoaded(Ancestors ancestors) {
                             List<Path> paths = ancestors.getPathsContaining(pathway);
@@ -265,6 +268,6 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
     private void updateView(){
         this.display.select(this.selected);
         display.setAnalysisToken(analysisStatus);
-        display.flag(this.flag);
+        display.flag(this.flag, this.flagInteractors);
     }
 }

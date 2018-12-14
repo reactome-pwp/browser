@@ -24,7 +24,7 @@ public interface Diagram {
 
         void fireworksOpened(Long dbId);
 
-        void diagramFlagPerformed(String term);
+        void diagramFlagPerformed(String term, Boolean includeInteractor);
 
         void resetFlag(DiagramObjectsFlagResetEvent event);
 
@@ -38,7 +38,7 @@ public interface Diagram {
 
         void loadPathway(Pathway pathway);
 
-        void flag(String flag);
+        void flag(String flag, Boolean includeInteractors);
 
         void highlight(DatabaseObject databaseObject);
 

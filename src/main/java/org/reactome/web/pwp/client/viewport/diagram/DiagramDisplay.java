@@ -70,11 +70,11 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
     }
 
     @Override
-    public void flag(String flag) {
+    public void flag(String flag, Boolean includeInteractors) {
         if (flag == null) {
             this.diagram.resetFlaggedItems();
         } else {
-            this.diagram.flagItems(flag);
+            this.diagram.flagItems(flag, includeInteractors);
         }
     }
 
@@ -108,7 +108,7 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
 
     @Override
     public void onDiagramObjectsFlagged(DiagramObjectsFlaggedEvent event) {
-        this.presenter.diagramFlagPerformed(event.getTerm());
+        this.presenter.diagramFlagPerformed(event.getTerm(), event.getIncludeInteractors());
     }
 
     @Override

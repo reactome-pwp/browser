@@ -49,6 +49,7 @@ public class State {
     private AnalysisStatus analysisStatus = new AnalysisStatus();
 
     private String flag;
+    private boolean flagIncludeInteractors = false;
 
     public State(Token token, final StateLoadedHandler handler) {
         List<String> toLoad = token.getToLoad();
@@ -90,6 +91,9 @@ public class State {
                             case FLAG:
                                 flag = identifier;
                                 break;
+                            case FLAG_INT:
+                                flagIncludeInteractors = true;
+                                break;
                             default:
                                 System.err.println(getClass().getSimpleName() + " >> " + key + " not treated!");
                         }
@@ -125,17 +129,18 @@ public class State {
         this.tool = state.tool;
         this.analysisStatus = state.analysisStatus;
         this.flag = state.flag;
+        this.flagIncludeInteractors = state.flagIncludeInteractors;
     }
 
-    public void doConsistencyCheck(final StateLoadedHandler handler){
-        if(event !=null){
-            if((event instanceof Pathway) && ((Pathway) event).getHasDiagram()){
+    void doConsistencyCheck(final StateLoadedHandler handler) {
+        if (event != null) {
+            if ((event instanceof Pathway) && ((Pathway) event).getHasDiagram()) {
                 handler.onStateLoaded(this);
-            }else{
+            } else {
                 StateHelper.getPathwayWithDiagram(event, path, new StateHelper.PathwayWithDiagramHandler() {
                     @Override
                     public void setPathwayWithDiagram(Pathway pathway, Path path) {
-                        if(State.this.selected==null){
+                        if (State.this.selected == null) {
                             State.this.selected = State.this.event;
                         }
                         State.this.event = pathway;
@@ -150,7 +155,7 @@ public class State {
                     }
                 });
             }
-        }else {
+        } else {
             handler.onStateLoaded(this);
         }
     }
@@ -167,13 +172,13 @@ public class State {
         return (Pathway) event;
     }
 
-    public void setPathway(Pathway pathway) {
-        if (pathway == null) {
+    public void setEvent(Event event) {
+        if (event == null) {
             this.species = getSpecies();
             this.selected = null;
             this.path = null;
         }
-        this.event = pathway;
+        this.event = event;
     }
 
     public DatabaseObject getSelected() {
@@ -202,7 +207,7 @@ public class State {
         return detailsTab;
     }
 
-    public void setDetailsTab(DetailsTabType detailsTab) {
+    void setDetailsTab(DetailsTabType detailsTab) {
         this.detailsTab = detailsTab;
     }
 
@@ -218,7 +223,7 @@ public class State {
         return this.analysisStatus;
     }
 
-    public void setAnalysisParameters(String analysisToken, String resource) {
+    void setAnalysisParameters(String analysisToken, String resource) {
         //IMPORTANT! Do no use setToken! ALWAYS create a new object here
         this.analysisStatus = new AnalysisStatus(analysisToken, resource);
     }
@@ -229,6 +234,14 @@ public class State {
 
     public void setFlag(String flag) {
         this.flag = flag;
+    }
+
+    public boolean getFlagIncludeInteractors() {
+        return flagIncludeInteractors;
+    }
+
+    public void setFlagIncludeInteractors(boolean flagIncludeInteractors) {
+        this.flagIncludeInteractors = flagIncludeInteractors;
     }
 
     @Override
@@ -268,12 +281,17 @@ public class State {
             token.deleteCharAt(token.length() - 1);
             addDelimiter = true;
         }
-        if( flag != null ) {
+        if (flag != null) {
             if (addDelimiter) token.append(Token.DELIMITER);
             token.append(StateKey.FLAG.getDefaultKey());
             token.append("=");
             token.append(flag);
-            addDelimiter=true;
+            addDelimiter = true;
+        }
+        if (flagIncludeInteractors) {
+            if (addDelimiter) token.append(Token.DELIMITER);
+            token.append(StateKey.FLAG_INT.getDefaultKey());
+            addDelimiter = true;
         }
         if (detailsTab != null && !detailsTab.equals(DetailsTabType.getDefault())) {
             if (addDelimiter) token.append(Token.DELIMITER);
@@ -293,7 +311,7 @@ public class State {
             token.append(StateKey.ANALYSIS.getDefaultKey());
             token.append("=");
             token.append(URL.encodeQueryString(analysisStatus.getToken()));
-            if(analysisStatus.getResource()!=null && !analysisStatus.getResource().equals("TOTAL")){
+            if (analysisStatus.getResource() != null && !analysisStatus.getResource().equals("TOTAL")) {
                 token.append(Token.DELIMITER);
                 token.append(StateKey.RESOURCE.getDefaultKey());
                 token.append("=");
@@ -309,7 +327,7 @@ public class State {
      *
      * @return the path until the loaded diagram (without including it)
      */
-    protected Path getPrunedPath() {
+    private Path getPrunedPath() {
         if (this.path == null) return null;
         List<Event> prunedPath = new LinkedList<>();
         for (Event event : this.path) {

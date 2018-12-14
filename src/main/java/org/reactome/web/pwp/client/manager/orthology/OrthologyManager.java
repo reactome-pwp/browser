@@ -43,7 +43,7 @@ public class OrthologyManager implements BrowserModule.Manager, StateChangedHand
     @Override
     public void onSpeciesSelected(SpeciesSelectedEvent event) {
         this.desiredState = new State(this.currentState);
-        this.desiredState.setPathway(null);
+        this.desiredState.setEvent(null);
         this.desiredState.setSelected(null);
         this.desiredState.setPath(null);
         this.desiredState.setSpecies(event.getSpecies()); //Keep this after the rest have been set to null;
@@ -91,7 +91,7 @@ public class OrthologyManager implements BrowserModule.Manager, StateChangedHand
         Pathway pathway = this.currentState.getPathway();
         if (pathway != null) { //Not really needed because we have check it above
             if (map.containsKey(pathway.getDbId() + "")) {
-                this.desiredState.setPathway((Pathway) map.get(pathway.getDbId() + ""));
+                this.desiredState.setEvent((Pathway) map.get(pathway.getDbId() + ""));
 
                 DatabaseObject selected = this.currentState.getSelected();
                 if (selected != null) {
