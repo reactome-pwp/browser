@@ -12,6 +12,8 @@
 }
 
 .titleContainer img {
+    height: 20px;
+    width: auto;
     margin-right: 5px;
     vertical-align: bottom !important;
     -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
