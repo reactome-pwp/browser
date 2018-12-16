@@ -55,11 +55,15 @@ public class GAManager implements BrowserModule.Manager,
                     this.gaTrackerActive = true;
                     break;
                 case DEV:
-                    GATracker.setAccount("UA-42985898-2", "oicr.on.ca");
+                    GATracker.setAccount("UA-42985898-2", "reactome.org");
+                    this.gaTrackerActive = true;
+                    break;
+                case RELEASE:
+                    GATracker.setAccount("UA-42985898-4", "reactome.org");
                     this.gaTrackerActive = true;
                     break;
                 case CURATOR:
-                    GATracker.setAccount("UA-42985898-3", "oicr.on.ca");
+                    GATracker.setAccount("UA-42985898-3", "reactome.org");
                     this.gaTrackerActive = true;
                     break;
                 default:
@@ -68,7 +72,7 @@ public class GAManager implements BrowserModule.Manager,
         }catch (JavaScriptException ex){
             this.gaTrackerActive = false;
         }
-        //noinspection PointlessBooleanExpression,ConstantConditions
+
         if(!this.gaTrackerActive && TRACK_GA_MANAGER){
             Console.info("[GAManager] set for DEV purposes");
         }
