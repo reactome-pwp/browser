@@ -1,14 +1,10 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
 import org.reactome.web.pwp.client.details.tabs.analysis.providers.NotFoundAsyncDataProvider;
+import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
 
 import java.util.List;
@@ -44,21 +40,9 @@ public class NotFoundPanel extends DockLayoutPanel {
 
         this.dataProvider = new NotFoundAsyncDataProvider(this.table, this.pager, this.token);
 
-        CustomButton downloadNotFound = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Not found");
-        downloadNotFound.setTitle("Click to download the not found identifiers");
-        downloadNotFound.getElement().getStyle().setFloat(Style.Float.LEFT);
-        downloadNotFound.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                Window.open("/AnalysisService/download/" + token + "/entities/notfound/not_found.csv", "_self", "");
-            }
-        });
-
         this.clear();
         FlowPanel pagerPanel = new FlowPanel();
-        pagerPanel.setWidth("100%");
-        pagerPanel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
-        pagerPanel.add(downloadNotFound);
+        pagerPanel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().panelFooter());
         pagerPanel.add(pager);
         this.addSouth(pagerPanel, 2);
 

@@ -1,9 +1,10 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.*;
+import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.providers.InteractorsFoundAsyncDataProvider;
+import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound.NotFoundTable;
 
@@ -17,13 +18,19 @@ public class InteractorsFoundPanel extends DockLayoutPanel {
     private String token;
     private String resource = "TOTAL";
     private Long pathwayId;
+    private String pathwayName;
     private boolean forceLoad = true;
 
     private CustomPager pager;
 
-    public InteractorsFoundPanel() {
-        super(Style.Unit.EM);
+    private Handler handler;
+    public interface Handler {
+        void onInteractorsFoundPanelPanelClosed();
+    }
 
+    public InteractorsFoundPanel(Handler handler) {
+        super(Style.Unit.EM);
+        this.handler = handler;
         this.pager = new CustomPager(); // Create paging controls.
         this.pager.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);
         this.pager.setPageSize(NotFoundTable.PAGE_SIZE);
@@ -44,23 +51,39 @@ public class InteractorsFoundPanel extends DockLayoutPanel {
         new InteractorsFoundAsyncDataProvider(table, this.pager, this.token, this.pathwayId, this.resource);
 
         this.clear();
+        this.addNorth(getHeader(pathwayName), 1.2);
         FlowPanel pagerPanel = new FlowPanel();
-        pagerPanel.setWidth("100%");
-        pagerPanel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
+        pagerPanel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().panelFooter());
         pagerPanel.add(pager);
         this.addSouth(pagerPanel, 2);
 
         this.add(table);
     }
 
-    public void setAnalysisDetails(String token, Long pathwayId) {
+    public void setAnalysisDetails(String token, PathwaySummary pathway) {
         this.token = token;
-        this.pathwayId = pathwayId;
+        this.pathwayId = pathway.getDbId();
+        this.pathwayName = pathway.getName();
         this.forceLoad = true;
     }
 
     public void setResource(String resource) {
         this.resource = resource;
         this.forceLoad = true;
+    }
+
+    private Widget getHeader(String pathwayName) {
+        Image icon = new Image(AnalysisTabStyleFactory.RESOURCES.backIcon());
+
+        Anchor backAnchor = new Anchor("Back to results overview");
+        backAnchor.addClickHandler(event -> handler.onInteractorsFoundPanelPanelClosed());
+
+        FlowPanel fp = new FlowPanel();
+        fp.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().panelHeader());
+        fp.add(icon);
+        fp.add(backAnchor);
+        fp.add(new Label("Matching (to interactors) identifiers for: " + pathwayName));
+
+        return fp;
     }
 }
