@@ -1,64 +1,109 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
 import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.OptionSelectedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ActionSelectedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ResourceChangedHandler;
 
 import java.util.List;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.OptionBadge.Type.INLCUDE_INTERACTORS;
+import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.OptionBadge.Type.PROJECT_TO_HUMAN;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
+ * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AnalysisSummaryPanel extends DockLayoutPanel {
+    private static final NumberFormat formatter = NumberFormat.getFormat( "#,###" );
+    private static final String DOC_URL = "/user/guide/analysis";
+    static final int baseSummaryPanel = 850;
+    static final int baseNameSize = 320;
+
     private String token;
     private ListBox resourceBox;
+    private FlowPanel mainPanel;
+    private FlowPanel namePanel;
+    private SimplePanel overlay;
 
-    private TableSelectorPanel selectorPanel;
+    private ActionsPanel actionsPanel;
 
     public AnalysisSummaryPanel(AnalysisResult analysisResult) {
         super(Style.Unit.PX);
         this.token = analysisResult.getSummary().getToken();
         AnalysisSummary summary = analysisResult.getSummary();
 
-        boolean speciesComparison = summary.getSpecies()!=null;
-        this.selectorPanel = new TableSelectorPanel(analysisResult.getIdentifiersNotFound(), speciesComparison);
-        this.addEast(this.selectorPanel, 330);
+        boolean speciesComparison = summary.getSpecies() != null;
 
-        FlowPanel fp = new FlowPanel();
-        fp.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().analysisTabSummary());
-        fp.add(getResourceTypePanel(analysisResult.getResourceSummary()));
-        fp.add(getTypePanel(summary));
-        fp.add(getOptionPanel(summary));
+        this.mainPanel = new FlowPanel();
+        this.mainPanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().summaryInfoPanel());
+        this.mainPanel.add(getTypePanel(summary));
+        this.mainPanel.add(getResourceTypePanel(analysisResult.getResourceSummary()));
+        this.mainPanel.add(getNamePanel(summary));
 
-        // Get tha analysis warnings
-        List<String> warningsList = analysisResult.getWarnings();
-        if(warningsList!=null && !warningsList.isEmpty()) {
-            NotificationPanel notificationPanel = new NotificationPanel(warningsList);
-            fp.add(notificationPanel);
+        if (summary.getProjection()) {
+            this.mainPanel.add(new OptionBadge(PROJECT_TO_HUMAN));
         }
 
-        this.add(fp);
-    }
+        if (summary.getInteractors()) {
+            this.mainPanel.add(new OptionBadge(INLCUDE_INTERACTORS));
+        }
 
-    public HandlerRegistration addOptionSelectedHandler(OptionSelectedHandler handler){
-        return this.selectorPanel.addOptionSelectedHandler(handler);
+        actionsPanel = new ActionsPanel(analysisResult);
+        this.addEast(actionsPanel, 150);
+
+        this.mainPanel.add(getOverlay());
+        this.add(mainPanel);
     }
 
     public HandlerRegistration addResourceChangeHandler(ResourceChangedHandler handler){
         return this.addHandler(handler, ResourceChangedEvent.TYPE);
     }
 
+    public HandlerRegistration addActionSelectedHandler(ActionSelectedHandler handler) {
+        return this.actionsPanel.addActionSelectedHandler(handler);
+    }
+
     public String getToken() {
         return token;
+    }
+
+
+//    @Override
+//    public void onActionSelected(ActionSelectedEvent event) {
+//        ActionSelectedEvent.Action action = event.getAction();
+//        switch (action) {
+//            case FILTERING_ON:
+//                setOverlay(true);
+//                break;
+//            case FILTERING_OFF:
+//                setOverlay(false);
+//                break;
+//            case HELP_ON:
+//                //TODO
+//                break;
+//            case HELP_OFF:
+//                //TODO
+//                break;
+//            case CLUSTERING_ON:
+//                //TODO
+//                break;
+//            case CLUSTERING_OFF:
+//                //TODO
+//                break;
+//        }
+//    }
+
+    public void showFilteringPanel(boolean isVisible) {
+        setOverlay(isVisible);
+        actionsPanel.showFilteringPanel(isVisible);
     }
 
     public void setResource(String resource){
@@ -72,43 +117,44 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
     }
 
     private Widget getResourceTypePanel(List<ResourceSummary> resourceSummary){
-        FlowPanel resourcePanel = new FlowPanel();
-        resourcePanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().analysisTabSummaryInfo());
-        resourcePanel.add(new InlineLabel("Results for: "));
+        SimplePanel resourcePanel = new SimplePanel();
+        resourcePanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().resourcePanel());
         resourceBox = new ListBox();
         resourceBox.setMultipleSelect(false);
-//        boolean noTotal = resourceSummary.size()==2;
+
         for (ResourceSummary summary : resourceSummary) {
             String resource = summary.getResource();
-//            if(noTotal && resource.equals("TOTAL")) continue;
-            resourceBox.addItem(resource + " (" + summary.getPathways() + ")", resource);
+            resourceBox.addItem(resource + " (" + formatter.format(summary.getPathways()) + ")", resource);
         }
         resourcePanel.add(resourceBox);
-        resourceBox.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                ListBox listBox = (ListBox) event.getSource();
-                String resource = listBox.getValue(listBox.getSelectedIndex());
-                fireEvent(new ResourceChangedEvent(resource));
-            }
+        resourceBox.addChangeHandler(event -> {
+            ListBox listBox = (ListBox) event.getSource();
+            String resource = listBox.getValue(listBox.getSelectedIndex());
+            fireEvent(new ResourceChangedEvent(resource));
         });
         return resourcePanel;
     }
 
-    private Widget getTypePanel(AnalysisSummary summary){
-        FlowPanel typePanel = new FlowPanel();
-        typePanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().analysisTabSummaryInfo());
-        typePanel.add(new InlineLabel("Type: "));
-        InlineLabel type = new InlineLabel(summary.getType().replaceAll("_", " ").toLowerCase());
-        type.getElement().getStyle().setTextTransform(Style.TextTransform.CAPITALIZE);
-        typePanel.add(type);
+    private Widget getTypePanel(AnalysisSummary summary) {
+        String type = summary.getType().replaceAll("_", " ").toLowerCase();
 
+        Anchor typeAnchor = new Anchor( type, DOC_URL, "_blank");
+        typeAnchor.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().summaryItem());
+        typeAnchor.setTitle("Find out more about this type of analysis");
+        typeAnchor.getElement().getStyle().setTextTransform(Style.TextTransform.CAPITALIZE);
+
+        Label lb = new Label(type.startsWith("species") ? "for" : "analysis results for");
+        lb.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().summaryItem());
+
+        FlowPanel typePanel = new FlowPanel();
+        typePanel.add(typeAnchor);
+        typePanel.add(lb);
         return typePanel;
     }
 
-    private Widget getOptionPanel(AnalysisSummary summary){
-        FlowPanel optPanel = new FlowPanel();
-        optPanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().analysisTabSummaryInfo());
+    private Widget getNamePanel(AnalysisSummary summary) {
+        namePanel = new FlowPanel();
+        namePanel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().namePanel());
         if(summary.getSpecies()==null){
             StringBuilder sb = new StringBuilder();
             String fileName = summary.getFileName();
@@ -122,19 +168,41 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
             if(sb.length()==0){
                 sb.append("Data submitted with no name");
             }
-            optPanel.add(new InlineLabel(sb.toString()));
+            namePanel.add(new InlineLabel(sb.toString()));
         }else{
-            optPanel.add(new InlineLabel("Homo sapiens compared with "));
-            optPanel.add(new InlineLabel(summary.getSpeciesName()));
+            namePanel.add(new InlineLabel("Homo sapiens compared with "));
+            namePanel.add(new InlineLabel(summary.getSpeciesName()));
         }
-        return optPanel;
+        return namePanel;
     }
 
-    public void setSelected(AnalysisInfoType type){
-        this.selectorPanel.setSelected(type);
+    private Widget getOverlay() {
+        overlay = new SimplePanel();
+        overlay.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().overlay());
+        return overlay;
     }
 
-    public void setDownAll(boolean down){
-        this.selectorPanel.setDownAll(down);
+    private void setOverlay(boolean overlayOn) {
+        if(overlayOn) {
+            overlay.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        } else {
+            overlay.getElement().getStyle().setDisplay(Style.Display.NONE);
+        }
+    }
+
+    private void updateNamePanelSize() {
+        int curPanelSize = this.getElement().getOffsetWidth();
+        if (curPanelSize > 860) {
+            namePanel.getElement().setAttribute("max-width", baseNameSize + (curPanelSize - baseSummaryPanel) + "px");
+        } else {
+            namePanel.getElement().setAttribute("max-width", baseNameSize + "px");
+        }
+    }
+
+    @Override
+    public void onResize() {
+        super.onResize();
+        actionsPanel.hideWarnings();
+        updateNamePanelSize();
     }
 }
