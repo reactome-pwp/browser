@@ -1,6 +1,8 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.common;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.view.client.HasRows;
 import com.google.gwt.view.client.Range;
@@ -17,6 +19,11 @@ public class CustomPager extends SimplePager {
 
     //Page size is normally derived from the visibleRange
     private int pageSize = 10;
+
+    public CustomPager() {
+        super(SimplePager.TextLocation.CENTER,
+                CUSTOM_IMAGES, true, 500, false);
+    }
 
     @Override
     public void setPageSize(int pageSize) {
@@ -114,4 +121,85 @@ public class CustomPager extends SimplePager {
                 + formatter.format( dataSize );
     }
 
+
+    private static CustomPagerResources CUSTOM_IMAGES;
+    static {
+        CUSTOM_IMAGES = GWT.create(CustomPagerResources.class);
+    }
+
+    public interface CustomPagerResources extends SimplePager.Resources {
+        // Here you can @Override all the methods and place @Source annotation to tell
+        // SimplePager what image should be loaded as a replacement
+        // For example here I am replacing the Fast Forward image.
+
+        /**
+         * The image used to skip ahead multiple pages.
+         */
+        @Override
+        @Source( "../images/fastForward.png" )
+        ImageResource simplePagerFastForward();
+
+        /**
+         * The disabled "fast forward" image.
+         */
+        @Override
+        @Source( "../images/fastForwardDisabled.png" )
+        ImageResource simplePagerFastForwardDisabled();
+
+        /**
+         * The image used to go to the first page.
+         */
+        @Override
+        @Source( "../images/firstPage.png" )
+        ImageResource simplePagerFirstPage();
+
+        /**
+         * The disabled first page image.
+         */
+        @Override
+        @Source( "../images/firstPageDisabled.png" )
+        ImageResource simplePagerFirstPageDisabled();
+
+        /**
+         * The image used to go to the last page.
+         */
+        @Override
+        @Source( "../images/lastPage.png" )
+        ImageResource simplePagerLastPage();
+
+        /**
+         * The disabled last page image.
+         */
+        @Override
+        @Source( "../images/lastPageDisabled.png" )
+        ImageResource simplePagerLastPageDisabled();
+
+        /**
+         * The image used to go to the next page.
+         */
+        @Override
+        @Source( "../images/nextPage.png" )
+        ImageResource simplePagerNextPage();
+
+        /**
+         * The disabled next page image.
+         */
+        @Override
+        @Source( "../images/nextPageDisabled.png" )
+        ImageResource simplePagerNextPageDisabled();
+
+        /**
+         * The image used to go to the previous page.
+         */
+        @Override
+        @Source( "../images/previousPage.png" )
+        ImageResource simplePagerPreviousPage();
+
+        /**
+         * The disabled previous page image.
+         */
+        @Override
+        @Source( "../images/previousPageDisabled.png" )
+        ImageResource simplePagerPreviousPageDisabled();
+    }
 }
