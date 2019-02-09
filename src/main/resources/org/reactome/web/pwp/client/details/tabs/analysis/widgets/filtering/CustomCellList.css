@@ -1,0 +1,43 @@
+.cellListEvenItem {
+    cursor: pointer;
+}
+
+.cellListEvenItem > div > div > a {
+    display: none;
+    margin-top: 1px;
+    line-height: 1em;
+    float:left;
+    opacity: 0.6;
+}
+
+.cellListEvenItem:hover > div > div > a {
+    display: block;
+}
+
+.cellListEvenItem a:hover {
+    opacity: 1;
+}
+
+.cellListKeyboardSelectedItem {}
+.cellListOddItem {
+    cursor: pointer;
+}
+
+.cellListOddItem > div > div > a {
+    display: none;
+    margin-top: 1px;
+    line-height: 1em;
+    float:left;
+    opacity: 0.6;
+}
+
+.cellListOddItem:hover > div > div > a {
+    display: block;
+}
+
+.cellListOddItem a:hover {
+    opacity: 1;
+}
+
+.cellListSelectedItem {}
+.cellListWidget {}

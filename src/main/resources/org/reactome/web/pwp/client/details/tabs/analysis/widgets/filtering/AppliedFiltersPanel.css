@@ -1,0 +1,86 @@
+.main {
+    background: #FFFFFF;
+    border: 0;
+    outline: none;
+    border-radius: 5px;
+    margin-right: 2px;
+    /*height: 99%;*/
+    padding: 1px 2px;
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+    font-size: smaller;
+
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    color: #000000;
+    font-weight: bolder;
+    line-height: 100%;
+    margin-right: 2px;
+    cursor: default !important;
+}
+
+.container {
+    /*background: #908aca;*/
+    display: flex;
+}
+
+.chip {
+    font-size: small;
+    border: 0 solid;
+    border-radius: 12px;
+    padding: 1px 4px;
+    margin-left: 3px;
+    display: flex;
+    color: #FFFFFF;
+    cursor: default !important;
+}
+
+.removeBtn {
+    float: right;
+    margin: 0 0 0 4px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    opacity: 0.8;
+    padding: 0;
+    border: 0;
+}
+
+.removeBtn>div {
+    margin: 0;
+    position: relative;
+}
+
+.removeBtn span {
+    display: none;
+}
+
+.removeBtn img {
+    display: block;
+    height: 12px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.removeBtn:hover {
+    /*background-color: #1E95CF;*/
+    cursor: pointer !important;
+    opacity: 0.9;
+}
+
+.removeBtn:active:hover {
+    /*background-color: #035d9c;*/
+    cursor: pointer !important;
+    opacity: 1;
+}

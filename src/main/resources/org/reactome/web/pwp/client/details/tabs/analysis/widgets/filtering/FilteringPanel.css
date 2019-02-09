@@ -1,0 +1,178 @@
+.main {
+    padding: 0 5px 0 5px;
+}
+
+.mainTitle {
+    color: #126c9c;
+    font-weight: bolder;
+    height: 1.5em;
+}
+
+.flexContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.bySizePanel {
+    display: inline-block;
+    max-width: 350px;
+    flex-grow: 1;
+}
+
+.bySpeciesPanel {
+    display: inline-block;
+    max-width: 350px;
+    flex-grow: 1;
+}
+
+.byDiseasePanel {
+    display: inline-block;
+    max-width: 450px;
+    align-self: stretch;
+    flex-grow: 2;
+}
+
+.innerTitle {
+    color: #126c9c;
+    font-weight: bolder;
+    font-size: 1.1em;
+}
+
+.subtitle {
+    color: #126c9c;
+    margin-left: 8px;
+    margin-bottom: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.sizeFilterLb {
+    float: right;
+    margin: 7px 20px 0 0;
+    color: #02a0e3;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.listPanel {
+    display: flex;
+}
+
+.speciesListBox {
+    max-height: 90px;
+    overflow: auto;
+    margin-left: 8px;
+    flex-grow: 1;
+    border-style: solid;
+    border-color: #DDDDDD;
+    border-width: 1px 0 1px 1px;
+    border-radius: 5px 0 0 0;
+}
+
+.listButtonsPanel {
+    width: 30px;
+    margin-right: 8px;
+    border: 1px solid #dddddd;
+    border-radius: 0 5px 0 0;
+}
+
+.selectBtn {
+    float: right;
+    margin: 10px 4px 0 0;
+    background-color: rgb(30, 148, 208);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 0;
+    outline: none;
+    font-size: small !important;
+}
+
+.selectBtn span {
+    display: none;
+}
+
+.selectBtn img {
+    vertical-align: middle !important;
+    padding: 2px;
+    height: 20px;
+    width: auto;
+}
+
+.selectBtn:hover {
+    background-color: #177dc0;
+    cursor: pointer !important;
+}
+
+.selectBtn:active:hover {
+    background-color: #07558b;
+    cursor: pointer !important;
+}
+
+.selectBtn:disabled {
+    background-color: #a39da6;
+}
+
+
+.checkBox {
+    margin: -6px 0 0 8px;
+    color: #000000;
+    font-size: small;
+    font-weight: bolder;
+    display: block;
+}
+
+.checkBox input {
+    cursor: pointer;
+}
+
+.buttonsPanel {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+
+.applyBtn {
+    float: right;
+    margin: 10px 4px 0 0;
+    background-color: rgb(30, 148, 208);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 0 8px 2px 3px;
+    outline: none;
+    font-size: small !important;
+}
+
+.applyBtn span {
+    vertical-align: middle !important;
+    display: inline-block;
+    min-width: 38px;
+    max-width: 60px;
+}
+
+.applyBtn img {
+    vertical-align: middle !important;
+    padding-right: 3px;
+    height: 16px;
+    width: auto;
+}
+
+.applyBtn:hover {
+    background-color: #177dc0;
+    cursor: pointer !important;
+}
+
+.applyBtn:active:hover {
+    background-color: #07558b;
+    cursor: pointer !important;
+}
+
+.applyBtn:disabled, .applyBtn:disabled:hover, .applyBtn:disabled:active {
+    background-color: #a39da6;
+    cursor: default !important;
+}
