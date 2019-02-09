@@ -3,6 +3,12 @@
     padding: 0 10px 2px 10px;
     overflow-x: hidden;
     white-space: nowrap;
+
+    font-size: small;
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+    /*line-height: 32px;*/
+
+    background: #b1b1b1;
 }
 
 .analysisTabSummary select {
@@ -23,6 +29,162 @@
     margin: 4px 10px 0 0;
     padding: 4px 10px 4px 10px;
 }
+
+.summaryInfoPanel {
+    /*float: left;*/
+    padding-left: 5px;
+    /*padding-right: 2px;*/
+    overflow-x: hidden;
+    white-space: nowrap;
+
+    line-height: 2.6em;
+    font-size: small;
+    font-weight: bolder;
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+
+    background: #e4e8eb;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #999999;
+    opacity: 0.7;
+    display: none;
+}
+
+.overlayOnActionsPanel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 33px;
+    height: 100%;
+    background: #999999;
+    opacity: 0.7;
+    display: none;
+}
+
+.summaryItem {
+    float: left;
+    margin-right: 4px;
+}
+
+.resourcePanel {
+    background: #FFFFFF;
+    border: 1px solid #126c9c;
+    border-radius:5px;
+    color: #126c9c;
+    float: left;
+    margin: 3px 4px 0 0;
+    padding: 4px 0 5px 0;
+    line-height: normal;
+}
+
+.resourcePanel select {
+    background: transparent;
+    border: none;
+    color: #126c9c;
+    font-size: smaller;
+    font-weight: bolder;
+    margin: 0 !important;
+    padding: 0 !important;
+    outline: none;
+}
+
+.namePanel {
+    float: left;
+    margin-right: 4px;
+    color: #126c9c;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 0 5px 0 0;
+    max-width: 315px;               /* !!!FOR TESTING!!!. CHANGE IT TO max-width */
+
+    /*background: white;*/
+}
+
+.optionBadge {
+    float: left;
+    height: 30px;
+    width:  30px;
+    margin-top: 2px;
+    margin-right: 4px;
+    border: 0;
+    border-radius: 5px;
+}
+
+.optionBadge img{
+    height: 27px;
+    width: auto;
+    margin-top: 1px;
+    margin-left: 1px;
+}
+
+.actionsPanel {
+    background: #e4e8eb;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-right: 2px;
+
+    line-height: 2.6em;
+    font-size: small;
+    font-weight: bolder;
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+}
+
+.warningBtn {
+    float: right;
+    margin: 0 0 0 4px;
+    background-color: #0e7cb3;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    color: white;
+    padding: 0;
+    border: 0;
+}
+
+.warningBtn>div {
+    margin: 0;
+    position: relative;
+}
+
+.warningBtn span {
+    display: none;
+}
+
+.warningBtn img {
+    display: block;
+    height: 32px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.warningBtn:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
+}
+
+.warningBtn:active:hover {
+    background-color: #035d9c;
+    cursor: pointer !important;
+}
+
+.warningBtn:disabled, .warningBtn:disabled:hover, .warningBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
+}
+
+
+
 
 .analysisTableSelector {
     float: right;
@@ -50,4 +212,115 @@
 
 .analysisRowSelector:active {
     box-shadow: inset -2px -2px 2px #888;
+}
+
+
+.unselectable {
+    -webkit-touch-callout: none; /* Prevents selection */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.undraggable {
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.tabButtonsPanel {
+    background: #e4e8eb;
+}
+
+.tabButton {
+    color: white;
+    position: relative;
+    border-color: #1E95CF;
+    border-radius: 9px 0 0 9px;
+    background: none rgb(88, 195, 229);
+    font-size: xx-small;
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+    padding: 3px !important;
+    outline: none;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    margin-left: 2px;
+    line-height: 1.2 !important;
+}
+
+.tabButton:disabled, .tabButton:disabled:hover, .tabButton:disabled:active {
+    background: #9a9c9e;
+    cursor: default;
+}
+
+.tabButton:enabled:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
+}
+
+.tabButtonSelected {
+    background: none rgb(6, 107, 158) !important;
+    cursor: default;
+}
+
+.tabButton img {
+    height: 32px;
+    width: auto;
+}
+
+.tabBadge {
+    background: #ee665a;
+    position: absolute;
+    padding: 0 2px 1px 2px;
+    min-width: 14px;
+    border-radius: 6px;
+    top: 1px;
+    right: 2px;
+    font-size: 0.9em;
+    display: none;
+}
+
+.panelHeader {
+    font-size: 1em;
+    font-weight: bolder;
+    line-height: 0.9em;
+    padding: 1px 0 0 2px;
+}
+
+.panelHeader > a {
+    float: left;
+    margin-left: 5px;
+    color: #126c9c;
+}
+
+.panelHeader > div {
+    float: left;
+    height: 1.1em;
+    max-width: 590px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    margin-left: 25px;
+    cursor: default;
+    color: #126c9c;
+}
+
+.panelHeader img {
+    width: 0.9em;
+    height: auto;
+    float: left;
+}
+
+.panelFooter {
+    width: 100%;
+    text-align: center;
+    background: #e4e8eb;
+}
+
+.downloadContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
