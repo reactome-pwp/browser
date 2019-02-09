@@ -4,9 +4,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.cellview.client.RowHoverEvent;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -14,16 +12,18 @@ import org.reactome.web.analysis.client.AnalysisHandler;
 import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.PathwaySummary;
-import org.reactome.web.diagram.profiles.analysis.AnalysisColours;
-import org.reactome.web.diagram.profiles.diagram.DiagramColours;
 import org.reactome.web.diagram.util.Console;
-import org.reactome.web.fireworks.profiles.FireworksColours;
-import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.client.details.common.widgets.button.CustomButton;
 import org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider;
+import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.AppliedFiltersPanel;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.FilterRemovedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.species.Species;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.*;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.*;
+
+import java.util.Arrays;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -34,6 +34,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     private AnalysisAsyncDataProvider dataProvider;
     private AnalysisResultTable table;
     private CustomPager pager;
+    private AppliedFiltersPanel appliedFiltersPanel;
 
     private Long candidateForSelection;
     private Long selected;
@@ -46,6 +47,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     public AnalysisResultPanel() {
         super(Style.Unit.EM);
 
+        this.appliedFiltersPanel = new AppliedFiltersPanel();
         this.pager = new CustomPager(); // Create paging controls.
         this.pager.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);
     }
@@ -68,6 +70,10 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
 
     public HandlerRegistration addPathwayHoveredResetHandler(PathwayHoveredResetHandler handler){
         return this.addHandler(handler, PathwayHoveredResetEvent.TYPE);
+    }
+
+    public HandlerRegistration addFilterRemovedHandler(FilterRemovedHandler handler) {
+        return appliedFiltersPanel.addFilterRemovedHandler(handler);
     }
 
     public void clearSelection() {
@@ -142,42 +148,20 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.dataProvider = new AnalysisAsyncDataProvider(table, pager, analysisResult, resource);
         this.dataProvider.addPageLoadedHanlder(this);
 
-        CustomButton downloadCVS = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Result");
-        downloadCVS.setTitle("Click to download the pathway analysis results in Comma Separated Values format for " + resource);
-        downloadCVS.getElement().getStyle().setFloat(Style.Float.LEFT);
-        downloadCVS.addClickHandler(event -> {
-            String token = analysisResult.getSummary().getToken();
-            Window.open("/AnalysisService/download/" + token + "/pathways/" + resource + "/result.csv", "_self", "");
-        });
+        Filter filter = new Filter(); //TODO Mock code -> Remove this
+        filter.setSize(10, 100);
+        filter.setSpecies(
+                Arrays.asList(new Species(1L, "Species 1"), new Species(2L, "Species 2"))
+        );
+        filter.setDisease(true);
+        appliedFiltersPanel.setFilter(filter);
 
-        CustomButton downloadMapping = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Mapping");
-        downloadMapping.setTitle("Click to download the identifier mapping between the submitted data and the selected resource (" + resource + ")");
-        downloadMapping.getElement().getStyle().setFloat(Style.Float.LEFT);
-        downloadMapping.addClickHandler(event -> {
-            String token = analysisResult.getSummary().getToken();
-            Window.open("/AnalysisService/download/" + token + "/entities/found/" + resource + "/mapping.csv", "_self", "");
-        });
-
-        CustomButton pdfExport = new CustomButton(CommonImages.INSTANCE.downloadFile(), "Report (PDF)");
-        pdfExport.setTitle("Click to download the most significant analysis results in PDF");
-        pdfExport.getElement().getStyle().setFloat(Style.Float.LEFT);
-        pdfExport.addClickHandler(event -> {
-            String diagramProfile = DiagramColours.get().PROFILE.getName();
-            String analysisProfile = AnalysisColours.get().PROFILE.getName();
-            String fireworksProfile = FireworksColours.getSelectedProfileName();
-            if (fireworksProfile == null || fireworksProfile.equals("undefined")) fireworksProfile = FireworksColours.ProfileType.getStandard().getProfile().getName();
-            String token = analysisResult.getSummary().getToken();
-            Window.open("/AnalysisService/report/" + token + "/" + URL.encode(species) + "/report.pdf?resource=" + resource + "&diagramProfile=" + diagramProfile + "&analysisProfile=" + analysisProfile + "&fireworksProfile=" + fireworksProfile, "_blank", "");
-        });
 
         this.clear();
         FlowPanel pagerPanel = new FlowPanel();
-        pagerPanel.setWidth("100%");
-        pagerPanel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
-        pagerPanel.add(downloadCVS);
-        pagerPanel.add(downloadMapping);
-        pagerPanel.add(pdfExport);
+        pagerPanel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().panelFooter());
         pagerPanel.add(pager);
+        pagerPanel.add(appliedFiltersPanel);
         this.addSouth(pagerPanel, 2);
 
         this.add(this.table);
