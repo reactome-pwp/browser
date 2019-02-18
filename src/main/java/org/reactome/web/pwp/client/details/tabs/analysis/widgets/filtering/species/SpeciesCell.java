@@ -60,7 +60,7 @@ public class SpeciesCell extends AbstractCell<Species> {
             return;
         }
 
-        SafeHtml primary = SafeHtmlUtils.fromTrustedString("<input type=\"checkbox\"" + (value.isChecked() ? "checked" : "") + " />" + value.getName());
+        SafeHtml primary = SafeHtmlUtils.fromTrustedString("<input type=\"checkbox\"" + (value.isChecked() ? "checked" : "") + " />" + value.getName() + " (" + value.getSpeciesSummary().getPathways() + ")");
         sb.append(templates.minCell(primary));
     }
 }
