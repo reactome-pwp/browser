@@ -81,7 +81,7 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
 
                 loading.setVisible(true);
                 goButton.setEnabled(false);
-                AnalysisClient.analyseURL(targetUrl, true, false, AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
+                AnalysisClient.analyseURL(targetUrl, true, false, null, AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
                     @Override
                     public void onAnalysisResult(AnalysisResult result, long time) {
                         loading.setVisible(false);
