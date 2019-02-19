@@ -62,6 +62,12 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
         } else {
             this.summaries = summaries.stream().collect(Collectors.toMap(ExperimentSummary::getId, Function.identity(), (a, b) -> a));
             setExperimentsList(summaries);
+
+            if(this.summaries.size() == 1) {
+                experimentSelector.setSelectedIndex(1);
+                Integer id = Integer.parseInt(experimentSelector.getSelectedValue());
+                onChange(id);
+            }
         }
     }
 
@@ -110,7 +116,11 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
     @Override
     public void onChange(ChangeEvent event) {
         Integer id = Integer.parseInt(experimentSelector.getSelectedValue());
-        selectedSummary = summaries.getOrDefault(id, null);
+        onChange(id);
+    }
+
+    private void onChange(Integer selectedId) {
+        selectedSummary = summaries.getOrDefault(selectedId, null);
         updateUI();
     }
 
