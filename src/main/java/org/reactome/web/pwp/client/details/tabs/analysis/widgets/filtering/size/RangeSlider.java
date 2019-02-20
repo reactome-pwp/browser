@@ -40,7 +40,7 @@ public class RangeSlider extends Composite implements HasHandlers,
     public RangeSlider(int width, int height, int min, int max, double filterMin, double filterMax, List<Integer> histValues) {
         this.width = width;
         this.height = height;
-        base = new Point(30, height - 20);
+        base = new Point(35, height - 20);
 
         if (min >= max) throw new RuntimeException("Min value in RangeSlider has to be always lower than max.");
         this.min = min;
@@ -174,7 +174,11 @@ public class RangeSlider extends Composite implements HasHandlers,
             Integer pixelWidth = (width - 2 * base.x()) / histValues.size();
 
             for (int i = 0; i <histValues.size(); i++) {
-                int normalisedValue = (int) ((maxAvailableHeight - 2) * histValues.get(i) / (double) maxValue);
+                Double nValue = ((maxAvailableHeight - 2) * histValues.get(i) / (double) maxValue);
+                if (nValue > 0 && nValue < 1) {
+                    nValue = 1d;
+                }
+                int normalisedValue = nValue.intValue();
                 int start = i * binSize;
                 Bin bin  = new Bin(
                         i,
