@@ -10,10 +10,13 @@ import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -30,6 +33,7 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
     private List<PathwaySummary> currentData;
     private String token;
     private String resource;
+    private Filter filter;
 
     private PageLoadedHandler pageLoadedHandler;
 
@@ -72,7 +76,24 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
                 pageLoadedHandler.onAnalysisAsyncDataProvider(page);
             }
         } else {
-            AnalysisClient.getResult(token, resource, AnalysisResultTable.PAGE_SIZE, page, new AnalysisHandler.Result() {
+
+            List<?> species = null;
+            Double pValue = null;
+            boolean includeDisease = true;
+            Integer min = null, max = null;
+
+            if (filter != null) {
+                Set<Filter.Type> appliedFilters = filter.getAppliedFilters();
+                if (appliedFilters.contains(Filter.Type.BY_SPECIES)) species = filter.getSpecies().stream().map(s -> s.getSpeciesSummary().getTaxId()).collect(Collectors.toList());
+                if (appliedFilters.contains(Filter.Type.BY_SIZE)) {
+                    min = filter.getSizeMin();
+                    max = filter.getSizeMax();
+                }
+                includeDisease = appliedFilters.contains(Filter.Type.BY_DISEASE);
+                pValue = filter.getpValue();
+            }
+
+            AnalysisClient.getResult(token, resource, AnalysisResultTable.PAGE_SIZE, page, species, null, null, pValue, includeDisease, min, max, new AnalysisHandler.Result() {
                 @Override
                 public void onAnalysisResult(AnalysisResult result, long time) {
                     currentData = result.getPathways();
@@ -94,6 +115,10 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
                 }
             });
         }
+    }
+
+    public void setAppliedFilter(final Filter filter) {
+        this.filter = filter;
     }
 
     public List<PathwaySummary> getCurrentData() {

@@ -6,8 +6,6 @@ import com.google.gwt.canvas.dom.client.Context2d;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class Thumb {
-    private static final String font = "bold 12px Arial";
-
     public static final double radius = 5;
     public static final int thickness = 3;
     private static final double sqrRadius = Math.pow(radius + 2, 2d);
@@ -16,6 +14,8 @@ public class Thumb {
     private double position;
     private String label;
     private ThumbStatus status;
+
+    private String font = "bold 12px Arial";
 
     public Thumb(Point base, double position, String label) {
         this.base = base;
@@ -30,6 +30,10 @@ public class Thumb {
 
     public void setStatus(ThumbStatus status) {
         this.status = status;
+    }
+
+    public void setFont(String font) {
+        this.font = font;
     }
 
     public boolean contains(Point p) {
@@ -61,7 +65,7 @@ public class Thumb {
         ctx.setFillStyle(status.colour);
         ctx.setTextBaseline(Context2d.TextBaseline.TOP);
         ctx.setTextAlign(Context2d.TextAlign.CENTER);
-        ctx.fillText(label, base.x() + position, base.y() + 10);
+        ctx.fillText(label, base.x() + position, base.y() + 8);
 
         ctx.restore();
     }

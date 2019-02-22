@@ -33,6 +33,7 @@ public class AppliedFiltersPanel extends FlowPanel {
 
         add(title);
         add(container);
+        setVisible(false);
     }
 
     public HandlerRegistration addFilterRemovedHandler(FilterRemovedHandler handler) {
@@ -49,6 +50,7 @@ public class AppliedFiltersPanel extends FlowPanel {
             for(Filter.Type f : filter.getAppliedFilters()) {
                 container.add(getChip(f));
             }
+            setVisible(true);
         }
     }
 

@@ -29,11 +29,15 @@
     flex-grow: 1;
 }
 
-.byDiseasePanel {
+.byVariousPanel {
     display: inline-block;
     max-width: 450px;
     align-self: stretch;
     flex-grow: 2;
+}
+
+.byPValuePanel {
+    position: relative;
 }
 
 .innerTitle {
@@ -50,11 +54,35 @@
     font-weight: bold;
 }
 
+.compactInnerTitle {
+    color: #126c9c;
+    font-weight: bolder;
+    font-size: 1.1em;
+    margin-top: -6px;
+}
+
+.compactSubtitle {
+    color: #126c9c;
+    margin-left: 8px;
+    margin-bottom: 2px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
 .sizeFilterLb {
     float: right;
-    margin: 7px 20px 0 0;
+    margin: 7px 10px 0 0;
     color: #02a0e3;
-    font-size: 1.5em;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.pValueFilterLb {
+    position: absolute;
+    top: 3px;
+    left: 200px;
+    color: #02a0e3;
+    font-size: 1.4em;
     font-weight: bold;
 }
 
@@ -119,7 +147,7 @@
 
 
 .checkBox {
-    margin: -6px 0 0 8px;
+    margin: -4px 0 0 8px;
     color: #000000;
     font-size: small;
     font-weight: bolder;
@@ -132,7 +160,7 @@
 
 .buttonsPanel {
     position: absolute;
-    bottom: 5px;
+    bottom: 2px;
     right: 10px;
 }
 

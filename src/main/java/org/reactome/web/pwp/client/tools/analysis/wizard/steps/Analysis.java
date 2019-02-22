@@ -161,7 +161,7 @@ public class Analysis extends ScrollPanel implements NextStepSelectedHandler, Fo
     }
 
     private void analyseText(String data) {
-        AnalysisClient.analyseData(data, wizardSelection.isProjectToHuman(), wizardSelection.isIncludeInteractors(), AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
+        AnalysisClient.analyseData(data, wizardSelection.isProjectToHuman(), wizardSelection.isIncludeInteractors(), null, AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisServerException(String s) {
                 analysisNotAvailable();

@@ -68,9 +68,9 @@ public abstract class AnalysisTabStyleFactory {
          */
         String DEFAULT_CSS = "org/reactome/web/pwp/client/details/tabs/analysis/style/AnalysisTabStyle.css";
 
-        String analysisTabSummary();
+//        String analysisTabSummary();
 
-        String analysisTabSummaryInfo();
+//        String analysisTabSummaryInfo();
 
         String summaryInfoPanel();
 
@@ -96,19 +96,7 @@ public abstract class AnalysisTabStyleFactory {
 //
 //        String helpBtn();
 
-
-
-//        String analysisOptions();
-
-        String analysisTableSelector();
-
-        String analysisTableSelectorButton();
-
         String analysisRowSelector();
-
-//        String notFoundIdentifiers();
-//
-//        String notFoundIdentifierSelected();
 
         String unselectable();
 

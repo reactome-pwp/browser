@@ -13,6 +13,7 @@ import java.util.Set;
 public class Filter {
 
     public enum Type {
+        BY_PVALUE   ("p-Value", "#7968a5"), //"#2d88c4"
         BY_SIZE     ("Size", "#89bf53"),
         BY_SPECIES  ("Species", "#f5b945"), //"#46ceac"
         BY_DISEASE  ("Disease", "#f96c51");
@@ -35,13 +36,17 @@ public class Filter {
     }
 
     private int sizeMin, sizeMax;
+    private double pValue;
     private List<Species> species;
     private boolean includeDisease;
 
     private Set<Type> appliedFilters;
 
     public Filter() {
+        species = new ArrayList<>(5);
         appliedFilters = new HashSet<>();
+        includeDisease = true;
+        pValue = 1d;
     }
 
     public boolean isActive() {
@@ -64,8 +69,32 @@ public class Filter {
         appliedFilters.add(Type.BY_DISEASE);
     }
 
+    public void setPValue(double pValue) {
+        this.pValue = pValue;
+        appliedFilters.add(Type.BY_PVALUE);
+    }
+
     public void removeFilter(Type type) {
         appliedFilters.remove(type);
+        switch (type) {
+            case BY_SPECIES:
+                species.clear();
+                break;
+            case BY_DISEASE:
+                includeDisease = true;
+                break;
+            case BY_SIZE:
+                break;
+            case BY_PVALUE:
+                pValue = 1d;
+                break;
+        }
+    }
+
+    public void removeAll() {
+        for (Type type : Type.values()) {
+            removeFilter(type);
+        }
     }
 
     public int getSizeMin() {
@@ -78,6 +107,10 @@ public class Filter {
 
     public List<Species> getSpecies() {
         return species;
+    }
+
+    public double getpValue() {
+        return pValue;
     }
 
     public boolean isIncludeDisease() {

@@ -13,11 +13,11 @@ import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
 import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.downloads.DownloadPanel;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.FilteringPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterRemovedEvent;
@@ -59,6 +59,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     private String token;
     private List<String> resources;
     private List<String> columnNames;
+    private Filter filter;
 
     private AnalysisSummaryPanel summaryPanel;
     private StackLayoutPanel stackPanel;
@@ -105,11 +106,6 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
         this.stackPanel.getElement().getStyle().setBackgroundColor("transparent"); //TODO Add a style in CSS
         this.stackPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
 
-        this.filteringPanel = new FilteringPanel();
-        this.filteringPanel.addActionSelectedHandler(this);
-        this.filteringPanel.addFilterAppliedHandler(this);
-        this.stackPanel.add(this.filteringPanel, "Filtering", 0);
-
         this.analysisResultPanel = new AnalysisResultPanel();
         this.analysisResultPanel.addEntitiesPathwaySelectedHandler(this);
         this.analysisResultPanel.addInteractorsPathwaySelectedHandler(this);
@@ -119,22 +115,24 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
         this.analysisResultPanel.addFilterRemovedHandler(this);
         this.analysisResultPanel.getElement().getStyle().setBackgroundColor("transparent");
         this.analysisResultPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
-//        this.stackPanel.add(this.analysisResultPanel, "Analysis Result", 0);
+
+        this.filteringPanel = new FilteringPanel();
+        this.filteringPanel.addActionSelectedHandler(this);
+        this.filteringPanel.addFilterAppliedHandler(this);
+        this.filteringPanel.addFilterAppliedHandler(analysisResultPanel);
+        this.stackPanel.add(this.filteringPanel, "Filtering", 0);
 
         this.entitiesEntitiesFoundPanel = new EntitiesFoundPanel(this);
         this.entitiesEntitiesFoundPanel.getElement().getStyle().setBackgroundColor("transparent");
         this.entitiesEntitiesFoundPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
-//        this.stackPanel.add(this.entitiesEntitiesFoundPanel, "Entities Found", 0);
 
         this.interactorsFoundPanel = new InteractorsFoundPanel(this);
         this.interactorsFoundPanel.getElement().getStyle().setBackgroundColor("transparent");
         this.interactorsFoundPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
-//        this.stackPanel.add(this.interactorsFoundPanel, "Interactors Found", 0);
 
         this.notFoundPanel = new NotFoundPanel();
         this.notFoundPanel.getElement().getStyle().setBackgroundColor("transparent");
         this.notFoundPanel.getElement().getStyle().setBorderWidth(0, Style.Unit.PX);
-//        this.stackPanel.add(this.notFoundPanel, "Not found", 0);
 
         this.downloadPanel = new DownloadPanel();
         this.downloadPanel.getElement().getStyle().setBackgroundColor("transparent");
@@ -222,7 +220,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.analysisResultPanel.showResult(analysisResult, resource);
             this.container.add(stackPanel);
 
-            AnalysisSummary summary = analysisResult.getSummary(); //TODO Test this at a later stage
+            AnalysisSummary summary = analysisResult.getSummary();
             boolean speciesComparison = summary.getSpecies()!=null;
             this.notFoundBtn.setEnabled(!speciesComparison);
 
@@ -234,7 +232,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             updateTabBadge(notFound);
 
             this.entitiesEntitiesFoundPanel.setResource(resource);
-            this.filteringPanel.setup();
+            this.filteringPanel.setup(analysisResult, resource);
 
             this.downloadPanel.showDownloadOptions(analysisResult, resource);
         } else {
@@ -305,6 +303,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     public void onActionSelected(ActionSelectedEvent event) {
         switch (event.getAction()) {
             case FILTERING_ON:
+                filteringPanel.refresh();
                 stackPanel.showWidget(filteringPanel);
                 summaryPanel.showFilteringPanel(true);
                 break;
@@ -317,13 +316,16 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
     @Override
     public void onFilterApplied(FilterAppliedEvent event) {
-        Console.info(event.getFilter().toString());
+        this.filter = event.getFilter();
+//        Console.info(event.getFilter().toString());
+        stackPanel.showWidget(innerTabPanel);
+        summaryPanel.showFilteringPanel(false);
+        presenter.onFilterChanged(event);
     }
 
     @Override
     public void onFilterRemoved(FilterRemovedEvent event) {
-        Console.info("filter removed: " + event.getRemovedFilter());
-
+        presenter.onFilterChanged(new FilterAppliedEvent(filter));
     }
 
     @Override

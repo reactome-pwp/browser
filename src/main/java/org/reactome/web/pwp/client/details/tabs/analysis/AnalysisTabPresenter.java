@@ -12,6 +12,8 @@ import org.reactome.web.pwp.client.common.events.DatabaseObjectSelectedEvent;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.client.manager.state.State;
@@ -22,7 +24,10 @@ import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 import org.reactome.web.pwp.model.client.util.Path;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -66,7 +71,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         if(!analysisStatus.equals(this.analysisStatus)){
             if(this.analysisStatus.isEmpty()) display.showLoadingMessage();
             this.analysisStatus = analysisStatus;
-            this.loadAnalysisData(analysisStatus.getToken(), analysisStatus.getResource());
+            this.loadAnalysisData(analysisStatus.getToken(), analysisStatus.getResource(), null);
         }
     }
 
@@ -127,8 +132,30 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         this.eventBus.fireEventFromSource(event, this);
     }
 
-    private void loadAnalysisData(final String token, final String resource){
-        AnalysisClient.getResult(token, resource, AnalysisResultTable.PAGE_SIZE, 1, new AnalysisHandler.Result() {
+    @Override
+    public void onFilterChanged(FilterAppliedEvent event) {
+        loadAnalysisData(analysisStatus.getToken(), analysisStatus.getResource(), event.getFilter());
+    }
+
+    private void loadAnalysisData(final String token, final String resource, final Filter filter){
+        List<?> species = null;
+        Double pValue = null;
+        boolean includeDisease = true;
+        Integer min = null, max = null;
+
+        if (filter != null) {
+            Set<Filter.Type> appliedFilters = filter.getAppliedFilters();
+            if (appliedFilters.contains(Filter.Type.BY_SPECIES)) species = filter.getSpecies().stream().map(s -> s.getSpeciesSummary().getTaxId()).collect(Collectors.toList());
+            if (appliedFilters.contains(Filter.Type.BY_SIZE)) {
+                min = filter.getSizeMin();
+                max = filter.getSizeMax();
+            }
+            includeDisease = appliedFilters.contains(Filter.Type.BY_DISEASE);
+            pValue = filter.getpValue();
+        }
+
+
+        AnalysisClient.getResult(token, resource, AnalysisResultTable.PAGE_SIZE, 1, species, null, null, pValue, includeDisease, min, max, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
                 Long speciesId = result.getSummary().getSpecies();

@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.results;
 
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -131,5 +132,150 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
 
     public void clearSelection(){
         this.selectionModel.clear();
+    }
+
+    private static DataGrid.Resources CUSTOM_STYLE;
+    static {
+        CUSTOM_STYLE = GWT.create(CustomTableResources.class);
+        CUSTOM_STYLE.dataGridStyle().ensureInjected();
+    }
+
+    public interface CustomTableResources extends DataGrid.Resources {
+        /**
+         * The styles used in this widget.
+         */
+        @Source(CustomTableStyle.DEFAULT_CSS)
+        Style dataGridStyle();
+    }
+
+    public interface CustomTableStyle extends DataGrid.Style {
+
+        /**
+         * The path to the default CSS styles used by this resource.
+         */
+        String DEFAULT_CSS = "org/reactome/web/pwp/client/details/tabs/analysis/widgets/results/CustomResultsTable.css";
+        /**
+         * Applied to headers cells.
+         */
+        /**
+         * Applied to every cell.
+         */
+        String dataGridCell();
+
+        /**
+         * Applied to even rows.
+         */
+        String dataGridEvenRow();
+
+        /**
+         * Applied to cells in even rows.
+         */
+        String dataGridEvenRowCell();
+
+        /**
+         * Applied to the first column.
+         */
+        String dataGridFirstColumn();
+
+        /**
+         * Applied to the first column footers.
+         */
+        String dataGridFirstColumnFooter();
+
+        /**
+         * Applied to the first column headers.
+         */
+        String dataGridFirstColumnHeader();
+
+        /**
+         * Applied to footers cells.
+         */
+        String dataGridFooter();
+
+        /**
+         * Applied to headers cells.
+         */
+        String dataGridHeader();
+
+        /**
+         * Applied to the hovered row.
+         */
+        String dataGridHoveredRow();
+
+        /**
+         * Applied to the cells in the hovered row.
+         */
+        String dataGridHoveredRowCell();
+
+        /**
+         * Applied to the keyboard selected cell.
+         */
+        String dataGridKeyboardSelectedCell();
+
+        /**
+         * Applied to the keyboard selected row.
+         */
+        String dataGridKeyboardSelectedRow();
+
+        /**
+         * Applied to the cells in the keyboard selected row.
+         */
+        String dataGridKeyboardSelectedRowCell();
+
+        /**
+         * Applied to the last column.
+         */
+        String dataGridLastColumn();
+
+        /**
+         * Applied to the last column footers.
+         */
+        String dataGridLastColumnFooter();
+
+        /**
+         * Applied to the last column headers.
+         */
+        String dataGridLastColumnHeader();
+
+        /**
+         * Applied to odd rows.
+         */
+        String dataGridOddRow();
+
+        /**
+         * Applied to cells in odd rows.
+         */
+        String dataGridOddRowCell();
+
+        /**
+         * Applied to selected rows.
+         */
+        String dataGridSelectedRow();
+
+        /**
+         * Applied to cells in selected rows.
+         */
+        String dataGridSelectedRowCell();
+
+        /**
+         * Applied to header cells that are sortable.
+         */
+        String dataGridSortableHeader();
+
+        /**
+         * Applied to header cells that are sorted in ascending order.
+         */
+        String dataGridSortedHeaderAscending();
+
+        /**
+         * Applied to header cells that are sorted in descending order.
+         */
+        String dataGridSortedHeaderDescending();
+
+        /**
+         * Applied to the table.
+         */
+        String dataGridWidget();
+
     }
 }

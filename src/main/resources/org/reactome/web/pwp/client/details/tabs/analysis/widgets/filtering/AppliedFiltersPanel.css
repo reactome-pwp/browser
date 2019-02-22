@@ -15,13 +15,14 @@
 
     display: flex;
     align-items: center;
+    max-width: 300px;
 }
 
 .title {
     color: #000000;
     font-weight: bolder;
     line-height: 100%;
-    margin-right: 2px;
+    margin-right: 1px;
     cursor: default !important;
 }
 
@@ -35,15 +36,17 @@
     border: 0 solid;
     border-radius: 12px;
     padding: 1px 4px;
-    margin-left: 3px;
+    margin-left: 2px;
+    max-height: 100%;
     display: flex;
     color: #FFFFFF;
     cursor: default !important;
+    white-space: nowrap;
 }
 
 .removeBtn {
     float: right;
-    margin: 0 0 0 4px;
+    margin: 0 0 0 2px;
     background-color: transparent;
     border: none;
     outline: none;

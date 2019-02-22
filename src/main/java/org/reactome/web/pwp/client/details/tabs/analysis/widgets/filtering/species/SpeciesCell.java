@@ -6,7 +6,6 @@ import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -40,11 +39,11 @@ public class SpeciesCell extends AbstractCell<Species> {
     public void onBrowserEvent(Context context, Element parent, Species value, NativeEvent event, ValueUpdater<Species> valueUpdater) {
         String type = event.getType();
         if (BrowserEvents.CHANGE.equals(type)) {
-            EventTarget eventTarget = event.getEventTarget();
-            Element element = Element.as(eventTarget);
-
-            boolean isChecked = element.getPropertyString("checked").equalsIgnoreCase("true");
-            value.setChecked(isChecked);
+//            EventTarget eventTarget = event.getEventTarget();
+//            Element element = Element.as(eventTarget);
+//
+//            boolean isChecked = element.getPropertyString("checked").equalsIgnoreCase("true");
+//            value.setChecked(isChecked);
             valueUpdater.update(value);
         }
     }
