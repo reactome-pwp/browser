@@ -7,6 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -30,6 +31,7 @@ public class SpeciesCell extends AbstractCell<Species> {
     }
 
     private static Templates templates = GWT.create(Templates.class);
+    private static NumberFormat formatter = NumberFormat.getFormat("#,###");
 
     public SpeciesCell() {
         super(BrowserEvents.CHANGE);
@@ -59,7 +61,7 @@ public class SpeciesCell extends AbstractCell<Species> {
             return;
         }
 
-        SafeHtml primary = SafeHtmlUtils.fromTrustedString("<input type=\"checkbox\"" + (value.isChecked() ? "checked" : "") + " />" + value.getName() + " (" + value.getSpeciesSummary().getPathways() + ")");
+        SafeHtml primary = SafeHtmlUtils.fromTrustedString("<input type=\"checkbox\"" + (value.isChecked() ? "checked" : "") + " />" + value.getName() + " (" + formatter.format(value.getSpeciesSummary().getPathways()) + ")");
         sb.append(templates.minCell(primary));
     }
 }
