@@ -41,11 +41,6 @@ public class SpeciesCell extends AbstractCell<Species> {
     public void onBrowserEvent(Context context, Element parent, Species value, NativeEvent event, ValueUpdater<Species> valueUpdater) {
         String type = event.getType();
         if (BrowserEvents.CHANGE.equals(type)) {
-//            EventTarget eventTarget = event.getEventTarget();
-//            Element element = Element.as(eventTarget);
-//
-//            boolean isChecked = element.getPropertyString("checked").equalsIgnoreCase("true");
-//            value.setChecked(isChecked);
             valueUpdater.update(value);
         }
     }
