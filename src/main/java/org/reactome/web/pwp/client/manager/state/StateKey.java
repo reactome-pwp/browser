@@ -14,7 +14,7 @@ public enum StateKey {
     DETAILS_TAB   ("DTAB", "DETAILS_TAB"),
     TOOL          ("TOOL"),
     ANALYSIS      ("ANALYSIS", "ANALYSIS_ID"),
-    RESOURCE      ("RESOURCE"),
+    FILTER        ("FILTER", "RESOURCE"),
     FLAG          ("FLG", "FLAG", "ACC", "UNIPROT", "GENE", "CHEBI", "ENSEMBL"),
     FLAG_INT      ("FLGINT");
 

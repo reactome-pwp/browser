@@ -18,17 +18,17 @@ public class Token {
 
     public Token(String token) throws TokenMalformedException {
         if(DEFAULT_SPECIES_ID==null || DELIMITER==null) throw new RuntimeException("Please initialise DEFAULT_SPECIES_ID and DELIMITER");
-        if(token.startsWith("/"))  token = token.substring(1);
+        if (token.startsWith("/")) token = token.substring(1);
 //        if(token.isEmpty()) token = StateKey.SPECIES.getDefaultKey() + "=" + DEFAULT_SPECIES_ID;
 
         this.parameters = new HashMap<>();
-        try{
+        try {
             @SuppressWarnings("NonJREEmulationClassesInClientCode")
             String[] tokens = token.split(DELIMITER);
             for (String t : tokens) {
                 t = t.trim();
-                if(!t.isEmpty()) {
-                    if (isSingleIdentifier(t)){
+                if (!t.isEmpty()) {
+                    if (isSingleIdentifier(t)) {
                         t = t.contains(".") ? t.split("\\.")[0] : t;
                         parameters.put(StateKey.PATHWAY, t);
                     } else {
@@ -43,11 +43,17 @@ public class Token {
                     }
                 }
             }
-            if(!parameters.containsKey(StateKey.SPECIES) && !parameters.containsKey(StateKey.PATHWAY)){
+            if (!parameters.containsKey(StateKey.SPECIES) && !parameters.containsKey(StateKey.PATHWAY)) {
                 this.parameters.put(StateKey.SPECIES, DEFAULT_SPECIES_ID.toString());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Console.error(e.getLocalizedMessage());
+            throw new TokenMalformedException();
+        }
+
+        String filter = this.parameters.getOrDefault(StateKey.FILTER, "");
+        if (!filter.isEmpty() && (filter.contains("&") || filter.contains("="))){
+            wellFormed = false;
             throw new TokenMalformedException();
         }
     }
