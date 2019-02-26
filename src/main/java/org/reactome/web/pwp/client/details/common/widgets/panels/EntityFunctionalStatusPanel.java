@@ -70,13 +70,21 @@ public class EntityFunctionalStatusPanel extends DetailsPanel implements OpenHan
         vp.addStyleName("elv-Details-OverviewDisclosure-Advanced");
         vp.setWidth("99%");
 
-        if(this.entityFunctionalStatus.getPhysicalEntity()!=null){
-            vp.add(new Label("Physical entity:"));
-            PhysicalEntityPanel aux = new PhysicalEntityPanel(this, this.entityFunctionalStatus.getPhysicalEntity());
+        if(this.entityFunctionalStatus.getDiseaseEntity()!=null){
+            vp.add(new Label("Disease entity:"));
+            PhysicalEntityPanel aux = new PhysicalEntityPanel(this, this.entityFunctionalStatus.getDiseaseEntity());
             aux.setWidth("98%");
             aux.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
             vp.add(aux);
         }
+
+//        if(this.entityFunctionalStatus.getNormalEntity()!=null){
+//            vp.add(new Label("Normal entity:"));
+//            PhysicalEntityPanel aux = new PhysicalEntityPanel(this, this.entityFunctionalStatus.getNormalEntity());
+//            aux.setWidth("98%");
+//            aux.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+//            vp.add(aux);
+//        }
 
         if(!this.entityFunctionalStatus.getFunctionalStatus().isEmpty()){
             vp.add(new Label("Functional Status:"));

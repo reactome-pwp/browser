@@ -6,25 +6,29 @@ import com.google.gwt.user.client.Window;
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public abstract class LocationHelper {
+abstract class LocationHelper {
     public enum Location {
         PRODUCTION,
         DEV,
+        RELEASE,
         CURATOR,
         LOCALHOST,
         OTHER
     }
 
-    public static Location getLocation(){
+    static Location getLocation(){
         String hostName = Window.Location.getHostName();
         if(GWT.isScript()){
-            if(hostName.equals("www.reactome.org") || hostName.equals("reactome.org")){
+            if(hostName.equals("reactome.org")){
                 return Location.PRODUCTION;
             }
-            if(hostName.equals("reactomedev.oicr.on.ca")){
+            if(hostName.equals("release.reactome.org")){
+                return Location.RELEASE;
+            }
+            if(hostName.equals("dev.reactome.org")){
                 return Location.DEV;
             }
-            if(hostName.equals("reactomecurator.oicr.on.ca")){
+            if(hostName.equals("curator.reactome.org") || hostName.equals("reactomecurator.oicr.on.ca")){
                 return Location.CURATOR;
             }
         }
@@ -32,15 +36,6 @@ public abstract class LocationHelper {
             return Location.LOCALHOST;
         }else {
             return Location.OTHER;
-        }
-    }
-
-    public static boolean isAnalysisAvailable(){
-        switch (getLocation()){
-            case CURATOR:
-               return false;
-            default:
-                return true;
         }
     }
 }
