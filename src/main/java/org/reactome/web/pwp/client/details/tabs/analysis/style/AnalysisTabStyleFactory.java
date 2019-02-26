@@ -80,8 +80,6 @@ public abstract class AnalysisTabStyleFactory {
 
         String summaryItem();
 
-        String resourcePanel();
-
         String namePanel();
 
         String optionBadge();

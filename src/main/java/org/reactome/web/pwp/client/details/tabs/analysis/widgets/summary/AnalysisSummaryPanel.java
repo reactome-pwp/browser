@@ -2,17 +2,11 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
-import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ActionSelectedHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ResourceChangedHandler;
-
-import java.util.List;
 
 import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.OptionBadge.Type.INLCUDE_INTERACTORS;
 import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.OptionBadge.Type.PROJECT_TO_HUMAN;
@@ -22,13 +16,11 @@ import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AnalysisSummaryPanel extends DockLayoutPanel {
-    private static final NumberFormat formatter = NumberFormat.getFormat( "#,###" );
     private static final String DOC_URL = "/user/guide/analysis";
-    static final int baseSummaryPanel = 850;
-    static final int baseNameSize = 320;
+    static final int baseSummaryPanel = 830;
+    static final int baseNameSize = 415;
 
     private String token;
-    private ListBox resourceBox;
     private FlowPanel mainPanel;
     private FlowPanel namePanel;
     private SimplePanel overlay;
@@ -45,26 +37,21 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         this.mainPanel = new FlowPanel();
         this.mainPanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().summaryInfoPanel());
         this.mainPanel.add(getTypePanel(summary));
-        this.mainPanel.add(getResourceTypePanel(analysisResult.getResourceSummary()));
         this.mainPanel.add(getNamePanel(summary));
 
-        if (summary.getProjection()) {
+        if (!speciesComparison && summary.getProjection()) {
             this.mainPanel.add(new OptionBadge(PROJECT_TO_HUMAN));
         }
 
-        if (summary.getInteractors()) {
+        if (!speciesComparison && summary.getInteractors()) {
             this.mainPanel.add(new OptionBadge(INLCUDE_INTERACTORS));
         }
 
         actionsPanel = new ActionsPanel(analysisResult);
-        this.addEast(actionsPanel, 150);
+        this.addEast(actionsPanel, 110);
 
         this.mainPanel.add(getOverlay());
         this.add(mainPanel);
-    }
-
-    public HandlerRegistration addResourceChangeHandler(ResourceChangedHandler handler){
-        return this.addHandler(handler, ResourceChangedEvent.TYPE);
     }
 
     public HandlerRegistration addActionSelectedHandler(ActionSelectedHandler handler) {
@@ -75,64 +62,9 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         return token;
     }
 
-
-//    @Override
-//    public void onActionSelected(ActionSelectedEvent event) {
-//        ActionSelectedEvent.Action action = event.getAction();
-//        switch (action) {
-//            case FILTERING_ON:
-//                setOverlay(true);
-//                break;
-//            case FILTERING_OFF:
-//                setOverlay(false);
-//                break;
-//            case HELP_ON:
-//                //TODO
-//                break;
-//            case HELP_OFF:
-//                //TODO
-//                break;
-//            case CLUSTERING_ON:
-//                //TODO
-//                break;
-//            case CLUSTERING_OFF:
-//                //TODO
-//                break;
-//        }
-//    }
-
     public void showFilteringPanel(boolean isVisible) {
         setOverlay(isVisible);
         actionsPanel.showFilteringPanel(isVisible);
-    }
-
-    public void setResource(String resource){
-        for (int i = 0; i < resourceBox.getItemCount(); i++) {
-            String value = resourceBox.getValue(i);
-            if(value.equals(resource)){
-                resourceBox.setSelectedIndex(i);
-                return;
-            }
-        }
-    }
-
-    private Widget getResourceTypePanel(List<ResourceSummary> resourceSummary){
-        SimplePanel resourcePanel = new SimplePanel();
-        resourcePanel.addStyleName(AnalysisTabStyleFactory.RESOURCES.css().resourcePanel());
-        resourceBox = new ListBox();
-        resourceBox.setMultipleSelect(false);
-
-        for (ResourceSummary summary : resourceSummary) {
-            String resource = summary.getResource();
-            resourceBox.addItem(resource + " (" + formatter.format(summary.getPathways()) + ")", resource);
-        }
-        resourcePanel.add(resourceBox);
-        resourceBox.addChangeHandler(event -> {
-            ListBox listBox = (ListBox) event.getSource();
-            String resource = listBox.getValue(listBox.getSelectedIndex());
-            fireEvent(new ResourceChangedEvent(resource));
-        });
-        return resourcePanel;
     }
 
     private Widget getTypePanel(AnalysisSummary summary) {
@@ -143,7 +75,7 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         typeAnchor.setTitle("Find out more about this type of analysis");
         typeAnchor.getElement().getStyle().setTextTransform(Style.TextTransform.CAPITALIZE);
 
-        Label lb = new Label(type.startsWith("species") ? "for" : "analysis results for");
+        Label lb = new Label(type.startsWith("species") ? "" : "analysis results");
         lb.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().summaryItem());
 
         FlowPanel typePanel = new FlowPanel();
@@ -193,9 +125,9 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
     private void updateNamePanelSize() {
         int curPanelSize = this.getElement().getOffsetWidth();
         if (curPanelSize > 860) {
-            namePanel.getElement().setAttribute("max-width", baseNameSize + (curPanelSize - baseSummaryPanel) + "px");
+            namePanel.getElement().getStyle().setProperty("maxWidth", baseNameSize + (curPanelSize - baseSummaryPanel) + "px");
         } else {
-            namePanel.getElement().setAttribute("max-width", baseNameSize + "px");
+            namePanel.getElement().getStyle().setProperty("maxWidth", baseNameSize + "px");
         }
     }
 

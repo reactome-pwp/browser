@@ -13,9 +13,10 @@ import java.util.Set;
 public class Filter {
 
     public enum Type {
-        BY_PVALUE   ("p-Value", "#7968a5"), //"#2d88c4"
-        BY_SIZE     ("Size", "#89bf53"),
-        BY_SPECIES  ("Species", "#f5b945"), //"#46ceac"
+        BY_RESOURCE ("Resource","#7968a5"),
+        BY_PVALUE   ("p-Value", "#7968a5"),
+        BY_SIZE     ("Size",    "#89bf53"),
+        BY_SPECIES  ("Species", "#f5b945"),
         BY_DISEASE  ("Disease", "#f96c51");
 
         private String displayName;
@@ -35,6 +36,7 @@ public class Filter {
         }
     }
 
+    private String resource;
     private int sizeMin, sizeMax;
     private double pValue;
     private List<Species> species;
@@ -51,6 +53,11 @@ public class Filter {
 
     public boolean isActive() {
         return appliedFilters.size() > 0;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+        appliedFilters.add(Type.BY_RESOURCE);
     }
 
     public void setSize(int sizeMin, int sizeMax) {
@@ -93,8 +100,14 @@ public class Filter {
 
     public void removeAll() {
         for (Type type : Type.values()) {
-            removeFilter(type);
+            if (type != Type.BY_RESOURCE) {
+                removeFilter(type);
+            }
         }
+    }
+
+    public String getResource() {
+        return resource;
     }
 
     public int getSizeMin() {
@@ -124,6 +137,7 @@ public class Filter {
     @Override
     public String toString() {
         return "Filter{" +
+                "resource=" + resource +
                 "appliedFilters=" + appliedFilters +
                 '}';
     }

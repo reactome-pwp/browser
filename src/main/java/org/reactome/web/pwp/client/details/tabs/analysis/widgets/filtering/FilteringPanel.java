@@ -17,10 +17,7 @@ import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
-import org.reactome.web.analysis.client.model.AnalysisError;
-import org.reactome.web.analysis.client.model.AnalysisResult;
-import org.reactome.web.analysis.client.model.Bin;
-import org.reactome.web.analysis.client.model.SpeciesSummary;
+import org.reactome.web.analysis.client.model.*;
 import org.reactome.web.diagram.common.IconButton;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
@@ -47,12 +44,15 @@ import java.util.stream.Collectors;
  */
 public class FilteringPanel extends LayoutPanel implements RangeValueChangedHandler, ClickHandler,
         ValueUpdater<Species>, ValueChangeHandler<Boolean> {
-    private static NumberFormat formatter = NumberFormat.getFormat("0.00");
+    private static NumberFormat pValueFormatter = NumberFormat.getFormat("0.00");
+    private static NumberFormat resourceFormatter = NumberFormat.getFormat("#,###");
 
-    private FlowPanel bySizePanel;
+    private FlowPanel firstColumnPanel;
     private FlowPanel bySpeciesPanel;
     private FlowPanel byVariousPanel;
+    private FlowPanel bySizePanel;
 
+    private ListBox resourceBox;
     private RangeSlider sizeSlider;
     private SimpleSlider pValueSlider;
 
@@ -62,9 +62,10 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
     private Button removeBtn;
     private Button applyBtn;
 
+    private List<ResourceSummary> resourceSummaries;
     private final static int binSize = 200;
     private final static int histWidth = 300;
-    private final static int histHeight = 90;
+    private final static int histHeight = 70;
     private double filterMin;
     private double filterMax;
     private int min;
@@ -79,7 +80,6 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
     private boolean includeDisease;
 
     private String token;
-    private String resource;
     private Filter filter;
 
     public FilteringPanel() {
@@ -94,12 +94,17 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         return this.addHandler(handler, FilterAppliedEvent.TYPE);
     }
 
+//    public HandlerRegistration addResourceChangeHandler(ResourceChangedHandler handler){
+//        return this.addHandler(handler, ResourceChangedEvent.TYPE);
+//    }
+
     public void setup(AnalysisResult analysisResult, String resource) {
         this.token = analysisResult.getSummary().getToken();
-        this.resource = resource;
+        filter.setResource(resource);
         this.includeDisease = true;
         this.pValue = 1d;
 
+        resourceSummaries = analysisResult.getResourceSummary();
         retrieveSpecies(analysisResult);
         initUI();
 
@@ -121,7 +126,7 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
 
         } else {    // p-Value filter
             pValue = event.getMax();
-            String rounded = formatter.format(pValue);
+            String rounded = pValueFormatter.format(pValue);
             pValueFilterLb.setText("p ≤ " + rounded);
             if (pValue != 1d) {
                 filter.setPValue(Double.parseDouble(rounded));
@@ -206,7 +211,7 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
 
         FlowPanel flexContainer = new FlowPanel();
         flexContainer.setStyleName(RESOURCES.getCSS().flexContainer());
-        flexContainer.add(getBySize());
+        flexContainer.add(getFirstColumnPanel());
         flexContainer.add(getBySpecies());
         flexContainer.add(getByVarious());
 
@@ -217,9 +222,35 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         updateApplyButton();
     }
 
+    private Widget getFirstColumnPanel() {
+        firstColumnPanel = new FlowPanel();
+        firstColumnPanel.setStyleName(RESOURCES.getCSS().firstColumnPanel());
+
+        firstColumnPanel.add(getByResource());
+        firstColumnPanel.add(getBySize());
+
+        return firstColumnPanel;
+    }
+
+    private Widget getByResource() {
+        FlowPanel byResourcePanel = new FlowPanel();
+
+        byResourcePanel.add(getResourceTypePanel(resourceSummaries));
+
+        Label resourceTitle = new Label("\u2022 By resource");
+        resourceTitle.setStyleName(RESOURCES.getCSS().innerTitle());
+        byResourcePanel.add(resourceTitle);
+
+        Label resourceSubtitle = new Label("Show pathways with size:");
+        resourceSubtitle.setStyleName(RESOURCES.getCSS().compactSubtitle());
+        byResourcePanel.add(resourceSubtitle);
+
+        return byResourcePanel;
+
+    }
+
     private Widget getBySize() {
         bySizePanel = new FlowPanel();
-        bySizePanel.setStyleName(RESOURCES.getCSS().bySizePanel());
 
         sizeFilterLb = new Label();
         sizeFilterLb.setStyleName(RESOURCES.getCSS().sizeFilterLb());
@@ -230,7 +261,7 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         bySizePanel.add(title);
 
         Label subtitle = new Label("Show pathways with size:");
-        subtitle.setStyleName(RESOURCES.getCSS().subtitle());
+        subtitle.setStyleName(RESOURCES.getCSS().compactSubtitle());
         bySizePanel.add(subtitle);
 
         return bySizePanel;
@@ -378,6 +409,27 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         return byPValuePanel;
     }
 
+    private Widget getResourceTypePanel(List<ResourceSummary> resourceSummary){
+        SimplePanel resourcePanel = new SimplePanel();
+        resourcePanel.addStyleName(RESOURCES.getCSS().resourcePanel());
+        resourceBox = new ListBox();
+        resourceBox.setMultipleSelect(false);
+
+        for (ResourceSummary summary : resourceSummary) {
+            String resource = summary.getResource();
+            resourceBox.addItem(resource + " (" + resourceFormatter.format(summary.getPathways()) + ")", resource);
+        }
+        resourcePanel.add(resourceBox);
+        resourceBox.addChangeHandler(event -> {
+            ListBox listBox = (ListBox) event.getSource();
+            String resource = listBox.getValue(listBox.getSelectedIndex());
+            filter.setResource(resource);
+//            fireEvent(new ResourceChangedEvent(resource));
+            fireEvent(new FilterAppliedEvent(filter));
+        });
+        return resourcePanel;
+    }
+
     private void updateApplyButton() {
         applyBtn.setEnabled(filter.isActive());
     }
@@ -409,7 +461,7 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
     private void retrieveHistogram() {
         this.histogram = new ArrayList<>();
 
-        AnalysisClient.getPathwaysBinnedBySize(token, resource, binSize, 1d, filter != null && filter.getSpecies().size() > 0? filter.getSpecies().stream().map(s -> s.getSpeciesSummary().getTaxId()).collect(Collectors.toList()) : null, new AnalysisHandler.PathwaysBinned() {
+        AnalysisClient.getPathwaysBinnedBySize(token, filter.getResource(), binSize, 1d, filter.getSpecies().size() > 0? filter.getSpecies().stream().map(s -> s.getSpeciesSummary().getTaxId()).collect(Collectors.toList()) : null, new AnalysisHandler.PathwaysBinned() {
             @Override
             public void onPathwaysBinnedLoaded(List<Bin> pathwaysBinned) {
                 if (pathwaysBinned != null && !pathwaysBinned.isEmpty()) {
@@ -480,7 +532,7 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
 
         String flexContainer();
 
-        String bySizePanel();
+        String firstColumnPanel();
 
         String bySpeciesPanel();
 
@@ -495,6 +547,8 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         String compactInnerTitle();
 
         String compactSubtitle();
+
+        String resourcePanel();
 
         String sizeFilterLb();
 

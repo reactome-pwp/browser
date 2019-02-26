@@ -17,7 +17,7 @@
     height: 100%;
 }
 
-.bySizePanel {
+.firstColumnPanel {
     display: inline-block;
     max-width: 350px;
     flex-grow: 1;
@@ -64,16 +64,41 @@
 .compactSubtitle {
     color: #126c9c;
     margin-left: 8px;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
     font-size: 0.8em;
     font-weight: bold;
 }
 
+.resourcePanel {
+    float: right;
+    background: #FFFFFF;
+    border: 1px solid #126c9c;
+    border-radius: 5px;
+    color: #126c9c;
+    margin: 7px 4px 0 0;
+    padding: 0px 0 0px 0;
+    line-height: normal;
+}
+
+.resourcePanel select {
+    background: transparent;
+    border: none;
+    /*color: #126c9c;*/
+    /*font-size: smaller;*/
+    /*font-weight: bolder;*/
+    color: #02a0e3;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0 !important;
+    padding: 0 !important;
+    outline: none;
+}
+
 .sizeFilterLb {
     float: right;
-    margin: 7px 10px 0 0;
+    margin: 10px 10px 0 0;
     color: #02a0e3;
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight: bold;
 }
 
@@ -110,7 +135,7 @@
 
 .selectBtn {
     float: right;
-    margin: 10px 4px 0 0;
+    margin: 5px 4px 5px 0;
     background-color: rgb(30, 148, 208);
     border: none;
     border-radius: 15px;

@@ -52,6 +52,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
     private AnalysisTab.Presenter presenter;
     private static final NumberFormat formatter = NumberFormat.getFormat( "#,###" );
+    private static final double SUMMARY_HEIGHT = 1.5;
 
     private DockLayoutPanel container;
     private DetailsTabTitle title;
@@ -211,11 +212,10 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
             this.container.clear();
             this.summaryPanel = new AnalysisSummaryPanel(analysisResult);
-            this.summaryPanel.setResource(resource);
-//            this.summaryPanel.addOptionSelectedHandler(this);
-            this.summaryPanel.addResourceChangeHandler(this);
+//            this.summaryPanel.setResource(resource);
+//            this.summaryPanel.addResourceChangeHandler(this);
             this.summaryPanel.addActionSelectedHandler(this);
-            this.container.addNorth(summaryPanel, 2.6);
+            this.container.addNorth(summaryPanel, SUMMARY_HEIGHT);
 
             this.analysisResultPanel.showResult(analysisResult, resource);
             this.container.add(stackPanel);
@@ -233,11 +233,13 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
             this.entitiesEntitiesFoundPanel.setResource(resource);
             this.filteringPanel.setup(analysisResult, resource);
+//            this.filteringPanel.addResourceChangeHandler(this);
 
             this.downloadPanel.showDownloadOptions(analysisResult, resource);
         } else {
             this.analysisResultPanel.showResult(analysisResult, resource);
-            this.summaryPanel.setResource(resource);
+//            this.summaryPanel.setResource(resource);
+//            this.filteringPanel.setResource()
             this.downloadPanel.showDownloadOptions(analysisResult, resource);
         }
     }

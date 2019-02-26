@@ -34,11 +34,11 @@
     /*float: left;*/
     padding-left: 5px;
     /*padding-right: 2px;*/
-    overflow-x: hidden;
+    overflow: hidden;
     white-space: nowrap;
 
-    line-height: 2.6em;
-    font-size: small;
+    line-height: 1.5em;
+    font-size: 1.1em;
     font-weight: bolder;
     font-family: Arial Unicode MS, Arial, sans-serif !important;
 
@@ -60,7 +60,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 33px;
+    right: 24px;
     height: 100%;
     background: #999999;
     opacity: 0.7;
@@ -72,53 +72,34 @@
     margin-right: 4px;
 }
 
-.resourcePanel {
-    background: #FFFFFF;
-    border: 1px solid #126c9c;
-    border-radius:5px;
-    color: #126c9c;
-    float: left;
-    margin: 3px 4px 0 0;
-    padding: 4px 0 5px 0;
-    line-height: normal;
-}
-
-.resourcePanel select {
-    background: transparent;
-    border: none;
-    color: #126c9c;
-    font-size: smaller;
-    font-weight: bolder;
-    margin: 0 !important;
-    padding: 0 !important;
-    outline: none;
-}
-
 .namePanel {
     float: left;
+    margin-left: 4px;
     margin-right: 4px;
     color: #126c9c;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     padding: 0 5px 0 0;
-    max-width: 315px;               /* !!!FOR TESTING!!!. CHANGE IT TO max-width */
-
-    /*background: white;*/
+    max-width: 420px;
 }
+
+/*.namePanel span {*/
+    /**/
+/*}*/
 
 .optionBadge {
     float: left;
-    height: 30px;
-    width:  30px;
-    margin-top: 2px;
+    height: 20px;
+    width:  20px;
+    margin-top: 0;
     margin-right: 4px;
     border: 0;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 .optionBadge img{
-    height: 27px;
+    height: 18px;
     width: auto;
     margin-top: 1px;
     margin-left: 1px;
@@ -130,7 +111,7 @@
     white-space: nowrap;
     padding-right: 2px;
 
-    line-height: 2.6em;
+    line-height: 1.5em;
     font-size: small;
     font-weight: bolder;
     font-family: Arial Unicode MS, Arial, sans-serif !important;
@@ -159,7 +140,7 @@
 
 .warningBtn img {
     display: block;
-    height: 32px;
+    height: 20px;
     width: auto;
     margin: 0;
     padding: 0;
