@@ -122,10 +122,10 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
     }
 
     public List<PathwaySummary> getCurrentData() {
-        return currentData != null ? currentData : new LinkedList<PathwaySummary>();
+        return currentData != null ? currentData : new LinkedList<>();
     }
 
     public void findPathwayPage(Long pathway, AnalysisHandler.Page handler) {
-        AnalysisClient.findPathwayPage(pathway, this.token, this.resource, handler);
+        AnalysisClient.findPathwayPage(pathway, this.token, this.resource, AnalysisResultTable.PAGE_SIZE, this.filter.getSpecies(), null, null, filter.getpValue(), filter.isIncludeDisease(), filter.getSizeMin(), filter.getSizeMax(), handler);
     }
 }
