@@ -183,7 +183,8 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
         for (Pathway pathway : pathways) {
             ids.add(pathway.getDbId().toString());
         }
-        AnalysisClient.getPathwaySummaries(analysisStatus.getToken(), analysisStatus.getResource(), ids, new AnalysisHandler.Summaries() {
+        //TODO: add the speciesList when available in the analysisStatus
+        AnalysisClient.getPathwaySummaries(analysisStatus.getToken(), analysisStatus.getResource(), null, analysisStatus.getpValue(), analysisStatus.getIncludeDisease(), analysisStatus.getMin(), analysisStatus.getMax(), ids, new AnalysisHandler.Summaries() {
             @Override
             public void onPathwaySummariesLoaded(List<PathwaySummary> pathwaySummaries, long time) {
                 display.showAnalysisResult(pathwaySummaries);
