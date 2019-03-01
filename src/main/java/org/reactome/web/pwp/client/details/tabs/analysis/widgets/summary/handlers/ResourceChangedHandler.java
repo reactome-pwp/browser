@@ -6,6 +6,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
+@Deprecated
 public interface ResourceChangedHandler extends EventHandler {
 
     void onResourceChanged(ResourceChangedEvent event);

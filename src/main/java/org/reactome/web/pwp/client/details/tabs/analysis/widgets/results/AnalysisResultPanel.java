@@ -18,8 +18,6 @@ import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleF
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.AppliedFiltersPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.FilterAppliedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.FilterRemovedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.*;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.*;
@@ -28,8 +26,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handler
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class AnalysisResultPanel extends DockLayoutPanel implements SelectionChangeEvent.Handler, RowHoverEvent.Handler, MouseOutHandler,
-        AnalysisAsyncDataProvider.PageLoadedHandler, AnalysisHandler.Page, EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler,
-        FilterAppliedHandler {
+        AnalysisAsyncDataProvider.PageLoadedHandler, AnalysisHandler.Page, EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler {
 
     private AnalysisAsyncDataProvider dataProvider;
     private AnalysisResultTable table;
@@ -41,10 +38,6 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     private Long hovered;
 
     private String species;
-
-    private String resource;
-
-    private Filter filter;
 
     public AnalysisResultPanel() {
         super(Style.Unit.EM);
@@ -94,11 +87,11 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.selectPathway(candidateForSelection);
     }
 
-    @Override
-    public void onFilterApplied(FilterAppliedEvent event) {
-        this.filter = event.getFilter();
-        appliedFiltersPanel.setFilter(filter);
-    }
+//    @Override
+//    public void onFilterApplied(FilterAppliedEvent event) {
+//        this.filter = event.getFilter();
+//        appliedFiltersPanel.setFilter(filter);
+//    }
 
     @Override
     public void onMouseOut(MouseOutEvent event) {
@@ -125,10 +118,6 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         }
     }
 
-    public void setResource(String resource) {
-        this.resource = resource;
-    }
-
     public void setSpecies(String species) {
         this.species = species;
     }
@@ -139,7 +128,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         }
     }
 
-    public void showResult(final AnalysisResult analysisResult, final String resource) {
+    public void showResult(final AnalysisResult analysisResult, final Filter filter) {
 //        ColumnSortEvent.ListHandler<PathwaySummary> sortHandler = new ColumnSortEvent.ListHandler<PathwaySummary>(analysisResult.getPathways());
         this.table = new AnalysisResultTable(analysisResult.getExpression().getColumnNames(), analysisResult.getSummary().getInteractors());
         this.table.addSelectionChangeHandler(this);
@@ -153,9 +142,11 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.pager.setDisplay(this.table);
         this.pager.setPageSize(AnalysisResultTable.PAGE_SIZE);
 
-        this.dataProvider = new AnalysisAsyncDataProvider(table, pager, analysisResult, resource);
+        this.dataProvider = new AnalysisAsyncDataProvider(table, pager, analysisResult, filter.getResource());
         this.dataProvider.setAppliedFilter(filter);
         this.dataProvider.addPageLoadedHanlder(this);
+
+        this.appliedFiltersPanel.setFilter(filter);
 
         this.clear();
         FlowPanel pagerPanel = new FlowPanel();

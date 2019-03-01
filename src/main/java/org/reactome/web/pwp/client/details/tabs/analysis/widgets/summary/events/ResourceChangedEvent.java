@@ -6,6 +6,8 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handler
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
+
+@Deprecated
 public class ResourceChangedEvent extends GwtEvent<ResourceChangedHandler> {
     public static Type<ResourceChangedHandler> TYPE = new Type<ResourceChangedHandler>();
 

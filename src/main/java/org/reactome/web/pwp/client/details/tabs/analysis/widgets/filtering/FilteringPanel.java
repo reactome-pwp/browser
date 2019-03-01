@@ -1,40 +1,32 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering;
 
 
-import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
-import org.reactome.web.analysis.client.model.*;
+import org.reactome.web.analysis.client.model.AnalysisError;
+import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.diagram.common.IconButton;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.FilterAppliedHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.pvalue.SimpleSlider;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.RangeSlider;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.RangeValueChangedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.RangeValueChangedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.species.Species;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.species.SpeciesCell;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ActionSelectedHandler;
+import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.common.ContentClientHandler;
+import org.reactome.web.pwp.model.client.content.ContentClient;
+import org.reactome.web.pwp.model.client.content.ContentClientError;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A panel containing all the different
@@ -42,48 +34,31 @@ import java.util.stream.Collectors;
  *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class FilteringPanel extends LayoutPanel implements RangeValueChangedHandler, ClickHandler,
-        ValueUpdater<Species>, ValueChangeHandler<Boolean> {
-    private static NumberFormat pValueFormatter = NumberFormat.getFormat("0.00");
-    private static NumberFormat resourceFormatter = NumberFormat.getFormat("#,###");
-
+public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handler, ClickHandler {
     private FlowPanel firstColumnPanel;
-    private FlowPanel bySpeciesPanel;
     private FlowPanel byVariousPanel;
-    private FlowPanel bySizePanel;
 
-    private ListBox resourceBox;
-    private RangeSlider sizeSlider;
-    private SimpleSlider pValueSlider;
+    private FilteringWidget resourceFiltering;
+    private FilteringWidget sizeFiltering;
+    private FilteringWidget speciesFiltering;
+    private FilteringWidget pValueFiltering;
+    private FilteringWidget diseaseFiltering;
 
-    private Label sizeFilterLb;
-    private Label pValueFilterLb;
     private Button cancelBtn;
     private Button removeBtn;
     private Button applyBtn;
 
-    private List<ResourceSummary> resourceSummaries;
-    private final static int binSize = 200;
-    private final static int histWidth = 300;
-    private final static int histHeight = 70;
-    private double filterMin;
-    private double filterMax;
-    private int min;
-    private int max;
-    private double pValue;
-    private List<Integer> histogram;
-
-    private CellList<Species> speciesListBox;
-    private List<Species> speciesList;
-
-    private CheckBox includeDiseaseCB;
-    private boolean includeDisease;
-
     private String token;
-    private Filter filter;
+    private AnalysisResult analysisResult;
+    private Filter initialFilter;
+    private Filter newFilter;
 
     public FilteringPanel() {
-        filter = new Filter();
+        resourceFiltering = new ResourceFiltering(this);
+        sizeFiltering = new SizeFiltering(this);
+        speciesFiltering = new SpeciesFiltering(this);
+        pValueFiltering = new PValueFiltering(this);
+        diseaseFiltering = new DiseaseFiltering(this);
     }
 
     public HandlerRegistration addActionSelectedHandler(ActionSelectedHandler handler) {
@@ -94,111 +69,85 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         return this.addHandler(handler, FilterAppliedEvent.TYPE);
     }
 
-//    public HandlerRegistration addResourceChangeHandler(ResourceChangedHandler handler){
-//        return this.addHandler(handler, ResourceChangedEvent.TYPE);
-//    }
+    public void setup(AnalysisResult analysisResult, Filter filter) {
+        this.analysisResult = analysisResult;
+        token = analysisResult.getSummary().getToken();
+        initialFilter = filter;
+        newFilter = initialFilter.clone();
 
-    public void setup(AnalysisResult analysisResult, String resource) {
-        this.token = analysisResult.getSummary().getToken();
-        filter.setResource(resource);
-        this.includeDisease = true;
-        this.pValue = 1d;
-
-        resourceSummaries = analysisResult.getResourceSummary();
-        retrieveSpecies(analysisResult);
         initUI();
+    }
 
-        retrieveHistogram();
+    public void setFilter(Filter filter) {
+        initialFilter = filter;
+        newFilter = initialFilter.clone();
+
+        loadAnalysisData();
     }
 
     @Override
-    public void onRangeValueChanged(RangeValueChangedEvent event) {
-        if (event.getSource() instanceof RangeSlider) { // Size Filter
-            filterMin = event.getMin();
-            filterMax = event.getMax();
-            sizeFilterLb.setText((int) filterMin + " - " + (int) filterMax + " entities");
-
-            if (filterMin != min || filterMax != max) {
-                filter.setSize((int) filterMin, (int) filterMax);
-            } else {
-                filter.removeFilter(Filter.Type.BY_SIZE);
-            }
-
-        } else {    // p-Value filter
-            pValue = event.getMax();
-            String rounded = pValueFormatter.format(pValue);
-            pValueFilterLb.setText("p ≤ " + rounded);
-            if (pValue != 1d) {
-                filter.setPValue(Double.parseDouble(rounded));
-            } else {
-                filter.removeFilter(Filter.Type.BY_PVALUE);
-            }
-        }
-        updateApplyButton();
+    public Filter getFilter() {
+        return newFilter;
     }
 
     @Override
-    public void onValueChange(ValueChangeEvent<Boolean> event) {
-        CheckBox cBox = (CheckBox) event.getSource();
-        if (cBox.equals(includeDiseaseCB)) {
-            includeDisease = includeDiseaseCB.getValue();
-            if (!includeDisease) {
-                filter.setDisease(includeDisease);
-            } else {
-                filter.removeFilter(Filter.Type.BY_DISEASE);
-            }
+    public AnalysisResult getAnalysisResult() {
+        return analysisResult;
+    }
+
+    @Override
+    public void onResourceChanged(String resource) {
+        Console.info("Resource changed to " + resource);
+        newFilter.setResource(resource);
+    }
+
+    @Override
+    public void onSizeChanged(int min, int max, int filterMin, int filterMax) {
+        Console.info("Size changed to " + filterMin + ", " + filterMax);
+
+        //Remove filter if necessary or update the filter with the new values
+        if (filterMin == min && filterMax == max) {
+            newFilter.removeFilter(Filter.Type.BY_SIZE);
+        } else {
+            newFilter.setSize(filterMin, filterMax);
         }
-        updateApplyButton();
+    }
+
+    @Override
+    public void onSpeciesChanged(List<Species> speciesList) {
+        Console.info("Species changed to " + speciesList);
+        newFilter.setSpecies(speciesList);
+        Console.info("Species: " + newFilter.getSpecies());
+    }
+
+    @Override
+    public void onPValueChanged(double pValue) {
+        Console.info("Pvalue changed to " + pValue);
+
+        if (pValue <= 1 || pValue >= 0) {
+            newFilter.setPValue(pValue);
+        } else {
+            newFilter.removeFilter(Filter.Type.BY_PVALUE);
+        }
+    }
+
+    @Override
+    public void onIncludeDiseaseChanged(boolean includeDisease) {
+        Console.info("IncludeDisease changed to " + includeDisease);
+        newFilter.setDisease(includeDisease);
     }
 
     @Override
     public void onClick(ClickEvent event) {
         Button btn = (Button) event.getSource();
         if (btn.equals(applyBtn)) {
-            fireEvent(new FilterAppliedEvent(filter));
+            fireEvent(new FilterAppliedEvent(newFilter));
         } else if (btn.equals(cancelBtn)) {
             fireEvent(new ActionSelectedEvent(ActionSelectedEvent.Action.FILTERING_OFF));
         } else if(btn.equals(removeBtn)) {
-            filter.removeAll();
-            fireEvent(new FilterAppliedEvent(filter));
+            newFilter.removeAll();
+            fireEvent(new FilterAppliedEvent(newFilter));
         }
-    }
-
-    @Override
-    public void update(Species value) {
-        List<Species> previouslySelectedSpecies = speciesList.stream().filter(Species::isChecked).collect(Collectors.toList());
-        if(value != null) {
-            value.setChecked(!value.isChecked());
-        }
-        List<Species> selectedSpecies = speciesList.stream().filter(Species::isChecked).collect(Collectors.toList());
-
-        if (previouslySelectedSpecies.size() == speciesList.size() && selectedSpecies.size() == previouslySelectedSpecies.size() - 1) {
-            //  Deselect everything else but the one clicked
-            speciesList.forEach(species -> {
-                if(!species.getId().equals(value.getId())) {
-                    species.setChecked(false);
-                } else {
-                    species.setChecked(true);
-                }
-            });
-            selectedSpecies = speciesList.stream().filter(Species::isChecked).collect(Collectors.toList());
-            speciesListBox.setRowData(speciesList);
-            filter.setSpecies(selectedSpecies);
-        } else if (selectedSpecies.size() == speciesList.size()) {
-            //  All of the species are selected so the filter should be removed
-            filter.removeFilter(Filter.Type.BY_SPECIES);
-        } else if (selectedSpecies.size() == 0) {
-            //  At least one of the species has to be selected, thus if nothing is selected we select all of them and
-            // remove
-            speciesList.forEach(species -> species.setChecked(true));
-            speciesListBox.setRowData(speciesList);
-            filter.removeFilter(Filter.Type.BY_SPECIES);
-        } else {
-            filter.setSpecies(selectedSpecies);
-        }
-
-        retrieveHistogram();
-        updateApplyButton();
     }
 
     private void initUI() {
@@ -212,7 +161,8 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         FlowPanel flexContainer = new FlowPanel();
         flexContainer.setStyleName(RESOURCES.getCSS().flexContainer());
         flexContainer.add(getFirstColumnPanel());
-        flexContainer.add(getBySpecies());
+
+        flexContainer.add(speciesFiltering.initUI());
         flexContainer.add(getByVarious());
 
         main.add(mainTitle);
@@ -226,119 +176,18 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         firstColumnPanel = new FlowPanel();
         firstColumnPanel.setStyleName(RESOURCES.getCSS().firstColumnPanel());
 
-        firstColumnPanel.add(getByResource());
-        firstColumnPanel.add(getBySize());
+        firstColumnPanel.add(resourceFiltering.initUI());
+        firstColumnPanel.add(sizeFiltering.initUI());
 
         return firstColumnPanel;
-    }
-
-    private Widget getByResource() {
-        FlowPanel byResourcePanel = new FlowPanel();
-
-        byResourcePanel.add(getResourceTypePanel(resourceSummaries));
-
-        Label resourceTitle = new Label("\u2022 By resource");
-        resourceTitle.setStyleName(RESOURCES.getCSS().innerTitle());
-        byResourcePanel.add(resourceTitle);
-
-        Label resourceSubtitle = new Label("Show pathways with size:");
-        resourceSubtitle.setStyleName(RESOURCES.getCSS().compactSubtitle());
-        byResourcePanel.add(resourceSubtitle);
-
-        return byResourcePanel;
-
-    }
-
-    private Widget getBySize() {
-        bySizePanel = new FlowPanel();
-
-        sizeFilterLb = new Label();
-        sizeFilterLb.setStyleName(RESOURCES.getCSS().sizeFilterLb());
-        bySizePanel.add(sizeFilterLb);
-
-        Label title = new Label("\u2022 By pathway size");
-        title.setStyleName(RESOURCES.getCSS().innerTitle());
-        bySizePanel.add(title);
-
-        Label subtitle = new Label("Show pathways with size:");
-        subtitle.setStyleName(RESOURCES.getCSS().compactSubtitle());
-        bySizePanel.add(subtitle);
-
-        return bySizePanel;
-    }
-
-    private void addSizeWidget() {
-        if (sizeSlider != null) sizeSlider.removeFromParent();
-
-        min = 0;
-        max = histogram.size() * binSize;
-        if (!filter.getAppliedFilters().contains(Filter.Type.BY_SIZE)) {
-            filterMin = min;
-            filterMax = max;
-        } else {
-            filterMin = filter.getSizeMin() < min || filter.getSizeMin() > max ? min : filter.getSizeMin();
-            filterMax = filter.getSizeMax() > max ? max : filter.getSizeMax();
-
-            //Remove filter if necessary or update the filter with the new values
-            if (filterMin == min && filterMax == max) {
-                filter.removeFilter(Filter.Type.BY_SIZE);
-            } else {
-                filter.setSize((int) filterMin, (int) filterMax);
-            }
-        }
-
-        sizeSlider = new RangeSlider(histWidth, histHeight, min, max, filterMin, filterMax, histogram);
-        sizeSlider.addRangeValueChangedHandler(this);
-        bySizePanel.add(sizeSlider);
-        sizeFilterLb.setText(filterMin == min && filterMax == max ? "All entities" : (int) filterMin + " - " + (int) filterMax + " entities");
-    }
-
-    private Widget getBySpecies() {
-        bySpeciesPanel = new FlowPanel();
-        bySpeciesPanel.setStyleName(RESOURCES.getCSS().bySpeciesPanel());
-
-        Label title = new Label("\u2022 By species");
-        title.setStyleName(RESOURCES.getCSS().innerTitle());
-        bySpeciesPanel.add(title);
-
-        Label subtitle = new Label("Show pathways belonging to he following species:");
-        subtitle.setStyleName(RESOURCES.getCSS().subtitle());
-        bySpeciesPanel.add(subtitle);
-
-        SpeciesCell speciesCell = new SpeciesCell();
-        speciesListBox = new CellList<>(speciesCell);
-        speciesListBox.setStyleName(RESOURCES.getCSS().speciesListBox());
-        speciesListBox.setKeyboardSelectionPolicy(HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED);
-        speciesListBox.setRowCount(speciesList.size(), true);
-        speciesListBox.setRowData(speciesList);
-        speciesListBox.setValueUpdater(this);
-
-        Button selectAllBtn = new IconButton("all", RESOURCES.selectAllIcon(), event -> {
-            speciesList.forEach(s -> s.setChecked(true));
-            speciesListBox.setRowData(speciesList);
-            update(null);
-        });
-        selectAllBtn.setStyleName(RESOURCES.getCSS().selectBtn());
-        selectAllBtn.setTitle("Select all species");
-
-        FlowPanel listButtonsPanel = new FlowPanel();
-        listButtonsPanel.setStyleName(RESOURCES.getCSS().listButtonsPanel());
-        listButtonsPanel.add(selectAllBtn);
-        FlowPanel listPanel = new FlowPanel();
-        listPanel.setStyleName(RESOURCES.getCSS().listPanel());
-        listPanel.add(speciesListBox);
-        listPanel.add(listButtonsPanel);
-        bySpeciesPanel.add(listPanel);
-
-        return bySpeciesPanel;
     }
 
     private Widget getByVarious() {
         byVariousPanel = new FlowPanel();
         byVariousPanel.setStyleName(RESOURCES.getCSS().byVariousPanel());
 
-        byVariousPanel.add(getByPValue());
-        byVariousPanel.add(getByDisease());
+        byVariousPanel.add(pValueFiltering.initUI());
+        byVariousPanel.add(diseaseFiltering.initUI());
 
         cancelBtn = new IconButton("Cancel", RESOURCES.cancelIcon());
         cancelBtn.setStyleName(RESOURCES.getCSS().applyBtn());
@@ -349,7 +198,7 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         removeBtn.setStyleName(RESOURCES.getCSS().applyBtn());
         removeBtn.addClickHandler(this);
         removeBtn.setTitle("Remove all filters");
-        removeBtn.setVisible(false);
+//        removeBtn.setVisible(false);
 
         applyBtn = new IconButton("Apply", RESOURCES.applyIcon());
         applyBtn.setStyleName(RESOURCES.getCSS().applyBtn());
@@ -366,135 +215,60 @@ public class FilteringPanel extends LayoutPanel implements RangeValueChangedHand
         return byVariousPanel;
     }
 
-    private Widget getByDisease() {
-        FlowPanel byDiseasePanel = new FlowPanel();
-
-        Label title = new Label("\u2022 By disease");
-        title.setStyleName(RESOURCES.getCSS().compactInnerTitle());
-        byDiseasePanel.add(title);
-
-        Label subtitle = new Label("Show/hide disease pathways");
-        subtitle.setStyleName(RESOURCES.getCSS().compactSubtitle());
-        byDiseasePanel.add(subtitle);
-
-        includeDiseaseCB = new CheckBox("Include disease pathway in the results");
-        includeDiseaseCB.setStyleName(RESOURCES.getCSS().checkBox());
-        includeDiseaseCB.setValue(Boolean.TRUE);
-        includeDiseaseCB.addValueChangeHandler(this);
-        byDiseasePanel.add(includeDiseaseCB);
-
-        return byDiseasePanel;
-    }
-
-    private Widget getByPValue() {
-        FlowPanel byPValuePanel = new FlowPanel();
-        byPValuePanel.setStyleName(RESOURCES.getCSS().byPValuePanel());
-
-        pValueFilterLb = new Label("p ≤ 1.00");
-        pValueFilterLb.setStyleName(RESOURCES.getCSS().pValueFilterLb());
-        byPValuePanel.add(pValueFilterLb);
-
-        Label title = new Label("\u2022 By p-value");
-        title.setStyleName(RESOURCES.getCSS().innerTitle());
-        byPValuePanel.add(title);
-
-        Label subtitle = new Label("Filter by statistical significance:");
-        subtitle.setStyleName(RESOURCES.getCSS().compactSubtitle());
-        byPValuePanel.add(subtitle);
-
-        pValueSlider = new SimpleSlider(280, 27, 0, 1, 1);
-        pValueSlider.addRangeValueChangedHandler(this);
-        byPValuePanel.add(pValueSlider);
-
-        return byPValuePanel;
-    }
-
-    private Widget getResourceTypePanel(List<ResourceSummary> resourceSummary){
-        SimplePanel resourcePanel = new SimplePanel();
-        resourcePanel.addStyleName(RESOURCES.getCSS().resourcePanel());
-        resourceBox = new ListBox();
-        resourceBox.setMultipleSelect(false);
-
-        for (ResourceSummary summary : resourceSummary) {
-            String resource = summary.getResource();
-            resourceBox.addItem(resource + " (" + resourceFormatter.format(summary.getPathways()) + ")", resource);
-        }
-        resourcePanel.add(resourceBox);
-        resourceBox.addChangeHandler(event -> {
-            ListBox listBox = (ListBox) event.getSource();
-            String resource = listBox.getValue(listBox.getSelectedIndex());
-            filter.setResource(resource);
-//            fireEvent(new ResourceChangedEvent(resource));
-            fireEvent(new FilterAppliedEvent(filter));
-        });
-        return resourcePanel;
+    private void updateFilteringWidgets() {
+        diseaseFiltering.updateUI();
+        resourceFiltering.updateUI();
+        pValueFiltering.updateUI();
+        sizeFiltering.updateUI();
+        speciesFiltering.updateUI();
     }
 
     private void updateApplyButton() {
-        applyBtn.setEnabled(filter.isActive());
+//        applyBtn.setEnabled(filter.isActive());
     }
 
-    public void refresh() {
-        List<Species> filterSpecies = filter.getSpecies();
-        if (filterSpecies.size() == 0) {
-            speciesList.forEach(s -> s.setChecked(true));
-            speciesListBox.setRowData(speciesList);
-            update(null);
-        } else {
-            speciesList.forEach(s -> s.setChecked(filterSpecies.contains(s)));
-            speciesListBox.setRowData(speciesList);
-            update(null);
-        }
-
-        includeDiseaseCB.setValue(filter.isIncludeDisease());
-
-        if (filter.getAppliedFilters().contains(Filter.Type.BY_PVALUE)) {
-            pValueSlider.setValue(filter.getpValue());
-        } else {
-            pValueSlider.setValue(1d);
-        }
-
-        removeBtn.setVisible(filter.isActive());
-
-    }
-
-    private void retrieveHistogram() {
-        this.histogram = new ArrayList<>();
-
-        AnalysisClient.getPathwaysBinnedBySize(token, filter.getResource(), binSize, 1d, filter.getSpecies().size() > 0? filter.getSpecies().stream().map(s -> s.getSpeciesSummary().getTaxId()).collect(Collectors.toList()) : null, new AnalysisHandler.PathwaysBinned() {
+    @Override
+    public void loadAnalysisData(){
+        Console.info("Refreshing...");
+        AnalysisClient.getResult(token, newFilter.getResource(), 0, 0, newFilter.getSpeciesString(), null, null, newFilter.getpValue(), newFilter.isIncludeDisease(), newFilter.getSizeMin(), newFilter.getSizeMax(), new AnalysisHandler.Result() {
             @Override
-            public void onPathwaysBinnedLoaded(List<Bin> pathwaysBinned) {
-                if (pathwaysBinned != null && !pathwaysBinned.isEmpty()) {
-                    Bin lastBin = pathwaysBinned.get(pathwaysBinned.size() - 1);
-                    Integer[] binValues = new Integer[lastBin.getKey() + 1];
-                    for (Bin bin : pathwaysBinned) {
-                        binValues[bin.getKey()] =  bin.getValue();
-                    }
-                    histogram = Arrays.stream(binValues).map(i -> i == null ? 0 : i).collect(Collectors.toList());
+            public void onAnalysisResult(final AnalysisResult result, long time) {
+                Long speciesId = result.getSummary().getSpecies();
+                if (speciesId != null) {
+                    ContentClient.query(result.getSummary().getSpecies(), new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
+                        @Override
+                        public void onObjectLoaded(DatabaseObject databaseObject) {
+                            result.getSummary().setSpeciesName(databaseObject.getDisplayName());
+                            analysisResult = result;
+                            updateFilteringWidgets();
+                        }
 
-                    addSizeWidget();
+                        @Override
+                        public void onContentClientException(Type type, String message) {
+
+                        }
+
+                        @Override
+                        public void onContentClientError(ContentClientError error) {
+
+                        }
+                    });
+                } else {
+                    analysisResult = result;
+                    updateFilteringWidgets();
                 }
             }
 
             @Override
-            public void onPathwaysBinnedError(AnalysisError error) {
-                Console.error(error.getReason());
+            public void onAnalysisError(AnalysisError error) {
+
             }
 
             @Override
             public void onAnalysisServerException(String message) {
-                Console.error(message);
+
             }
         });
-    }
-
-    private void retrieveSpecies(AnalysisResult analysisResult) {
-        this.speciesList = new ArrayList<>();
-        if (analysisResult.getSpeciesSummary() != null) {
-            for (SpeciesSummary speciesSummary : analysisResult.getSpeciesSummary()) {
-                this.speciesList.add(new Species(speciesSummary));
-            }
-        }
     }
 
     public static Resources RESOURCES;

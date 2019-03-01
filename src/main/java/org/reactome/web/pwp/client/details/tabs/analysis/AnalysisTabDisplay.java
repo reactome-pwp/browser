@@ -13,6 +13,7 @@ import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
 import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.pwp.client.common.CommonImages;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
@@ -31,9 +32,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.events.
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handlers.*;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.AnalysisSummaryPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ActionSelectedHandler;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ResourceChangedHandler;
 import org.reactome.web.pwp.model.client.classes.Pathway;
 
 import java.util.LinkedList;
@@ -44,7 +43,7 @@ import java.util.List;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.Display,
-        ResourceChangedHandler, ActionSelectedHandler, ClickHandler,
+        ActionSelectedHandler, ClickHandler,
         PathwaySelectedHandler, PathwayHoveredHandler, PathwayHoveredResetHandler,
         EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler,
         FilterAppliedHandler, EntitiesFoundPanel.Handler, InteractorsFoundPanel.Handler,
@@ -120,7 +119,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
         this.filteringPanel = new FilteringPanel();
         this.filteringPanel.addActionSelectedHandler(this);
         this.filteringPanel.addFilterAppliedHandler(this);
-        this.filteringPanel.addFilterAppliedHandler(analysisResultPanel);
+//        this.filteringPanel.addFilterAppliedHandler(analysisResultPanel);
         this.stackPanel.add(this.filteringPanel, "Filtering", 0);
 
         this.entitiesEntitiesFoundPanel = new EntitiesFoundPanel(this);
@@ -200,8 +199,9 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     }
 
     @Override
-    public void showResult(AnalysisResult analysisResult, String resource) {
+    public void showResult(AnalysisResult analysisResult, Filter filter) {
         this.refreshTitle(analysisResult.getPathwaysFound());
+        this.filter = filter;
 
         if(this.summaryPanel==null || !this.summaryPanel.getToken().equals(analysisResult.getSummary().getToken())){
             this.resources = new LinkedList<>();
@@ -212,12 +212,12 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
             this.container.clear();
             this.summaryPanel = new AnalysisSummaryPanel(analysisResult);
-//            this.summaryPanel.setResource(resource);
+
 //            this.summaryPanel.addResourceChangeHandler(this);
             this.summaryPanel.addActionSelectedHandler(this);
             this.container.addNorth(summaryPanel, SUMMARY_HEIGHT);
 
-            this.analysisResultPanel.showResult(analysisResult, resource);
+            this.analysisResultPanel.showResult(analysisResult, filter);
             this.container.add(stackPanel);
 
             AnalysisSummary summary = analysisResult.getSummary();
@@ -231,16 +231,14 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.notFoundPanel.setAnalysisDetails(this.token, notFound);
             updateTabBadge(notFound);
 
-            this.entitiesEntitiesFoundPanel.setResource(resource);
-            this.filteringPanel.setup(analysisResult, resource);
-//            this.filteringPanel.addResourceChangeHandler(this);
+            this.entitiesEntitiesFoundPanel.setResource(filter.getResource());
+            this.filteringPanel.setup(analysisResult, filter);
 
-            this.downloadPanel.showDownloadOptions(analysisResult, resource);
+            this.downloadPanel.showDownloadOptions(analysisResult, filter.getResource());
         } else {
-            this.analysisResultPanel.showResult(analysisResult, resource);
-//            this.summaryPanel.setResource(resource);
-//            this.filteringPanel.setResource()
-            this.downloadPanel.showDownloadOptions(analysisResult, resource);
+            this.analysisResultPanel.showResult(analysisResult, filter);
+            this.filteringPanel.setFilter(filter);
+            this.downloadPanel.showDownloadOptions(analysisResult, filter.getResource());
         }
     }
 
@@ -305,7 +303,6 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     public void onActionSelected(ActionSelectedEvent event) {
         switch (event.getAction()) {
             case FILTERING_ON:
-                filteringPanel.refresh();
                 stackPanel.showWidget(filteringPanel);
                 summaryPanel.showFilteringPanel(true);
                 break;
@@ -319,7 +316,6 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     @Override
     public void onFilterApplied(FilterAppliedEvent event) {
         this.filter = event.getFilter();
-//        Console.info(event.getFilter().toString());
         stackPanel.showWidget(innerTabPanel);
         summaryPanel.showFilteringPanel(false);
         presenter.onFilterChanged(event);
@@ -327,6 +323,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
     @Override
     public void onFilterRemoved(FilterRemovedEvent event) {
+        Console.info(filter.toString());
         presenter.onFilterChanged(new FilterAppliedEvent(filter));
     }
 
@@ -344,14 +341,6 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     public void onPathwaySelected(PathwaySelectedEvent event) {
         this.presenter.onPathwaySelected(event.getIdentifier());
 //        this.scrollToSelected();
-    }
-
-    @Override
-    public void onResourceChanged(ResourceChangedEvent event) {
-//        this.summaryPanel.setSelected(AnalysisInfoType.PATHWAYS_FOUND);
-//        this.analysisResultPanel.setResource(event.getResource());
-//        this.entitiesEntitiesFoundPanel.setResource(event.getResource());
-        presenter.onResourceSelected(event);
     }
 
     @Override

@@ -2,8 +2,8 @@ package org.reactome.web.pwp.client.details.tabs.analysis;
 
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.tabs.DetailsTab;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
 import org.reactome.web.pwp.model.client.classes.Pathway;
 
 /**
@@ -12,7 +12,6 @@ import org.reactome.web.pwp.model.client.classes.Pathway;
 public interface AnalysisTab {
 
     interface Presenter extends DetailsTab.Presenter {
-        void onResourceSelected(ResourceChangedEvent event);
         void onPathwayHovered(Long dbId);
         void onPathwayHoveredReset();
         void onPathwaySelected(Long dbId);
@@ -22,7 +21,7 @@ public interface AnalysisTab {
     interface Display extends DetailsTab.Display<Presenter>{
         void clearSelection();
         void selectPathway(Pathway pathway);
-        void showResult(AnalysisResult analysisResult, String resource);
+        void showResult(AnalysisResult analysisResult, Filter filter);
         void setSpecies(String species);
     }
 }
