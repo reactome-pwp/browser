@@ -3,10 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.species.Species;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -170,6 +167,25 @@ public class Filter {
 
     public Set<Type> getAppliedFilters() {
         return appliedFilters;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Filter filter = (Filter) o;
+        return includeDisease == filter.includeDisease &&
+                resource.equals(filter.resource) &&
+                Objects.equals(sizeMin, filter.sizeMin) &&
+                Objects.equals(sizeMax, filter.sizeMax) &&
+                Objects.equals(pValue, filter.pValue) &&
+                Objects.equals(species, filter.species) &&
+                Objects.equals(appliedFilters, filter.appliedFilters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(resource, sizeMin, sizeMax, pValue, species, includeDisease, appliedFilters);
     }
 
     @Override

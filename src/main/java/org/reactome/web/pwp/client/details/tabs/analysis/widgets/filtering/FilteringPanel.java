@@ -15,7 +15,6 @@ import org.reactome.web.analysis.client.AnalysisHandler;
 import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.diagram.common.IconButton;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.FilterAppliedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.species.Species;
@@ -97,44 +96,42 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     @Override
     public void onResourceChanged(String resource) {
-        Console.info("Resource changed to " + resource);
         newFilter.setResource(resource);
+        updateApplyButton();
     }
 
     @Override
     public void onSizeChanged(int min, int max, int filterMin, int filterMax) {
-        Console.info("Size changed to " + filterMin + ", " + filterMax);
-
         //Remove filter if necessary or update the filter with the new values
         if (filterMin == min && filterMax == max) {
             newFilter.removeFilter(Filter.Type.BY_SIZE);
         } else {
             newFilter.setSize(filterMin, filterMax);
         }
+
+        updateApplyButton();
     }
 
     @Override
     public void onSpeciesChanged(List<Species> speciesList) {
-        Console.info("Species changed to " + speciesList);
         newFilter.setSpecies(speciesList);
-        Console.info("Species: " + newFilter.getSpecies());
+        updateApplyButton();
     }
 
     @Override
     public void onPValueChanged(double pValue) {
-        Console.info("Pvalue changed to " + pValue);
-
         if (pValue <= 1 || pValue >= 0) {
             newFilter.setPValue(pValue);
         } else {
             newFilter.removeFilter(Filter.Type.BY_PVALUE);
         }
+        updateApplyButton();
     }
 
     @Override
     public void onIncludeDiseaseChanged(boolean includeDisease) {
-        Console.info("IncludeDisease changed to " + includeDisease);
         newFilter.setDisease(includeDisease);
+        updateApplyButton();
     }
 
     @Override
@@ -224,12 +221,11 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
     }
 
     private void updateApplyButton() {
-//        applyBtn.setEnabled(filter.isActive());
+        applyBtn.setEnabled(!newFilter.equals(initialFilter));
     }
 
     @Override
     public void loadAnalysisData(){
-        Console.info("Refreshing...");
         AnalysisClient.getResult(token, newFilter.getResource(), 0, 0, newFilter.getSpeciesString(), null, null, newFilter.getpValue(), newFilter.isIncludeDisease(), newFilter.getSizeMin(), newFilter.getSizeMax(), new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
