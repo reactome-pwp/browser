@@ -1,6 +1,7 @@
-package org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size;
+package org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events;
 
 import com.google.gwt.event.shared.GwtEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.RangeValueChangedHandler;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -10,7 +11,6 @@ public class RangeValueChangedEvent extends GwtEvent<RangeValueChangedHandler> {
 
     private double min;
     private double max;
-
 
     public RangeValueChangedEvent(double min, double max){
         this.min = min;

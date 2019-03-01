@@ -12,10 +12,23 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.*;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.RangePinMovedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.RangeValueChangedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.RangePinMovedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.RangeValueChangedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.Point;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.Thumb;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.ThumbStatus;
 
 
 /**
+ * A simple slider tool allowing the user to
+ * select a value between a min and a max.
+ *
+ * Fires a RangePinMovedEvent when a pin has a new position
+ * and a RangeValueChangedEvent when the pin has settled in a
+ * new position.
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SimpleSlider extends Composite implements HasHandlers,
@@ -28,12 +41,15 @@ public class SimpleSlider extends Composite implements HasHandlers,
     private int height;
     private double min;
     private double max;
-    private double filterMax;
+    private double value;
+
+    private double previousValue;
+    private boolean pinMoved;
 
     private Axis axis;
-    private Thumb maxThumb;
+    private Thumb thumb;
 
-    public SimpleSlider(int width, int height, double min, double max, double filterMax) {
+    public SimpleSlider(int width, int height, double min, double max, double value) {
         this.width = width;
         this.height = height;
         base = new Point(30, height - 20);
@@ -42,7 +58,7 @@ public class SimpleSlider extends Composite implements HasHandlers,
         this.min = min;
         this.max = max;
 
-        this.filterMax = filterMax > max && filterMax < min ? max : filterMax;
+        this.value = value > max && value < min ? max : value;
 
         initUI();
         initHandlers();
@@ -53,27 +69,37 @@ public class SimpleSlider extends Composite implements HasHandlers,
         return addHandler(handler, RangeValueChangedEvent.TYPE);
     }
 
+    public HandlerRegistration addRangePinMovedHandler(RangePinMovedHandler handler) {
+        return addHandler(handler, RangePinMovedEvent.TYPE);
+    }
+
     @Override
     public void onMouseDown(MouseDownEvent event) {
         Point point = getMousePosition(event);
-        maxThumb.setStatus(maxThumb.contains(point) ? ThumbStatus.CLICKED : ThumbStatus.NORMAL);
+        thumb.setStatus(thumb.contains(point) ? ThumbStatus.CLICKED : ThumbStatus.NORMAL);
         draw();
+
+        if (thumb.getStatus() == ThumbStatus.CLICKED) {
+            previousValue = value;
+            pinMoved = false;
+        }
     }
 
     @Override
     public void onMouseMove(MouseMoveEvent event) {
         Point point = getMousePosition(event);
         int pos = point.x() - base.x();
-        if (maxThumb.getStatus() == ThumbStatus.CLICKED) {
+        if (thumb.getStatus() == ThumbStatus.CLICKED) {
             double newPosition = pos > (width - 2 * base.x()) ? (width - 2 * base.x()) : pos;
             newPosition = newPosition < 0 ? 0 : newPosition;
-            filterMax = translatePointOnAxisToValue(newPosition);
-            maxThumb.setPosition(newPosition, formatter.format(filterMax));
+            value = translatePointOnAxisToValue(newPosition);
+            thumb.setPosition(newPosition, formatter.format(value));
             axis.setFilterMax(newPosition);
-            fireEvent(new RangeValueChangedEvent(0, filterMax));
+            pinMoved = true;
+            fireEvent(new RangePinMovedEvent(0, value));
         } else {
-            boolean isHovered = maxThumb.contains(point);
-            maxThumb.setStatus(isHovered ? ThumbStatus.HOVERED : ThumbStatus.NORMAL);
+            boolean isHovered = thumb.contains(point);
+            thumb.setStatus(isHovered ? ThumbStatus.HOVERED : ThumbStatus.NORMAL);
             getElement().getStyle().setCursor(isHovered ? Style.Cursor.POINTER : Style.Cursor.DEFAULT);
         }
         draw();
@@ -82,20 +108,31 @@ public class SimpleSlider extends Composite implements HasHandlers,
     @Override
     public void onMouseUp(MouseUpEvent event) {
         Point point = getMousePosition(event);
-        maxThumb.setStatus(maxThumb.contains(point) ? ThumbStatus.HOVERED : ThumbStatus.NORMAL);
+        thumb.setStatus(thumb.contains(point) ? ThumbStatus.HOVERED : ThumbStatus.NORMAL);
         draw();
+
+        if (value != previousValue && pinMoved) {
+            pinMoved = false;
+            fireEvent(new RangeValueChangedEvent(0, value));
+        }
     }
 
     @Override
     public void onMouseOut(MouseOutEvent event) {
-        //TODO implement this
+        thumb.setStatus(ThumbStatus.NORMAL);
+        draw();
+
+        if (value != previousValue && pinMoved) {
+            pinMoved = false;
+            fireEvent(new RangeValueChangedEvent(0, value));
+        }
     }
 
     public void setValue(double value) {
-        this.filterMax = value;
-        double tFilterMax = translateValueToPointOnAxis(filterMax);
-        maxThumb.setPosition(tFilterMax, formatter.format(filterMax));
-        axis.setFilterMax(tFilterMax);
+        this.value = value;
+        double tValue = translateValueToPointOnAxis(this.value);
+        thumb.setPosition(tValue, formatter.format(this.value));
+        axis.setFilterMax(tValue);
         draw();
     }
 
@@ -123,10 +160,10 @@ public class SimpleSlider extends Composite implements HasHandlers,
     }
 
     private void initialize() {
-        double tFilterMax = translateValueToPointOnAxis(filterMax);
-        axis = new Axis(base, min, max, tFilterMax);
-        maxThumb = new Thumb(base, tFilterMax, formatter.format(filterMax));
-        maxThumb.setFont("bold 11px Arial");
+        double tValue = translateValueToPointOnAxis(value);
+        axis = new Axis(base, min, max, tValue);
+        thumb = new Thumb(base, tValue, formatter.format(value));
+        thumb.setFont("bold 11px Arial");
 
     }
 
@@ -136,15 +173,14 @@ public class SimpleSlider extends Composite implements HasHandlers,
     }
 
     private double translatePointOnAxisToValue(double point) {
-        double value = ((max - min) * point / (double)(width - 2 * base.x())) + min;
-        return value;
+        return ((max - min) * point / (double)(width - 2 * base.x())) + min;
     }
 
     private void draw(){
         Context2d ctx = canvas.getContext2d();
         ctx.clearRect(0, 0, width, height);
         axis.draw(ctx);
-        maxThumb.draw(ctx);
+        thumb.draw(ctx);
     }
 
     private Point getMousePosition(MouseEvent event){

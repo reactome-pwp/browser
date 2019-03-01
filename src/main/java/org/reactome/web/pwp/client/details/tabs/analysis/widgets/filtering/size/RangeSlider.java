@@ -11,12 +11,23 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.RangePinMovedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.RangeValueChangedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.RangePinMovedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.RangeValueChangedHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
+ * A slider tool with two pins allowing the user to
+ * select a min and a max value.
+ *
+ * Fires a RangePinMovedEvent when a pin has a new position
+ * and a RangeValueChangedEvent when the pin has settled in a
+ * new position
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class RangeSlider extends Composite implements HasHandlers,
@@ -30,18 +41,26 @@ public class RangeSlider extends Composite implements HasHandlers,
     private int max;
     private double filterMin;
     private double filterMax;
-    private final List<Bin> bins;
+    private List<Bin> bins;
 
     private Axis axis;
     private Histogram histogram;
     private Thumb minThumb;
     private Thumb maxThumb;
 
+    private double previousMin;
+    private double previousMax;
+    private boolean pinMoved;
+
     public RangeSlider(int width, int height, int min, int max, double filterMin, double filterMax, List<Integer> histValues) {
         this.width = width;
         this.height = height;
         base = new Point(35, height - 20);
 
+        update(min, max,filterMin, filterMax, histValues);
+    }
+
+    public void update(int min, int max, double filterMin, double filterMax, List<Integer> histValues) {
         if (min >= max) throw new RuntimeException("Min value in RangeSlider has to be always lower than max.");
         this.min = min;
         this.max = max;
@@ -61,20 +80,31 @@ public class RangeSlider extends Composite implements HasHandlers,
         return addHandler(handler, RangeValueChangedEvent.TYPE);
     }
 
+    public HandlerRegistration addRangePinMovedHandler(RangePinMovedHandler handler) {
+        return addHandler(handler, RangePinMovedEvent.TYPE);
+    }
+
     @Override
     public void onMouseDown(MouseDownEvent event) {
         Point point = getMousePosition(event);
         minThumb.setStatus(minThumb.contains(point) ? ThumbStatus.CLICKED : ThumbStatus.NORMAL);
         maxThumb.setStatus(maxThumb.contains(point) ? ThumbStatus.CLICKED : ThumbStatus.NORMAL);
         draw();
+
+        if (minThumb.getStatus() == ThumbStatus.CLICKED || maxThumb.getStatus() == ThumbStatus.CLICKED) {
+            previousMin = filterMin;
+            previousMax = filterMax;
+            pinMoved = false;
+        }
     }
 
     @Override
     public void onMouseMove(MouseMoveEvent event) {
         Point point = getMousePosition(event);
         int pos = point.x() - base.x();
-        boolean isAnyThumbHovered = false;
+        boolean isAnyThumbHovered;
         if (minThumb.getStatus() == ThumbStatus.CLICKED) {
+            isAnyThumbHovered = true;
             double newPosition = pos < 0 ? 0 : pos;
             double limit = maxThumb.getPosition() - (int) (2 * Thumb.radius + Thumb.thickness);
             newPosition = newPosition < limit ? newPosition : limit;
@@ -82,7 +112,8 @@ public class RangeSlider extends Composite implements HasHandlers,
             minThumb.setPosition(newPosition, filterMin + "");
             axis.setFilterMin(newPosition);
             histogram.setFilterMin(newPosition);
-            fireEvent(new RangeValueChangedEvent(filterMin, filterMax));
+            pinMoved = true;
+            fireEvent(new RangePinMovedEvent(filterMin, filterMax));
         } else {
             boolean isHovered = minThumb.contains(point);
             isAnyThumbHovered = isHovered;
@@ -90,6 +121,7 @@ public class RangeSlider extends Composite implements HasHandlers,
         }
 
         if (maxThumb.getStatus() == ThumbStatus.CLICKED) {
+            isAnyThumbHovered = true;
             double newPosition = pos > (width - 2 * base.x()) ? (width - 2 * base.x()) : pos;
             double limit = minThumb.getPosition() + (int) (2 * Thumb.radius + Thumb.thickness);
             newPosition = newPosition > limit ? newPosition : limit;
@@ -97,7 +129,8 @@ public class RangeSlider extends Composite implements HasHandlers,
             maxThumb.setPosition(newPosition, filterMax + "");
             axis.setFilterMax(newPosition);
             histogram.setFilterMax(newPosition);
-            fireEvent(new RangeValueChangedEvent(filterMin, filterMax));
+            pinMoved = true;
+            fireEvent(new RangePinMovedEvent(filterMin, filterMax));
         } else {
             boolean isHovered = maxThumb.contains(point);
             isAnyThumbHovered = isAnyThumbHovered || isHovered;
@@ -113,11 +146,23 @@ public class RangeSlider extends Composite implements HasHandlers,
         minThumb.setStatus(minThumb.contains(point) ? ThumbStatus.HOVERED : ThumbStatus.NORMAL);
         maxThumb.setStatus(maxThumb.contains(point) ? ThumbStatus.HOVERED : ThumbStatus.NORMAL);
         draw();
+
+        if ((filterMin != previousMin || filterMax != previousMax) && pinMoved) {
+            pinMoved = false;
+            fireEvent(new RangeValueChangedEvent(filterMin, filterMax));
+        }
     }
 
     @Override
     public void onMouseOut(MouseOutEvent event) {
-        //TODO implement this
+        minThumb.setStatus(ThumbStatus.NORMAL);
+        maxThumb.setStatus(ThumbStatus.NORMAL);
+        draw();
+
+        if ((filterMin != previousMin || filterMax != previousMax) && pinMoved) {
+            pinMoved = false;
+            fireEvent(new RangeValueChangedEvent(filterMin, filterMax));
+        }
     }
 
     private void initUI() {
@@ -160,7 +205,6 @@ public class RangeSlider extends Composite implements HasHandlers,
 
     private double translatePointOnAxisToValue(double point) {
         double value = ((max - min) * point / (double)(width - 2 * base.x())) + min;
-//        Console.info(point + " -> " + value);
         return Math.round(value);
     }
 
