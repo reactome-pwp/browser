@@ -15,6 +15,7 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.AnalysisFilterChangedEvent;
 import org.reactome.web.pwp.client.manager.state.State;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 import org.reactome.web.pwp.model.client.classes.Pathway;
@@ -126,13 +127,12 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
 
     @Override
     public void onFilterChanged(FilterAppliedEvent event) {
-        ///TODO: instead of the following just fire the StateChangedEvent with the new filter
-//        eventBus.fireEventFromSource(new StateChangedEvent(state), this);
-        loadAnalysisData(analysisStatus.getToken(), event.getFilter());
+        this.eventBus.fireEventFromSource(new AnalysisFilterChangedEvent(event.getResultFilter()), this);
+        this.loadAnalysisData(analysisStatus.getToken(), event.getFilter());
     }
 
     private void loadAnalysisData(final String token, final Filter filter){
-        AnalysisClient.getResult(token, filter.getResource(), AnalysisResultTable.PAGE_SIZE, 1, filter.getSpeciesString(), null, null, filter.getpValue(), filter.isIncludeDisease(), filter.getSizeMin(), filter.getSizeMax(), new AnalysisHandler.Result() {
+        AnalysisClient.getResult(token, filter.getResultFilter(), AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
                 Long speciesId = result.getSummary().getSpecies();

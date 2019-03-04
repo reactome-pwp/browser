@@ -26,6 +26,7 @@ import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A panel containing all the different
@@ -114,7 +115,7 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     @Override
     public void onSpeciesChanged(List<Species> speciesList) {
-        newFilter.setSpecies(speciesList);
+        newFilter.setSpecies(speciesList.stream().map(s -> s.getSpeciesSummary().getTaxId() + "").collect(Collectors.toList()));
         updateApplyButton();
     }
 
@@ -226,7 +227,7 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     @Override
     public void loadAnalysisData(){
-        AnalysisClient.getResult(token, newFilter.getResource(), 0, 0, newFilter.getSpeciesString(), null, null, newFilter.getpValue(), newFilter.isIncludeDisease(), newFilter.getSizeMin(), newFilter.getSizeMax(), new AnalysisHandler.Result() {
+        AnalysisClient.getResult(token, newFilter.getResultFilter(), 0, 0,null, null, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
                 Long speciesId = result.getSummary().getSpecies();

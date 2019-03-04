@@ -37,8 +37,6 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     private Long selected;
     private Long hovered;
 
-    private String species;
-
     public AnalysisResultPanel() {
         super(Style.Unit.EM);
 
@@ -118,10 +116,6 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         }
     }
 
-    public void setSpecies(String species) {
-        this.species = species;
-    }
-
     public void showPage(int page) {
         if(this.pager!=null){
             this.pager.setPage(page - 1);
@@ -142,9 +136,9 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.pager.setDisplay(this.table);
         this.pager.setPageSize(AnalysisResultTable.PAGE_SIZE);
 
-        this.dataProvider = new AnalysisAsyncDataProvider(table, pager, analysisResult, filter.getResource());
-        this.dataProvider.setAppliedFilter(filter);
-        this.dataProvider.addPageLoadedHanlder(this);
+        this.dataProvider = new AnalysisAsyncDataProvider(table, pager, analysisResult, filter.getResultFilter());
+        //this.dataProvider.setAppliedFilter(filter);
+        this.dataProvider.addPageLoadedHandler(this);
 
         this.appliedFiltersPanel.setFilter(filter);
 

@@ -183,8 +183,7 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
         for (Pathway pathway : pathways) {
             ids.add(pathway.getDbId().toString());
         }
-        //TODO: add the speciesList when available in the analysisStatus
-        AnalysisClient.getPathwaySummaries(analysisStatus.getToken(), analysisStatus.getResource(), null, analysisStatus.getpValue(), analysisStatus.getIncludeDisease(), analysisStatus.getMin(), analysisStatus.getMax(), ids, new AnalysisHandler.Summaries() {
+        AnalysisClient.getPathwaySummaries(analysisStatus.getToken(), analysisStatus.getResultFilter(), ids, new AnalysisHandler.Summaries() {
             @Override
             public void onPathwaySummariesLoaded(List<PathwaySummary> pathwaySummaries, long time) {
                 display.showAnalysisResult(pathwaySummaries);
@@ -209,7 +208,7 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
 
     private void loadHitReactions(Set<Pathway> pathways){
         if(this.analysisStatus.isEmpty()) return;
-        AnalysisClient.getHitReactions(analysisStatus.getToken(), analysisStatus.getResource(), pathways, new AnalysisHandler.Reactions() {
+        AnalysisClient.getHitReactions(analysisStatus.getToken(), analysisStatus.getResultFilter(), pathways, new AnalysisHandler.Reactions() {
             @Override
             public void onReactionsAnalysisDataRetrieved(Set<Long> reactions) {
                 display.highlightHitReactions(reactions);

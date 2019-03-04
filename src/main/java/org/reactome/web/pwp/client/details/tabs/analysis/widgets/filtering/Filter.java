@@ -1,10 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering;
 
+import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.species.Species;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -37,7 +36,7 @@ public class Filter {
     private String resource;
     private Integer sizeMin, sizeMax;
     private Double pValue;
-    private List<Species> species;
+    private List<String> species;
     private boolean includeDisease;
 
     private Set<Type> appliedFilters;
@@ -54,6 +53,7 @@ public class Filter {
         filter.setSpecies(null);
         filter.setPValue(analysisStatus.getpValue());
         filter.setDisease(analysisStatus.getIncludeDisease());
+        filter.setSpecies(analysisStatus.getSpeciesList());
         return filter;
     }
 
@@ -62,7 +62,7 @@ public class Filter {
         rtn.setSize(sizeMin, sizeMax);
         rtn.setSpecies(species);
         rtn.setPValue(pValue);
-        rtn.setDisease(Boolean.valueOf(includeDisease));
+        rtn.setDisease(includeDisease);
 
         return rtn;
     }
@@ -86,7 +86,7 @@ public class Filter {
         }
     }
 
-    public void setSpecies(List<Species> species) {
+    public void setSpecies(List<String> species) {
         this.species = species != null && !species.isEmpty() ? new ArrayList<>(species) : new ArrayList<>();
         if (!this.species.isEmpty()) {
             appliedFilters.add(Type.BY_SPECIES);
@@ -149,12 +149,8 @@ public class Filter {
         return sizeMax;
     }
 
-    public List<Species> getSpecies() {
+    public List<String> getSpecies() {
         return species;
-    }
-
-    public List<?> getSpeciesString() {
-        return species != null && !species.isEmpty() ? species.stream().map(s -> s.getSpeciesSummary().getTaxId()).collect(Collectors.toList()) : null;
     }
 
     public Double getpValue() {
@@ -167,6 +163,10 @@ public class Filter {
 
     public Set<Type> getAppliedFilters() {
         return appliedFilters;
+    }
+
+    public ResultFilter getResultFilter(){
+        return new ResultFilter(resource, pValue, includeDisease, getSizeMin(), getSizeMax(), getSpecies());
     }
 
     @Override

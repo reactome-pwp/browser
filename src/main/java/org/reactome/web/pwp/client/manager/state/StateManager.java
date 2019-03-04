@@ -15,8 +15,8 @@ import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.*;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ResourceChangedEvent;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ResourceChangedHandler;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.AnalysisFilterChangedEvent;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.AnalysisFilterChangedHandler;
 import org.reactome.web.pwp.client.manager.state.token.Token;
 import org.reactome.web.pwp.client.manager.state.token.TokenMalformedException;
 import org.reactome.web.pwp.client.manager.title.TitleManager;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class StateManager implements BrowserModule.Manager, ValueChangeHandler<String>,
         State.StateLoadedHandler, StateChangedHandler, DatabaseObjectSelectedHandler, DetailsTabChangedHandler,
-        DiagramObjectsFlagResetHandler, AnalysisCompletedHandler, AnalysisResetHandler, ResourceChangedHandler,
+        DiagramObjectsFlagResetHandler, AnalysisCompletedHandler, AnalysisResetHandler, AnalysisFilterChangedHandler,
         ToolSelectedHandler, TermFlaggedHandler {
 
     private EventBus eventBus;
@@ -50,7 +50,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         this.eventBus.addHandler(AnalysisCompletedEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisResetEvent.TYPE, this);
         this.eventBus.addHandler(DiagramObjectsFlagResetEvent.TYPE, this);
-        this.eventBus.addHandler(ResourceChangedEvent.TYPE, this);
+        this.eventBus.addHandler(AnalysisFilterChangedEvent.TYPE, this);
         this.eventBus.addHandler(TermFlaggedEvent.TYPE, this);
     }
 
@@ -86,7 +86,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     @Override
     public void onAnalysisReset() {
         State desiredState = new State(this.currentState);
-        desiredState.setAnalysisParameters(null, null);
+        desiredState.resetAnalysisParameters();
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 
@@ -155,9 +155,9 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     }
 
     @Override
-    public void onResourceChanged(ResourceChangedEvent event) {
+    public void onAnalysisFilterChanged(AnalysisFilterChangedEvent event) {
         State desiredState = new State(this.currentState);
-        desiredState.setAnalysisParameters(this.currentState.getAnalysisStatus().getToken(), event.getResource());
+        desiredState.setAnalysisParameters(this.currentState.getAnalysisStatus().getToken(), event.getFilter());
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 
@@ -181,7 +181,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                 public void onTokenAvailabilityChecked(boolean available, String message) {
                     if (!available) {
                         eventBus.fireEventFromSource(new ErrorMessageEvent(message), StateManager.this);
-                        state.setAnalysisParameters(null, null);
+                        state.resetAnalysisParameters();
                         History.newItem(state.toString(), false);
                     }
                     currentState = state;

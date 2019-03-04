@@ -3,20 +3,17 @@ package org.reactome.web.pwp.client.details.tabs.analysis.providers;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ProvidesKey;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -32,43 +29,28 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
     private List<PathwaySummary> firstPage;
     private List<PathwaySummary> currentData;
     private String token;
-    private String resource;
-    private Filter filter;
+    private ResultFilter filter;
 
     private PageLoadedHandler pageLoadedHandler;
 
-    public AnalysisAsyncDataProvider(AnalysisResultTable table, SimplePager pager, AnalysisResult analysisResult, String resource) {
-        super(new ProvidesKey<PathwaySummary>() {
-            @Override
-            public Object getKey(PathwaySummary item) {
-                return item == null ? null : item.getDbId();
-            }
-        });
+    public AnalysisAsyncDataProvider(AnalysisResultTable table, SimplePager pager, AnalysisResult analysisResult, ResultFilter filter) {
+        super(item -> item == null ? null : item.getDbId());
         this.table = table;
         this.pager = pager;
         this.token = analysisResult.getSummary().getToken();
-        this.resource = resource;
+        this.filter = filter;
         this.firstPage = analysisResult.getPathways();
         this.currentData = this.firstPage;
-
         this.addDataDisplay(this.table);
     }
 
-    public void addPageLoadedHanlder(PageLoadedHandler pageLoadedHandler) {
+    public void addPageLoadedHandler(PageLoadedHandler pageLoadedHandler) {
         this.pageLoadedHandler = pageLoadedHandler;
     }
 
     @Override
     protected void onRangeChanged(HasData<PathwaySummary> display) {
-//        ColumnSortList sortList = ((AbstractCellTable<PathwaySummary>) display).getColumnSortList();
-//        String sortOnName = "name";
-//        boolean isAscending = true;
-//        if( (sortList!=null) && (sortList.size()>0) ){
-//            sortOnName = sortList.get(0).getColumn().getDataStoreName();
-//            isAscending = sortList.get(0).isAscending();
-//        }
-
-        final Integer page = this.pager.getPage() + 1;
+        final int page = this.pager.getPage() + 1;
         if (page == 1) {  //TODO: Find a better way for the first result to be shown so we DO NOT kept it longer ;)
             this.currentData = this.firstPage;
             this.table.setRowData(0, this.firstPage);
@@ -76,24 +58,7 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
                 pageLoadedHandler.onAnalysisAsyncDataProvider(page);
             }
         } else {
-
-            List<?> species = null;
-            Double pValue = null;
-            boolean includeDisease = true;
-            Integer min = null, max = null;
-
-            if (filter != null) {
-                Set<Filter.Type> appliedFilters = filter.getAppliedFilters();
-                if (appliedFilters.contains(Filter.Type.BY_SPECIES)) species = filter.getSpecies().stream().map(s -> s.getSpeciesSummary().getTaxId()).collect(Collectors.toList());
-                if (appliedFilters.contains(Filter.Type.BY_SIZE)) {
-                    min = filter.getSizeMin();
-                    max = filter.getSizeMax();
-                }
-                includeDisease = appliedFilters.contains(Filter.Type.BY_DISEASE);
-                pValue = filter.getpValue();
-            }
-
-            AnalysisClient.getResult(token, resource, AnalysisResultTable.PAGE_SIZE, page, species, null, null, pValue, includeDisease, min, max, new AnalysisHandler.Result() {
+            AnalysisClient.getResult(token, filter, AnalysisResultTable.PAGE_SIZE, page, null, null, new AnalysisHandler.Result() {
                 @Override
                 public void onAnalysisResult(AnalysisResult result, long time) {
                     currentData = result.getPathways();
@@ -117,15 +82,15 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
         }
     }
 
-    public void setAppliedFilter(final Filter filter) {
-        this.filter = filter;
-    }
+//    public void setAppliedFilter(final Filter filter) {
+//        this.filter = filter;
+//    }
 
     public List<PathwaySummary> getCurrentData() {
         return currentData != null ? currentData : new LinkedList<>();
     }
 
     public void findPathwayPage(Long pathway, AnalysisHandler.Page handler) {
-        AnalysisClient.findPathwayPage(pathway, this.token, this.resource, AnalysisResultTable.PAGE_SIZE, this.filter.getSpecies(), null, null, filter.getpValue(), filter.isIncludeDisease(), filter.getSizeMin(), filter.getSizeMax(), handler);
+        AnalysisClient.findPathwayPage(pathway, this.token, filter, AnalysisResultTable.PAGE_SIZE, null, null, handler);
     }
 }

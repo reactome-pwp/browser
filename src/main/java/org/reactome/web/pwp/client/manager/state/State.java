@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.manager.state;
 
 import com.google.gwt.http.client.URL;
+import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.common.utils.Console;
@@ -223,10 +224,25 @@ public class State {
         return this.analysisStatus;
     }
 
+    public void setAnalysisStatus(AnalysisStatus analysisStatus) {
+        this.analysisStatus = analysisStatus;
+    }
+
     void setAnalysisParameters(String analysisToken, String filter) {
         //IMPORTANT! Do no use setToken! ALWAYS create a new object here
         this.analysisStatus = new AnalysisStatus(analysisToken);
         this.analysisStatus.setFilter(filter);
+    }
+
+    void setAnalysisParameters(String analysisToken, ResultFilter filter) {
+        //IMPORTANT! Do no use setToken! ALWAYS create a new object here
+        this.analysisStatus = new AnalysisStatus(analysisToken);
+        this.analysisStatus.setResultFilter(filter);
+    }
+
+    void resetAnalysisParameters(){
+        //IMPORTANT! Do no use setToken! ALWAYS create a new object here
+        this.analysisStatus = new AnalysisStatus(null);
     }
 
     public String getFlag() {

@@ -1,9 +1,11 @@
 package org.reactome.web.pwp.client.common;
 
 import com.google.gwt.http.client.URL;
+import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.pwp.model.client.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +20,7 @@ public class AnalysisStatus {
     private boolean includeDisease;
     private Integer min;
     private Integer max;
+    private List<String> speciesList;
 
     public AnalysisStatus() {
         this.token = null;
@@ -26,6 +29,7 @@ public class AnalysisStatus {
         this.includeDisease = true;
         this.min = null;
         this.max = null;
+        this.speciesList = new ArrayList<>();
     }
 
     public AnalysisStatus(String token) {
@@ -40,7 +44,7 @@ public class AnalysisStatus {
         }
     }
 
-    public AnalysisStatus(String token, String resource, Double pValue, boolean includeDisease, Integer min, Integer max) {
+    public AnalysisStatus(String token, String resource, Double pValue, boolean includeDisease, Integer min, Integer max, List<String> speciesList) {
         setToken(token);
         if (token != null && !token.isEmpty()) {
             this.resource = resource;
@@ -48,11 +52,12 @@ public class AnalysisStatus {
             this.includeDisease = includeDisease;
             this.min = min;
             this.max = max;
+            this.speciesList = speciesList;
         }
     }
 
     public AnalysisStatus clone(){
-        return new AnalysisStatus(token, resource, pValue, includeDisease, min, max);
+        return new AnalysisStatus(token, resource, pValue, includeDisease, min, max, speciesList);
     }
 
     public String getFilter() {
@@ -62,6 +67,7 @@ public class AnalysisStatus {
         if (!includeDisease) rtn.add("includeDisease:" + getIncludeDisease());
         if (getMin() != null) rtn.add("min:" + getMin());
         if (getMax() != null) rtn.add("max:" + getMax());
+        if (!getSpeciesList().isEmpty()) rtn.add("species:" + StringUtils.join(getSpeciesList(), ","));
         return rtn.isEmpty() ? null : StringUtils.join(rtn, "$");
     }
 
@@ -133,8 +139,37 @@ public class AnalysisStatus {
         this.max = max;
     }
 
+    public List<String> getSpeciesList() {
+        return speciesList;
+    }
+
+    private void setSpeciesList(String str) {
+        if (str == null || str.isEmpty()) {
+            this.speciesList = new ArrayList<>();
+        } else {
+            this.speciesList = Arrays.asList(str.split(","));
+        }
+    }
+
+    public void setSpeciesList(List<String> speciesList) {
+        this.speciesList = speciesList;
+    }
+
     public boolean isEmpty() {
         return this.token == null || this.token.isEmpty();
+    }
+
+    public ResultFilter getResultFilter() {
+        return new ResultFilter(resource, pValue, includeDisease, min, max, speciesList);
+    }
+
+    public void setResultFilter(ResultFilter filter){
+        setResource(filter.getResource());
+        setpValue(filter.getpValue());
+        setIncludeDisease(filter.getIncludeDisease());
+        setMin(filter.getMin());
+        setMax(filter.getMax());
+        setSpeciesList(filter.getSpeciesList());
     }
 
     @Override
@@ -147,12 +182,13 @@ public class AnalysisStatus {
                 Objects.equals(resource, that.resource) &&
                 Objects.equals(pValue, that.pValue) &&
                 Objects.equals(min, that.min) &&
-                Objects.equals(max, that.max);
+                Objects.equals(max, that.max) &&
+                Objects.equals(speciesList, that.speciesList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(token, resource, pValue, includeDisease, min, max);
+        return Objects.hash(token, resource, pValue, includeDisease, min, max, speciesList);
     }
 
     @Override
@@ -164,6 +200,7 @@ public class AnalysisStatus {
                 ", includeDisease=" + includeDisease +
                 (min != null ? ", min=" + min : "") +
                 (max != null ? ", max=" + max : "") +
+                (!speciesList.isEmpty() ? ", species=" + StringUtils.join(speciesList, "-") : "") +
                 '}';
     }
 
@@ -175,6 +212,7 @@ public class AnalysisStatus {
                 case "includedisease":  setIncludeDisease(Boolean.valueOf(value));  break;
                 case "min":             setMin(Integer.valueOf(value));             break;
                 case "max":             setMax(Integer.valueOf(value));             break;
+                case "species":         setSpeciesList(value);                      break;
             }
         } catch (Exception e) {
             //Nothing here

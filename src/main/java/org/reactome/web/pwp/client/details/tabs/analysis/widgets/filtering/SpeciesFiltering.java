@@ -126,20 +126,17 @@ public class SpeciesFiltering extends FlowPanel implements FilteringWidget, Valu
     private void populateSpeciesList() {
         this.speciesList = new ArrayList<>();
         AnalysisResult analysisResult = handler.getAnalysisResult();
-        List<Long> filterSpecies = handler.getFilter().getSpecies().stream()
-                                                                   .map(s -> s.getId())
-                                                                   .collect(Collectors.toList());
-
         if (analysisResult.getSpeciesSummary() != null) {
             for (SpeciesSummary speciesSummary : analysisResult.getSpeciesSummary()) {
                 this.speciesList.add(new Species(speciesSummary));
             }
         }
 
+        List<String> filterSpecies = handler.getFilter().getSpecies();
         if (filterSpecies.size() == 0) {
             speciesList.forEach(s -> s.setChecked(true));
         } else {
-            speciesList.forEach(s -> s.setChecked(filterSpecies.contains(s.getId())));
+            speciesList.forEach(s -> s.setChecked(filterSpecies.contains(s.getId().toString())));
         }
     }
 }

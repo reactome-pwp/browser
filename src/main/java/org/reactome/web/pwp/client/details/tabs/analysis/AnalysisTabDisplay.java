@@ -13,7 +13,6 @@ import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
 import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.pwp.client.common.CommonImages;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabType;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
@@ -244,7 +243,6 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
     @Override
     public void setSpecies(String species) {
-        this.analysisResultPanel.setSpecies(species);
         this.downloadPanel.setSpecies(species);
     }
 
@@ -323,7 +321,6 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
     @Override
     public void onFilterRemoved(FilterRemovedEvent event) {
-        Console.info(filter.toString());
         presenter.onFilterChanged(new FilterAppliedEvent(filter));
     }
 
