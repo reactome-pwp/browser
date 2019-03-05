@@ -96,7 +96,7 @@ public class SizeFiltering extends FlowPanel implements FilteringWidget,
         AnalysisResult result = handler.getAnalysisResult();
         Filter filter = handler.getFilter();
 
-        AnalysisClient.getPathwaysBinnedBySize(result.getSummary().getToken(), binSize, filter.getResource(), filter.getpValue() != null ? filter.getpValue() : 1d, filter.getSpecies(), new AnalysisHandler.PathwaysBinned() {
+        AnalysisClient.getPathwaysBinnedBySize(result.getSummary().getToken(), binSize, filter.getResultFilter(), new AnalysisHandler.PathwaysBinned() {
             @Override
             public void onPathwaysBinnedLoaded(List<Bin> pathwaysBinned) {
                 if (pathwaysBinned != null && !pathwaysBinned.isEmpty()) {
