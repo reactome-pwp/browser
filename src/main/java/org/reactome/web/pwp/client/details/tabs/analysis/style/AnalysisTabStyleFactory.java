@@ -68,10 +68,6 @@ public abstract class AnalysisTabStyleFactory {
          */
         String DEFAULT_CSS = "org/reactome/web/pwp/client/details/tabs/analysis/style/AnalysisTabStyle.css";
 
-//        String analysisTabSummary();
-
-//        String analysisTabSummaryInfo();
-
         String summaryInfoPanel();
 
         String overlay();
@@ -87,12 +83,6 @@ public abstract class AnalysisTabStyleFactory {
         String actionsPanel();
 
         String warningBtn();
-
-//        String clusterBtn();
-//
-//        String filterBtn();
-//
-//        String helpBtn();
 
         String analysisRowSelector();
 

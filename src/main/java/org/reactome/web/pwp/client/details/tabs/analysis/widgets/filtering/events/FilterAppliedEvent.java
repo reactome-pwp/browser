@@ -1,7 +1,6 @@
 package org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.FilterAppliedHandler;
 
@@ -30,9 +29,5 @@ public class FilterAppliedEvent extends GwtEvent<FilterAppliedHandler> {
 
     public Filter getFilter() {
         return filter;
-    }
-
-    public ResultFilter getResultFilter() {
-        return filter.getResultFilter();
     }
 }
