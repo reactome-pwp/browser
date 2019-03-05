@@ -132,7 +132,7 @@ public class SpeciesFiltering extends FlowPanel implements FilteringWidget, Valu
             }
         }
 
-        List<String> filterSpecies = handler.getFilter().getSpecies();
+        List<String> filterSpecies = handler.getFilter().getSpeciesList();
         if (filterSpecies.size() == 0) {
             speciesList.forEach(s -> s.setChecked(true));
         } else {

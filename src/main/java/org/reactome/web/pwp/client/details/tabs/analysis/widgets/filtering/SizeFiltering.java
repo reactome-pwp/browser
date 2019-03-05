@@ -96,7 +96,7 @@ public class SizeFiltering extends FlowPanel implements FilteringWidget,
         AnalysisResult result = handler.getAnalysisResult();
         Filter filter = handler.getFilter();
 
-        AnalysisClient.getPathwaysBinnedBySize(result.getSummary().getToken(), binSize, filter.getResultFilter(), new AnalysisHandler.PathwaysBinned() {
+        AnalysisClient.getPathwaysBinnedBySize(result.getSummary().getToken(), binSize, filter, new AnalysisHandler.PathwaysBinned() {
             @Override
             public void onPathwaysBinnedLoaded(List<Bin> pathwaysBinned) {
                 if (pathwaysBinned != null && !pathwaysBinned.isEmpty()) {
@@ -115,8 +115,8 @@ public class SizeFiltering extends FlowPanel implements FilteringWidget,
                         filterMax = max;
                         handler.onSizeChanged(min, max, (int) filterMin, (int) filterMax);
                     } else {
-                        filterMin = filter.getSizeMin() < min || filter.getSizeMin() > max ? min : filter.getSizeMin();
-                        filterMax = filter.getSizeMax() > max ? max : filter.getSizeMax();
+                        filterMin = filter.getMin() < min || filter.getMin() > max ? min : filter.getMin();
+                        filterMax = filter.getMax() > max ? max : filter.getMax();
 
                         handler.onSizeChanged(min, max, (int) filterMin, (int) filterMax);
                     }

@@ -56,8 +56,13 @@ public class SpeciesCell extends AbstractCell<Species> {
             return;
         }
 
+        double pathways = value.getSpeciesSummary().getPathways();
+        double filtered = value.getSpeciesSummary().getFiltered();
+
+        String number = " (" + (pathways == filtered ? formatter.format(pathways) : formatter.format(filtered) + "/" + formatter.format(pathways)) + ")";
+
         SafeHtml primary = SafeHtmlUtils.fromTrustedString("<input type=\"checkbox\"" + (value.isChecked() ? "checked" : "") + " />"
-                + value.getName() + " (" + formatter.format(value.getSpeciesSummary().getFiltered()) + "/" + formatter.format(value.getSpeciesSummary().getPathways()) +")");
+                + value.getName() + number);
         sb.append(templates.minCell(primary));
     }
 }

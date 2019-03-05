@@ -136,7 +136,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.pager.setDisplay(this.table);
         this.pager.setPageSize(AnalysisResultTable.PAGE_SIZE);
 
-        this.dataProvider = new AnalysisAsyncDataProvider(table, pager, analysisResult, filter.getResultFilter());
+        this.dataProvider = new AnalysisAsyncDataProvider(table, pager, analysisResult, filter);
         //this.dataProvider.setAppliedFilter(filter);
         this.dataProvider.addPageLoadedHandler(this);
 
@@ -147,7 +147,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         pagerPanel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().panelFooter());
         pagerPanel.add(pager);
         pagerPanel.add(appliedFiltersPanel);
-        this.addSouth(pagerPanel, 2);
+        this.addSouth(pagerPanel, 1.9);
 
         this.add(this.table);
     }

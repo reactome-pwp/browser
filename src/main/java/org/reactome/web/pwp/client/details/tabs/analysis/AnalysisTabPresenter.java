@@ -127,12 +127,12 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
 
     @Override
     public void onFilterChanged(FilterAppliedEvent event) {
-        this.eventBus.fireEventFromSource(new AnalysisFilterChangedEvent(event.getResultFilter()), this);
+        this.eventBus.fireEventFromSource(new AnalysisFilterChangedEvent(event.getFilter()), this);
         this.loadAnalysisData(analysisStatus.getToken(), event.getFilter());
     }
 
     private void loadAnalysisData(final String token, final Filter filter){
-        AnalysisClient.getResult(token, filter.getResultFilter(), AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
+        AnalysisClient.getResult(token, filter, AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
                 Long speciesId = result.getSummary().getSpecies();

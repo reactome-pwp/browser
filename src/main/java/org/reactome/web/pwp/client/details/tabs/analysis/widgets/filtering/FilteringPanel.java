@@ -107,7 +107,7 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
         if (filterMin == min && filterMax == max) {
             newFilter.removeFilter(Filter.Type.BY_SIZE);
         } else {
-            newFilter.setSize(filterMin, filterMax);
+            newFilter.setSizeBoundaries(filterMin, filterMax);
         }
 
         updateApplyButton();
@@ -115,14 +115,14 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     @Override
     public void onSpeciesChanged(List<Species> speciesList) {
-        newFilter.setSpecies(speciesList.stream().map(s -> s.getSpeciesSummary().getTaxId() + "").collect(Collectors.toList()));
+        newFilter.setSpeciesList(speciesList == null ? null : speciesList.stream().map(s -> s.getSpeciesSummary().getTaxId() + "").collect(Collectors.toList()));
         updateApplyButton();
     }
 
     @Override
     public void onPValueChanged(double pValue) {
-        if (pValue <= 1 || pValue >= 0) {
-            newFilter.setPValue(pValue);
+        if (pValue < 1 && pValue >= 0) {
+            newFilter.setpValue(pValue);
         } else {
             newFilter.removeFilter(Filter.Type.BY_PVALUE);
         }
@@ -131,7 +131,7 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     @Override
     public void onIncludeDiseaseChanged(boolean includeDisease) {
-        newFilter.setDisease(includeDisease);
+        newFilter.setIncludeDisease(includeDisease);
         updateApplyButton();
     }
 
@@ -227,7 +227,7 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     @Override
     public void loadAnalysisData(){
-        AnalysisClient.getResult(token, newFilter.getResultFilter(), 0, 0,null, null, new AnalysisHandler.Result() {
+        AnalysisClient.getResult(token, newFilter, 0, 0,null, null, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
                 Long speciesId = result.getSummary().getSpecies();

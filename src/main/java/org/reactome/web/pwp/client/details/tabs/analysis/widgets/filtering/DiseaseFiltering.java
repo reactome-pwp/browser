@@ -58,7 +58,7 @@ public class DiseaseFiltering extends FlowPanel implements FilteringWidget, Valu
     }
 
     private void populate() {
-        includeDisease = handler.getFilter().isIncludeDisease();
+        includeDisease = handler.getFilter().getIncludeDisease();
     }
 
 }

@@ -3,12 +3,15 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering;
 import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class Filter {
+public class Filter extends ResultFilter {
 
     public enum Type {
         BY_PVALUE   ("p-Value", "#7968a5"),
@@ -33,79 +36,71 @@ public class Filter {
         }
     }
 
-    private String resource;
-    private Integer sizeMin, sizeMax;
-    private Double pValue;
-    private List<String> species;
-    private boolean includeDisease;
-
     private Set<Type> appliedFilters;
 
     private Filter(String resource) {
         setResource(resource);
-        species = new ArrayList<>();
         appliedFilters = new HashSet<>(5);
     }
 
     public static Filter fromAnalysisStatus(AnalysisStatus analysisStatus) {
         Filter filter = new Filter(analysisStatus.getResource());
-        filter.setSize(analysisStatus.getMin(), analysisStatus.getMax());
-        filter.setSpecies(null);
-        filter.setPValue(analysisStatus.getpValue());
-        filter.setDisease(analysisStatus.getIncludeDisease());
-        filter.setSpecies(analysisStatus.getSpeciesList());
+        filter.setSizeBoundaries(analysisStatus.getMin(), analysisStatus.getMax());
+        filter.setSpeciesList(analysisStatus.getSpeciesList());
+        filter.setpValue(analysisStatus.getpValue());
+        filter.setIncludeDisease(analysisStatus.getIncludeDisease());
         return filter;
     }
 
     public Filter clone() {
         Filter rtn = new Filter(resource);
-        rtn.setSize(sizeMin, sizeMax);
-        rtn.setSpecies(species);
-        rtn.setPValue(pValue);
-        rtn.setDisease(includeDisease);
+        rtn.setSizeBoundaries(min, max);
+        rtn.setSpeciesList(speciesList);
+        rtn.setpValue(pValue);
+        rtn.setIncludeDisease(includeDisease);
 
         return rtn;
     }
 
-    public boolean isActive() {
-        return true;
-//        return appliedFilters.size() > 0;
-    }
-
+    @Override
     public void setResource(String resource) {
-        this.resource = resource;
+        super.setResource(resource);
     }
 
-    public void setSize(Integer sizeMin, Integer sizeMax) {
-        this.sizeMin = sizeMin;
-        this.sizeMax = sizeMax;
-        if (sizeMin != null && sizeMax != null) {
-            appliedFilters.add(Type.BY_SIZE);
+
+    public void setSizeBoundaries(Integer min, Integer max) {
+        if (min != null && max != null) {
+            if (super.setBoundaries(min, max)) {
+                appliedFilters.add(Type.BY_SIZE);
+            }
         } else {
             appliedFilters.remove(Type.BY_SIZE);
         }
     }
 
-    public void setSpecies(List<String> species) {
-        this.species = species != null && !species.isEmpty() ? new ArrayList<>(species) : new ArrayList<>();
-        if (!this.species.isEmpty()) {
+    @Override
+    public void setSpeciesList(List<String> species) {
+        super.setSpeciesList(species != null && !species.isEmpty() ? new ArrayList<>(species) : new ArrayList<>());
+        if (!speciesList.isEmpty()) {
             appliedFilters.add(Type.BY_SPECIES);
         } else {
             appliedFilters.remove((Type.BY_SPECIES));
         }
     }
 
-    public void setPValue(Double pValue) {
-        this.pValue = pValue;
-        if (pValue != null) {
+    @Override
+    public void setpValue(Double pValue) {
+        super.setpValue(pValue);
+        if (this.pValue != null) {
             appliedFilters.add(Type.BY_PVALUE);
         } else {
             appliedFilters.remove(Type.BY_PVALUE);
         }
     }
 
-    public void setDisease(boolean includeDisease) {
-        this.includeDisease = includeDisease;
+    @Override
+    public void setIncludeDisease(boolean includeDisease) {
+        super.setIncludeDisease(includeDisease);
         if (!includeDisease) {
             appliedFilters.add(Type.BY_DISEASE);
         } else {
@@ -117,13 +112,13 @@ public class Filter {
         appliedFilters.remove(type);
         switch (type) {
             case BY_SPECIES:
-                species.clear();
+                speciesList.clear();
                 break;
             case BY_DISEASE:
                 includeDisease = true;
                 break;
             case BY_SIZE:
-                sizeMax = sizeMin = null;
+                max = min = null;
                 break;
             case BY_PVALUE:
                 pValue = null;
@@ -137,67 +132,7 @@ public class Filter {
         }
     }
 
-    public String getResource() {
-        return resource;
-    }
-
-    public Integer getSizeMin() {
-        return sizeMin;
-    }
-
-    public Integer getSizeMax() {
-        return sizeMax;
-    }
-
-    public List<String> getSpecies() {
-        return species;
-    }
-
-    public Double getpValue() {
-        return pValue;
-    }
-
-    public boolean isIncludeDisease() {
-        return includeDisease;
-    }
-
     public Set<Type> getAppliedFilters() {
         return appliedFilters;
-    }
-
-    public ResultFilter getResultFilter(){
-        return new ResultFilter(resource, pValue, includeDisease, getSizeMin(), getSizeMax(), getSpecies());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Filter filter = (Filter) o;
-        return includeDisease == filter.includeDisease &&
-                resource.equals(filter.resource) &&
-                Objects.equals(sizeMin, filter.sizeMin) &&
-                Objects.equals(sizeMax, filter.sizeMax) &&
-                Objects.equals(pValue, filter.pValue) &&
-                Objects.equals(species, filter.species) &&
-                Objects.equals(appliedFilters, filter.appliedFilters);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(resource, sizeMin, sizeMax, pValue, species, includeDisease, appliedFilters);
-    }
-
-    @Override
-    public String toString() {
-        return "Filter{" +
-                "resource='" + resource + '\'' +
-                ", sizeMin=" + sizeMin +
-                ", sizeMax=" + sizeMax +
-                ", pValue=" + pValue +
-                ", species=" + species +
-                ", includeDisease=" + includeDisease +
-                ", appliedFilters=" + appliedFilters +
-                '}';
     }
 }
