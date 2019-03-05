@@ -83,7 +83,8 @@ public class TissueDistribution extends FlowPanel implements ClickHandler, Chang
                                                       .collect(Collectors.joining(","));
 
                 String targetUrl = SAMPLE_URL.replaceFirst("##EXPERIMENT_ID##", selectedSummary.getId().toString())
-                                    + "?included=" + includedColumns;
+                                    + "?included=" + includedColumns
+                                    + "&omitNulls=true";
 
                 loading.setVisible(true);
                 goButton.setEnabled(false);
