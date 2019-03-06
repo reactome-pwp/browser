@@ -59,6 +59,7 @@ public class AppliedFiltersPanel extends FlowPanel {
         chip.setStyleName(RESOURCES.getCSS().chip());
         chip.getElement().getStyle().setBackgroundColor(filterType.chipColour());
         chip.add(new Label(filterType.displayName()));
+        chip.setTitle(getTooltip(filterType));
 
         IconButton btn = new IconButton(RESOURCES.cancelIcon(), RESOURCES.getCSS().removeBtn(), "remove this filter", e -> {
             filter.removeFilter(filterType);
@@ -72,7 +73,25 @@ public class AppliedFiltersPanel extends FlowPanel {
         return chip;
     }
 
+    private String getTooltip(Filter.Type filterType) {
+        String rtn = "";
 
+        switch (filterType) {
+            case BY_DISEASE:
+                rtn = "Disease pathways are filtered out";
+                break;
+            case BY_PVALUE:
+                rtn = "Only pathways with pValue ≤ " + filter.getpValue() + " are visible";
+                break;
+            case BY_SPECIES:
+                rtn = "Only pathways belonging to " + filter.getSpeciesList().size() + " species are visible";
+                break;
+            case BY_SIZE:
+                rtn = "Only pathways of size between " + filter.getMin() + " and " + filter.getMax() + " are visible";
+                break;
+        }
+        return rtn;
+    }
 
     public static Resources RESOURCES;
     static {

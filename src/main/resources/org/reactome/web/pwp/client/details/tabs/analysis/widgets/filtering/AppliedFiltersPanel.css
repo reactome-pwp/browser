@@ -15,7 +15,7 @@
 
     display: flex;
     align-items: center;
-    max-width: 300px;
+    max-width: 275px;
 }
 
 .title {
@@ -32,7 +32,7 @@
 }
 
 .chip {
-    font-size: small;
+    /*font-size: small;*/
     border: 0 solid;
     border-radius: 12px;
     padding: 1px 4px;
