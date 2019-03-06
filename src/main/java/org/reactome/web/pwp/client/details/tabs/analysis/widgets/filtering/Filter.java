@@ -14,7 +14,7 @@ import java.util.Set;
 public class Filter extends ResultFilter {
 
     public enum Type {
-        BY_PVALUE   ("p-Value", "#7968a5"),
+        BY_PVALUE   ("pValue", "#7968a5"),
         BY_SIZE     ("Size",    "#89bf53"),
         BY_SPECIES  ("Species", "#f5b945"),
         BY_DISEASE  ("Disease", "#f96c51");
@@ -66,7 +66,6 @@ public class Filter extends ResultFilter {
     public void setResource(String resource) {
         super.setResource(resource);
     }
-
 
     public void setSizeBoundaries(Integer min, Integer max) {
         if (min != null && max != null) {
