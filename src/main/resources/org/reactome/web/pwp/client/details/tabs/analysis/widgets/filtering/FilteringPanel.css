@@ -1,5 +1,10 @@
 .main {
     padding: 0 5px 0 5px;
+
+    -webkit-transition: 250ms -webkit-filter ease-in;
+    -moz-transition: 250ms -moz-filter ease-in;
+    -o-transition: 250ms -o-filter ease-in;
+    transition: 250ms filter ease-in;
 }
 
 .mainTitle {
@@ -228,4 +233,30 @@
 .applyBtn:disabled, .applyBtn:disabled:hover, .applyBtn:disabled:active {
     background-color: #a39da6;
     cursor: default !important;
+}
+
+.blurEffect {
+    -webkit-filter: blur(3px);
+    -moz-filter: blur(3px);
+    -o-filter: blur(3px);
+    -ms-filter: blur(3px);
+    filter: blur(3px);
+}
+
+.loader {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader img {
+    height: 150px;
+    width: auto;
 }

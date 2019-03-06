@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handler, ClickHandler {
+    private FlowPanel main;
     private FlowPanel firstColumnPanel;
     private FlowPanel byVariousPanel;
 
@@ -43,6 +44,8 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
     private FilteringWidget speciesFiltering;
     private FilteringWidget pValueFiltering;
     private FilteringWidget diseaseFiltering;
+
+    private SimplePanel loader;
 
     private Button cancelBtn;
     private Button removeBtn;
@@ -150,7 +153,7 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     private void initUI() {
         clear();
-        FlowPanel main = new FlowPanel();
+        main = new FlowPanel();
         main.setStyleName(RESOURCES.getCSS().main());
 
         Label mainTitle = new Label("Filter your analysis results");
@@ -166,6 +169,8 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
         main.add(mainTitle);
         main.add(flexContainer);
         add(main);
+        add(createLoader());
+        showLoader(false);
 
         updateApplyButton();
     }
@@ -196,7 +201,6 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
         removeBtn.setStyleName(RESOURCES.getCSS().applyBtn());
         removeBtn.addClickHandler(this);
         removeBtn.setTitle("Remove all filters");
-//        removeBtn.setVisible(false);
 
         applyBtn = new IconButton("Apply", RESOURCES.applyIcon());
         applyBtn.setStyleName(RESOURCES.getCSS().applyBtn());
@@ -213,12 +217,33 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
         return byVariousPanel;
     }
 
+    private Widget createLoader() {
+        loader = new SimplePanel();
+        loader.setStyleName(RESOURCES.getCSS().loader());
+
+        loader.add(new Image(RESOURCES.loaderIcon()));
+        return loader;
+    }
+
+    private void showLoader(boolean show) {
+        if (show) {
+            main.addStyleName(RESOURCES.getCSS().blurEffect());
+            setWidgetVisible(loader, true);
+        } else {
+            main.removeStyleName(RESOURCES.getCSS().blurEffect());
+            setWidgetVisible(loader, false);
+        }
+
+    }
+
     private void updateFilteringWidgets() {
         diseaseFiltering.updateUI();
         resourceFiltering.updateUI();
         pValueFiltering.updateUI();
         sizeFiltering.updateUI();
         speciesFiltering.updateUI();
+
+        showLoader(false);
     }
 
     private void updateApplyButton() {
@@ -227,6 +252,7 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
     @Override
     public void loadAnalysisData(){
+        showLoader(true);
         AnalysisClient.getResult(token, newFilter, 0, 0,null, null, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
@@ -253,17 +279,18 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
                 } else {
                     analysisResult = result;
                     updateFilteringWidgets();
+
                 }
             }
 
             @Override
             public void onAnalysisError(AnalysisError error) {
-
+                showLoader(false);
             }
 
             @Override
             public void onAnalysisServerException(String message) {
-
+                showLoader(false);
             }
         });
     }
@@ -278,6 +305,9 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
 
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
+
+        @Source("../images/loader.gif")
+        ImageResource loaderIcon();
 
         @Source("../images/ok.png")
         ImageResource applyIcon();
@@ -338,6 +368,10 @@ public class FilteringPanel extends LayoutPanel implements FilteringWidget.Handl
         String buttonsPanel();
 
         String applyBtn();
+
+        String blurEffect();
+
+        String loader();
 
     }
 
