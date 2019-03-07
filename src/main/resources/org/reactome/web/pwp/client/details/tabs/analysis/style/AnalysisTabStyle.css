@@ -40,6 +40,17 @@
     margin-right: 4px;
 }
 
+.summaryResource {
+    float: left;
+    cursor: default;
+    color: #1E95CF;
+    margin-right: 4px;
+}
+
+.summaryResource:hover {
+    cursor: pointer;
+}
+
 .namePanel {
     float: left;
     margin-left: 4px;

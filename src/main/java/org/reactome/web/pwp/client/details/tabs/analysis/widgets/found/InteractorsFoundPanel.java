@@ -55,7 +55,7 @@ public class InteractorsFoundPanel extends DockLayoutPanel {
         FlowPanel pagerPanel = new FlowPanel();
         pagerPanel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().panelFooter());
         pagerPanel.add(pager);
-        this.addSouth(pagerPanel, 1.9);
+        this.addSouth(pagerPanel, 1.6);
 
         this.add(table);
     }

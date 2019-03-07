@@ -147,7 +147,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         pagerPanel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().panelFooter());
         pagerPanel.add(pager);
         pagerPanel.add(appliedFiltersPanel);
-        this.addSouth(pagerPanel, 1.9);
+        this.addSouth(pagerPanel, 1.6);
 
         this.add(this.table);
     }

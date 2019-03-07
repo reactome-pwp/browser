@@ -1,0 +1,19 @@
+.pageDetails {
+    padding: 0 8px 2px 8px;
+    text-align: center;
+}
+
+.button {
+    padding: 1px 4px;
+    cursor: pointer;
+}
+
+.button img {
+    padding-top: 1px;
+    height: 17px;
+    width: auto;
+}
+
+.disabledButton {
+    cursor: default;
+}

@@ -201,5 +201,30 @@ public class CustomPager extends SimplePager {
         @Override
         @Source( "../images/previousPageDisabled.png" )
         ImageResource simplePagerPreviousPageDisabled();
+
+        @Source("CustomPager.css")
+        Style simplePagerStyle();
     }
+
+    /**
+     * Styles used by this widget.
+     */
+    public static interface Style extends SimplePager.Style {
+
+        /**
+         * Applied to buttons.
+         */
+        String button();
+
+        /**
+         * Applied to disabled buttons.
+         */
+        String disabledButton();
+
+        /**
+         * Applied to the details text.
+         */
+        String pageDetails();
+    }
+
 }
