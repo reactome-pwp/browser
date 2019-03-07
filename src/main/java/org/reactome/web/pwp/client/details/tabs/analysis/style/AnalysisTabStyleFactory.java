@@ -76,6 +76,8 @@ public abstract class AnalysisTabStyleFactory {
 
         String summaryItem();
 
+        String summaryResource();
+
         String namePanel();
 
         String optionBadge();

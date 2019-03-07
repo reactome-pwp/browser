@@ -48,6 +48,7 @@ public class SizeFiltering extends FlowPanel implements FilteringWidget,
 
     @Override
     public Widget initUI() {
+        clear();
         sizeFilterLb = new Label();
         sizeFilterLb.setStyleName(style.getCSS().sizeFilterLb());
         add(sizeFilterLb);
@@ -123,6 +124,7 @@ public class SizeFiltering extends FlowPanel implements FilteringWidget,
 
                     if (sizeSlider != null) sizeSlider.removeFromParent();
 
+                    updateLabel();
                     sizeSlider = new RangeSlider(histWidth, histHeight, min, max, filterMin, filterMax, histogram);
                     sizeSlider.addRangeValueChangedHandler(SizeFiltering.this);
                     sizeSlider.addRangePinMovedHandler(SizeFiltering.this);

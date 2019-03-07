@@ -35,6 +35,7 @@ public class SpeciesFiltering extends FlowPanel implements FilteringWidget, Valu
 
     @Override
     public Widget initUI() {
+        clear();
         setStyleName(style.getCSS().bySpeciesPanel());
 
         Label title = new Label("\u2022 By species");

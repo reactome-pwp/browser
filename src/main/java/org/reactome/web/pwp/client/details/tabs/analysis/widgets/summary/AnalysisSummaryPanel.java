@@ -6,10 +6,12 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
+import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ActionSelectedHandler;
 
 import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.OptionBadge.Type.INLCUDE_INTERACTORS;
 import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.OptionBadge.Type.PROJECT_TO_HUMAN;
+import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent.Action.FILTERING_ON;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -18,19 +20,23 @@ import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.
 public class AnalysisSummaryPanel extends DockLayoutPanel {
     private static final String DOC_URL = "/user/guide/analysis";
     static final int baseSummaryPanel = 830;
-    static final int baseNameSize = 415;
+    static final int baseNameSize = 380;
 
     private String token;
+    private String resource = "TOTAL";
     private FlowPanel mainPanel;
     private FlowPanel namePanel;
+    private Label resourceLabel;
     private SimplePanel overlay;
 
     private ActionsPanel actionsPanel;
 
-    public AnalysisSummaryPanel(AnalysisResult analysisResult) {
+    public AnalysisSummaryPanel(AnalysisResult analysisResult, String resource) {
         super(Style.Unit.PX);
-        this.token = analysisResult.getSummary().getToken();
         AnalysisSummary summary = analysisResult.getSummary();
+
+        this.token = summary.getToken();
+        this.resource = resource;
 
         boolean speciesComparison = summary.getSpecies() != null;
 
@@ -55,7 +61,13 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
     }
 
     public HandlerRegistration addActionSelectedHandler(ActionSelectedHandler handler) {
+        this.addHandler(handler, ActionSelectedEvent.TYPE);
         return this.actionsPanel.addActionSelectedHandler(handler);
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+        updateResourceLabel();
     }
 
     public String getToken() {
@@ -75,12 +87,18 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
         typeAnchor.setTitle("Find out more about this type of analysis");
         typeAnchor.getElement().getStyle().setTextTransform(Style.TextTransform.CAPITALIZE);
 
-        Label lb = new Label(type.startsWith("species") ? "" : "analysis results");
+        Label lb = new Label(type.startsWith("species") ? "" : "analysis results for ");
         lb.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().summaryItem());
+
+        resourceLabel = new Label(type.startsWith("species") ? "" : resource);
+        resourceLabel.setStyleName(AnalysisTabStyleFactory.RESOURCES.css().summaryResource());
+        resourceLabel.setTitle("Click to change the selected resource");
+        resourceLabel.addClickHandler(e -> fireEvent(new ActionSelectedEvent(FILTERING_ON)));
 
         FlowPanel typePanel = new FlowPanel();
         typePanel.add(typeAnchor);
         typePanel.add(lb);
+        typePanel.add(resourceLabel);
         return typePanel;
     }
 
@@ -106,6 +124,10 @@ public class AnalysisSummaryPanel extends DockLayoutPanel {
             namePanel.add(new InlineLabel(summary.getSpeciesName()));
         }
         return namePanel;
+    }
+
+    private void updateResourceLabel() {
+        resourceLabel.setText(resource);
     }
 
     private Widget getOverlay() {

@@ -33,6 +33,7 @@ public class PValueFiltering extends FlowPanel implements FilteringWidget,
 
     @Override
     public Widget initUI() {
+        clear();
         setStyleName(style.getCSS().byPValuePanel());
 
         pValueFilterLb = new Label();

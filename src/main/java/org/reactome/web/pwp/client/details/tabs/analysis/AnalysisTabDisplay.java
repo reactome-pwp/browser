@@ -139,7 +139,6 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
 
 
         FlowPanel tabButtonsPanel = new FlowPanel();                // Tab buttons panel
-//        tabButtonsPanel.setStyleName(RESOURCES.getCSS().tabButtonsPanel());
         tabButtonsPanel.addStyleName(css.tabButtonsPanel());
         tabButtonsPanel.addStyleName(css.unselectable());
         tabButtonsPanel.add(this.resultsBtn = getTabButton("Results", "Analysis results found", AnalysisTabStyleFactory.RESOURCES.resultsIcon()));
@@ -210,7 +209,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.columnNames = analysisResult.getExpression().getColumnNames();
 
             this.container.clear();
-            this.summaryPanel = new AnalysisSummaryPanel(analysisResult);
+            this.summaryPanel = new AnalysisSummaryPanel(analysisResult, filter.getResource());
 
 //            this.summaryPanel.addResourceChangeHandler(this);
             this.summaryPanel.addActionSelectedHandler(this);
@@ -236,6 +235,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.downloadPanel.showDownloadOptions(analysisResult, filter.getResource());
         } else {
             this.analysisResultPanel.showResult(analysisResult, filter);
+            this.summaryPanel.setResource(filter.getResource());
             this.filteringPanel.setFilter(filter);
             this.downloadPanel.showDownloadOptions(analysisResult, filter.getResource());
         }

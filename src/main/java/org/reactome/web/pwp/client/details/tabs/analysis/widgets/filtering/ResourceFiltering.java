@@ -27,6 +27,7 @@ public class ResourceFiltering extends FlowPanel implements FilteringWidget {
 
     @Override
     public Widget initUI() {
+        clear();
         add(getResourceTypePanel());
 
         Label resourceTitle = new Label("\u2022 By resource");

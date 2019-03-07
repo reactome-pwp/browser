@@ -25,6 +25,7 @@ public class DiseaseFiltering extends FlowPanel implements FilteringWidget, Valu
 
     @Override
     public Widget initUI() {
+        clear();
         Label title = new Label("\u2022 By disease");
         title.setStyleName(style.getCSS().compactInnerTitle());
         add(title);
