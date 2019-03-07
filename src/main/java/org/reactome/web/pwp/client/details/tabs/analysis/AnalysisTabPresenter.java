@@ -128,7 +128,6 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
     @Override
     public void onFilterChanged(FilterAppliedEvent event) {
         this.eventBus.fireEventFromSource(new AnalysisFilterChangedEvent(event.getFilter()), this);
-        this.loadAnalysisData(analysisStatus.getToken(), event.getFilter());
     }
 
     private void loadAnalysisData(final String token, final Filter filter){
