@@ -130,7 +130,6 @@ public class CustomPager extends SimplePager {
     public interface CustomPagerResources extends SimplePager.Resources {
         // Here you can @Override all the methods and place @Source annotation to tell
         // SimplePager what image should be loaded as a replacement
-        // For example here I am replacing the Fast Forward image.
 
         /**
          * The image used to skip ahead multiple pages.
@@ -209,7 +208,7 @@ public class CustomPager extends SimplePager {
     /**
      * Styles used by this widget.
      */
-    public static interface Style extends SimplePager.Style {
+    public interface Style extends SimplePager.Style {
 
         /**
          * Applied to buttons.

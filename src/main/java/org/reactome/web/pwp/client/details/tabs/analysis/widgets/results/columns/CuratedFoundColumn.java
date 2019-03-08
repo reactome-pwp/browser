@@ -31,7 +31,7 @@ public class CuratedFoundColumn extends AbstractColumn<String> {
         if(object.getEntities().getCuratedFound() == 0){
             super.render(context, object, sb);
         } else {
-            sb.appendHtmlConstant("<span style='cursor:pointer; text-decoration:underline; background: blue;' title='" + this.rowTitle + "'>" +
+            sb.appendHtmlConstant("<span style='cursor:pointer; text-decoration:underline;' title='" + this.rowTitle + "'>" +
                     getValue(object) + "</span>");
         }
     }
