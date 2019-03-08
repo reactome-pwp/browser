@@ -71,9 +71,7 @@
 }
 
 .dataGridEvenRow {
-    /*background: #ffffff;*/
-    background: #ff0000;
-    opacity: 1;
+    background: #ffffff;
 }
 
 .dataGridEvenRowCell {
@@ -81,9 +79,7 @@
 }
 
 .dataGridOddRow {
-    /*background: #f3f7fb;*/
-    background: #ff0000;
-    opacity: 0.9;
+    background: #f3f7fb;
 }
 
 .dataGridOddRowCell {
@@ -91,8 +87,7 @@
 }
 
 .dataGridHoveredRow {
-    /*background: #eee;*/
-    background: #8bce95;
+    background: #c6dcee !important;
 }
 
 .dataGridHoveredRowCell {

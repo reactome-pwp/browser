@@ -308,6 +308,12 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
                 stackPanel.showWidget(innerTabPanel);
                 summaryPanel.showFilteringPanel(false);
                 break;
+            case CLUSTERING_ON:
+                analysisResultPanel.switchClustering(true);
+                break;
+            case CLUSTERING_OFF:
+                analysisResultPanel.switchClustering(false);
+                break;
         }
     }
 

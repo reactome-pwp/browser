@@ -187,6 +187,10 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.selected = null;
     }
 
+    public void switchClustering(boolean enable) {
+        table.switchClusterColouring(enable);
+    }
+
     @Override
     public void onAnalysisServerException(String message) {
         Console.warn(getClass().getSimpleName() + " --> TODO");

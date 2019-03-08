@@ -16,8 +16,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handler
 
 import java.util.List;
 
-import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent.Action.FILTERING_OFF;
-import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent.Action.FILTERING_ON;
+import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent.Action.*;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -73,7 +72,8 @@ public class ActionsPanel extends FlowPanel implements ClickHandler {
         } else if (btn.equals(helpBtn)) {
             Console.info("Help is coming...");
         } else if (btn.equals(clusterBtn)) {
-            Console.info("Clustering...");
+            clusterBtnStatus = !clusterBtnStatus;
+            fireEvent(new ActionSelectedEvent(clusterBtnStatus ? CLUSTERING_ON : CLUSTERING_OFF));
         } else if (btn.equals(warningBtn)) {
             popupInstance.setMessage(warningsList);
             popupInstance.showPanel(btn);

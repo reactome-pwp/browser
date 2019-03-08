@@ -5,7 +5,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.cellview.client.DataGrid;
+import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -29,7 +32,7 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
     private SingleSelectionModel<PathwaySummary> selectionModel;
 
     public AnalysisResultTable(List<String> expColumnNames, boolean interactors) {
-        super(PAGE_SIZE, new ProvidesKey<PathwaySummary>() {
+        super(PAGE_SIZE, CUSTOM_TABLE_RESOURCES, new ProvidesKey<PathwaySummary>() {
             @Override
             public Object getKey(PathwaySummary item) {
                 return item == null ? null : item.getDbId();
@@ -134,148 +137,67 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
         this.selectionModel.clear();
     }
 
-    private static DataGrid.Resources CUSTOM_STYLE;
+    public void switchClusterColouring(boolean enable) {
+        if (enable) {
+            this.setRowStyles(clustersRowStyles);
+        } else {
+            this.setRowStyles(null);
+        }
+
+        this.redraw();
+    }
+
+
+    private RowStyles<PathwaySummary> clustersRowStyles = new RowStyles<PathwaySummary>() {
+        @Override
+        public String getStyleNames(PathwaySummary row, int rowIndex) {
+            if (selectionModel.isSelected(row)) {
+                return null;
+            } else {
+                if (rowIndex % 2 == 0) {
+                    return RESOURCES.getCSS().clusterA();
+                } else {
+                    return RESOURCES.getCSS().clusterB();
+                }
+            }
+        }
+    };
+
+    private static Resources RESOURCES;
     static {
-        CUSTOM_STYLE = GWT.create(CustomTableResources.class);
-        CUSTOM_STYLE.dataGridStyle().ensureInjected();
+        RESOURCES = GWT.create(Resources.class);
+        RESOURCES.getCSS().ensureInjected();
     }
 
-    public interface CustomTableResources extends DataGrid.Resources {
-        /**
-         * The styles used in this widget.
-         */
-        @Source(CustomTableStyle.DEFAULT_CSS)
-        Style dataGridStyle();
+    public interface Resources extends ClientBundle {
+        @Source(ResourceCSS.CSS)
+        ResourceCSS getCSS();
     }
 
-    public interface CustomTableStyle extends DataGrid.Style {
+    @CssResource.ImportedWithPrefix("pwp-AnalysisResultTable")
+    public interface ResourceCSS extends CssResource {
 
-        /**
-         * The path to the default CSS styles used by this resource.
-         */
-        String DEFAULT_CSS = "org/reactome/web/pwp/client/details/tabs/analysis/widgets/results/CustomResultsTable.css";
-        /**
-         * Applied to headers cells.
-         */
-        /**
-         * Applied to every cell.
-         */
-        String dataGridCell();
+        String CSS = "org/reactome/web/pwp/client/details/tabs/analysis/widgets/results/ClusterRowsStyles.css";
 
-        /**
-         * Applied to even rows.
-         */
-        String dataGridEvenRow();
+        String clusterA();
 
-        /**
-         * Applied to cells in even rows.
-         */
-        String dataGridEvenRowCell();
+        String clusterB();
+    }
 
-        /**
-         * Applied to the first column.
-         */
-        String dataGridFirstColumn();
+    private static CustomResources CUSTOM_TABLE_RESOURCES;
+    static {
+        CUSTOM_TABLE_RESOURCES = GWT.create(CustomResources.class);
+    }
 
-        /**
-         * Applied to the first column footers.
-         */
-        String dataGridFirstColumnFooter();
+    public interface CustomResources extends DataGrid.Resources {
 
-        /**
-         * Applied to the first column headers.
-         */
-        String dataGridFirstColumnHeader();
+        @Override
+        @Source(CustomStyle.CSS)
+        CustomStyle dataGridStyle();
 
-        /**
-         * Applied to footers cells.
-         */
-        String dataGridFooter();
-
-        /**
-         * Applied to headers cells.
-         */
-        String dataGridHeader();
-
-        /**
-         * Applied to the hovered row.
-         */
-        String dataGridHoveredRow();
-
-        /**
-         * Applied to the cells in the hovered row.
-         */
-        String dataGridHoveredRowCell();
-
-        /**
-         * Applied to the keyboard selected cell.
-         */
-        String dataGridKeyboardSelectedCell();
-
-        /**
-         * Applied to the keyboard selected row.
-         */
-        String dataGridKeyboardSelectedRow();
-
-        /**
-         * Applied to the cells in the keyboard selected row.
-         */
-        String dataGridKeyboardSelectedRowCell();
-
-        /**
-         * Applied to the last column.
-         */
-        String dataGridLastColumn();
-
-        /**
-         * Applied to the last column footers.
-         */
-        String dataGridLastColumnFooter();
-
-        /**
-         * Applied to the last column headers.
-         */
-        String dataGridLastColumnHeader();
-
-        /**
-         * Applied to odd rows.
-         */
-        String dataGridOddRow();
-
-        /**
-         * Applied to cells in odd rows.
-         */
-        String dataGridOddRowCell();
-
-        /**
-         * Applied to selected rows.
-         */
-        String dataGridSelectedRow();
-
-        /**
-         * Applied to cells in selected rows.
-         */
-        String dataGridSelectedRowCell();
-
-        /**
-         * Applied to header cells that are sortable.
-         */
-        String dataGridSortableHeader();
-
-        /**
-         * Applied to header cells that are sorted in ascending order.
-         */
-        String dataGridSortedHeaderAscending();
-
-        /**
-         * Applied to header cells that are sorted in descending order.
-         */
-        String dataGridSortedHeaderDescending();
-
-        /**
-         * Applied to the table.
-         */
-        String dataGridWidget();
-
+        @CssResource.ImportedWithPrefix("pwp-CustomResultsTable")
+        interface CustomStyle extends Style {
+            String CSS = "org/reactome/web/pwp/client/details/tabs/analysis/widgets/results/CustomResultsTable.css";
+        }
     }
 }
