@@ -34,7 +34,7 @@ public class ResourceFiltering extends FlowPanel implements FilteringWidget {
         resourceTitle.setStyleName(style.getCSS().innerTitle());
         add(resourceTitle);
 
-        Label resourceSubtitle = new Label("Show pathways with size:");
+        Label resourceSubtitle = new Label("Filter results based on their resource:");
         resourceSubtitle.setStyleName(style.getCSS().compactSubtitle());
         add(resourceSubtitle);
 
