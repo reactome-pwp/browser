@@ -187,7 +187,7 @@
     height: auto;
     cursor: pointer;
     margin-left: 2px;
-    line-height: 1.2 !important;
+    line-height: 1.1em !important;
 }
 
 .tabButton:disabled, .tabButton:disabled:hover, .tabButton:disabled:active {
