@@ -10,10 +10,11 @@ import com.google.gwt.resources.client.TextResource;
  */
 public enum AnalysisDownloadType {
 
-    RESULTS    (Resources.INSTANCE.resultsIcon(),   Resources.INSTANCE.resultsInfo(),   "Pathway analysis results", "/AnalysisService/download/###TOKEN###/pathways/###RESOURCE###/result.csv"),
-    MAPPINGS   (Resources.INSTANCE.mappingsIcon(),  Resources.INSTANCE.mappingsInfo(),  "Identifier mappings",      "/AnalysisService/download/###TOKEN###/entities/found/###RESOURCE###/mapping.csv"),
-    PDF_REPORT (Resources.INSTANCE.pdfReportIcon(), Resources.INSTANCE.pdfReportInfo(), "Analysis report",          "/AnalysisService/report/###TOKEN###/###SPECIES###/report.pdf?resource=###RESOURCE###&diagramProfile=###D_PROFILE###&analysisProfile=###A_PROFILE###&fireworksProfile=###F_PROFILE###"),
-    NOT_FOUND  (Resources.INSTANCE.notFoundIcon(),  Resources.INSTANCE.notFoundInfo(),  "Not found identifiers",    "/AnalysisService/download/###TOKEN###/entities/notfound/not_found.csv");
+    RESULTS_CSV    (Resources.INSTANCE.resultsCSVIcon(),    Resources.INSTANCE.resultsCSVInfo(),    "Pathway analysis results", "/AnalysisService/download/###TOKEN###/pathways/###RESOURCE###/result.csv"),
+    RESULTS_JSON   (Resources.INSTANCE.resultsJSONIcon(),   Resources.INSTANCE.resultsJSONInfo(),   "Complete analysis results",    "/AnalysisService/download/###TOKEN###/result.json"),
+    MAPPINGS       (Resources.INSTANCE.mappingsIcon(),      Resources.INSTANCE.mappingsInfo(),      "Identifier mappings",      "/AnalysisService/download/###TOKEN###/entities/found/###RESOURCE###/mapping.csv"),
+    PDF_REPORT     (Resources.INSTANCE.pdfReportIcon(),     Resources.INSTANCE.pdfReportInfo(),     "Analysis report",          "/AnalysisService/report/###TOKEN###/###SPECIES###/report.pdf?resource=###RESOURCE###&diagramProfile=###D_PROFILE###&analysisProfile=###A_PROFILE###&fireworksProfile=###F_PROFILE###"),
+    NOT_FOUND      (Resources.INSTANCE.notFoundIcon(),      Resources.INSTANCE.notFoundInfo(),      "Not found identifiers",    "/AnalysisService/download/###TOKEN###/entities/notfound/not_found.csv");
 
 
     private transient ImageResource icon;
@@ -48,8 +49,11 @@ public enum AnalysisDownloadType {
 
         Resources INSTANCE = GWT.create(Resources.class);
 
-        @Source("images/results.png")
-        ImageResource resultsIcon();
+        @Source("images/results_csv.png")
+        ImageResource resultsCSVIcon();
+
+        @Source("images/results_json.png")
+        ImageResource resultsJSONIcon();
 
         @Source("images/mappings.png")
         ImageResource mappingsIcon();
@@ -60,8 +64,11 @@ public enum AnalysisDownloadType {
         @Source("images/not_found.png")
         ImageResource notFoundIcon();
 
-        @Source("info/AnalysisResultsInfo.html")
-        TextResource resultsInfo();
+        @Source("info/AnalysisResultsCSVInfo.html")
+        TextResource resultsCSVInfo();
+
+        @Source("info/AnalysisResultsJSONInfo.html")
+        TextResource resultsJSONInfo();
 
         @Source("info/IdentifierMappingsInfo.html")
         TextResource mappingsInfo();

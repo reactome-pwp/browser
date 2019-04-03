@@ -6,7 +6,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.diagram.profiles.analysis.AnalysisColours;
 import org.reactome.web.diagram.profiles.diagram.DiagramColours;
@@ -67,8 +66,30 @@ public class AnalysisDownloadItem extends FocusPanel implements ClickHandler {
                                     .replaceAll("###A_PROFILE###", analysisProfile)
                                     .replaceAll("###F_PROFILE###", fireworksProfile);
 
-        Window.open(link, type == AnalysisDownloadType.PDF_REPORT ? "_blank" : "_self", "");
+        click(link);
     }
+
+    // IMPORTANT !!!
+    // This is used to force the client to download the file instead of
+    // opening it inside the browser. The following method creates an anchor element
+    // and then reuses it.
+    public static native void click(String url)
+/*-{
+
+    var a = document.getElementById('hiddenAnchor');
+    if (a == null)
+    {
+        a = document.createElement('a');
+        a.setAttribute('id', 'hiddenAnchor')
+        a.style.display = 'none'
+        document.body.appendChild(a);
+    }
+
+    a.href = url;
+    a.download = '';
+    a.click();
+
+}-*/;
 
 
     public static Resources RESOURCES;
