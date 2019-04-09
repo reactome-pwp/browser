@@ -108,7 +108,7 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
             this.flag = null;
         }
         //Please note there is no checking to analysisStatus because reset is an option :)
-        this.fireworks.setAnalysisToken(this.analysisStatus.getToken(), this.analysisStatus.getResource());
+        this.fireworks.setAnalysisToken(this.analysisStatus.getToken(), this.analysisStatus.getResultFilter());
     }
 
     @Override
@@ -144,7 +144,7 @@ public class FireworksDisplay extends DockLayoutPanel implements Fireworks.Displ
                 if (analysisStatus.isEmpty()) {
                     fireworks.resetAnalysis();
                 } else {
-                    fireworks.setAnalysisToken(analysisStatus.getToken(), analysisStatus.getResource());
+                    fireworks.setAnalysisToken(analysisStatus.getToken(), analysisStatus.getResultFilter());
                 }
             }
         }

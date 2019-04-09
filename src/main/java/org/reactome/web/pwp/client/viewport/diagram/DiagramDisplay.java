@@ -98,7 +98,7 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
 
     @Override
     public void setAnalysisToken(AnalysisStatus analysisStatus) {
-        this.diagram.setAnalysisToken(analysisStatus.getToken(), analysisStatus.getResource());
+        this.diagram.setAnalysisToken(analysisStatus.getToken(), analysisStatus.getResultFilter());
     }
 
     @Override
