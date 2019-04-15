@@ -5,6 +5,8 @@ import com.google.gwt.i18n.client.NumberFormat;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.cells.CustomNumberCell;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider.SortingType.REACTIONS_RATIO;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -15,6 +17,7 @@ public class ReactionsRatioColumn extends AbstractColumn<Number> {
     public ReactionsRatioColumn() {
         super(new CustomNumberCell(Style.FontStyle.ITALIC, NumberFormat.getDecimalFormat()), "Reactions", "ratio", explanation);
         setWidth(85);
+        setSortingBy(REACTIONS_RATIO);
     }
 
     @Override

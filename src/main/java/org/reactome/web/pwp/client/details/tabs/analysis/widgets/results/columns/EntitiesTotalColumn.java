@@ -3,6 +3,8 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.column
 import com.google.gwt.cell.client.NumberCell;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider.SortingType.TOTAL_ENTITIES;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -14,6 +16,7 @@ public class EntitiesTotalColumn extends AbstractColumn<Number> {
     public EntitiesTotalColumn(boolean includeInteractors) {
         super(new NumberCell(), "Entities", "Total", includeInteractors ? interactors : standard);
         setWidth(65);
+        setSortingBy(TOTAL_ENTITIES);
     }
 
     @Override

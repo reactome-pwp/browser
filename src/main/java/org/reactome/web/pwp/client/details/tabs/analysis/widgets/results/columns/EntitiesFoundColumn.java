@@ -7,6 +7,8 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider.SortingType.FOUND_ENTITIES;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -23,6 +25,7 @@ public class EntitiesFoundColumn extends AbstractColumn<String> {
         setFieldUpdater(fieldUpdater);
         this.clickable = true;
         rowTitle = "Display matching submitted identifiers for the selected pathway";
+        setSortingBy(FOUND_ENTITIES);
     }
 
     public EntitiesFoundColumn() {

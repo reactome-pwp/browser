@@ -4,6 +4,8 @@ import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.i18n.client.NumberFormat;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider.SortingType.ENTITIES_RATIO;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -14,6 +16,7 @@ public class EntitiesRatioColumn extends AbstractColumn<Number> {
     public EntitiesRatioColumn() {
         super(new NumberCell(NumberFormat.getDecimalFormat()), "Entities", "ratio", explanation);
         setWidth(65);
+        setSortingBy(ENTITIES_RATIO);
     }
 
     @Override

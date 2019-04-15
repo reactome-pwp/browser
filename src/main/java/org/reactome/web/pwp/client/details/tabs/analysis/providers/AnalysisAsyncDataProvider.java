@@ -33,6 +33,20 @@ public class AnalysisAsyncDataProvider extends AsyncDataProvider<PathwaySummary>
 
     private PageLoadedHandler pageLoadedHandler;
 
+    public enum SortingType {
+        NAME,
+        TOTAL_ENTITIES,
+        TOTAL_INTERACTORS,
+        TOTAL_REACTIONS,
+        FOUND_ENTITIES,
+        FOUND_INTERACTORS,
+        FOUND_REACTIONS,
+        ENTITIES_RATIO,
+        ENTITIES_PVALUE,
+        ENTITIES_FDR,
+        REACTIONS_RATIO
+    }
+
     public AnalysisAsyncDataProvider(AnalysisResultTable table, SimplePager pager, AnalysisResult analysisResult, ResultFilter filter) {
         super(item -> item == null ? null : item.getDbId());
         this.table = table;

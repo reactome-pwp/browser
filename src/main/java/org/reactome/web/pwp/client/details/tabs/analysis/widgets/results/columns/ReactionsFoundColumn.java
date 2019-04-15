@@ -4,6 +4,8 @@ import com.google.gwt.dom.client.Style;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.cells.CustomNumberCell;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider.SortingType.FOUND_REACTIONS;
+
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -15,6 +17,7 @@ public class ReactionsFoundColumn extends AbstractColumn<Number> {
     public ReactionsFoundColumn() {
         super(new CustomNumberCell(Style.FontStyle.ITALIC), "Reactions", "found", explanation);
         setWidth(85);
+        setSortingBy(FOUND_REACTIONS);
     }
 
     @Override

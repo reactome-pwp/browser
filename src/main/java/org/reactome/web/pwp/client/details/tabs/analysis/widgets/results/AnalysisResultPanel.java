@@ -26,7 +26,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handler
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public class AnalysisResultPanel extends DockLayoutPanel implements SelectionChangeEvent.Handler, RowHoverEvent.Handler, MouseOutHandler,
-        AnalysisAsyncDataProvider.PageLoadedHandler, AnalysisHandler.Page, EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler {
+        AnalysisAsyncDataProvider.PageLoadedHandler, AnalysisHandler.Page, EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler, SortingChangedHandler {
 
     private AnalysisAsyncDataProvider dataProvider;
     private AnalysisResultTable table;
@@ -85,12 +85,6 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.selectPathway(candidateForSelection);
     }
 
-//    @Override
-//    public void onFilterApplied(FilterAppliedEvent event) {
-//        this.filter = event.getFilter();
-//        appliedFiltersPanel.setFilter(filter);
-//    }
-
     @Override
     public void onMouseOut(MouseOutEvent event) {
         fireEvent(new PathwayHoveredResetEvent());
@@ -128,6 +122,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
         this.table.addSelectionChangeHandler(this);
         this.table.addRowHoverHandler(this);
         this.table.addMouseOutHandler(this);
+        this.table.addSortingChangedHandler(this);
 
         this.table.addEntitiesPathwaySelectedHandler(this);
         this.table.addInteractorsPathwaySelectedHandler(this);
@@ -218,5 +213,10 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
     @Override
     public void onPathwayFoundInteractorsSelected(InteractorsPathwaySelectedEvent event) {
         fireEvent(event);
+    }
+
+    @Override
+    public void onSortingChanged(SortingChangedEvent event) {
+        //TODO: handle sorting
     }
 }

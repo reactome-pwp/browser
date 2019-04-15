@@ -50,7 +50,7 @@ public class CustomHeader extends Header<String> {
 
     @Override
     public String getValue() {
-        return "";
+        return group + " " + name;
     }
 
     @Override
@@ -60,6 +60,6 @@ public class CustomHeader extends Header<String> {
         SafeStyles safeStyles = SafeStylesUtils.forTextAlign(this.textAlign);
         SafeHtml rendered = templates.cell(safeStyles, this.title, group, name);
         sb.append(rendered);
-        super.render(context, sb);
+//        super.render(context, sb);
     }
 }

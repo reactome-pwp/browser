@@ -160,7 +160,7 @@ public class AnalysisStatus {
     }
 
     public ResultFilter getResultFilter() {
-        return new ResultFilter(resource, pValue, includeDisease, min, max, speciesList);
+        return new ResultFilter(resource == null ? "TOTAL" : resource, pValue, includeDisease, min, max, speciesList);
     }
 
     public void setResultFilter(ResultFilter filter){

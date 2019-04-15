@@ -4,6 +4,8 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider.SortingType.NAME;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -16,6 +18,7 @@ public class PathwayNameColumn extends AbstractColumn<String> {
         setDataStoreName(COLUMN_NAME_TITLE);
         setWidth(400);
         setHorizontalAlignment(ALIGN_LEFT);
+        setSortingBy(NAME);
     }
 
     @Override

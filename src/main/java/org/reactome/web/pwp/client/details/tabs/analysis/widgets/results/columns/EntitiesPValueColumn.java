@@ -4,6 +4,8 @@ import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.i18n.client.NumberFormat;
 import org.reactome.web.analysis.client.model.PathwaySummary;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.providers.AnalysisAsyncDataProvider.SortingType.ENTITIES_PVALUE;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -13,6 +15,7 @@ public class EntitiesPValueColumn extends AbstractColumn<Number> {
 
     public EntitiesPValueColumn() {
         super(new NumberCell(NumberFormat.getFormat("#.##E0")), "Entities", "pValue", explanation);
+        setSortingBy(ENTITIES_PVALUE);
     }
 
     @Override
