@@ -143,6 +143,28 @@
         <url-pattern>/figures/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Reactome FoamTree (ONLY USED IN DEV MODE) -->
+    <servlet>
+        <servlet-name>FoamTreeProxy</servlet-name>
+        <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>dev.reactome.org</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>80</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/reacfoam</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FoamTreeProxy</servlet-name>
+        <url-pattern>/reacfoam/*</url-pattern>
+    </servlet-mapping>
+
     <!-- chEBI PROXY Configuration -->
     <servlet>
         <servlet-name>ChEBIProxy</servlet-name>
