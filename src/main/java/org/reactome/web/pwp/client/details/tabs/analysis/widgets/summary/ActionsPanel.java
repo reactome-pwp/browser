@@ -42,8 +42,8 @@ public class ActionsPanel extends FlowPanel implements ClickHandler {
         setStyleName(resources.css().actionsPanel());
 
         add(filterBtn = new IconButton(resources.filterIcon(), resources.css().warningBtn(), "Filter your results", this));
-        add(helpBtn = new IconButton(resources.helpIcon(), resources.css().warningBtn(), "Get help with the analysis", this));
-        add(clusterBtn = new IconButton(resources.clusterIcon(), resources.css().warningBtn(), "Cluster your results", this));
+//        add(helpBtn = new IconButton(resources.helpIcon(), resources.css().warningBtn(), "Get help with the analysis", this));
+//        add(clusterBtn = new IconButton(resources.clusterIcon(), resources.css().warningBtn(), "Cluster your results", this));
 
         // Get tha analysis warnings
         warningsList = analysisResult.getWarnings();
