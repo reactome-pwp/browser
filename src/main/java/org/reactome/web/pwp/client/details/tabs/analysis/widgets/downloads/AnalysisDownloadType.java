@@ -10,11 +10,11 @@ import com.google.gwt.resources.client.TextResource;
  */
 public enum AnalysisDownloadType {
 
-    RESULTS_CSV    (Resources.INSTANCE.resultsCSVIcon(),    Resources.INSTANCE.resultsCSVInfo(),    "Pathway analysis results", "/AnalysisService/download/###TOKEN###/pathways/###RESOURCE###/result.csv"),
-    RESULTS_JSON   (Resources.INSTANCE.resultsJSONIcon(),   Resources.INSTANCE.resultsJSONInfo(),   "Complete analysis results",    "/AnalysisService/download/###TOKEN###/result.json"),
-    MAPPINGS       (Resources.INSTANCE.mappingsIcon(),      Resources.INSTANCE.mappingsInfo(),      "Identifier mappings",      "/AnalysisService/download/###TOKEN###/entities/found/###RESOURCE###/mapping.csv"),
-    PDF_REPORT     (Resources.INSTANCE.pdfReportIcon(),     Resources.INSTANCE.pdfReportInfo(),     "Analysis report",          "/AnalysisService/report/###TOKEN###/###SPECIES###/report.pdf?resource=###RESOURCE###&diagramProfile=###D_PROFILE###&analysisProfile=###A_PROFILE###&fireworksProfile=###F_PROFILE###"),
-    NOT_FOUND      (Resources.INSTANCE.notFoundIcon(),      Resources.INSTANCE.notFoundInfo(),      "Not found identifiers",    "/AnalysisService/download/###TOKEN###/entities/notfound/not_found.csv");
+    RESULTS_CSV    (Resources.INSTANCE.resultsCSVIcon(),    Resources.INSTANCE.resultsCSVInfo(),    "Pathway analysis results",     "/AnalysisService/download/###TOKEN###/pathways/###RESOURCE###/result.csv"),
+    RESULTS_JSON   (Resources.INSTANCE.resultsJSONIcon(),   Resources.INSTANCE.resultsJSONInfo(),   "Complete analysis results",    "/AnalysisService/download/###TOKEN###/result.json.gz"),
+    MAPPINGS       (Resources.INSTANCE.mappingsIcon(),      Resources.INSTANCE.mappingsInfo(),      "Identifier mappings",          "/AnalysisService/download/###TOKEN###/entities/found/###RESOURCE###/mapping.csv"),
+    PDF_REPORT     (Resources.INSTANCE.pdfReportIcon(),     Resources.INSTANCE.pdfReportInfo(),     "Analysis report",              "/AnalysisService/report/###TOKEN###/###SPECIES###/report.pdf?resource=###RESOURCE###&diagramProfile=###D_PROFILE###&analysisProfile=###A_PROFILE###&fireworksProfile=###F_PROFILE###"),
+    NOT_FOUND      (Resources.INSTANCE.notFoundIcon(),      Resources.INSTANCE.notFoundInfo(),      "Not found identifiers",        "/AnalysisService/download/###TOKEN###/entities/notfound/not_found.csv");
 
 
     private transient ImageResource icon;
