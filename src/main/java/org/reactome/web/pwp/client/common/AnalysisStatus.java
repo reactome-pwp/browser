@@ -35,6 +35,7 @@ public class AnalysisStatus {
     public AnalysisStatus(String token) {
         this();
         setToken(token);
+        setResource("TOTAL");
     }
 
     public AnalysisStatus(String token, String resource) {
