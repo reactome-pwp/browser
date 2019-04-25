@@ -1,6 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.structures;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.tabs.DetailsTabTitle;
@@ -172,5 +175,38 @@ public class StructuresTabDisplay extends ResizeComposite implements StructuresT
             counter = loadedStructures + "/" + proteinAccessions;
         }
         this.title.setCounter(counter);
+    }
+
+    public static final Resources RESOURCES;
+    static {
+        RESOURCES = GWT.create(Resources.class);
+        RESOURCES.css().ensureInjected();
+    }
+
+    /**
+     * A ClientBundle of resources used by this module.
+     */
+    public interface Resources extends ClientBundle {
+        /**
+         * The styles used in this widget.
+         */
+        @ClientBundle.Source(ResourceCSS.CSS)
+        ResourceCSS css();
+
+    }
+
+    /**
+     * Styles used by this module.
+     */
+    @CssResource.ImportedWithPrefix("pwp-StructuresTabDisplay")
+    public interface ResourceCSS extends CssResource {
+        /**
+         * The path to the default CSS styles used by this resource.
+         */
+        String CSS = "org/reactome/web/pwp/client/details/tabs/structures/StructuresTabDisplay.css";
+
+        String message();
+
+
     }
 }

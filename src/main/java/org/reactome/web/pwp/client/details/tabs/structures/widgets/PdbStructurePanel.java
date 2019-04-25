@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.structures.widgets;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import org.reactome.web.pwp.client.details.tabs.structures.StructuresTabDisplay;
 import org.reactome.web.pwp.client.details.tabs.structures.events.StructureLoadedEvent;
 import org.reactome.web.pwp.client.details.tabs.structures.handlers.StructureLoadedHandler;
 import org.reactome.web.pwp.model.client.classes.ReferenceSequence;
@@ -46,6 +47,8 @@ public class PdbStructurePanel extends StructuresPanel<ReferenceSequence> implem
 
     public void setEmpty() {
         this.container.clear();
-        this.container.add(new HTMLPanel("Object does not contains proteins to show structures"));
+        HTMLPanel panel = new HTMLPanel("Object does not contain associated proteins structures");
+        panel.setStyleName(StructuresTabDisplay.RESOURCES.css().message());
+        this.container.add(panel);
     }
 }

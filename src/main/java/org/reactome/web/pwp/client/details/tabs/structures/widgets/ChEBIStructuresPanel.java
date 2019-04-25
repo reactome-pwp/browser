@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.structures.widgets;
 
 import com.google.gwt.user.client.ui.HTMLPanel;
+import org.reactome.web.pwp.client.details.tabs.structures.StructuresTabDisplay;
 import org.reactome.web.pwp.client.details.tabs.structures.events.StructureLoadedEvent;
 import org.reactome.web.pwp.model.client.classes.ReferenceMolecule;
 import org.reactome.web.pwp.model.client.classes.SimpleEntity;
@@ -47,7 +48,9 @@ public class ChEBIStructuresPanel extends StructuresPanel<SimpleEntity> implemen
     @Override
     public void setEmpty() {
         this.container.clear();
-        this.container.add(new HTMLPanel("This entity does not contain chEBI structures to be shown"));
+        HTMLPanel panel = new HTMLPanel("This entity does not contain associated chEBI structures");
+        panel.setStyleName(StructuresTabDisplay.RESOURCES.css().message());
+        this.container.add(panel);
     }
 
     @Override
