@@ -24,6 +24,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handler
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
+ * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AnalysisResultPanel extends DockLayoutPanel implements SelectionChangeEvent.Handler, RowHoverEvent.Handler, MouseOutHandler,
         AnalysisAsyncDataProvider.PageLoadedHandler, AnalysisHandler.Page, EntitiesPathwaySelectedHandler, InteractorsPathwaySelectedHandler, SortingChangedHandler {
@@ -118,7 +119,7 @@ public class AnalysisResultPanel extends DockLayoutPanel implements SelectionCha
 
     public void showResult(final AnalysisResult analysisResult, final Filter filter) {
 //        ColumnSortEvent.ListHandler<PathwaySummary> sortHandler = new ColumnSortEvent.ListHandler<PathwaySummary>(analysisResult.getPathways());
-        this.table = new AnalysisResultTable(analysisResult.getExpression().getColumnNames(), analysisResult.getSummary().getInteractors());
+        this.table = new AnalysisResultTable(analysisResult.getSummary().getType(), analysisResult.getExpression().getColumnNames(), analysisResult.getSummary().getInteractors());
         this.table.addSelectionChangeHandler(this);
         this.table.addRowHoverHandler(this);
         this.table.addMouseOutHandler(this);

@@ -35,7 +35,7 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
 
     private SingleSelectionModel<PathwaySummary> selectionModel;
 
-    public AnalysisResultTable(List<String> expColumnNames, boolean interactors) {
+    public AnalysisResultTable(String analysisType, List<String> expColumnNames, boolean interactors) {
         super(PAGE_SIZE, CUSTOM_TABLE_RESOURCES, new ProvidesKey<PathwaySummary>() {
             @Override
             public Object getKey(PathwaySummary item) {
@@ -92,7 +92,11 @@ public class AnalysisResultTable extends DataGrid<PathwaySummary> {
 
         int i = 0;
         for (String columnName : expColumnNames) {
-            columns.add(new ExpressionColumn(i++, columnName));
+            columns.add(
+                    !analysisType.equalsIgnoreCase("GSA_REGULATION") ?
+                            new ExpressionColumn(i++, columnName):
+                            new RegulationSignColumn(i++, columnName)
+            );
         }
 
         columns.add(new SpeciesColumn());
