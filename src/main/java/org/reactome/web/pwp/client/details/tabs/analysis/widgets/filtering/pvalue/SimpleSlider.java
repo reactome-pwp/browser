@@ -21,6 +21,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.ThumbStatus;
 
 
+
 /**
  * A simple slider tool allowing the user to
  * select a value between a min and a max.
@@ -33,7 +34,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.size.
  */
 public class SimpleSlider extends Composite implements HasHandlers,
         MouseMoveHandler, MouseDownHandler, MouseOutHandler, MouseUpHandler {
-    private static NumberFormat formatter = NumberFormat.getFormat("#.00");
+    private static NumberFormat formatter = NumberFormat.getFormat("#.000");
     private Point base;
 
     private Canvas canvas;
@@ -49,9 +50,20 @@ public class SimpleSlider extends Composite implements HasHandlers,
     private Axis axis;
     private Thumb thumb;
 
+    public enum Type {
+        LINEAR,
+        EXPONENTIAL
+    }
+    private Type type;
+
     public SimpleSlider(int width, int height, double min, double max, double value) {
+        this(width, height, min, max, value, Type.LINEAR);
+    }
+
+    public SimpleSlider(int width, int height, double min, double max, double value, Type type) {
         this.width = width;
         this.height = height;
+        this.type = type;
         base = new Point(30, height - 20);
 
         if (min >= max) throw new RuntimeException("Min value in SimpleSlider has to be always lower than max.");
@@ -168,12 +180,13 @@ public class SimpleSlider extends Composite implements HasHandlers,
     }
 
     private double translateValueToPointOnAxis(double value) {
-        double p = ((width - 2 * base.x()) * (value - min) / (double)(max - min));
-        return Math.round(p);
+        value = type == Type.LINEAR ? value : Math.sqrt(value);
+        return (width - 2 * base.x()) * (value - min) / (double)(max - min);
     }
 
     private double translatePointOnAxisToValue(double point) {
-        return ((max - min) * point / (double)(width - 2 * base.x())) + min;
+        double v = ((max - min) * point / (double)(width - 2 * base.x())) + min;
+        return type == Type.LINEAR ? v : v * v;
     }
 
     private void draw(){

@@ -10,13 +10,15 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handl
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.handlers.RangeValueChangedHandler;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.pvalue.SimpleSlider;
 
+import static org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.pvalue.SimpleSlider.Type.EXPONENTIAL;
+
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class PValueFiltering extends FlowPanel implements FilteringWidget,
         RangeValueChangedHandler, RangePinMovedHandler {
-    private static NumberFormat pValueFormatter = NumberFormat.getFormat("0.00");
+    private static NumberFormat pValueFormatter = NumberFormat.getFormat("0.000");
 
     private Handler handler;
     private FilteringPanel.Resources style;
@@ -50,7 +52,7 @@ public class PValueFiltering extends FlowPanel implements FilteringWidget,
 
         populatePValue();
 
-        pValueSlider = new SimpleSlider(280, 27, 0, 1, pValue);
+        pValueSlider = new SimpleSlider(280, 27, 0, 1, pValue, EXPONENTIAL);
         pValueSlider.addRangeValueChangedHandler(this);
         pValueSlider.addRangePinMovedHandler(this);
         add(pValueSlider);
