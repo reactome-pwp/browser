@@ -237,6 +237,7 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.analysisResultPanel.showResult(analysisResult, filter);
             this.summaryPanel.setResource(filter.getResource());
             this.filteringPanel.setFilter(filter);
+            this.entitiesEntitiesFoundPanel.setResource(filter.getResource());
             this.downloadPanel.showDownloadOptions(analysisResult, filter.getResource());
         }
     }
