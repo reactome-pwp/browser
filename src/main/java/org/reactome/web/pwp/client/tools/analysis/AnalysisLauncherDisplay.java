@@ -17,6 +17,8 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
+import org.reactome.web.pwp.client.tools.analysis.gsa.GSAWizard;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.Method;
 import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
 import org.reactome.web.pwp.client.tools.analysis.tissues.TissueDistribution;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
@@ -40,9 +42,11 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     private SpeciesComparison speciesComparison;
     private TissueDistribution tissueDistribution;
+    private GSAWizard gwsWizard;
 
     private List<Button> btns = new LinkedList<>();
     private Button analysisBtn;
+    private Button gsaBtn;
     private Button speciesBtn;
     private Button experimentsBtn;
 
@@ -74,6 +78,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         buttonsPanel.setStyleName(RESOURCES.getCSS().buttonsPanel());
         buttonsPanel.addStyleName(RESOURCES.getCSS().unselectable());
         buttonsPanel.add(this.analysisBtn = getButton("Analyse your data", RESOURCES.analysisTabIcon()));
+        buttonsPanel.add(this.gsaBtn = getButton("Put a name here", RESOURCES.analysisTabIcon()));
         buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
         buttonsPanel.add(this.experimentsBtn = getButton("Tissue Distribution", RESOURCES.tissuesTabIcon()));
         buttonsPanel.add(getVersionInfo());
@@ -83,6 +88,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.container.setStyleName(RESOURCES.getCSS().container());
 
         this.container.add(new AnalysisWizard(this));
+        this.container.add(gwsWizard = new GSAWizard(this));
         this.container.add(speciesComparison = new SpeciesComparison(this));
         this.container.add(tissueDistribution = new TissueDistribution(this));
 
@@ -119,10 +125,12 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         btn.addStyleName(RESOURCES.getCSS().buttonSelected());
         if (btn.equals(this.analysisBtn)){
             this.container.showWidget(0);
-        } else if(btn.equals(this.speciesBtn)){
+        } else if(btn.equals(this.gsaBtn)){
             this.container.showWidget(1);
-        } else if(btn.equals(this.experimentsBtn)) {
+        } else if(btn.equals(this.speciesBtn)){
             this.container.showWidget(2);
+        } else if(btn.equals(this.experimentsBtn)) {
+            this.container.showWidget(3);
         }
     }
 
@@ -154,6 +162,11 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     @Override
     public void setExperimentSummaries(List<ExperimentSummary> summaries) {
         tissueDistribution.setExperimentSummaries(summaries);
+    }
+
+    @Override
+    public void setAvailableGSAMethods(List<Method> methods) {
+        gwsWizard.setAvailableMethods(methods);
     }
 
     @Override

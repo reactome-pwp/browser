@@ -317,4 +317,31 @@
         <servlet-name>Templates</servlet-name>
         <url-pattern>/templates/*</url-pattern>
     </servlet-mapping>
+
+    <!-- Reactome GSA Service Configuration (ONLY USED IN DEV MODE) -->
+    <servlet>
+        <servlet-name>GSAService</servlet-name>
+        <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>193.62.55.4</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>80</param-value>
+        </init-param>
+        <!-- ONLY when connecting to localhost -->
+        <init-param>
+            <param-name>proxyProtocol</param-name>
+            <param-value>http</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GSAService</servlet-name>
+        <url-pattern>/gsa/*</url-pattern>
+    </servlet-mapping>
 </web-app>

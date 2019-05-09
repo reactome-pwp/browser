@@ -8,6 +8,11 @@ import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClientHandler;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.GSAError;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.Method;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.ExperimentSummariesClient;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentError;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
@@ -34,6 +39,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     private org.reactome.web.analysis.client.model.DBInfo analysisInfo;
 
     private boolean summariesRetrieved;
+    private boolean methodsRetrieved;
 
     public AnalysisLauncherPresenter(EventBus eventBus, AnalysisLauncher.Display display) {
         super(eventBus);
@@ -67,6 +73,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
         if (tool.equals(PathwayPortalTool.ANALYSIS)) {
             if (!summariesRetrieved)        retrieveExperimentSummaries();
             if (analysisInfo == null)       retrieveAnalysisInfo();
+            if (!methodsRetrieved)          retrieveAvailableGSAMethods();
             display.show();
             display.center();
         } else {
@@ -112,6 +119,28 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             @Override
             public void onSummariesException(String msg) {
                 display.setExperimentSummaries(new LinkedList<>());
+            }
+        });
+    }
+
+    private void retrieveAvailableGSAMethods() {
+        GSAClient.getMethods(new GSAClientHandler.GSAMethodsHandler() {
+            @Override
+            public void onMethodsSuccess(List<Method> methods) {
+                display.setAvailableGSAMethods(methods);
+                methodsRetrieved = true;
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                Console.error("Error: " + error.getTitle() + " " + error.getDetail());
+                display.setAvailableGSAMethods(new LinkedList<>());
+            }
+
+            @Override
+            public void onException(String msg) {
+                Console.info("Exception: " + msg);
+                display.setAvailableGSAMethods(new LinkedList<>());
             }
         });
     }
