@@ -2,7 +2,8 @@ package org.reactome.web.pwp.client.tools.analysis;
 
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.Method;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
 import org.reactome.web.pwp.model.client.classes.Species;
 
@@ -32,6 +33,7 @@ public interface AnalysisLauncher {
         void setSpeciesList(List<Species> speciesList);
         void setExperimentSummaries(List<ExperimentSummary> summaries);
         void setAvailableGSAMethods(List<Method> methods);
+        void setAvailableGSADatasetTypes(List<DatasetType> datasetTypes);
         void setVersionInfo(String version);
         void setStatus(Status status);
     }

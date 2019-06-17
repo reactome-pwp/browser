@@ -11,8 +11,9 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClientHandler;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.GSAError;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.Method;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.GSAError;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.ExperimentSummariesClient;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentError;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
@@ -40,6 +41,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
 
     private boolean summariesRetrieved;
     private boolean methodsRetrieved;
+    private boolean typesRetrieved;
 
     public AnalysisLauncherPresenter(EventBus eventBus, AnalysisLauncher.Display display) {
         super(eventBus);
@@ -74,6 +76,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             if (!summariesRetrieved)        retrieveExperimentSummaries();
             if (analysisInfo == null)       retrieveAnalysisInfo();
             if (!methodsRetrieved)          retrieveAvailableGSAMethods();
+            if (!typesRetrieved)            retrieveAvailableGSADatasetTypes();
             display.show();
             display.center();
         } else {
@@ -141,6 +144,28 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             public void onException(String msg) {
                 Console.info("Exception: " + msg);
                 display.setAvailableGSAMethods(new LinkedList<>());
+            }
+        });
+    }
+
+    private void retrieveAvailableGSADatasetTypes() {
+        GSAClient.getDatasetTypes(new GSAClientHandler.GSADatasetTypesHandler() {
+            @Override
+            public void onTypesSuccess(List<DatasetType> types) {
+                display.setAvailableGSADatasetTypes(types);
+                typesRetrieved = true;
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                Console.error("Error: " + error.getTitle() + " " + error.getDetail());
+                display.setAvailableGSADatasetTypes(new LinkedList<>());
+            }
+
+            @Override
+            public void onException(String msg) {
+                Console.info("Exception: " + msg);
+                display.setAvailableGSADatasetTypes(new LinkedList<>());
             }
         });
     }

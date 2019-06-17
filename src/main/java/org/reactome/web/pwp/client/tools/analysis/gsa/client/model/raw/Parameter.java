@@ -1,4 +1,4 @@
-package org.reactome.web.pwp.client.tools.analysis.gsa.client.model;
+package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw;
 
 import com.google.web.bindery.autobean.shared.AutoBean;
 
@@ -17,6 +17,8 @@ public interface Parameter {
 
     @AutoBean.PropertyName("display_name")
     String getDisplayName();
+
+    String getScope();
 
     String getType();
 

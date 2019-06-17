@@ -18,7 +18,8 @@ import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.GSAWizard;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.Method;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
 import org.reactome.web.pwp.client.tools.analysis.tissues.TissueDistribution;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
@@ -78,7 +79,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         buttonsPanel.setStyleName(RESOURCES.getCSS().buttonsPanel());
         buttonsPanel.addStyleName(RESOURCES.getCSS().unselectable());
         buttonsPanel.add(this.analysisBtn = getButton("Analyse your data", RESOURCES.analysisTabIcon()));
-        buttonsPanel.add(this.gsaBtn = getButton("Put a name here", RESOURCES.analysisTabIcon()));
+        buttonsPanel.add(this.gsaBtn = getButton("Gene Set Analysis", RESOURCES.gsaTabIcon()));
         buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
         buttonsPanel.add(this.experimentsBtn = getButton("Tissue Distribution", RESOURCES.tissuesTabIcon()));
         buttonsPanel.add(getVersionInfo());
@@ -167,6 +168,11 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     @Override
     public void setAvailableGSAMethods(List<Method> methods) {
         gwsWizard.setAvailableMethods(methods);
+    }
+
+    @Override
+    public void setAvailableGSADatasetTypes(List<DatasetType> datasetTypes) {
+        gwsWizard.setAvailableDatasetTypes(datasetTypes);
     }
 
     @Override
@@ -278,6 +284,9 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
         @Source("images/tissuesTabIcon.png")
         ImageResource tissuesTabIcon();
+
+        @Source("images/gsaTabIcon.png")
+        ImageResource gsaTabIcon();
 
     }
 

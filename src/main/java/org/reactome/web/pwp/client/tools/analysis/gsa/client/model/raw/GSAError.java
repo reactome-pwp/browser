@@ -1,4 +1,4 @@
-package org.reactome.web.pwp.client.tools.analysis.gsa.client.model;
+package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw;
 
 
 /**
@@ -21,5 +21,7 @@ public interface GSAError {
      */
     String getDetail();
 
+
+    String getType();
 
 }

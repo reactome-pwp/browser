@@ -1,4 +1,4 @@
-package org.reactome.web.pwp.client.tools.analysis.gsa.client.model;
+package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw;
 
 import java.util.List;
 

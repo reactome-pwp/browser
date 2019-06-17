@@ -1,0 +1,56 @@
+.main {
+    background: #908aca;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 2px;
+    margin-top: 2px;
+    cursor: default;
+
+    font-family: system-ui, Arial, sans-serif !important;
+}
+
+.main select {
+    margin-right: 10px;
+    color: #0e7cb3;
+    font-weight: bold;
+    font-size: medium;
+    text-align: right;
+    max-width: 140px;
+
+    font-family: system-ui, Arial, sans-serif !important;
+    -webkit-appearance: menulist-button;
+}
+
+.main input {
+    margin-right: 10px;
+    color: #0e7cb3;
+    font-weight: bold;
+    font-size: medium;
+    text-align: right;
+    max-width: 140px;
+
+    font-family: system-ui, Arial, sans-serif !important;
+}
+
+.leftGroup {
+    display: inline-flex;
+    align-items: stretch;
+}
+
+.title {
+    color: #0e7cb3;
+    font-size: medium;
+    font-weight: bolder;
+    margin-left: 6px;
+}
+
+.description {
+    height: 20px;
+    width: auto;
+    cursor: help;
+    margin-left: 5px;
+}
+
+
+

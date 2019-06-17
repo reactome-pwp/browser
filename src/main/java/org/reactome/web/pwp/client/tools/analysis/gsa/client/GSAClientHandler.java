@@ -1,8 +1,8 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client;
 
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.DatasetType;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.GSAError;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.Method;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.GSAError;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 
 import java.util.List;
 
@@ -20,9 +20,5 @@ public interface GSAClientHandler {
 
     interface GSADatasetTypesHandler extends GSAClientHandler {
         void onTypesSuccess(List<DatasetType> types);
-    }
-
-    interface GSAUploadHandler extends GSAClientHandler {
-        void onUploadSuccess();
     }
 }

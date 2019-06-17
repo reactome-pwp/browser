@@ -1,10 +1,9 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client;
 
 import com.google.gwt.http.client.*;
-import com.google.gwt.user.client.ui.FormPanel;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.*;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAException;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAFactory;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.*;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ public class GSAClient {
 
     private static final String URL_METHODS = "/gsa/0.1/methods";
     private static final String URL_TYPES = "/gsa/0.1/types";
-    private static final String URL_UPLOAD_FILE = "/gsa/upload";
 
     public static Request getMethods(final GSAClientHandler.GSAMethodsHandler handler) {
         Request request = null;
@@ -102,25 +100,6 @@ public class GSAClient {
             handler.onException(ex.getMessage());
         }
         return rtn;
-    }
-
-    public static void uploadFile(FormPanel form) {
-        form.setMethod(FormPanel.METHOD_POST);
-        form.setEncoding(FormPanel.ENCODING_MULTIPART);
-        form.setAction(URL_UPLOAD_FILE);
-        form.addSubmitHandler(new FormPanel.SubmitHandler() {
-            @Override
-            public void onSubmit(FormPanel.SubmitEvent event) {
-
-            }
-        });
-        form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-            @Override
-            public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-
-            }
-        });
-        form.submit();
     }
 
 }
