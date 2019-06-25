@@ -165,3 +165,8 @@
     max-width: 350px;
     border-radius: 5px;
 }
+
+.annotationsPlaceholder {
+    background: #2b5e6d;
+    height: 250px;
+}

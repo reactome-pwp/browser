@@ -77,5 +77,7 @@ public class GSAStyleFactory {
 
         String nameTextBox();
 
+        String annotationsPlaceholder();
+
     }
 }

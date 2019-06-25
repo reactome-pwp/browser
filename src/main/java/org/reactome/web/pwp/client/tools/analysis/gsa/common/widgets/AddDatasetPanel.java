@@ -182,7 +182,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
         itemsPanel.clear();
 
         for (DatasetType type : datasetTypes) {
-            Label name = new Label(type.getId());
+            Label name = new Label(type.getName());
             name.setStyleName(RESOURCES.getCSS().typeName());
 
             HTMLPanel description = new HTMLPanel(type.getDescription());

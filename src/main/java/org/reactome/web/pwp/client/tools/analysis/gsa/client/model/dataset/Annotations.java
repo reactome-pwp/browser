@@ -18,5 +18,19 @@ public class Annotations {
         }
     }
 
+    public boolean isAnnotationNameValid(String name) {
+        return !annotationPropertyMap.containsKey(name);
+    }
+
+    public void createAnnotationProperty(String name) {
+        if (!isAnnotationNameValid(name)) return;
+
+        AnnotationProperty annotationProperty = new AnnotationProperty(name, index.size());
+        annotationPropertyMap.put(name, annotationProperty);
+    }
+
+    public void deleteAnnotationProperty(String name) {
+        annotationPropertyMap.remove(name);
+    }
 
 }

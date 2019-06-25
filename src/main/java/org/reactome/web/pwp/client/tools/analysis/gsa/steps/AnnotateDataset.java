@@ -6,6 +6,7 @@ import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardEventBus;
+import org.reactome.web.pwp.client.tools.analysis.gsa.common.widgets.AnnotationsPanel;
 import org.reactome.web.pwp.client.tools.analysis.gsa.events.StepSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.gsa.handlers.StepSelectedHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.style.GSAStyleFactory;
@@ -18,6 +19,8 @@ public class AnnotateDataset extends AbstractGSAStep implements StepSelectedHand
     private IconButton nextBtn;
     private IconButton previousBtn;
     private TextBox nameTB;
+    private SimplePanel annotationsPlaceholder;
+    private AnnotationsPanel annotationsPanel;
 
     private GSADataset dataset;
 
@@ -53,7 +56,9 @@ public class AnnotateDataset extends AbstractGSAStep implements StepSelectedHand
         nameTB.setStyleName(GSAStyleFactory.getStyle().nameTextBox());
         container.add(nameTB);
 
-
+        annotationsPlaceholder = new SimplePanel();
+        annotationsPlaceholder.setStyleName(GSAStyleFactory.getStyle().annotationsPlaceholder());
+        container.add(annotationsPlaceholder);
 
         addNavigationButtons();
 
@@ -90,6 +95,9 @@ public class AnnotateDataset extends AbstractGSAStep implements StepSelectedHand
     private void update() {
         dataset = wizardContext.getDatasetToAnnotate();
         Console.info("Updating for ...." + dataset);
+        annotationsPanel = new AnnotationsPanel(dataset);
+        annotationsPlaceholder.clear();
+        annotationsPlaceholder.add(annotationsPanel);
     }
 
 }

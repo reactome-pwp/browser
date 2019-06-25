@@ -3,15 +3,77 @@ package org.reactome.web.pwp.client.tools.analysis.gsa.common.widgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
+import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AnnotationsPanel extends FlowPanel {
+    private GSADataset dataset;
+
+    private FlowPanel samplesPanel;
+    private FlowPanel propertiesPanel;
+    private Button addBtn;
+
+    public AnnotationsPanel(GSADataset dataset) {
+        this.dataset = dataset;
+        init();
+    }
 
 
-    public AnnotationsPanel() {
+    private void init() {
+        setStyleName(RESOURCES.getCSS().main());
+
+        addBtn = new IconButton(RESOURCES.addIcon(), RESOURCES.getCSS().parametersBtn(), "Add new annotation property", event -> {
+            propertiesPanel.add(createNewPropertyAnnotation());
+        });
+
+        add(samplesPanel = getSamplesPanel());
+        add(propertiesPanel = getPropertiesPanel());
+        add(addBtn);
+
+    }
+
+    private FlowPanel getSamplesPanel() {
+        FlowPanel rtn = new FlowPanel();
+        rtn.setStyleName(RESOURCES.getCSS().samplesPanel());
+
+        for (String sample : dataset.getSampleNames()) {
+            Label sampleLB = new Label(sample + " " + sample + " " + sample);
+            sampleLB.setStyleName(RESOURCES.getCSS().sampleItem());
+            rtn.add(sampleLB);
+        }
+
+        return rtn;
+    }
+
+    private FlowPanel getPropertiesPanel() {
+        FlowPanel rtn = new FlowPanel();
+        rtn.setStyleName(RESOURCES.getCSS().propertiesPanel());
+
+        return rtn;
+    }
+
+    private FlowPanel createNewPropertyAnnotation() {
+        FlowPanel rtn = new FlowPanel();
+        rtn.setStyleName(RESOURCES.getCSS().propertiesGroup());
+
+        Label title = new Label("title");
+        title.setStyleName(RESOURCES.getCSS().propertiesItem());
+        rtn.add(title);
+
+        for (String sample : dataset.getSampleNames()) {
+            Label sampleLB = new Label("Blank");
+            sampleLB.setStyleName(RESOURCES.getCSS().propertiesItem());
+            rtn.add(sampleLB);
+        }
+
+        return rtn;
     }
 
     public static Resources RESOURCES;
@@ -24,14 +86,9 @@ public class AnnotationsPanel extends FlowPanel {
         @Source(ResourceCSS.CSS)
         ResourceCSS getCSS();
 
-//        @Source("../../images/unchecked.png")
-//        ImageResource uncheckedIcon();
-//
-//        @Source("../../images/checked.png")
-//        ImageResource checkedIcon();
-//
-//        @Source("../../images/parameters.png")
-//        ImageResource parametersIcon();
+        @Source("../../images/addNewItem.png")
+        ImageResource addIcon();
+
     }
 
     @CssResource.ImportedWithPrefix("pwp-AnnotationsPanel")
@@ -40,6 +97,22 @@ public class AnnotationsPanel extends FlowPanel {
         String CSS = "org/reactome/web/pwp/client/tools/analysis/gsa/common/widgets/AnnotationsPanel.css";
 
         String main();
+
+        String samplesPanel();
+
+        String sampleItem();
+
+        String propertiesPanel();
+
+        String propertiesGroup();
+
+        String propertiesItem();
+
+        String parametersBtn();
+
+        String unselectable();
+
+        String undraggable();
 
     }
 }

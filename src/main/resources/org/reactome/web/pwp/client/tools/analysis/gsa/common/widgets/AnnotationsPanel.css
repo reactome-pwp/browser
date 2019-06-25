@@ -1,0 +1,133 @@
+.main {
+    background: #326599;
+    display: flex;
+    align-items: stretch;
+    justify-items: flex-start;
+    height: 240px;
+    margin: 5px;
+
+    font-family: system-ui, Arial, sans-serif !important;
+    font-size: medium;
+    font-weight: normal;
+
+}
+
+.samplesPanel {
+    background: darkorange;
+    margin-right: 5px;
+    min-width: 10%;
+    max-width: 200px;
+    /*flex-grow: 1;*/
+}
+
+.sampleItem {
+    background: gray;
+    border-radius: 5px;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 0 1px 0;
+    padding: 2px 0 3px 0;
+    overflow: auto;
+
+    outline: none;
+}
+
+.sampleItem:first-child {
+    margin-top: 41px;
+}
+
+.propertiesPanel {
+    background: darkseagreen;
+    margin-right: 5px;
+    display: flex;
+
+    overflow: auto;
+}
+
+.propertiesGroup {
+    background: rebeccapurple;
+    outline: none;
+    margin-right: 3px;
+    max-width: 100px;
+
+    align-self: flex-start;
+}
+
+.propertiesGroup:hover {
+    background: firebrick;
+}
+
+
+.propertiesItem {
+    background: cornflowerblue;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 0 1px 0;
+    padding: 2px 0 3px 0;
+    overflow: auto;
+
+    outline: none;
+}
+
+.parametersBtn {
+    align-self: center;
+    background-color: #0e7cb3;
+    border: none;
+    outline: none;
+    border-radius: 19px;
+    color: white;
+    padding: 0;
+    border: 0;
+    margin: 5px;
+}
+
+.parametersBtn>div {
+    margin: 0;
+    position: relative;
+}
+
+.parametersBtn span {
+    display: none;
+}
+
+.parametersBtn img {
+    display: block;
+    height: 32px;
+    width: auto;
+    margin: 3px;
+    padding: 0;
+    border: 0;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.parametersBtn:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
+}
+
+.parametersBtn:active:hover {
+    background-color: #035d9c;
+    cursor: pointer !important;
+}
+
+.parametersBtn:disabled, .parametersBtn:disabled:hover, .parametersBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
+}
+
+
+.unselectable {
+    -webkit-touch-callout: none; /* Prevents selection */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.undraggable {
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+

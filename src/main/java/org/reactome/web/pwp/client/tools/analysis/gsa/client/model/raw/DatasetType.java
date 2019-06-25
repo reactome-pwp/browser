@@ -8,4 +8,6 @@ public interface DatasetType {
     String getDescription();
 
     String getId();
+
+    String getName();
 }
