@@ -4,7 +4,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 
@@ -64,8 +68,10 @@ public class AnnotationsPanel extends FlowPanel {
         FlowPanel header = new FlowPanel();
         header.setStyleName(RESOURCES.getCSS().propertiesItem());
         header.addStyleName(RESOURCES.getCSS().propertiesItemTitle());
-        TextBox title = new TextBox();
+        ExtendedTextBox title = new ExtendedTextBox();
         title.setText("Annotation");
+        title.addValueChangeHandler(event -> Console.info(" >>> >>> " + event.getValue()));
+        title.addKeyUpHandler(event -> Console.info(" >>> >>> " + title.getText()));
         header.add(title);
         header.add(new Image(RESOURCES.addIcon()));
         rtn.add(header);
