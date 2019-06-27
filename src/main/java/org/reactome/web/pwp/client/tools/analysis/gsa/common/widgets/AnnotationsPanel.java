@@ -4,9 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 
@@ -63,9 +61,14 @@ public class AnnotationsPanel extends FlowPanel {
         FlowPanel rtn = new FlowPanel();
         rtn.setStyleName(RESOURCES.getCSS().propertiesGroup());
 
-        Label title = new Label("title");
-        title.setStyleName(RESOURCES.getCSS().propertiesItem());
-        rtn.add(title);
+        FlowPanel header = new FlowPanel();
+        header.setStyleName(RESOURCES.getCSS().propertiesItem());
+        header.addStyleName(RESOURCES.getCSS().propertiesItemTitle());
+        TextBox title = new TextBox();
+        title.setText("Annotation");
+        header.add(title);
+        header.add(new Image(RESOURCES.addIcon()));
+        rtn.add(header);
 
         for (String sample : dataset.getSampleNames()) {
             Label sampleLB = new Label("Blank");
@@ -107,6 +110,8 @@ public class AnnotationsPanel extends FlowPanel {
         String propertiesGroup();
 
         String propertiesItem();
+
+        String propertiesItemTitle();
 
         String parametersBtn();
 
