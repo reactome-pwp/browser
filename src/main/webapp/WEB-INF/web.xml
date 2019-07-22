@@ -324,7 +324,7 @@
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
-            <param-value>193.62.55.4</param-value>
+            <param-value>gsa.reactome.org</param-value>
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
