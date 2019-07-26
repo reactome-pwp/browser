@@ -1,8 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client;
 
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.GSAError;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.*;
 
 import java.util.List;
 
@@ -20,5 +18,17 @@ public interface GSAClientHandler {
 
     interface GSADatasetTypesHandler extends GSAClientHandler {
         void onTypesSuccess(List<DatasetType> types);
+    }
+
+    interface GSAStatusHandler extends GSAClientHandler {
+        void onStatusSuccess(Status status);
+    }
+
+    interface GSAAnalysisHandler extends GSAClientHandler {
+        void onAnalysisSuccess(String gsaToken);
+    }
+
+    interface GSAResultLinksHandler extends GSAClientHandler {
+        void onResultLinksSuccess(ResultLinks resultLinks);
     }
 }
