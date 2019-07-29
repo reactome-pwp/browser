@@ -32,6 +32,11 @@ public class GSAFactory {
 
         AutoBean<UploadResult> uploadResult();
 
+        AutoBean<Status> status();
+
+        AutoBean<Link> link();
+        AutoBean<ResultLinks> result();
+
         AutoBean<GSAError> error();
     }
 }

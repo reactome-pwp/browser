@@ -19,6 +19,7 @@ public class GSAClient {
     private static final String URL_METHODS = "/gsa/0.1/methods";
     private static final String URL_TYPES = "/gsa/0.1/types";
     private static final String URL_STATUS = "/gsa/0.1/status";
+    private static final String URL_REPORTS_STATUS = "/gsa/0.1/report_status";
     private static final String URL_ANALYSIS = "/gsa/0.1/analysis";
     private static final String URL_RESULT = "/gsa/0.1/result";
 
@@ -105,7 +106,7 @@ public class GSAClient {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case Response.SC_OK:
-                            handler.onAnalysisSuccess(response.getText());
+                            handler.onAnalysisSubmissionSuccess(response.getText());
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
@@ -136,10 +137,42 @@ public class GSAClient {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    Console.info("OOOO > " + response.getText() + " " + response.getStatusCode());
                     switch (response.getStatusCode()){
                         case Response.SC_OK:
                             handler.onStatusSuccess(getStatus(response.getText(), handler));
+                            break;
+                        default:
+                            GSAError error = getError(response.getText(), handler);
+                            if (error!=null) {
+                                handler.onError(error);
+                            }
+                    }
+                }
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    handler.onException(exception.getMessage());
+                }
+            });
+        } catch (RequestException ex) {
+            handler.onException(ex.getMessage());
+        }
+        return request;
+    }
+
+    /***
+     * Returning the current status of the Report generation
+     */
+    public static Request getAnalysisReportsStatus(final String analysisId, final GSAClientHandler.GSAReportsStatusHandler handler) {
+        Request request = null;
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_REPORTS_STATUS + "/" + analysisId);
+        requestBuilder.setHeader("Accept", "application/json");
+        try {
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    switch (response.getStatusCode()){
+                        case Response.SC_OK:
+                            handler.onReportsStatusSuccess(getReportsStatus(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
@@ -214,6 +247,17 @@ public class GSAClient {
     }
 
     private static Status getStatus(final String json, final GSAClientHandler.GSAStatusHandler handler) {
+        Status rtn = null;
+        try {
+            rtn = GSAFactory.getModelObject(Status.class, json);
+        } catch (GSAException ex) {
+            handler.onException("Server unreachable");
+            Console.error(ex.getMessage());
+        }
+        return rtn;
+    }
+
+    private static Status getReportsStatus(final String json, final GSAClientHandler.GSAReportsStatusHandler handler) {
         Status rtn = null;
         try {
             rtn = GSAFactory.getModelObject(Status.class, json);

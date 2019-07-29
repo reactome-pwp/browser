@@ -25,10 +25,14 @@ public interface GSAClientHandler {
     }
 
     interface GSAAnalysisHandler extends GSAClientHandler {
-        void onAnalysisSuccess(String gsaToken);
+        void onAnalysisSubmissionSuccess(String gsaToken);
     }
 
     interface GSAResultLinksHandler extends GSAClientHandler {
         void onResultLinksSuccess(ResultLinks resultLinks);
+    }
+
+    interface GSAReportsStatusHandler extends GSAClientHandler {
+        void onReportsStatusSuccess(Status reportsStatus);
     }
 }
