@@ -14,19 +14,23 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.style.GSAStyleFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
+ * This step presents all the available GSA methods (along with their parameters) and
+ * allows the user to select one of them and set its specific parameters.
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class SelectMethod extends AbstractGSAStep implements MethodItem.Handler {
+public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Handler {
     private List<Method> availableMethods = new ArrayList<>();
     private MethodItem selectedMethodItem;
 
     private FlowPanel methodsPanel;
     private IconButton nextBtn;
 
-    public SelectMethod(GSAWizardEventBus eventBus, GSAWizardContext context) {
+    public SelectMethodStep(GSAWizardEventBus eventBus, GSAWizardContext context) {
         super(eventBus, context);
         init();
     }
@@ -69,8 +73,10 @@ public class SelectMethod extends AbstractGSAStep implements MethodItem.Handler 
                 "Define your datasets",
                 event -> {
                     if(selectedMethodItem.validateAllParameters()) {
-                        wizardContext.setMethod(selectedMethodItem.getMethod().getName());
-                        wizardContext.setParameters(selectedMethodItem.getParameterValues());
+                        wizardContext.setMethod(selectedMethodItem.getMethod());
+                        for (Map.Entry<String, String> entry : selectedMethodItem.getParameterValues().entrySet()) {
+                            wizardContext.setParameter(entry.getKey(), entry.getValue());
+                        }
                         wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.DATASETS), this);
                     }
                 });
