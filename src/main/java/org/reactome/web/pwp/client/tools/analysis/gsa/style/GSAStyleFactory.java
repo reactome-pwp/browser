@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.TextResource;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -31,14 +32,26 @@ public class GSAStyleFactory {
         @Source(Style.CSS)
         Style getCSS();
 
-        @Source("../images/parameters.png")
+        @Source("../common/EmailDisclaimer.html")
+        TextResource emailDisclaimer();
+
+        @Source("../images/next.png")
         ImageResource nextIcon();
 
-        @Source("../images/parameters.png")
+        @Source("../images/previous.png")
         ImageResource previousIcon();
 
         @Source("../images/addNewItem.png")
         ImageResource addIcon();
+
+        @Source("../images/pen.png")
+        ImageResource editIcon();
+
+        @Source("../images/bin_blue.png")
+        ImageResource deleteIcon();
+
+        @Source("../images/loader.gif")
+        ImageResource loaderIcon();
     }
 
     /**
@@ -69,6 +82,10 @@ public class GSAStyleFactory {
 
         String datasetsList();
 
+        String emptyListLabel();
+
+        String itemIcon();
+
         String addNewDatasetBtn();
 
         String rotate();
@@ -78,6 +95,38 @@ public class GSAStyleFactory {
         String nameTextBox();
 
         String annotationsPlaceholder();
+
+        String comparisonLB();
+
+        String comparisonPanel();
+
+        String groupOneLB();
+
+        String groupOnePanel();
+
+        String groupTwoLB();
+
+        String groupTwoPanel();
+
+        String covariatesLB();
+
+        String covariatesListBox();
+
+        String optionsPanel();
+
+        String disclaimerPanel();
+
+        String centered();
+
+        String statusPanel();
+
+        String titleFont();
+
+        String errorPanel();
+
+        String resultsPanel();
+
+        String reportsPanel();
 
     }
 }

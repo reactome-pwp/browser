@@ -1,6 +1,4 @@
 .container {
-    background: #8bce95;
-
     font-family: system-ui, Arial, sans-serif !important;
     font-size: medium;
     height: 100%;
@@ -83,16 +81,38 @@
 
 .datasetsListContainer {
     max-height: 80px;
+    /*max-width: 950px;*/
+    border-bottom:#efefef solid 1px;
+    padding-bottom: 10px;
 }
 
 .datasetsList {
-    background: #908aca;
+    /*background: #908aca;*/
+}
+
+.emptyListLabel {
+    font-style: italic;
+    color: #F6BB42;
+    margin-left: 15px;
+}
+
+.itemIcon {
+    height: 16px;
+    width: auto;
+    opacity: 0.7;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.itemIcon:hover {
+    height: 16px;
+    width: auto;
+    opacity: 1;
+
 }
 
 .addNewDatasetBtn {
     align-self: center;
-    /*float: right;*/
-    /*margin: 0 0 0 4px;*/
     background-color: #0e7cb3;
     border: none;
     outline: none;
@@ -101,9 +121,9 @@
     padding: 0;
     border: 0;
 
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in;
+    -moz-transition: all 0.3s ease-in;
+    transition: all 0.3s ease-in;
 }
 
 .addNewDatasetBtn>div {
@@ -169,4 +189,215 @@
 .annotationsPlaceholder {
     background: #2b5e6d;
     height: 250px;
+}
+
+.comparisonLB {
+    color: rgb(14, 124, 179);
+    font-weight: bold;
+    font-size: large;
+    text-align: justify;
+    margin-left: 5px;
+    max-width: 250px;
+}
+
+.comparisonPanel {
+    margin-bottom: 10px;
+}
+
+.comparisonPanel select {
+    /*border: 0;*/
+    float: left;
+    margin: 0 0 0 10px;
+    background: transparent;
+    border: 1px solid rgb(14, 124, 179);
+    border-radius: 5px;
+    color: rgb(14, 124, 179);
+    font-size: large;
+    font-weight: bold;
+    outline: none;
+}
+
+.comparisonPanel select option {
+    /*color: black;*/
+}
+
+.groupOneLB {
+    color: rgb(14, 124, 179);
+    font-weight: bold;
+    font-size: large;
+    text-align: justify;
+    margin-left: 5px;
+    max-width: 250px;
+}
+
+.groupOnePanel {
+    margin-bottom: 10px;
+}
+
+.groupOnePanel select {
+    /*border: 0;*/
+    float: left;
+    margin: 0 0 0 10px;
+    background: transparent;
+    border: 1px solid rgb(14, 124, 179);
+    border-radius: 5px;
+    color: rgb(14, 124, 179);
+    font-size: large;
+    font-weight: bold;
+    outline: none;
+}
+
+.groupOnePanel select option {
+    /*color: black;*/
+}
+
+.groupTwoLB {
+    color: rgb(14, 124, 179);
+    font-weight: bold;
+    font-size: large;
+    text-align: justify;
+    margin-left: 5px;
+    max-width: 250px;
+}
+
+.groupTwoPanel {
+    margin-bottom: 10px;
+}
+
+.groupTwoPanel select {
+    /*border: 0;*/
+    float: left;
+    margin: 0 0 0 10px;
+    background: transparent;
+    border: 1px solid rgb(14, 124, 179);
+    border-radius: 5px;
+    color: rgb(14, 124, 179);
+    font-size: large;
+    font-weight: bold;
+    outline: none;
+}
+
+.groupTwoPanel select option {
+    /*color: black;*/
+}
+
+.covariatesLB {
+    color: rgb(14, 124, 179);
+    font-weight: bold;
+    font-size: large;
+    text-align: justify;
+    margin-left: 5px;
+    max-width: 250px;
+}
+
+.covariatesListBox {
+    height: 100px;
+    overflow: auto;
+    padding: 7px;
+    font-size: medium;
+}
+
+.covariatesListBox input[type=checkbox] {
+    transform: scale(1.5);
+    margin: 5px 2ex;
+}
+
+.optionsPanel {
+    max-width: 750px;
+}
+
+.optionsPanel input {
+    max-width: 260px !important;
+}
+
+.disclaimerPanel {
+    margin-top: 15px;
+    max-width: 750px;
+    padding: 3px;
+    color: rgb(14, 124, 179);
+    font-size: small;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.centered {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.statusPanel {
+    width: 400px;
+    color: rgb(14, 124, 179);
+    font-size: medium;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.statusPanel img {
+    width: 250px;
+    height: auto;
+}
+
+.titleFont {
+    font-size: large;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.errorPanel {
+    background: rgb(179, 57, 44);
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    color: white;
+    font-size: medium;
+    font-style: italic;
+    margin-bottom: 10px;
+    padding: 4px;
+}
+
+.errorPanel img {
+    width: 80px;
+    height: auto;
+    align-self: center;
+}
+
+.resultsPanel {
+    width: 400px;
+    color: rgb(14, 124, 179);
+    margin-bottom: 55px;
+}
+
+.resultsPanel img {
+    width: 250px;
+    height: auto;
+}
+
+.resultsPanel a {
+    font-size: large;
+    font-weight: bold;
+    font-style: normal;
+    color: rgb(14, 124, 179);
+}
+
+.reportsPanel {
+    width: 400px;
+    color: rgb(14, 124, 179);
+    display: flex;
+    flex-direction: column;
+}
+
+.reportsPanel img {
+    width: 24px;
+    height: auto;
+}
+
+.reportsPanel a {
+    font-size: large;
+    font-weight: bold;
+    font-style: normal;
+    color: rgb(14, 124, 179);
+    margin-bottom: 5px;
+    margin-left: 18px;
 }
