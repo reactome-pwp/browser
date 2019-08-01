@@ -2,12 +2,12 @@ package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset;
 
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.UploadResult;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
+ * Used to store the information for every dataset annotated
+ * and submitted to the GSA service
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class GSADataset {
@@ -108,6 +108,25 @@ public class GSADataset {
 
     public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GSADataset that = (GSADataset) o;
+        return numberOfLines == that.numberOfLines &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(filename, that.filename) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(sampleNames, that.sampleNames) &&
+                Objects.equals(dataToken, that.dataToken);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, filename, type, numberOfLines, sampleNames, dataToken);
     }
 
     @Override
