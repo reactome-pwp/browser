@@ -20,6 +20,12 @@ public class FloatParameter extends AbstractParameterWidget<Float> {
     }
 
     @Override
+    public void setValue(String value) {
+        this.value = Float.parseFloat(value);
+        input.setText(value);
+    }
+
+    @Override
     protected void setDefault() {
         input.setText(parameter.getDefault());
     }

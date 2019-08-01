@@ -20,6 +20,8 @@ public class ParametersPanel extends FlowPanel {
         this.method = method;
 
         for (Parameter par : method.getParameters()) {
+            if(par.getScope().equalsIgnoreCase("common")) continue;
+
             AbstractParameterWidget widget = null;
             switch(par.getType()) {
                 case "string":

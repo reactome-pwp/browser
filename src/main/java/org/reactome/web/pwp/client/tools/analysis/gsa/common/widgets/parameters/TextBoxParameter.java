@@ -20,6 +20,12 @@ public class TextBoxParameter extends AbstractParameterWidget<String> {
     }
 
     @Override
+    public void setValue(String value) {
+        this.value = value;
+        input.setText(value);
+    }
+
+    @Override
     protected void setDefault() {
         input.setText(parameter.getDefault());
     }

@@ -20,6 +20,12 @@ public class IntParameter extends AbstractParameterWidget<Integer> {
     }
 
     @Override
+    public void setValue(String value) {
+        this.value = Integer.parseInt(value);
+        input.setText(value);
+    }
+
+    @Override
     protected void setDefault() {
         input.setText(parameter.getDefault());
     }

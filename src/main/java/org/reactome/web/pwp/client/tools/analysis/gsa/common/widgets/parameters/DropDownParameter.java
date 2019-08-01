@@ -20,6 +20,12 @@ public class DropDownParameter extends AbstractParameterWidget<String> {
     }
 
     @Override
+    public void setValue(String value) {
+        this.value = value;
+        input.setSelectedIndex(getItemIndex(value));
+    }
+
+    @Override
     protected void setDefault() {
         if (parameter.getDefault() != null) {
             input.setSelectedIndex(getItemIndex(parameter.getDefault()));
