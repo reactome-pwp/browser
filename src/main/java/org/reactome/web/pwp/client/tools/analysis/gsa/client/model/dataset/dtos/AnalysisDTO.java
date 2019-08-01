@@ -11,6 +11,9 @@ import java.util.Map;
 import static jsinterop.annotations.JsPackage.GLOBAL;
 
 /**
+ * Lightweight JavaScript objects used to communicate with
+ * the GSA service and submit an analysis
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 @JsType(namespace = GLOBAL, name = "Object", isNative = true)
