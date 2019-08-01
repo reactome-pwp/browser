@@ -1,13 +1,13 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.common.widgets.parameters;
 
-import com.google.gwt.user.client.ui.ListBox;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Parameter;
+import org.reactome.web.pwp.client.tools.analysis.gsa.common.widgets.FlipSwitch;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class BooleanParameter extends AbstractParameterWidget<Boolean> {
-    private ListBox input;
+public class BooleanParameter extends AbstractParameterWidget<Boolean> implements FlipSwitch.Handler {
+    private FlipSwitch input;
 
     public BooleanParameter(Parameter parameter) {
         super(parameter);
@@ -16,13 +16,19 @@ public class BooleanParameter extends AbstractParameterWidget<Boolean> {
 
     @Override
     public String getValue() {
-        return input.getValue(input.getSelectedIndex());
+        return input.isChecked().toString();
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value = Boolean.parseBoolean(value);
+        input.setChecked(this.value, false);
     }
 
     @Override
     protected void setDefault() {
         if (parameter.getDefault() != null) {
-            input.setSelectedIndex(getItemIndex(parameter.getDefault()));
+            setValue(parameter.getDefault());
         }
     }
 
@@ -32,23 +38,16 @@ public class BooleanParameter extends AbstractParameterWidget<Boolean> {
     }
 
     private void initUI() {
-        input = new ListBox();
-        input.setMultipleSelect(false);
-        input.addItem("True");
-        input.addItem("False");
+        input = new FlipSwitch();
+        input.setHandler(this);
+        input.addStyleName(AbstractParameterWidget.RESOURCES.getCSS().flipSwitch());
         setDefault();
 
         add(input);
     }
 
-    private int getItemIndex(String item) {
-        int indexToFind = -1;
-        for (int i = 0; i < input.getItemCount(); i++) {
-            if (input.getItemText(i).equals(item)) {
-                indexToFind = i;
-                break;
-            }
-        }
-        return indexToFind;
+    @Override
+    public void onValueChange(boolean value) {
+        this.value = value;
     }
 }

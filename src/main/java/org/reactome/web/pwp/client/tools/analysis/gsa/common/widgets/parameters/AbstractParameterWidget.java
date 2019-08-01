@@ -82,6 +82,8 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
 
         String main();
 
+        String flipSwitch();
+
         String leftGroup();
 
         String title();

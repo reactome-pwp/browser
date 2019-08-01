@@ -57,7 +57,7 @@ public class ParametersPanel extends FlowPanel {
         for (Widget widget : getChildren()) {
             AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
             if (!parameterWidget.validate()) {
-                Console.info("VALIDATION_ERROR: " + parameterWidget.getName());
+                Console.info("Parameter validation error: " + parameterWidget.getName());
                 rtn = false;
             }
         }
