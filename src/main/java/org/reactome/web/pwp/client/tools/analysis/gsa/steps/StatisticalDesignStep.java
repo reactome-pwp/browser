@@ -20,6 +20,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * Allows the user to select the properties to be compared
+ * during the analysis (group 1 vs group 2) and the covariate factors
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 @SuppressWarnings("Duplicates")
