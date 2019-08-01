@@ -7,6 +7,7 @@ public enum GSAStep {
     METHODS,
     DATASETS,
     ANNOTATE_DATASET,
-    OVERVIEW,
+    STATISTICAL_DESIGN,
+    OPTIONS,
     ANALYSIS
 }

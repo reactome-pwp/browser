@@ -1,7 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.steps;
 
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
@@ -12,9 +11,11 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.handlers.StepSelectedHandl
 import org.reactome.web.pwp.client.tools.analysis.gsa.style.GSAStyleFactory;
 
 /**
+ * Allows the user to annotate the selected dataset through a table-like widget
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class AnnotateDataset extends AbstractGSAStep implements StepSelectedHandler {
+public class AnnotateDatasetStep extends AbstractGSAStep implements StepSelectedHandler {
 
     private IconButton nextBtn;
     private IconButton previousBtn;
@@ -24,7 +25,7 @@ public class AnnotateDataset extends AbstractGSAStep implements StepSelectedHand
 
     private GSADataset dataset;
 
-    public AnnotateDataset(GSAWizardEventBus wizardEventBus, GSAWizardContext wizardContext) {
+    public AnnotateDatasetStep(GSAWizardEventBus wizardEventBus, GSAWizardContext wizardContext) {
         super(wizardEventBus, wizardContext);
         init();
         initHandlers();
@@ -35,7 +36,7 @@ public class AnnotateDataset extends AbstractGSAStep implements StepSelectedHand
         if (event.getSource().equals(this) || event.getStep() != GSAStep.ANNOTATE_DATASET)  {
             return;
         }
-        update();
+        updateUI();
     }
 
     private void init() {
@@ -75,26 +76,32 @@ public class AnnotateDataset extends AbstractGSAStep implements StepSelectedHand
                 "Continue",
                 GSAStyleFactory.RESOURCES.nextIcon(),
                 GSAStyleFactory.getStyle().navigationBtn(),
-                "Save annotated dataset",
+                "Set statistical comparison details",
                 event -> {
-                    wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.DATASETS), this);
-//                    }
+
+                    //TODO update the dataset/name
+                    if (!nameTB.getText().isEmpty()) {
+                        dataset.setName(nameTB.getText());
+                    }
+
+                    wizardContext.setDatasetToAnnotate(dataset);
+                    wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.STATISTICAL_DESIGN), this);
                 });
-        nextBtn.setEnabled(false);
+        nextBtn.setEnabled(true);
         addRightButton(nextBtn);
 
         previousBtn = new IconButton(
                 "Cancel",
-                GSAStyleFactory.RESOURCES.nextIcon(),
+                GSAStyleFactory.RESOURCES.previousIcon(),
                 GSAStyleFactory.getStyle().navigationBtn(),
                 "Abort dataset annotation and go back",
                 event -> wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.DATASETS), this));
         addLeftButton(previousBtn);
     }
 
-    private void update() {
+    private void updateUI() {
         dataset = wizardContext.getDatasetToAnnotate();
-        Console.info("Updating for ...." + dataset);
+        nameTB.setText(dataset.getName());
         annotationsPanel = new AnnotationsPanel(dataset);
         annotationsPlaceholder.clear();
         annotationsPlaceholder.add(annotationsPanel);
