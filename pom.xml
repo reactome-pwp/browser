@@ -27,6 +27,12 @@
             <email>fabregat@ebi.ac.uk</email>
             <organization>http://www.ebi.ac.uk/</organization>
         </developer>
+        <developer>
+            <id>ksidiro</id>
+            <name>Kostas Sidiropoulos</name>
+            <email>ksidiro@ebi.ac.uk</email>
+            <organization>http://www.ebi.ac.uk/</organization>
+        </developer>
     </developers>
 
     <properties>
