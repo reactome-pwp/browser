@@ -1,11 +1,10 @@
 .item {
-    background: #f4d7ed;
     border: 2px solid rgb(75, 140, 179);
     border-radius: 0 20px 0 20px;
     overflow: hidden;
     height: 95px;
     width: 600px;
-    margin: 15px auto;
+    margin: 9px auto;
     padding: 2px;
 
     /*font-family: Arial Unicode MS, Arial, sans-serif !important;*/
@@ -30,11 +29,10 @@
 }
 
 .itemExpanded {
-    height: 294px;
+    height: 260px;
 }
 
 .contentPanel {
-    background: maroon;
     height: 100%;
     width: 100%;
     /*display: flex;*/
@@ -43,14 +41,12 @@
 }
 
 .mainPanel {
-    background: #c7ffdb;
     height: 95px;
     display: flex;
     align-items: stretch;
 }
 
 .parametersPanel {
-    background: #b2aa76;
     flex-grow: 4;
     display: flex;
     flex-direction: column;
@@ -67,7 +63,7 @@
 .parametersBtn {
     align-self: center;
     /*float: right;*/
-    /*margin: 0 0 0 4px;*/
+    margin-left: 10px;
     background-color: #0e7cb3;
     border: none;
     outline: none;

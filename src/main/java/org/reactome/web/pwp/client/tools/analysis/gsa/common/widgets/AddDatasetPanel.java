@@ -23,6 +23,7 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.events.StepSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.gsa.steps.GSAStep;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -40,7 +41,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
     private List<DatasetType> datasetTypes;
     private boolean isExpanded;
-    private String selectedType;
+    private DatasetType selectedType;
 
     private FlowPanel itemsPanel;
     private FormPanel form;
@@ -64,7 +65,10 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
     @Override
     public void onClick(ClickEvent event) {
         showInfoPanel(false);
-        selectedType = ((FocusPanel)event.getSource()).getElement().getId();
+        Optional<DatasetType> datasetType = datasetTypes.stream()
+                                                        .filter(dt -> dt.getId().equalsIgnoreCase(((FocusPanel)event.getSource()).getElement().getId()))
+                                                        .findFirst();
+        selectedType = datasetType.orElse(null);
         fileUpload.click();
     }
 
@@ -89,28 +93,32 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
             String json = results.replaceAll("\\<[^>]*>", "");
             try {
                 if (results.contains("\"status\":")) {
+                    // This is an indication that a server error has occurred
                     GSAError error = GSAFactory.getModelObject(GSAError.class, json);
                     Console.info(error.getStatus() + " -> " + error.getTitle());
                     form.reset();
-                    updateInfo(RESOURCES.folderIcon(), UPLOAD_FAILED_MSG);
+                    updateInfo(RESOURCES.errorIcon(), UPLOAD_FAILED_MSG);
                     showInfoPanel(true);
                 } else {
+                    // Create a new dataset and store it in the context
                     UploadResult result = GSAFactory.getModelObject(UploadResult.class, json);
-                    GSADataset dataset = GSADataset.create(selectedType, fileUpload.getFilename(), result);
+                    String defaultName = selectedType.getId() + "_" + (wizardContext.getAnnotatedDatasets().size() + 1);
+                    GSADataset dataset = GSADataset.create(selectedType.getId(), selectedType.getName(), fileUpload.getFilename(), result, defaultName.toUpperCase());
                     wizardContext.setDatasetToAnnotate(dataset);
-                    updateInfo(RESOURCES.penIcon(), UPLOAD_SUCCESS_MSG);
+                    updateInfo(RESOURCES.successIcon(), UPLOAD_SUCCESS_MSG);
                     showInfoPanel(true);
                     Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
                         @Override
                         public boolean execute() {
                             wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.ANNOTATE_DATASET), this);
+                            form.reset();
                             return false;
                         }
-                    }, 500);
+                    }, 700);
 
                 }
             } catch (GSAException ex) {
-                //TODO
+                form.reset();
             }
         }
     }
@@ -128,7 +136,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
         isExpanded = !isExpanded;
     }
 
-    private void showInfoPanel(boolean visible) {
+    public void showInfoPanel(boolean visible) {
         infoPanel.setVisible(visible);
     }
 
@@ -195,7 +203,8 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
             FocusPanel typePanel = new FocusPanel();
             typePanel.getElement().setId(type.getId());
-            typePanel.setStyleName(RESOURCES.getCSS().typePanel());
+            typePanel.getElement().getStyle().setBackgroundColor(type.getColour());
+            typePanel.addStyleName(RESOURCES.getCSS().typePanel());
             typePanel.addClickHandler(this);
             typePanel.add(content);
 
@@ -243,6 +252,12 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
         @Source("../../images/bin.png")
         ImageResource binIcon();
+
+        @Source("../../images/success.png")
+        ImageResource successIcon();
+
+        @Source("../../images/error.png")
+        ImageResource errorIcon();
 
     }
 

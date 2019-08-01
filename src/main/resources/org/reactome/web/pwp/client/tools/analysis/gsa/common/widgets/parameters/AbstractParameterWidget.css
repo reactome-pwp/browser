@@ -33,6 +33,10 @@
     font-family: system-ui, Arial, sans-serif !important;
 }
 
+.flipSwitch {
+    margin-right: 10px;
+}
+
 .leftGroup {
     display: inline-flex;
     align-items: stretch;
