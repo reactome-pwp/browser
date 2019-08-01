@@ -30,6 +30,8 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
 
     public abstract String getValue();
 
+    public abstract void setValue(String value);
+
     public Parameter getParameter() {
         return parameter;
     }
@@ -76,7 +78,7 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
     @CssResource.ImportedWithPrefix("pwp-MethodItem")
     public interface ResourceCSS extends CssResource {
 
-        String CSS = "org/reactome/web/pwp/client/tools/analysis/gsa/common/widgets/parameters/ParameterWidget.css";
+        String CSS = "org/reactome/web/pwp/client/tools/analysis/gsa/common/widgets/parameters/AbstractParameterWidget.css";
 
         String main();
 
