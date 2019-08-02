@@ -17,11 +17,13 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardEventBus;
 import org.reactome.web.pwp.client.tools.analysis.gsa.events.StepSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.gsa.handlers.StepSelectedHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.steps.*;
-import org.reactome.web.pwp.client.tools.analysis.style.AnalysisStyleFactory;
+import org.reactome.web.pwp.client.tools.analysis.gsa.style.GSAStyleFactory;
 
 import java.util.List;
 
 /**
+ * Guides the user through the individual steps of the GSA process.
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class GSAWizard extends DockLayoutPanel implements StepSelectedHandler, AnalysisCompletedHandler {
@@ -88,11 +90,11 @@ public class GSAWizard extends DockLayoutPanel implements StepSelectedHandler, A
                 break;
             case OPTIONS:
                 index = 4;
-                top.add(new Image(RESOURCES.step02()));
+                top.add(new Image(RESOURCES.step03()));
                 break;
             case ANALYSIS:
                 index = 5;
-                top.add(new Image(RESOURCES.step02()));
+                top.add(new Image(RESOURCES.step04()));
                 break;
 
         }
@@ -101,7 +103,7 @@ public class GSAWizard extends DockLayoutPanel implements StepSelectedHandler, A
 
     private void initUI() {
         top = new SimplePanel();
-        top.addStyleName(AnalysisStyleFactory.getAnalysisStyle().wizardTop());
+        top.addStyleName(GSAStyleFactory.getStyle().wizardTop());
         top.add(new Image(RESOURCES.step01()));
         this.addNorth(top, 55);
 
@@ -124,14 +126,17 @@ public class GSAWizard extends DockLayoutPanel implements StepSelectedHandler, A
     public static GSAResource RESOURCES = GWT.create(GSAResource.class);
     public interface GSAResource extends ClientBundle {
 
-        @Source("images/step1.png")
+        @Source("images/step01.png")
         ImageResource step01();
 
-        @Source("images/step2.png")
+        @Source("images/step02.png")
         ImageResource step02();
 
-        @Source("images/step1.png")
+        @Source("images/step03.png")
         ImageResource step03();
+
+        @Source("images/step04.png")
+        ImageResource step04();
     }
 
 }

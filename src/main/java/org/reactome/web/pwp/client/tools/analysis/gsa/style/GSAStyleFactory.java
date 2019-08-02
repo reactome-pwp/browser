@@ -64,6 +64,8 @@ public class GSAStyleFactory {
          */
         String CSS = "org/reactome/web/pwp/client/tools/analysis/gsa/style/GSAStyleFactory.css";
 
+        String wizardTop();
+
         String container();
 
         String title();
