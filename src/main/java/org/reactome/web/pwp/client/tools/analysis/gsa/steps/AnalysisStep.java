@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * The process is divided in the following steps:
- *      1. The datasets are submitted to the GSA analysis method
+ *      1. The datasets and various parameters are submitted to the GSA analysis method
  *      2. The analysis status is checked periodically using the analysis id returned by step 1
  *      3. When analysis is completed the list of results links (along with the associated analysis token) are requested
  *      4. At last, using the received analysis token the actual results are requested
@@ -39,6 +39,7 @@ import java.util.List;
 public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler,
         GSAClientHandler.GSAAnalysisHandler, GSAClientHandler.GSAStatusHandler, GSAClientHandler.GSAResultLinksHandler,
         GSAClientHandler.GSAReportsStatusHandler {
+    private IconButton nextBtn;
     private IconButton previousBtn;
 
     private Widget statusPanel;
@@ -59,6 +60,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     private boolean isAnalysisCompleted;
     private boolean areReportsCompleted;
     private boolean createReports;
+
     private STAGE stage = STAGE.IDLE;
 
     private enum STAGE {
@@ -183,21 +185,22 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                     areReportsCompleted = false;
                     reportsPanel.setVisible(true);
                     checkReportsStatusUntilCompleted();
+                    nextBtn.setVisible(true);
+                } else {
+                    wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this);
+                    Scheduler.get().scheduleDeferred(() -> wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this));
                 }
-//                wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this);
-//                Scheduler.get().scheduleDeferred(() -> {
-//                    wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this);
-//                });
+
             }
 
             @Override
             public void onAnalysisError(AnalysisError error) {
-
+                updateErrorPanel("Oups! An error has occurred", "Analysis failed", error.getReason());
             }
 
             @Override
             public void onAnalysisServerException(String message) {
-
+                updateErrorPanel("Oups! An error has occurred", "Analysis failed", message);
             }
         });
     }
@@ -222,6 +225,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
     private void performAnalysis() {
         stage = STAGE.SUBMISSION;
+        nextBtn.setVisible(false);
         String prop = wizardContext.getParameters().getOrDefault("create_reports", "False");
         createReports = Boolean.parseBoolean(prop);
         GSAClient.analyse(wizardContext.toJSON(), this);
@@ -366,6 +370,16 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     }
 
     private void addNavigationButtons() {
+        nextBtn = new IconButton(
+                "Start Again",
+                GSAStyleFactory.RESOURCES.nextIcon(),
+                GSAStyleFactory.getStyle().navigationBtn(),
+                "Go back to the first step",
+                event -> { wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this); });
+        nextBtn.setEnabled(true);
+        nextBtn.setVisible(false);
+        addRightButton(nextBtn);
+
         previousBtn = new IconButton(
                 "Back",
                 GSAStyleFactory.RESOURCES.previousIcon(),
