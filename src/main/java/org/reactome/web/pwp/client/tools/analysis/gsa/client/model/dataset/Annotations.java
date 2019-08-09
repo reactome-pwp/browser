@@ -34,6 +34,7 @@ public class Annotations {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static Annotations create(Annotations annotations) {
         Annotations copy = new Annotations();
         copy.index = new HashMap(annotations.index);
