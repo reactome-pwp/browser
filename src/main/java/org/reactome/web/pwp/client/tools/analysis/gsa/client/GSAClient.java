@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client;
 
 import com.google.gwt.http.client.*;
+import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAException;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAFactory;
@@ -15,13 +16,12 @@ import java.util.List;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class GSAClient {
-
-    private static final String URL_METHODS = "/gsa/0.1/methods";
-    private static final String URL_TYPES = "/gsa/0.1/types";
-    private static final String URL_STATUS = "/gsa/0.1/status";
-    private static final String URL_REPORTS_STATUS = "/gsa/0.1/report_status";
-    private static final String URL_ANALYSIS = "/gsa/0.1/analysis";
-    private static final String URL_RESULT = "/gsa/0.1/result";
+    private static final String URL_METHODS = Browser.GSA_SERVER + "/0.1/methods";
+    private static final String URL_TYPES = Browser.GSA_SERVER + "/0.1/types";
+    private static final String URL_STATUS = Browser.GSA_SERVER + "/0.1/status";
+    private static final String URL_REPORTS_STATUS = Browser.GSA_SERVER + "/0.1/report_status";
+    private static final String URL_ANALYSIS = Browser.GSA_SERVER + "/0.1/analysis";
+    private static final String URL_RESULT = Browser.GSA_SERVER + "/0.1/result";
 
     /**
      * Retrieves the available methods and their specification/parameters.

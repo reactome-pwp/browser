@@ -26,6 +26,7 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
     public static final Boolean BETA = false;
 
     public static boolean VERBOSE = true;
+    public static String GSA_SERVER = "";
     private AppController appViewer;
 
     /**
@@ -58,6 +59,7 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
     private void initConfig() {
         String hostName = Window.Location.getHostName();
         Browser.VERBOSE = (hostName.equals("localhost") || hostName.equals("127.0.0.1"));
+        Browser.GSA_SERVER = hostName.equals("localhost") || hostName.equals("127.0.0.1") ? "/gsa" : "https://gsa.reactome.org";
         TitleChangedEvent.REPORT = false;
         Token.DEFAULT_SPECIES_ID = 48887L; //Homo sapiens
         Token.DELIMITER = "&";
