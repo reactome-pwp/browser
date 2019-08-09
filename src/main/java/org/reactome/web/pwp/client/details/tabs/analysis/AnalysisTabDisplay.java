@@ -201,17 +201,16 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
         this.refreshTitle(analysisResult.getPathwaysFound());
         this.filter = filter;
 
-        if(this.summaryPanel==null || !this.summaryPanel.getToken().equals(analysisResult.getSummary().getToken())){
-            this.resources = new LinkedList<>();
-            for (ResourceSummary resourceSummary : analysisResult.getResourceSummary()) {
-                resources.add(resourceSummary.getResource());
-            }
-            this.columnNames = analysisResult.getExpression().getColumnNames();
+        this.resources = new LinkedList<>();
+        for (ResourceSummary resourceSummary : analysisResult.getResourceSummary()) {
+            resources.add(resourceSummary.getResource());
+        }
+        this.columnNames = analysisResult.getExpression().getColumnNames();
 
+        if(this.summaryPanel==null || !this.summaryPanel.getToken().equals(analysisResult.getSummary().getToken())){
             this.container.clear();
             this.summaryPanel = new AnalysisSummaryPanel(analysisResult, filter.getResource());
 
-//            this.summaryPanel.addResourceChangeHandler(this);
             this.summaryPanel.addActionSelectedHandler(this);
             this.container.addNorth(summaryPanel, SUMMARY_HEIGHT);
 
@@ -238,6 +237,8 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.summaryPanel.setResource(filter.getResource());
             this.filteringPanel.setFilter(filter);
             this.downloadPanel.showDownloadOptions(analysisResult, filter.getResource());
+            this.entitiesEntitiesFoundPanel.setResource(filter.getResource());
+            this.entitiesEntitiesFoundPanel.showFoundEntities(resources, columnNames);
         }
     }
 

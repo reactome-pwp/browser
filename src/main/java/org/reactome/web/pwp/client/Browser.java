@@ -61,7 +61,7 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
         TitleChangedEvent.REPORT = false;
         Token.DEFAULT_SPECIES_ID = 48887L; //Homo sapiens
         Token.DELIMITER = "&";
-        FireworksFactory.SHOW_FOAM_BTN = (hostName.equals("localhost") || hostName.equals("127.0.0.1")) || hostName.equals("dev.reactome.org");
+        FireworksFactory.SHOW_FOAM_BTN = true;
     }
 
     private void removeLoadingMessage() {
