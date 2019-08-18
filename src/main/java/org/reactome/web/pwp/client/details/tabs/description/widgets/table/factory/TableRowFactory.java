@@ -253,7 +253,7 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static OverviewRow getRegulationRow(String title, List<? extends Regulation> regulations) {
+    public static OverviewRow getRegulationRow(String title, List<? extends Regulation> regulations, List<? extends ControlReference> references) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Regulation regulation : regulations) {
             panels.add(new RegulationPanel(regulation));

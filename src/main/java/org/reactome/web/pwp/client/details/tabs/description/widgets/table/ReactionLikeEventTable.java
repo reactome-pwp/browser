@@ -35,7 +35,7 @@ public class ReactionLikeEventTable extends EventTable {
             case POSITIVELY_REGULATED:
                 return TableRowFactory.getRegulationRow(title, this.reactionLikeEvent.getPositiveRegulations());
             case NEGATIVELY_REGULATED:
-                return TableRowFactory.getRegulationRow(title, this.reactionLikeEvent.getNegativeRegulations());
+                return TableRowFactory.getRegulationRow(title, this.reactionLikeEvent.getNegativeRegulations(), );
             default:
                 return super.getTableRow(propertyType);
         }

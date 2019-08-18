@@ -16,15 +16,17 @@ import java.util.List;
  */
 public class RegulationPanel extends DetailsPanel implements OpenHandler<DisclosurePanel> {
     private Regulation regulation;
+    private List<RegulationReference> references;
     private DisclosurePanel disclosurePanel;
 
-    public RegulationPanel(Regulation regulation) {
-        this(null, regulation);
+    public RegulationPanel(Regulation regulation, List<RegulationReference> references) {
+        this(null, regulation, references);
     }
 
-    public RegulationPanel(DetailsPanel parentPanel, Regulation regulation) {
+    public RegulationPanel(DetailsPanel parentPanel, Regulation regulation, List<RegulationReference> references) {
         super(parentPanel);
         this.regulation = regulation;
+        this.references = references;
         initialize();
     }
 
@@ -100,13 +102,13 @@ public class RegulationPanel extends DetailsPanel implements OpenHandler<Disclos
             }
         }
 
-        if (!this.regulation.getLiteratureReference().isEmpty()) {
+        if (this.references != null && !this.references.isEmpty()) {
             DisclosurePanel literatureReferences = new DisclosurePanel("Published experimental evidence...");
             literatureReferences.setWidth("100%");
             VerticalPanel aux = new VerticalPanel();
             aux.setWidth("100%");
-            for (Publication publication : this.regulation.getLiteratureReference()) {
-                PublicationPanel pp = new PublicationPanel(this, publication);
+            for (RegulationReference refs : this.references) {
+                PublicationPanel pp = new PublicationPanel(this, refs.getLiteratureReference());
                 pp.setWidth("99%");
                 aux.add(pp);
             }
