@@ -4,13 +4,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.panels.*;
 import org.reactome.web.pwp.model.client.classes.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -253,10 +251,19 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static OverviewRow getRegulationRow(String title, List<? extends Regulation> regulations, List<? extends ControlReference> references) {
+    public static OverviewRow getRegulationRow(String title, List<? extends Regulation> regulations, List<RegulationReference> references) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (Regulation regulation : regulations) {
-            panels.add(new RegulationPanel(regulation));
+            if (regulation != null) {
+                List<RegulationReference> filteredReferences = new ArrayList<>();
+                for (RegulationReference reference : references) {
+                    Regulation thatRegulation = reference.getRegulation();
+                    if (thatRegulation != null && thatRegulation.getDbId().equals(regulation.getDbId())) {
+                        filteredReferences.add(reference);
+                    }
+                }
+                panels.add(new RegulationPanel(regulation, filteredReferences));
+            }
         }
         return getOverviewRow(title, panels);
     }

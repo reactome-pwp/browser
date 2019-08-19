@@ -4,12 +4,14 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.model.client.classes.*;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -108,9 +110,11 @@ public class RegulationPanel extends DetailsPanel implements OpenHandler<Disclos
             VerticalPanel aux = new VerticalPanel();
             aux.setWidth("100%");
             for (RegulationReference refs : this.references) {
-                PublicationPanel pp = new PublicationPanel(this, refs.getLiteratureReference());
-                pp.setWidth("99%");
-                aux.add(pp);
+                for(Publication publication : refs.getLiteratureReference()) {
+                    PublicationPanel pp = new PublicationPanel(this, publication);
+                    pp.setWidth("99%");
+                    aux.add(pp);
+                }
             }
             literatureReferences.setContent(aux);
             vp.add(literatureReferences);
