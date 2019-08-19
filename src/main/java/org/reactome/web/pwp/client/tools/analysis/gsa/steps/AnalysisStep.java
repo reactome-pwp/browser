@@ -148,7 +148,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
         } else if (status.getStatus().equalsIgnoreCase("failed")) {
             isAnalysisCompleted = true;
-            updateErrorPanel("Oups! An error has occurred", "Analysis failed", status.getDescription());
+            updateErrorPanel("Oops! An error has occurred", "Analysis failed", status.getDescription());
         }
         Console.info(status.getStatus() + " - " + status.getCompleted() + " - " + isAnalysisCompleted);
     }
@@ -196,12 +196,12 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
             @Override
             public void onAnalysisError(AnalysisError error) {
-                updateErrorPanel("Oups! An error has occurred", "Analysis failed", error.getReason());
+                updateErrorPanel("Oops! An error has occurred", "Analysis failed", error.getReason());
             }
 
             @Override
             public void onAnalysisServerException(String message) {
-                updateErrorPanel("Oups! An error has occurred", "Analysis failed", message);
+                updateErrorPanel("Oops! An error has occurred", "Analysis failed", message);
             }
         });
     }
@@ -211,7 +211,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         isAnalysisCompleted = true;
         areReportsCompleted = true;
         AnalysisStep.this.gsaToken = null;
-        updateErrorPanel("Oups! An error has occurred", error.getTitle(), error.getDetail());
+        updateErrorPanel("Oops! An error has occurred", error.getTitle(), error.getDetail());
         Console.error(error.getTitle() + " - " + error.getDetail());
     }
 
@@ -220,7 +220,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         isAnalysisCompleted = true;
         areReportsCompleted = true;
         AnalysisStep.this.gsaToken = null;
-        updateErrorPanel("Oups! An error has occurred", msg, "");
+        updateErrorPanel("Oos! An error has occurred", msg, "");
         Console.error(msg);
     }
 
