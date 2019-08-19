@@ -15,20 +15,20 @@
 }
 
 .samplesPanel {
-    background: darkorange;
+    /*background: darkorange;*/
     margin-right: 5px;
     min-width: 10%;
     max-width: 200px;
-    /*flex-grow: 1;*/
 }
 
 .sampleItem {
-    background: gray;
+    background: darkorange;
+    /*background: gray;*/
     border-radius: 5px;
     height: 35px;
     line-height: 35px;
     margin: 0 0 1px 0;
-    padding: 2px 0 3px 0;
+    padding: 2px 4px 3px 4px;
     overflow-y: hidden;
 
     outline: none;

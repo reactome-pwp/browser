@@ -138,7 +138,8 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     public void onStatusSuccess(Status status) {
         if (status.getStatus().equalsIgnoreCase("running")) {
             isAnalysisCompleted = false;
-            updateStatusPanel(null, "Performing analysis [" + status.getCompleted() + "]", status.getDescription());
+            Double progress = (status.getCompleted() * 100);
+            updateStatusPanel(null, "Performing analysis [" + progress.intValue() + "%]", status.getDescription());
 
         } else if (status.getStatus().equalsIgnoreCase("complete")) {
             isAnalysisCompleted = true;

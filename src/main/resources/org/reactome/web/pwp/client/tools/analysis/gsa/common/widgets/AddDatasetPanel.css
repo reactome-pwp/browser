@@ -66,6 +66,7 @@
     padding: 2px;
     cursor: pointer;
     outline: none;
+    overflow-y: auto;
 }
 
 .typePanel:hover {
@@ -82,12 +83,16 @@
     color: white;
     font-size: medium;
     align-self: center;
+    text-align: center;
 }
 
 .typeDescription {
     color: white;
     font-size: small;
+    font-weight: 500;
     align-self: center;
+    text-align: center;
+    margin-top: 5px;
 }
 
 .infoPanel {
