@@ -37,7 +37,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
         FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler {
     private static final String URL_UPLOAD_FILE = "/GSAServer/upload";
 
-    private static final String UPLOADING_MSG = "Uploading file ...";
+    private static final String UPLOADING_MSG = "Please wait while uploading file ...";
     private static final String UPLOAD_SUCCESS_MSG = "File uploaded successfully";
     private static final String UPLOAD_FAILED_MSG = "File upload failed. Please try again.";
 
@@ -46,6 +46,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
     private List<DatasetType> datasetTypes;
     private boolean isExpanded;
+    private boolean uploadInProgress;
     private DatasetType selectedType;
 
     private FlowPanel itemsPanel;
@@ -69,6 +70,8 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
     @Override
     public void onClick(ClickEvent event) {
+        if (uploadInProgress) return;
+
         showInfoPanel(false);
         Optional<DatasetType> datasetType = datasetTypes.stream()
                                                         .filter(dt -> dt.getId().equalsIgnoreCase(((FocusPanel)event.getSource()).getElement().getId()))
@@ -86,12 +89,14 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
     @Override
     public void onSubmit(FormPanel.SubmitEvent event) {
-        updateInfo(RESOURCES.binIcon(), UPLOADING_MSG);
+        uploadInProgress = true;
+        updateInfo(RESOURCES.uploadSpinnerIcon(), UPLOADING_MSG);
         showInfoPanel(true);
     }
 
     @Override
     public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+        uploadInProgress = false;
         showInfoPanel(false);
         String results = event.getResults();
         if (results != null) {
@@ -267,6 +272,9 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
         @Source("../../images/error.png")
         ImageResource errorIcon();
+
+        @Source("../../images/upload_spinner.gif")
+        ImageResource uploadSpinnerIcon();
 
     }
 
