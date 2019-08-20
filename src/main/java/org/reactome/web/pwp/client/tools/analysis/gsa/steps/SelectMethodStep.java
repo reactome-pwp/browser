@@ -43,12 +43,15 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
         this.availableMethods = methods;
         updateMethodsPanel();
 
-        //Set default selection to PADOG
-        MethodItem itemToSelect = findMethodItemByName(DEFAULT_METHOD_NAME);
+        //Set default selection to DEFAULT
+        //MethodItem itemToSelect = findMethodItemByName(DEFAULT_METHOD_NAME);
+
+        //Select the first method
+        MethodItem itemToSelect = getFirstMethodItem();
+
         if (itemToSelect != null) {
             onCheckedChanged(itemToSelect, true);
         }
-
     }
 
     @Override
@@ -110,9 +113,22 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
     private MethodItem findMethodItemByName(String name) {
         MethodItem rtn = null;
         for (Widget widget : methodsPanel) {
-            MethodItem item = (MethodItem) widget;
-            if (item.getMethod().getName().equalsIgnoreCase(name)) {
-                rtn = item;
+            if (widget instanceof MethodItem) {
+                MethodItem item = (MethodItem) widget;
+                if (item.getMethod().getName().equalsIgnoreCase(name)) {
+                    rtn = item;
+                    break;
+                }
+            }
+        }
+        return rtn;
+    }
+
+    private MethodItem getFirstMethodItem() {
+        MethodItem rtn = null;
+        for (Widget widget : methodsPanel) {
+            if(widget instanceof MethodItem) {
+                rtn = (MethodItem) widget;
                 break;
             }
         }
