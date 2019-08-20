@@ -5,7 +5,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
@@ -91,7 +90,6 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
                         for (Map.Entry<String, String> entry : selectedMethodItem.getParameterValues().entrySet()) {
                             wizardContext.setParameter(entry.getKey(), entry.getValue());
                         }
-                        Console.info("HI: " + selectedMethodItem.getMethod().getName());
                         wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.DATASETS), this);
                     }
                 });
