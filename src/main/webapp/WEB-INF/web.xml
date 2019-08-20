@@ -342,6 +342,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>GSAService</servlet-name>
-        <url-pattern>/gsa/*</url-pattern>
+        <url-pattern>/GSAServer/*</url-pattern>
     </servlet-mapping>
 </web-app>
