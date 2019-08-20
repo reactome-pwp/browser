@@ -10,7 +10,6 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAException;
@@ -27,11 +26,16 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * Uses a FormUpload widget to upload the dataset to the gsa server.
+ *
+ * NOTE: Please keep in mind that to avoid Cross-Origin restrictions applied by most browsers
+ * we proxy the gsa backend (gsa.reactome.org) through our servers at Apache level.
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHandler,
         FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler {
-    private static final String URL_UPLOAD_FILE = Browser.GSA_SERVER + "/upload";
+    private static final String URL_UPLOAD_FILE = "/GSAServer/upload";
 
     private static final String UPLOADING_MSG = "Uploading file ...";
     private static final String UPLOAD_SUCCESS_MSG = "File uploaded successfully";
@@ -119,8 +123,12 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
                 }
             } catch (GSAException ex) {
+                Console.info("Exception: " + ex.getMessage());
                 form.reset();
             }
+        } else {
+            updateInfo(RESOURCES.errorIcon(), "No response received from server after file upload");
+            Console.info("Error: No response received from server after file upload");
         }
     }
 
