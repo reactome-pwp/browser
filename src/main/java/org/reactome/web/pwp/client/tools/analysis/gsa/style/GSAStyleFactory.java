@@ -32,6 +32,9 @@ public class GSAStyleFactory {
         @Source(Style.CSS)
         Style getCSS();
 
+        @Source("../common/AnnotationInfo.html")
+        TextResource annotationInfo();
+
         @Source("../common/EmailDisclaimer.html")
         TextResource emailDisclaimer();
 
@@ -115,6 +118,8 @@ public class GSAStyleFactory {
         String covariatesListBox();
 
         String optionsPanel();
+
+        String annotationInfoPanel();
 
         String disclaimerPanel();
 

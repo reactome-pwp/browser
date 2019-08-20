@@ -321,6 +321,15 @@
     max-width: 260px !important;
 }
 
+.annotationInfoPanel {
+    margin-top: 10px;
+    max-width: 650px;
+    padding: 3px;
+    color: rgb(14, 124, 179);
+    font-size: medium;
+    font-weight: bold;
+}
+
 .disclaimerPanel {
     margin-top: 15px;
     max-width: 750px;

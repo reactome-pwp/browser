@@ -57,6 +57,11 @@ public class AnnotateDatasetStep extends AbstractGSAStep implements StepSelected
         nameTB.setStyleName(GSAStyleFactory.getStyle().nameTextBox());
         container.add(nameTB);
 
+        FlowPanel infoPanel = new FlowPanel();
+        infoPanel.setStyleName(GSAStyleFactory.getStyle().annotationInfoPanel());
+        infoPanel.add(new HTML(GSAStyleFactory.RESOURCES.annotationInfo().getText()));
+        container.add(infoPanel);
+
         annotationsPlaceholder = new SimplePanel();
         annotationsPlaceholder.setStyleName(GSAStyleFactory.getStyle().annotationsPlaceholder());
         container.add(annotationsPlaceholder);
