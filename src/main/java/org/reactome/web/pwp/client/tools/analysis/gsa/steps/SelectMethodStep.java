@@ -4,6 +4,8 @@ package org.reactome.web.pwp.client.tools.analysis.gsa.steps;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
@@ -24,6 +26,8 @@ import java.util.Map;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Handler {
+    private final static String DEFAULT_METHOD_NAME = "PADOG";
+
     private List<Method> availableMethods = new ArrayList<>();
     private MethodItem selectedMethodItem;
 
@@ -38,6 +42,13 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
     public void setAvailableMethods(List<Method> methods) {
         this.availableMethods = methods;
         updateMethodsPanel();
+
+        //Set default selection to PADOG
+        MethodItem itemToSelect = findMethodItemByName(DEFAULT_METHOD_NAME);
+        if (itemToSelect != null) {
+            onCheckedChanged(itemToSelect, true);
+        }
+
     }
 
     @Override
@@ -77,6 +88,7 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
                         for (Map.Entry<String, String> entry : selectedMethodItem.getParameterValues().entrySet()) {
                             wizardContext.setParameter(entry.getKey(), entry.getValue());
                         }
+                        Console.info("HI: " + selectedMethodItem.getMethod().getName());
                         wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.DATASETS), this);
                     }
                 });
@@ -95,5 +107,15 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
         }
     }
 
-
+    private MethodItem findMethodItemByName(String name) {
+        MethodItem rtn = null;
+        for (Widget widget : methodsPanel) {
+            MethodItem item = (MethodItem) widget;
+            if (item.getMethod().getName().equalsIgnoreCase(name)) {
+                rtn = item;
+                break;
+            }
+        }
+        return rtn;
+    }
 }
