@@ -39,6 +39,11 @@ import java.util.List;
 public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler,
         GSAClientHandler.GSAAnalysisHandler, GSAClientHandler.GSAStatusHandler, GSAClientHandler.GSAResultLinksHandler,
         GSAClientHandler.GSAReportsStatusHandler {
+    private final static String DEFAULT_ERROR_TITLE = "Oops! An error has occurred";
+    private final static String DEFAULT_ERROR_MSG = "Analysis failed, please contact help@reactome.org";
+    private final static int ANALYSIS_POLLING_PERIOD = 10000;
+    private final static int REPORTS_POLLING_PERIOD = 3000;
+
     private IconButton nextBtn;
     private IconButton previousBtn;
 
@@ -55,6 +60,8 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
     private FlowPanel resultsPanel;
     private FlowPanel reportsPanel;
+
+    private FlowPanel infoPanel;
 
     private String gsaToken;
     private boolean isAnalysisCompleted;
@@ -91,11 +98,6 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         FlowPanel container = new FlowPanel();
         container.setStyleName(GSAStyleFactory.getStyle().container());
 
-        SimplePanel title = new SimplePanel();
-        title.setStyleName(GSAStyleFactory.getStyle().title());
-        title.getElement().setInnerHTML("Results");
-        container.add(title);
-
         FlowPanel centered = new FlowPanel();
         centered.setStyleName(GSAStyleFactory.getStyle().centered());
         container.add(centered);
@@ -115,6 +117,11 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         reportsPanel = getReportsPanel();
         reportsPanel.setVisible(false);
         centered.add(reportsPanel);
+
+        infoPanel = new FlowPanel();
+        infoPanel.setStyleName(GSAStyleFactory.getStyle().analysisInfoPanel());
+        infoPanel.add(new HTML(GSAStyleFactory.RESOURCES.analysisInfo().getText()));
+        centered.add(infoPanel);
 
         addNavigationButtons();
 
@@ -148,7 +155,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
         } else if (status.getStatus().equalsIgnoreCase("failed")) {
             isAnalysisCompleted = true;
-            updateErrorPanel("Oops! An error has occurred", "Analysis failed", status.getDescription());
+            updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, status.getDescription());
         }
         Console.info(status.getStatus() + " - " + status.getCompleted() + " - " + isAnalysisCompleted);
     }
@@ -160,10 +167,12 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
         } else if (reportsStatus.getStatus().equalsIgnoreCase("complete")) {
             areReportsCompleted = true;
+            infoPanel.setVisible(false);
             updateReportsPanel(reportsStatus.getReports());
 
         } else if (reportsStatus.getStatus().equalsIgnoreCase("failed")) {
             areReportsCompleted = true;
+            infoPanel.setVisible(false);
 
         }
     }
@@ -185,23 +194,23 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                 if (createReports) {
                     areReportsCompleted = false;
                     reportsPanel.setVisible(true);
+                    wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, false), this);
                     checkReportsStatusUntilCompleted();
                     nextBtn.setVisible(true);
                 } else {
                     wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this);
                     Scheduler.get().scheduleDeferred(() -> wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this));
                 }
-
             }
 
             @Override
             public void onAnalysisError(AnalysisError error) {
-                updateErrorPanel("Oops! An error has occurred", "Analysis failed", error.getReason());
+                updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, error.getReason());
             }
 
             @Override
             public void onAnalysisServerException(String message) {
-                updateErrorPanel("Oops! An error has occurred", "Analysis failed", message);
+                updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, message);
             }
         });
     }
@@ -211,7 +220,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         isAnalysisCompleted = true;
         areReportsCompleted = true;
         AnalysisStep.this.gsaToken = null;
-        updateErrorPanel("Oops! An error has occurred", error.getTitle(), error.getDetail());
+        updateErrorPanel(DEFAULT_ERROR_TITLE, error.getTitle(), error.getDetail());
         Console.error(error.getTitle() + " - " + error.getDetail());
     }
 
@@ -220,7 +229,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         isAnalysisCompleted = true;
         areReportsCompleted = true;
         AnalysisStep.this.gsaToken = null;
-        updateErrorPanel("Oos! An error has occurred", msg, "");
+        updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, msg);
         Console.error(msg);
     }
 
@@ -229,6 +238,12 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         nextBtn.setVisible(false);
         String prop = wizardContext.getParameters().getOrDefault("create_reports", "False");
         createReports = Boolean.parseBoolean(prop);
+
+        // If user has provided with an email then show a
+        // message explaining he will get an email
+//        String email = wizardContext.getParameters().get("email");
+        infoPanel.setVisible(true);
+
         GSAClient.analyse(wizardContext.toJSON(), this);
         updateStatusPanel(GSAStyleFactory.RESOURCES.loaderIcon(), "Data submission", "Submitting data for analysis...");
     }
@@ -242,7 +257,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
             GSAClient.getAnalysisStatus(gsaToken, this);
             return true;
-        }, 2000);
+        }, ANALYSIS_POLLING_PERIOD);
     }
 
     private void checkReportsStatusUntilCompleted() {
@@ -254,7 +269,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
             GSAClient.getAnalysisReportsStatus(gsaToken, this);
             return true;
-        }, 2000);
+        }, REPORTS_POLLING_PERIOD);
     }
 
     private void getResultLinks(){
@@ -288,7 +303,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     private Widget getErrorPanel() {
         FlowPanel fp = new FlowPanel();
         fp.addStyleName(GSAStyleFactory.getStyle().errorPanel());
-        fp.add(errorImage = new Image(GSAStyleFactory.RESOURCES.addIcon()));
+        fp.add(errorImage = new Image(GSAStyleFactory.RESOURCES.analysisErrorIcon()));
         errorTitle = new Label("");
         errorTitle.setStyleName(GSAStyleFactory.getStyle().titleFont());
         fp.add(errorTitle);
@@ -306,6 +321,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         resultsPanel.setVisible(false);
         reportsPanel.setVisible(false);
         errorPanel.setVisible(true);
+        infoPanel.setVisible(false);
     }
 
     private FlowPanel getResultsPanel() {
@@ -324,6 +340,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                     anchor.setText("\u25B6 " + link.getName());
                     anchor.setName(link.getName());
                     if (link.getName().equalsIgnoreCase("Gene Set Analysis Summary")) {
+                        anchor.setText("\u25B6 " + "Click to visualise the result of the Gene Set Analysis");
                         anchor.getElement().getStyle().setCursor(Style.Cursor.POINTER);
                         anchor.addClickHandler(event -> wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this));
                     } else {

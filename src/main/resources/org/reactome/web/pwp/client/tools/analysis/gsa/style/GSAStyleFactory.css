@@ -346,12 +346,26 @@
     flex-direction: column;
 }
 
+.analysisInfoPanel {
+    margin-top: 15px;
+    max-width: 750px;
+    padding: 3px;
+    color: rgb(14, 124, 179);
+    font-size: small;
+    font-weight: bold;
+    font-style: italic;
+}
+
 .statusPanel {
-    width: 400px;
+    width: 600px;
     color: rgb(14, 124, 179);
     font-size: medium;
     font-style: italic;
     margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .statusPanel img {
@@ -369,12 +383,19 @@
     background: rgb(179, 57, 44);
     display: flex;
     flex-direction: column;
-    width: 400px;
+    align-items: center;
+    width: 600px;
     color: white;
     font-size: medium;
     font-style: italic;
     margin-bottom: 10px;
     padding: 4px;
+}
+
+.errorPanel div {
+    padding: 3px;
+    margin-bottom: 10px;
+    text-align: justify;
 }
 
 .errorPanel img {
@@ -384,8 +405,9 @@
 }
 
 .resultsPanel {
-    width: 400px;
+    width: 600px;
     color: rgb(14, 124, 179);
+    margin-top: 100px;
     margin-bottom: 55px;
 }
 
@@ -402,7 +424,7 @@
 }
 
 .reportsPanel {
-    width: 400px;
+    width: 600px;
     color: rgb(14, 124, 179);
     display: flex;
     flex-direction: column;

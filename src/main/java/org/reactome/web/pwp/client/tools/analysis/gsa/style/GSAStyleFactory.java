@@ -38,6 +38,9 @@ public class GSAStyleFactory {
         @Source("../common/EmailDisclaimer.html")
         TextResource emailDisclaimer();
 
+        @Source("../common/AnalysisInfo.html")
+        TextResource analysisInfo();
+
         @Source("../images/next.png")
         ImageResource nextIcon();
 
@@ -55,6 +58,9 @@ public class GSAStyleFactory {
 
         @Source("../images/loader.gif")
         ImageResource loaderIcon();
+
+        @Source("../images/analysis_error.png")
+        ImageResource analysisErrorIcon();
     }
 
     /**
@@ -124,6 +130,8 @@ public class GSAStyleFactory {
         String disclaimerPanel();
 
         String centered();
+
+        String analysisInfoPanel();
 
         String statusPanel();
 

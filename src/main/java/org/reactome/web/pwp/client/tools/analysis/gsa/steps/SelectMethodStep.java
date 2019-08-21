@@ -25,7 +25,7 @@ import java.util.Map;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Handler {
-    private final static String DEFAULT_METHOD_NAME = "PADOG";
+    private final static String DEFAULT_METHOD_NAME = "CAMERA";
 
     private List<Method> availableMethods = new ArrayList<>();
     private MethodItem selectedMethodItem;
@@ -43,10 +43,10 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
         updateMethodsPanel();
 
         //Set default selection to DEFAULT
-        //MethodItem itemToSelect = findMethodItemByName(DEFAULT_METHOD_NAME);
+        MethodItem itemToSelect = findMethodItemByName(DEFAULT_METHOD_NAME);
 
         //Select the first method
-        MethodItem itemToSelect = getFirstMethodItem();
+//        MethodItem itemToSelect = getFirstMethodItem();
 
         if (itemToSelect != null) {
             onCheckedChanged(itemToSelect, true);
