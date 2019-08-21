@@ -6,14 +6,21 @@ import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
+ * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AnalysisCompletedEvent extends GwtEvent<AnalysisCompletedHandler> {
     public static Type<AnalysisCompletedHandler> TYPE = new GwtEvent.Type<AnalysisCompletedHandler>();
 
     AnalysisResult analysisResult;
+    boolean hideSubmissionDialog;
 
     public AnalysisCompletedEvent(AnalysisResult analysisResult) {
+        this(analysisResult, true);
+    }
+
+    public AnalysisCompletedEvent(AnalysisResult analysisResult, boolean hideSubmissionDialog ) {
         this.analysisResult = analysisResult;
+        this.hideSubmissionDialog = hideSubmissionDialog;
     }
 
     @Override
@@ -23,6 +30,10 @@ public class AnalysisCompletedEvent extends GwtEvent<AnalysisCompletedHandler> {
 
     public AnalysisResult getAnalysisResult() {
         return analysisResult;
+    }
+
+    public boolean getHideSubmissionDialog() {
+        return hideSubmissionDialog;
     }
 
     @Override

@@ -59,7 +59,9 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
 
     @Override
     public void analysisCompleted(AnalysisCompletedEvent event) {
-        this.display.hide();
+        if (event.getHideSubmissionDialog()) {
+            this.display.hide();
+        }
         this.eventBus.fireEventFromSource(event, this);
     }
 
