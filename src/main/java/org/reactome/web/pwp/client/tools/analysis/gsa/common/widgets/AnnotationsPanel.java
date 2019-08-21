@@ -101,7 +101,9 @@ public class AnnotationsPanel extends FlowPanel {
             sampleTB.getElement().setPropertyString("placeholder", "Click to edit");
             final int k = i;
             sampleTB.addValueChangeHandler(event -> {
-                if (regExp.exec(sampleTB.getText()) != null) {
+                if (sampleTB.getText().isEmpty()) {
+                    values[k] = "";
+                } else if (regExp.exec(sampleTB.getText()) != null) {
                     values[k] = sampleTB.getText();
                 } else {
                     sampleTB.setText(values[k]);
