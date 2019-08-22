@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -16,6 +17,9 @@ import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -28,12 +32,15 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
     public static boolean VERBOSE = true;
     private AppController appViewer;
 
+    private List<String> scriptsToLoad = Arrays.asList("https://gsui.genomespace.org/jsui/js/jquery-1.7.2.min.js",
+                                                       "https://gsui.genomespace.org/jsui/upload/gsuploadwindow.js");
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
         initConfig();
         ContentClient.getDatabaseInformation(this);
+        loadScripts();
     }
 
     @Override
@@ -82,6 +89,15 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
             }
         } catch (JavaScriptException exception) {
             Console.error(exception.getMessage(), this);
+        }
+    }
+
+    private void loadScripts() {
+        for (String url : scriptsToLoad) {
+            ScriptInjector.fromUrl(url)
+                          .setRemoveTag(false)
+                          .setWindow(ScriptInjector.TOP_WINDOW)
+                          .inject();
         }
     }
 }
