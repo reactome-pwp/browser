@@ -108,16 +108,14 @@
 }
 
 .itemIcon {
-    height: 16px;
+    height: 14px;
     width: auto;
-    opacity: 0.7;
+    opacity: 0.8;
 
     -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
 }
 
 .itemIcon:hover {
-    height: 16px;
-    width: auto;
     opacity: 1;
 
 }

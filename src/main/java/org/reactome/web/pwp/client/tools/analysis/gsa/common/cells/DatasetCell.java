@@ -32,7 +32,7 @@ public class DatasetCell extends AbstractCell<GSADataset> {
 
         @Template("" +
                 "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display: flex;\">" +
-                    "<div title=\"{0}\" style=\"{5}; height:17px; width:20px; margin:2px 10px 0 5px; border-radius:10px; cursor: default;\"></div>" +
+                    "<div title=\"{0}\" style=\"{5}; height:18px; width:18px; margin:2px 10px 0 5px; border-radius:10px; cursor: default;\"></div>" +
                     "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:medium; margin:0 10px 0 5px; width:250px; line-height: 25px; height:25px; cursor:default;\">{1}</div>" +
                     "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:small; margin:0 5px 0 0; width:150px; line-height: 25px; height:25px; cursor:default;\">{2}</div>" +
                     "<div style=\"overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:small; margin:0 5px 0 0; width:180px; line-height: 25px; height:25px; cursor:default;\">{3}</div>" +
