@@ -5,7 +5,7 @@
     overflow: hidden;
     height: 0;
     width: 99%;
-    margin: 15px auto;
+    margin: 5px auto;
     /*padding: 2px;*/
 
     font-family: system-ui, Arial, sans-serif !important;
@@ -19,7 +19,7 @@
 }
 
 .expanded {
-    height: 200px;
+    height: 372px;
 }
 
 .categoryPanel {
@@ -53,20 +53,21 @@
 .itemsPanel {
     max-width: 700px;
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
+    align-items: center;
     justify-content: space-around;
-    margin-top: 7px;
+    margin-top: 4px;
 }
 
 .typePanel {
-    height: 130px;
-    width: 140px;
-    margin: 2px;
-    border-radius: 12px;
+    height: 55px;
+    width: 300px;
+    margin: 2px 4px;
+    border-radius: 9px;
     padding: 2px;
     cursor: pointer;
     outline: none;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
 }
 
 .typePanel:hover {
@@ -88,22 +89,22 @@
 
 .typeDescription {
     color: white;
-    font-size: small;
+    font-size: x-small;
     font-weight: 500;
     align-self: center;
     text-align: center;
-    margin-top: 5px;
+    margin-top: 3px;
 }
 
 .infoPanel {
-    margin-top: 3px;
+    margin-top: 2px;
 }
 
 .infoIcon {
     height: 20px;
     width: auto;
     float: left;
-    margin-left: 16px;
+    margin-left: 5px;
 }
 
 .infoMessage {

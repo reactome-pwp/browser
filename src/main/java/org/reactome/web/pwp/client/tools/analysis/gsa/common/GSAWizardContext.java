@@ -54,8 +54,29 @@ public class GSAWizardContext {
         return annotatedDatasets;
     }
 
-    public void addDataset(GSADataset dataset) {
-        annotatedDatasets.add(dataset);
+    public void updateOrAddDataset(GSADataset dataset) {
+        if (dataset == null) return;
+
+        int index = annotatedDatasets.indexOf(dataset);
+        if (index != -1) {
+            annotatedDatasets.remove(index);
+            annotatedDatasets.add(index, dataset);
+        } else {
+            annotatedDatasets.add(dataset);
+        }
+    }
+
+    public void removeDatasetByIndex(int index) {
+        annotatedDatasets.remove(index);
+    }
+
+    public int sizeOfAnnotatedDatasets() {
+        return annotatedDatasets.size();
+    }
+
+    public String toJSON() {
+        AnalysisDTO dto = AnalysisDTO.create(method, annotatedDatasets, parameters);
+        return JSON.stringify(dto);
     }
 
     @Override
@@ -66,10 +87,5 @@ public class GSAWizardContext {
                 ", datasetToAnnotate=" + datasetToAnnotate +
                 ", datasets=" + annotatedDatasets.size() +
                 '}';
-    }
-
-    public String toJSON() {
-        AnalysisDTO dto = AnalysisDTO.create(method, annotatedDatasets, parameters);
-        return JSON.stringify(dto);
     }
 }

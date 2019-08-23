@@ -90,7 +90,7 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
                 if (className != null) {
                     if (className.equalsIgnoreCase("deleteIcon")) {
                         // Handle the delete icon being clicked
-                        wizardContext.getAnnotatedDatasets().remove(event.getIndex());
+                        wizardContext.removeDatasetByIndex(event.getIndex());
                         updateUI();
                     } else if (className.equalsIgnoreCase("editIcon")) {
                         // Select the clicked item to be edited
@@ -105,7 +105,7 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
 
         // Set the total row count. This isn't strictly necessary, but it affects
         // paging calculations, so its good habit to keep the row count up to date.
-        datasetsList.setRowCount(wizardContext.getAnnotatedDatasets().size(), true);
+        datasetsList.setRowCount(wizardContext.sizeOfAnnotatedDatasets(), true);
         datasetsList.setRowData(wizardContext.getAnnotatedDatasets());
 
         ScrollPanel datasetsListContainer = new ScrollPanel();
@@ -168,10 +168,10 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
     private void updateUI() {
         // Set the total row count. This isn't strictly necessary, but it affects
         // paging calculations, so its good habit to keep the row count up to date.
-        datasetsList.setRowCount(wizardContext.getAnnotatedDatasets().size(), true);
+        datasetsList.setRowCount(wizardContext.sizeOfAnnotatedDatasets(), true);
         datasetsList.setRowData(wizardContext.getAnnotatedDatasets());
 
-        nextBtn.setEnabled(wizardContext.getAnnotatedDatasets().size() > 0);
+        nextBtn.setEnabled(wizardContext.sizeOfAnnotatedDatasets() > 0);
     }
 
 }

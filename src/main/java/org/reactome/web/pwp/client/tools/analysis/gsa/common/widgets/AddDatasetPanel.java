@@ -57,6 +57,8 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
     private Image infoIcon;
     private Label infoMessage;
 
+    private FlowPanel examplesPanel;
+
     public AddDatasetPanel(GSAWizardEventBus wizardEventBus, GSAWizardContext wizardContext) {
         this.wizardEventBus = wizardEventBus;
         this.wizardContext = wizardContext;
@@ -74,7 +76,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
         showInfoPanel(false);
         Optional<DatasetType> datasetType = datasetTypes.stream()
-                                                        .filter(dt -> dt.getId().equalsIgnoreCase(((FocusPanel)event.getSource()).getElement().getId()))
+                                                        .filter(dt -> dt.getType().equalsIgnoreCase(((FocusPanel)event.getSource()).getElement().getId()))
                                                         .findFirst();
         selectedType = datasetType.orElse(null);
         fileUpload.click();
@@ -112,8 +114,8 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
                 } else {
                     // Create a new dataset and store it in the context
                     UploadResult result = GSAFactory.getModelObject(UploadResult.class, json);
-                    String defaultName = selectedType.getId() + "_" + (wizardContext.getAnnotatedDatasets().size() + 1);
-                    GSADataset dataset = GSADataset.create(selectedType.getId(), selectedType.getName(), fileUpload.getFilename(), result, defaultName.toUpperCase());
+                    String defaultName = selectedType.getType() + "_" + (wizardContext.sizeOfAnnotatedDatasets() + 1);
+                    GSADataset dataset = GSADataset.create(selectedType.getType(), selectedType.getName(), fileUpload.getFilename(), result, defaultName.toUpperCase());
                     wizardContext.setDatasetToAnnotate(dataset);
                     updateInfo(RESOURCES.successIcon(), UPLOAD_SUCCESS_MSG);
                     showInfoPanel(true);
@@ -157,6 +159,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
     private void init() {
         setStyleName(RESOURCES.getCSS().main());
         add(getLocalCategoryPanel());
+//        add(getExamplesPanel());
 
         //initialise the file submission form
         form = new FormPanel();
@@ -216,7 +219,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
             content.add(description);
 
             FocusPanel typePanel = new FocusPanel();
-            typePanel.getElement().setId(type.getId());
+            typePanel.getElement().setId(type.getType());
             typePanel.getElement().getStyle().setBackgroundColor(type.getColour());
             typePanel.addStyleName(RESOURCES.getCSS().typePanel());
             typePanel.addClickHandler(this);
@@ -245,6 +248,30 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
     private void updateInfo(ImageResource icon, String message) {
         infoIcon.setResource(icon);
         infoMessage.setText(message);
+    }
+
+    private Widget getExamplesPanel() {
+        FlowPanel rtn = new FlowPanel();
+        rtn.setStyleName(RESOURCES.getCSS().categoryPanel());
+
+        Image icon = new Image(RESOURCES.folderIcon());
+        icon.setStyleName(RESOURCES.getCSS().icon());
+        Label title = new Label("Select an example dataset");
+        title.setStyleName(RESOURCES.getCSS().title());
+        FlowPanel header = new FlowPanel();
+        header.setStyleName(RESOURCES.getCSS().header());
+        header.add(icon);
+        header.add(title);
+
+        examplesPanel = new FlowPanel();
+        examplesPanel.setStyleName(RESOURCES.getCSS().itemsPanel());
+
+        rtn.add(header);
+        rtn.add(examplesPanel);
+//        rtn.add(infoPanel = getInfoPanel());
+//        infoPanel.setVisible(false);
+
+        return rtn;
     }
 
 
