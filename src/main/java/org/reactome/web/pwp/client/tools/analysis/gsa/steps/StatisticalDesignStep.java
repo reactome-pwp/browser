@@ -298,8 +298,8 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
                     dataset.getAnnotations().setGroupTwo(groupTwo);
                     dataset.getAnnotations().setCovariates(selectedCovariates);
 
-                    wizardContext.getAnnotatedDatasets().remove(dataset);
-                    wizardContext.addDataset(dataset);
+//                    wizardContext.getAnnotatedDatasets().remove(dataset);
+                    wizardContext.updateOrAddDataset(dataset);
                     wizardContext.setDatasetToAnnotate(null);
                     wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.DATASETS), this);
 

@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw;
 
+import com.google.web.bindery.autobean.shared.AutoBean;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.DatasetTypesPalette;
 
 /**
@@ -9,11 +10,12 @@ public interface DatasetType {
 
     String getDescription();
 
-    String getId();
+    @AutoBean.PropertyName("id")
+    String getType();
 
     String getName();
 
     default String getColour() {
-        return DatasetTypesPalette.get().colourFromType(getId());
+        return DatasetTypesPalette.get().colourFromType(getType());
     }
 }

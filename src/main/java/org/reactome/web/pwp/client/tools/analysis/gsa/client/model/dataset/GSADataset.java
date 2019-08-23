@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset;
 
+import com.google.gwt.user.client.DOM;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.UploadResult;
 
 import java.util.*;
@@ -12,6 +13,7 @@ import java.util.*;
  */
 public class GSADataset {
 
+    private String id;
     private String name;
     private String filename;
     private String type;
@@ -31,6 +33,7 @@ public class GSADataset {
 
     public static GSADataset create(final String type, final String typeName, final String filename, final UploadResult uploadResult, final String defaultName) {
         GSADataset dataset = new GSADataset();
+        dataset.id = DOM.createUniqueId();
         dataset.name = defaultName;
         dataset.type = type;
         dataset.typeName = typeName;
@@ -48,6 +51,7 @@ public class GSADataset {
 
     public static GSADataset create(GSADataset dataset) {
         GSADataset copy = new GSADataset();
+        copy.id = dataset.id;
         copy.name = dataset.name;
         copy.type = dataset.type;
         copy.typeName = dataset.typeName;
@@ -60,6 +64,10 @@ public class GSADataset {
         copy.annotations = Annotations.create(dataset.annotations);
 
         return copy;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {
@@ -110,29 +118,24 @@ public class GSADataset {
         this.parameters = parameters;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GSADataset that = (GSADataset) o;
-        return numberOfLines == that.numberOfLines &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(filename, that.filename) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(sampleNames, that.sampleNames) &&
-                Objects.equals(dataToken, that.dataToken);
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, filename, type, numberOfLines, sampleNames, dataToken);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "GSADataset{" +
                 "name='" + name + '\'' +
+                "id='" + id + '\'' +
                 ", filename='" + filename + '\'' +
                 ", type=" + type +
                 ", typeName=" + typeName +
