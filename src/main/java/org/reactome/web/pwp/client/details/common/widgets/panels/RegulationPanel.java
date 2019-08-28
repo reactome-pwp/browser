@@ -4,14 +4,12 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.model.client.classes.*;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -79,7 +77,7 @@ public class RegulationPanel extends DetailsPanel implements OpenHandler<Disclos
             } else if (regulator instanceof Event) {
                 aux = new EventPanel(this, (Event) regulator);
             } else if (regulator instanceof CatalystActivity) {
-                aux = new CatalystActivityPanel(this, (CatalystActivity) regulator);
+                aux = new CatalystActivityPanel(this, (CatalystActivity) regulator, null);
             }
             if (aux != null) {
                 vp.add(new Label("Regulator: "));

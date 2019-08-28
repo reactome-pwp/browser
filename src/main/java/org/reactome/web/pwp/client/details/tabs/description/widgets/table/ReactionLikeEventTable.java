@@ -23,7 +23,7 @@ public class ReactionLikeEventTable extends EventTable {
             case INPUT:
                 return TableRowFactory.getPhysicalEntityRow(title, this.reactionLikeEvent.getInputs());
             case CATALYST:
-                return TableRowFactory.getCatalystActivityRow(title, this.reactionLikeEvent.getCatalystActivities());
+                return TableRowFactory.getCatalystActivityRow(title, this.reactionLikeEvent.getCatalystActivities(), this.reactionLikeEvent.getCatalystActivityReference());
             case OUTPUT:
                 return TableRowFactory.getPhysicalEntityRow(title, this.reactionLikeEvent.getOutputs());
             case ENTITY_FUNCTIONAL_STATUS:

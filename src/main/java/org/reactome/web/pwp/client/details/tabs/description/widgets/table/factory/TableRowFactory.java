@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.panels.*;
 import org.reactome.web.pwp.model.client.classes.*;
 
@@ -33,10 +32,10 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getCatalystActivityRow(String title, List<CatalystActivity> catalystActivities) {
+    public static Widget getCatalystActivityRow(String title, List<CatalystActivity> catalystActivities, CatalystActivityReference catalystActivityReferences) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (CatalystActivity catalystActivity : catalystActivities) {
-            panels.add(new CatalystActivityPanel(catalystActivity));
+            panels.add(new CatalystActivityPanel(catalystActivity, catalystActivityReferences));
         }
         return getOverviewRow(title, panels);
     }
