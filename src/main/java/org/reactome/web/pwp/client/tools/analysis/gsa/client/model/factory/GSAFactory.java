@@ -30,6 +30,11 @@ public class GSAFactory {
         AutoBean<DatasetType> datasetType();
         AutoBean<DatasetTypesResult> types();
 
+        AutoBean<ExampleDataset> example();
+        AutoBean<ExampleDatasetsResult> exampleDatasets();
+        AutoBean<ExampleDatasetSummary> exampleSummary();
+        AutoBean<ExampleMetadata> metadata();
+
         AutoBean<UploadResult> uploadResult();
 
         AutoBean<Status> status();

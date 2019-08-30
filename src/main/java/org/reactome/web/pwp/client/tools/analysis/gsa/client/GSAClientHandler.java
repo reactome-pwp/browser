@@ -20,6 +20,18 @@ public interface GSAClientHandler {
         void onTypesSuccess(List<DatasetType> types);
     }
 
+    interface GSAExampleDatasetsHandler extends GSAClientHandler {
+        void onExampleDatasetSuccess(List<ExampleDataset> examples);
+    }
+
+    interface GSAExampleDatasetLoadHandler extends GSAClientHandler {
+        void onExampleDatasetLoadSuccess(String statusToken);
+    }
+
+    interface GSAExampleDatasetSummaryHandler extends GSAClientHandler {
+        void onExampleDatasetSummarySuccess(ExampleDatasetSummary summary);
+    }
+
     interface GSAStatusHandler extends GSAClientHandler {
         void onStatusSuccess(Status status);
     }

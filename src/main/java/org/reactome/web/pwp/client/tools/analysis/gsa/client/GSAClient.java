@@ -17,10 +17,18 @@ import java.util.List;
  *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
+@SuppressWarnings("Duplicates")
 public class GSAClient {
     public static String GSA_SERVER = "/GSAServer";
     private static final String URL_METHODS = GSA_SERVER + "/0.1/methods";
     private static final String URL_TYPES = GSA_SERVER + "/0.1/types";
+
+    private static final String URL_GET_EXAMPLES = GSA_SERVER + "/0.1/data/examples";
+    private static final String URL_LOAD_EXAMPLE = GSA_SERVER + "/0.1/data/load";
+    private static final String URL_EXAMPLE_LOADING_STATUS = GSA_SERVER + "/0.1/data/status";
+    private static final String URL_EXAMPLE_SUMMARY = GSA_SERVER + "/0.1/data/summary";
+
+
     private static final String URL_STATUS = GSA_SERVER + "/0.1/status";
     private static final String URL_REPORTS_STATUS = GSA_SERVER + "/0.1/report_status";
     private static final String URL_ANALYSIS = GSA_SERVER + "/0.1/analysis";
@@ -94,6 +102,138 @@ public class GSAClient {
         return request;
     }
 
+
+    /**
+     * This function returns a list of all the available example datasets
+     * stored on the gsa server.
+     */
+    public static Request getExampleDatasets(final GSAClientHandler.GSAExampleDatasetsHandler handler) {
+        Request request = null;
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_GET_EXAMPLES);
+        requestBuilder.setHeader("Accept", "application/json");
+        try {
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    switch (response.getStatusCode()){
+                        case Response.SC_OK:
+                            handler.onExampleDatasetSuccess(getExamples(response.getText(), handler));
+                            break;
+                        default:
+                            GSAError error = getError(response.getText(), handler);
+                            if (error!=null) {
+                                handler.onError(error);
+                            }
+                    }
+                }
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    handler.onException(exception.getMessage());
+                }
+            });
+        } catch (RequestException ex) {
+            handler.onException(ex.getMessage());
+        }
+        return request;
+    }
+
+    public static Request loadExampleDataset(final String exampleId, final GSAClientHandler.GSAExampleDatasetLoadHandler handler) {
+        Request request = null;
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_LOAD_EXAMPLE + "/" + exampleId);
+        requestBuilder.setHeader("Accept", "application/json");
+        try {
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    switch (response.getStatusCode()){
+                        case Response.SC_OK:
+                            handler.onExampleDatasetLoadSuccess(response.getText());
+                            break;
+                        default:
+                            GSAError error = getError(response.getText(), handler);
+                            if (error!=null) {
+                                handler.onError(error);
+                            }
+                    }
+                }
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    handler.onException(exception.getMessage());
+                }
+            });
+        } catch (RequestException ex) {
+            handler.onException(ex.getMessage());
+        }
+        return request;
+    }
+
+    /***
+     * Returning the current status of the example's loading.
+     */
+    public static Request getExampleDatasetLoadingStatus(final String statusToken, final GSAClientHandler.GSAStatusHandler handler) {
+        Request request = null;
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_EXAMPLE_LOADING_STATUS + "/" + statusToken);
+        requestBuilder.setHeader("Accept", "application/json");
+        try {
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    switch (response.getStatusCode()){
+                        case Response.SC_OK:
+                            handler.onStatusSuccess(getStatus(response.getText(), handler));
+                            break;
+                        default:
+                            GSAError error = getError(response.getText(), handler);
+                            if (error!=null) {
+                                handler.onError(error);
+                            }
+                    }
+                }
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    handler.onException(exception.getMessage());
+                }
+            });
+        } catch (RequestException ex) {
+            handler.onException(ex.getMessage());
+        }
+        return request;
+    }
+
+    /***
+     * Retrieves a summary of the loaded example.
+     * This function is only available once the example has been fully loaded.
+     */
+    public static Request getExampleDatasetSummary(final String exampleId, final GSAClientHandler.GSAExampleDatasetSummaryHandler handler) {
+        Request request = null;
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_EXAMPLE_SUMMARY + "/" + exampleId);
+        requestBuilder.setHeader("Accept", "application/json");
+        try {
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    switch (response.getStatusCode()){
+                        case Response.SC_OK:
+                            handler.onExampleDatasetSummarySuccess(getExampleSummary(response.getText(), handler));
+                            break;
+                        default:
+                            GSAError error = getError(response.getText(), handler);
+                            if (error!=null) {
+                                handler.onError(error);
+                            }
+                    }
+                }
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    handler.onException(exception.getMessage());
+                }
+            });
+        } catch (RequestException ex) {
+            handler.onException(ex.getMessage());
+        }
+        return request;
+    }
+
     /**
      * Initiates an analysis by submitting the annotated
      * datasets and parameters in JSON format
@@ -130,7 +270,7 @@ public class GSAClient {
     }
 
     /***
-     * returning the current status of the task.
+     * Returning the current status of the analysis task.
      */
     public static Request getAnalysisStatus(final String analysisId, final GSAClientHandler.GSAStatusHandler handler) {
         Request request = null;
@@ -249,10 +389,33 @@ public class GSAClient {
         return rtn;
     }
 
+    private static List<ExampleDataset> getExamples(final String json, final GSAClientHandler.GSAExampleDatasetsHandler handler) {
+        List<ExampleDataset> rtn = null;
+        try {
+            ExampleDatasetsResult result = GSAFactory.getModelObject(ExampleDatasetsResult.class, "{\"examples\": " + json + "}");
+            rtn = result != null ? result.getExamples() : null;
+        } catch (GSAException ex) {
+            handler.onException("Server unreachable");
+            Console.error(ex.getMessage());
+        }
+        return rtn;
+    }
+
     private static Status getStatus(final String json, final GSAClientHandler.GSAStatusHandler handler) {
         Status rtn = null;
         try {
             rtn = GSAFactory.getModelObject(Status.class, json);
+        } catch (GSAException ex) {
+            handler.onException("Server unreachable");
+            Console.error(ex.getMessage());
+        }
+        return rtn;
+    }
+
+    private static ExampleDatasetSummary getExampleSummary(final String json, final GSAClientHandler.GSAExampleDatasetSummaryHandler handler) {
+        ExampleDatasetSummary rtn = null;
+        try {
+            rtn = GSAFactory.getModelObject(ExampleDatasetSummary.class, json);
         } catch (GSAException ex) {
             handler.onException("Server unreachable");
             Console.error(ex.getMessage());
