@@ -28,6 +28,7 @@
     border-radius: 12px;
     display: flex;
     flex-direction: column;
+    width: 340px;
 }
 
 .header {
@@ -98,17 +99,19 @@
 
 .infoPanel {
     margin-top: 2px;
+    max-width: 340px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 
 .infoIcon {
     height: 20px;
     width: auto;
-    float: left;
     margin-left: 5px;
 }
 
 .infoMessage {
-    float: left;
     font-size: medium;
-    margin-left: 8px;
+    margin-left: 5px;
 }
