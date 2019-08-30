@@ -12,6 +12,7 @@ import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClientHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.GSAError;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.ExperimentSummariesClient;
@@ -42,6 +43,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     private boolean summariesRetrieved;
     private boolean methodsRetrieved;
     private boolean typesRetrieved;
+    private boolean examplesRetrieved;
 
     public AnalysisLauncherPresenter(EventBus eventBus, AnalysisLauncher.Display display) {
         super(eventBus);
@@ -79,6 +81,7 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             if (analysisInfo == null)       retrieveAnalysisInfo();
             if (!methodsRetrieved)          retrieveAvailableGSAMethods();
             if (!typesRetrieved)            retrieveAvailableGSADatasetTypes();
+            if (!examplesRetrieved)         retrieveAvailableGSAExampleDatasets();
             display.show();
             display.center();
         } else {
@@ -102,7 +105,6 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             @Override
             public void onContentClientError(ContentClientError error) {
                 display.setSpeciesList(new LinkedList<>());
-                //TODO
                 eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage().get(0)), this);
             }
         });
@@ -168,6 +170,28 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             public void onException(String msg) {
                 Console.info("Exception: " + msg);
                 display.setAvailableGSADatasetTypes(new LinkedList<>());
+            }
+        });
+    }
+
+    private void retrieveAvailableGSAExampleDatasets() {
+        GSAClient.getExampleDatasets(new GSAClientHandler.GSAExampleDatasetsHandler() {
+            @Override
+            public void onExampleDatasetSuccess(List<ExampleDataset> examples) {
+                display.setAvailableGSAExampleDatasets(examples);
+                examplesRetrieved = true;
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                Console.error("Error: " + error.getTitle() + " " + error.getDetail());
+                display.setAvailableGSAExampleDatasets(new LinkedList<>());
+            }
+
+            @Override
+            public void onException(String msg) {
+                Console.info("Exception: " + msg);
+                display.setAvailableGSAExampleDatasets(new LinkedList<>());
             }
         });
     }

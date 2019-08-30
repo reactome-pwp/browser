@@ -1,6 +1,8 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset;
 
 import com.google.gwt.regexp.shared.RegExp;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDatasetSummary;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleMetadata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +37,7 @@ public class Annotations {
     }
 
     @SuppressWarnings("unchecked")
-    public static Annotations create(Annotations annotations) {
+    public static Annotations copy(Annotations annotations) {
         Annotations copy = new Annotations();
         copy.index = new HashMap(annotations.index);
         copy.annotationPropertyList = new ArrayList<>(annotations.annotationPropertyList);
@@ -43,6 +45,22 @@ public class Annotations {
         copy.groupOne = annotations.groupOne;
         copy.groupTwo = annotations.groupTwo;
         copy.covariates = new ArrayList<>(annotations.covariates);
+
+        return copy;
+    }
+
+    public static Annotations create(ExampleDatasetSummary summary) {
+        Annotations copy = new Annotations(summary.getSampleIds());
+        List<ExampleMetadata> metadata = summary.getMetadata();
+
+        if(metadata!=null) {
+            copy.annotationPropertyList = new ArrayList<>();
+            for (ExampleMetadata meta : metadata) {
+                String[] annotationValues = meta.getValues().toArray(new String[meta.getValues().size()]);
+                AnnotationProperty annotationProperty = new AnnotationProperty(meta.getName(),annotationValues);
+                copy.annotationPropertyList.add(annotationProperty);
+            }
+        }
 
         return copy;
     }
@@ -135,5 +153,12 @@ public class Annotations {
 
     public void setCovariates(List<AnnotationProperty> covariates) {
         this.covariates = covariates;
+    }
+
+    @Override
+    public String toString() {
+        return "Annotations{" +
+                "properties=" + annotationPropertyList +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset;
 
 import com.google.gwt.user.client.DOM;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDatasetSummary;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.UploadResult;
 
 import java.util.*;
@@ -49,9 +50,28 @@ public class GSADataset {
         return dataset;
     }
 
-    public static GSADataset create(GSADataset dataset) {
+    public static GSADataset create(final ExampleDatasetSummary summary) {
+        GSADataset dataset = new GSADataset();
+        dataset.id = DOM.createUniqueId();
+        dataset.name = summary.getTitle();
+        dataset.type = summary.getType();
+        dataset.typeName = summary.getType();
+        dataset.filename = summary.getTitle();
+
+        dataset.numberOfLines = summary.getSampleIds().size();
+        dataset.dataToken = summary.getId();
+        dataset.sampleNames = summary.getSampleIds();
+        dataset.topIdentifiers = new ArrayList<>(); // This is left empty intentionally
+
+        dataset.annotations = Annotations.create(summary);
+
+        return dataset;
+    }
+
+
+    public static GSADataset copy(GSADataset dataset) {
         GSADataset copy = new GSADataset();
-        copy.id = dataset.id;
+        copy.id = dataset.id;               //Copies the the id of the original dataset
         copy.name = dataset.name;
         copy.type = dataset.type;
         copy.typeName = dataset.typeName;
@@ -61,7 +81,7 @@ public class GSADataset {
         copy.dataToken = dataset.dataToken;
         copy.sampleNames = new ArrayList<>(dataset.sampleNames);
         copy.topIdentifiers = new ArrayList<>(dataset.topIdentifiers);
-        copy.annotations = Annotations.create(dataset.annotations);
+        copy.annotations = Annotations.copy(dataset.annotations);
 
         return copy;
     }

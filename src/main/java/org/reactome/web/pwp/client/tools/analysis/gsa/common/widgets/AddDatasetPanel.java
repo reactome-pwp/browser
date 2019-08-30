@@ -4,26 +4,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClientHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAException;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAFactory;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.GSAError;
-import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.UploadResult;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.*;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardEventBus;
 import org.reactome.web.pwp.client.tools.analysis.gsa.events.StepSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.gsa.steps.GSAStep;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Uses a FormUpload widget to upload the dataset to the gsa server.
@@ -33,18 +30,26 @@ import java.util.Optional;
  *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHandler,
+@SuppressWarnings("Duplicates")
+public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler {
     private static final String URL_UPLOAD_FILE = "/GSAServer/upload";
+    private static final int UPLOAD_POLLING_PERIOD = 2000;
 
     private static final String UPLOADING_MSG = "Please wait while uploading file ...";
     private static final String UPLOAD_SUCCESS_MSG = "File uploaded successfully";
     private static final String UPLOAD_FAILED_MSG = "File upload failed. Please try again.";
 
+    private static final String EXAMPLE_UPLOADING_MSG = "Please wait while uploading example ...";
+    private static final String EXAMPLE_UPLOAD_SUCCESS_MSG = "Example uploaded successfully";
+    private static final String EXAMPLE_UPLOAD_FAILED_MSG = "Example upload failed. Please try again.";
+
     private GSAWizardEventBus wizardEventBus;
     private GSAWizardContext wizardContext;
 
     private List<DatasetType> datasetTypes;
+    private List<ExampleDataset> exampleDatasets;
+
     private boolean isExpanded;
     private boolean uploadInProgress;
     private DatasetType selectedType;
@@ -53,11 +58,17 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
     private FormPanel form;
     private FileUpload fileUpload;
 
-    private Widget infoPanel;
-    private Image infoIcon;
-    private Label infoMessage;
+    private Label orLabel;
+
+    private Widget fileInfoPanel;
+    private Image fileInfoIcon;
+    private Label fileInfoMessage;
 
     private FlowPanel examplesPanel;
+
+    private Widget exampleInfoPanel;
+    private Image exampleInfoIcon;
+    private Label exampleInfoMessage;
 
     public AddDatasetPanel(GSAWizardEventBus wizardEventBus, GSAWizardContext wizardContext) {
         this.wizardEventBus = wizardEventBus;
@@ -70,16 +81,9 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
         getTypeWidgets();
     }
 
-    @Override
-    public void onClick(ClickEvent event) {
-        if (uploadInProgress) return;
-
-        showInfoPanel(false);
-        Optional<DatasetType> datasetType = datasetTypes.stream()
-                                                        .filter(dt -> dt.getType().equalsIgnoreCase(((FocusPanel)event.getSource()).getElement().getId()))
-                                                        .findFirst();
-        selectedType = datasetType.orElse(null);
-        fileUpload.click();
+    public void setExampleDatasets(List<ExampleDataset> exampleDatasets) {
+        this.exampleDatasets = exampleDatasets;
+        getExampleWidgets();
     }
 
     @Override
@@ -92,14 +96,14 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
     @Override
     public void onSubmit(FormPanel.SubmitEvent event) {
         uploadInProgress = true;
-        updateInfo(RESOURCES.uploadSpinnerIcon(), UPLOADING_MSG);
-        showInfoPanel(true);
+        updateFileInfo(RESOURCES.uploadSpinnerIcon(), UPLOADING_MSG);
+        showFileInfoPanel(true);
     }
 
     @Override
     public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
         uploadInProgress = false;
-        showInfoPanel(false);
+        showFileInfoPanel(false);
         String results = event.getResults();
         if (results != null) {
             String json = results.replaceAll("\\<[^>]*>", "");
@@ -109,16 +113,16 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
                     GSAError error = GSAFactory.getModelObject(GSAError.class, json);
                     Console.info(error.getStatus() + " -> " + error.getTitle());
                     form.reset();
-                    updateInfo(RESOURCES.errorIcon(), UPLOAD_FAILED_MSG);
-                    showInfoPanel(true);
+                    updateFileInfo(RESOURCES.errorIcon(), UPLOAD_FAILED_MSG);
+                    showFileInfoPanel(true);
                 } else {
                     // Create a new dataset and store it in the context
                     UploadResult result = GSAFactory.getModelObject(UploadResult.class, json);
                     String defaultName = selectedType.getType() + "_" + (wizardContext.sizeOfAnnotatedDatasets() + 1);
                     GSADataset dataset = GSADataset.create(selectedType.getType(), selectedType.getName(), fileUpload.getFilename(), result, defaultName.toUpperCase());
                     wizardContext.setDatasetToAnnotate(dataset);
-                    updateInfo(RESOURCES.successIcon(), UPLOAD_SUCCESS_MSG);
-                    showInfoPanel(true);
+                    updateFileInfo(RESOURCES.successIcon(), UPLOAD_SUCCESS_MSG);
+                    showFileInfoPanel(true);
                     Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
                         @Override
                         public boolean execute() {
@@ -134,7 +138,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
                 form.reset();
             }
         } else {
-            updateInfo(RESOURCES.errorIcon(), "No response received from server after file upload");
+            updateFileInfo(RESOURCES.errorIcon(), "No response received from server after file upload");
             Console.info("Error: No response received from server after file upload");
         }
     }
@@ -152,14 +156,19 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
         isExpanded = !isExpanded;
     }
 
-    public void showInfoPanel(boolean visible) {
-        infoPanel.setVisible(visible);
+    public void showFileInfoPanel(boolean visible) {
+        fileInfoPanel.setVisible(visible);
+    }
+
+    public void showExampleInfoPanel(boolean visible) {
+        exampleInfoPanel.setVisible(visible);
     }
 
     private void init() {
         setStyleName(RESOURCES.getCSS().main());
         add(getLocalCategoryPanel());
-//        add(getExamplesPanel());
+        add(orLabel = new Label("OR"));
+        add(getExamplesPanel());
 
         //initialise the file submission form
         form = new FormPanel();
@@ -197,8 +206,8 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
         rtn.add(header);
         rtn.add(itemsPanel);
-        rtn.add(infoPanel = getInfoPanel());
-        infoPanel.setVisible(false);
+        rtn.add(fileInfoPanel = getFileInfoPanel());
+        fileInfoPanel.setVisible(false);
 
         return rtn;
     }
@@ -222,32 +231,42 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
             typePanel.getElement().setId(type.getType());
             typePanel.getElement().getStyle().setBackgroundColor(type.getColour());
             typePanel.addStyleName(RESOURCES.getCSS().typePanel());
-            typePanel.addClickHandler(this);
+            typePanel.addClickHandler(event -> {
+                if (uploadInProgress) return;
+
+                showFileInfoPanel(false);
+                selectedType = type;
+                fileUpload.click();
+            });
             typePanel.add(content);
 
             itemsPanel.add(typePanel);
         }
-
     }
 
-    private Widget getInfoPanel() {
-        infoIcon = new Image(RESOURCES.binIcon());
-        infoIcon.setStyleName(RESOURCES.getCSS().infoIcon());
+    private Widget getFileInfoPanel() {
+        fileInfoIcon = new Image(RESOURCES.binIcon());
+        fileInfoIcon.setStyleName(RESOURCES.getCSS().infoIcon());
 
-        infoMessage = new Label();
-        infoMessage.setStyleName(RESOURCES.getCSS().infoMessage());
+        fileInfoMessage = new Label();
+        fileInfoMessage.setStyleName(RESOURCES.getCSS().infoMessage());
 
         FlowPanel infoPanel = new FlowPanel();
         infoPanel.setStyleName(RESOURCES.getCSS().infoPanel());
-        infoPanel.add(infoIcon);
-        infoPanel.add(infoMessage);
+        infoPanel.add(fileInfoIcon);
+        infoPanel.add(fileInfoMessage);
 
         return infoPanel;
     }
 
-    private void updateInfo(ImageResource icon, String message) {
-        infoIcon.setResource(icon);
-        infoMessage.setText(message);
+    private void updateFileInfo(ImageResource icon, String message) {
+        fileInfoIcon.setResource(icon);
+        fileInfoMessage.setText(message);
+    }
+
+    private void updateExampleInfo(ImageResource icon, String message) {
+        exampleInfoIcon.setResource(icon);
+        exampleInfoMessage.setText(message);
     }
 
     private Widget getExamplesPanel() {
@@ -256,7 +275,7 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
         Image icon = new Image(RESOURCES.folderIcon());
         icon.setStyleName(RESOURCES.getCSS().icon());
-        Label title = new Label("Select an example dataset");
+        Label title = new Label("Select one example dataset");
         title.setStyleName(RESOURCES.getCSS().title());
         FlowPanel header = new FlowPanel();
         header.setStyleName(RESOURCES.getCSS().header());
@@ -268,10 +287,170 @@ public class AddDatasetPanel extends FlowPanel implements ClickHandler, ChangeHa
 
         rtn.add(header);
         rtn.add(examplesPanel);
-//        rtn.add(infoPanel = getInfoPanel());
-//        infoPanel.setVisible(false);
+        rtn.add(exampleInfoPanel = getExampleInfoPanel());
+        exampleInfoPanel.setVisible(false);
+
+        rtn.setVisible(true);
 
         return rtn;
+    }
+
+    private Widget getExampleInfoPanel() {
+        exampleInfoIcon = new Image(RESOURCES.binIcon());
+        exampleInfoIcon.setStyleName(RESOURCES.getCSS().infoIcon());
+
+        exampleInfoMessage = new Label();
+        exampleInfoMessage.setStyleName(RESOURCES.getCSS().infoMessage());
+
+        FlowPanel infoPanel = new FlowPanel();
+        infoPanel.setStyleName(RESOURCES.getCSS().infoPanel());
+        infoPanel.add(exampleInfoIcon);
+        infoPanel.add(exampleInfoMessage);
+
+        return infoPanel;
+    }
+
+    private void getExampleWidgets() {
+        examplesPanel.clear();
+
+        examplesPanel.getParent().setVisible(!exampleDatasets.isEmpty());
+        orLabel.setVisible(!exampleDatasets.isEmpty());
+
+        for (ExampleDataset example : exampleDatasets) {
+            Label name = new Label(example.getTitle());
+            name.setStyleName(RESOURCES.getCSS().typeName());
+
+            HTMLPanel description = new HTMLPanel(example.getDescription());
+            description.setStyleName(RESOURCES.getCSS().typeDescription());
+
+            FlowPanel content = new FlowPanel();
+            content.setStyleName(RESOURCES.getCSS().typeContent());
+            content.add(name);
+            content.add(description);
+
+            FocusPanel aPanel = new FocusPanel();
+            aPanel.getElement().setId(example.getType());
+            aPanel.getElement().getStyle().setBackgroundColor(example.getColour());
+            aPanel.addStyleName(RESOURCES.getCSS().typePanel());
+            aPanel.addClickHandler(event -> {
+                if (uploadInProgress) return;
+                showExampleInfoPanel(false);
+                submitExample(example);
+            });
+            aPanel.add(content);
+
+            examplesPanel.add(aPanel);
+        }
+    }
+
+    private void submitExample(ExampleDataset example) {
+        uploadInProgress = true;
+        GSAClient.loadExampleDataset(example.getId(), new GSAClientHandler.GSAExampleDatasetLoadHandler() {
+            @Override
+            public void onExampleDatasetLoadSuccess(String statusToken) {
+                updateExampleInfo(RESOURCES.uploadSpinnerIcon(), EXAMPLE_UPLOADING_MSG);
+                showExampleInfoPanel(true);
+
+                checkExampleLoadingStatusUntilCompleted(statusToken, example);
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                uploadInProgress = false;
+                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                showExampleInfoPanel(true);
+            }
+
+            @Override
+            public void onException(String msg) {
+                uploadInProgress = false;
+                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                showExampleInfoPanel(true);
+            }
+        });
+
+    }
+
+    private void checkExampleLoadingStatusUntilCompleted(String statusToken, ExampleDataset example) {
+        if (statusToken == null || statusToken.isEmpty()) return;
+
+        Scheduler.get().scheduleFixedPeriod(() -> {
+            if (!uploadInProgress) return false;
+
+            GSAClient.getExampleDatasetLoadingStatus(statusToken, new GSAClientHandler.GSAStatusHandler() {
+                @Override
+                public void onStatusSuccess(Status status) {
+                    if (status.getStatus().equalsIgnoreCase("running")) {
+                        uploadInProgress = true;
+                        updateExampleInfo(RESOURCES.uploadSpinnerIcon(), EXAMPLE_UPLOADING_MSG);
+                        showExampleInfoPanel(true);
+                    } else if (status.getStatus().equalsIgnoreCase("complete")) {
+                        uploadInProgress = false;
+                        getExampleSummary(example);
+
+                    } else if (status.getStatus().equalsIgnoreCase("failed")) {
+                        uploadInProgress = false;
+                        updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                        showExampleInfoPanel(true);
+                    }
+                }
+
+                @Override
+                public void onError(GSAError error) {
+                    uploadInProgress = false;
+                    Console.info("Error uploading example: " + error.getTitle());
+                    updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                    showExampleInfoPanel(true);
+                }
+
+                @Override
+                public void onException(String msg) {
+                    uploadInProgress = false;
+                    Console.info("Error uploading example: " + msg);
+                    updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                    showExampleInfoPanel(true);
+                }
+            });
+            return true;
+        }, UPLOAD_POLLING_PERIOD);
+    }
+
+    private void getExampleSummary(ExampleDataset example) {
+        GSAClient.getExampleDatasetSummary(example.getId(), new GSAClientHandler.GSAExampleDatasetSummaryHandler() {
+            @Override
+            public void onExampleDatasetSummarySuccess(ExampleDatasetSummary summary) {
+                uploadInProgress = false;
+                updateExampleInfo(RESOURCES.successIcon(), EXAMPLE_UPLOAD_SUCCESS_MSG);
+                showExampleInfoPanel(true);
+
+                GSADataset dataset = GSADataset.create(summary);
+
+                wizardContext.setDatasetToAnnotate(dataset);
+                Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+                    @Override
+                    public boolean execute() {
+                        wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.ANNOTATE_DATASET), this);
+                        return false;
+                    }
+                }, 700);
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                uploadInProgress = false;
+                Console.info("Error getting example summary: " + error.getDetail());
+                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                showExampleInfoPanel(true);
+            }
+
+            @Override
+            public void onException(String msg) {
+                uploadInProgress = false;
+                Console.info("Error getting example summary: " + msg);
+                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                showExampleInfoPanel(true);
+            }
+        });
     }
 
 

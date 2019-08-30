@@ -43,7 +43,7 @@ public class GSAWizardContext {
     }
 
     public GSADataset getDatasetToAnnotate() {
-        return GSADataset.create(datasetToAnnotate);
+        return GSADataset.copy(datasetToAnnotate);
     }
 
     public void setDatasetToAnnotate(GSADataset datasetToAnnotate) {

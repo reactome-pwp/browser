@@ -11,6 +11,7 @@ import com.google.gwt.view.client.NoSelectionModel;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardEventBus;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.cells.DatasetCell;
@@ -28,8 +29,6 @@ import java.util.List;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelectedHandler {
-    private List<DatasetType> availableDatasetTypes;
-
     private CellList<GSADataset> datasetsList;
     private NoSelectionModel<GSADataset> datasetsListSelectionModel;
 
@@ -46,8 +45,11 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
     }
 
     public void setAvailableDatasetTypes(List<DatasetType> types) {
-        this.availableDatasetTypes = types;
         addDatasetPanel.setDatasetTypes(types);
+    }
+
+    public void setExampleDatasets(List<ExampleDataset> exampleDatasets) {
+        addDatasetPanel.setExampleDatasets(exampleDatasets);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
             if (addDatasetPanel.isExpanded()) {
                 rotateAddButton();
                 addDatasetPanel.expandCollapse();
-                addDatasetPanel.showInfoPanel(false);
+                addDatasetPanel.showFileInfoPanel(false);
             }
         } else if (event.getStep() == GSAStep.DATASETS) {
             updateUI();

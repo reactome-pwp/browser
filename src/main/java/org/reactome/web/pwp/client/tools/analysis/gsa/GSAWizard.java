@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 import org.reactome.web.pwp.client.common.events.AnalysisCompletedEvent;
 import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardEventBus;
@@ -62,6 +63,10 @@ public class GSAWizard extends DockLayoutPanel implements StepSelectedHandler, A
 
     public void setAvailableDatasetTypes(List<DatasetType> types) {
         datasetsOverviewStep.setAvailableDatasetTypes(types);
+    }
+
+    public void setAvailableExampleDatasets(List<ExampleDataset> exampleDatasets) {
+        datasetsOverviewStep.setExampleDatasets(exampleDatasets);
     }
 
     @Override

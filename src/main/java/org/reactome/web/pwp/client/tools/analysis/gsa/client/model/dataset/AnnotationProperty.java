@@ -21,6 +21,11 @@ public class AnnotationProperty {
         }
     }
 
+    public AnnotationProperty(String name, String[] values) {
+        this.name = name;
+        this.values = values;
+    }
+
     public void resetAtIndex(int index) {
         if (isIndexCorrect(index)) return;
         values[index] = EMPTY;
