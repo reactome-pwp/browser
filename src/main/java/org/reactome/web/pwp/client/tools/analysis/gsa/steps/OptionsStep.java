@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.steps;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
@@ -139,6 +140,20 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
         return disclaimerPanel;
     }
 
+    private void setReactomeAnalysisServer() {
+        String hostName = Window.Location.getHostName();
+        Console.info("HostName: " + hostName);
+        String server = "production";
+        if (hostName.equalsIgnoreCase("dev.reactome.org")) {
+            server = "dev";
+        } else if (hostName.equals("localhost") || hostName.equals("127.0.0.1")) {
+            server = "dev";
+        } else if (hostName.equalsIgnoreCase("release.reactome.org")) {
+            server = "release";
+        }
+        wizardContext.setParameter("reactome_server", server);
+    }
+
 
     private void addNavigationButtons() {
         nextBtn = new IconButton(
@@ -152,7 +167,10 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
                         for (Map.Entry<String, String> entry : selectedParameters.entrySet()) {
                             wizardContext.setParameter(entry.getKey(), entry.getValue());
                         }
-                    wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.ANALYSIS), this);
+                        // Important Note: the following method has to set the analysis server
+                        // so that gsa.reactome.org stores the analysis token at the correct server.
+                        setReactomeAnalysisServer();
+                        wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.ANALYSIS), this);
                     }
                 });
         nextBtn.setEnabled(true);
@@ -170,6 +188,7 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
     private void updateUI() {
         parameters = wizardContext.getMethod().getParameters().stream()
                 .filter(parameter -> parameter.getScope().equalsIgnoreCase("common"))
+                .filter(parameter -> !parameter.getName().equalsIgnoreCase("reactome_server"))
                 .collect(Collectors.toList());
 
         populateParametersPanel();
