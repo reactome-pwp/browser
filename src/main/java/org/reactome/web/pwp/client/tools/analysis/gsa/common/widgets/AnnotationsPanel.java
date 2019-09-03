@@ -13,11 +13,14 @@ import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.AnnotationProperty;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 
+import java.util.List;
+
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class AnnotationsPanel extends FlowPanel {
     private static RegExp regExp = RegExp.compile("^[a-zA-Z\\d_]+$");
+    private static String DEFAULT_NAME = "Annotation";
 
     private GSADataset dataset;
 
@@ -25,16 +28,19 @@ public class AnnotationsPanel extends FlowPanel {
     private FlowPanel propertiesPanel;
     private Button addBtn;
 
+    private int nextId = 1;
+
     public AnnotationsPanel(GSADataset dataset) {
         this.dataset = dataset;
         init();
+        initNextId();
     }
 
     private void init() {
         setStyleName(RESOURCES.getCSS().main());
 
         addBtn = new IconButton(RESOURCES.addIcon(), RESOURCES.getCSS().addNewPropertyBtn(), "Add new annotation property", event -> {
-            AnnotationProperty property = dataset.getAnnotations().createAnnotationProperty("Annotation");
+            AnnotationProperty property = dataset.getAnnotations().createAnnotationProperty(DEFAULT_NAME + nextId++);
             if (property != null) {
                 propertiesPanel.add(createNewAnnotation(property));
             }
@@ -44,6 +50,24 @@ public class AnnotationsPanel extends FlowPanel {
         add(propertiesPanel = getPropertiesPanel());
         add(addBtn);
 
+    }
+
+    private void initNextId() {
+        List<AnnotationProperty> annotationPropertyList = dataset.getAnnotations().getAllAnnotations();
+
+        int maxId = 0;
+        for (AnnotationProperty annotationProperty : annotationPropertyList) {
+            if (annotationProperty.getName().startsWith(DEFAULT_NAME)) {
+                String name = annotationProperty.getName().replace(DEFAULT_NAME, "");
+                try {
+                    maxId = Math.max(Integer.parseInt(name), maxId);
+                } catch (NumberFormatException ex) {
+                    // Do nothing
+                }
+            }
+        }
+
+        nextId = maxId + 1;
     }
 
     private FlowPanel getSamplesPanel() {
@@ -167,10 +191,6 @@ public class AnnotationsPanel extends FlowPanel {
         String addNewPropertyBtn();
 
         String deletePropertyBtn();
-
-        String unselectable();
-
-        String undraggable();
 
     }
 }

@@ -30,4 +30,7 @@ public interface ExampleDatasetSummary {
     @AutoBean.PropertyName("sample_metadata")
     List<ExampleMetadata> getMetadata();
 
+    @AutoBean.PropertyName("default_parameters")
+    List<ExampleParameter> getDefaultParameters();
+
 }

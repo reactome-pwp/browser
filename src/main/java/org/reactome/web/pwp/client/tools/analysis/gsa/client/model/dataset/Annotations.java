@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset;
 import com.google.gwt.regexp.shared.RegExp;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDatasetSummary;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleMetadata;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,14 +52,45 @@ public class Annotations {
 
     public static Annotations create(ExampleDatasetSummary summary) {
         Annotations copy = new Annotations(summary.getSampleIds());
-        List<ExampleMetadata> metadata = summary.getMetadata();
 
-        if(metadata!=null) {
+        List<ExampleMetadata> metadata = summary.getMetadata();
+        if (metadata != null) {
             copy.annotationPropertyList = new ArrayList<>();
             for (ExampleMetadata meta : metadata) {
                 String[] annotationValues = meta.getValues().toArray(new String[meta.getValues().size()]);
                 AnnotationProperty annotationProperty = new AnnotationProperty(meta.getName(),annotationValues);
+                annotationProperty.setChecked(false);
                 copy.annotationPropertyList.add(annotationProperty);
+            }
+        }
+
+        List<ExampleParameter> parameters = summary.getDefaultParameters();
+        if (parameters != null) {
+            for (ExampleParameter parameter : parameters) {
+                switch (parameter.getName()) {
+                    case "analysis_group":
+                        copy.selectedComparisonFactor = parameter.getValue();
+                        break;
+                    case "comparison_group_1":
+                        copy.groupOne = parameter.getValue();
+                        break;
+                    case "comparison_group_2":
+                        copy.groupTwo = parameter.getValue();
+                        break;
+                    case "covariates":
+                        String covariatesStr = parameter.getValue();
+                        if (covariatesStr != null && !covariatesStr.isEmpty()) {
+                            String[] covArray = covariatesStr.split(",");
+                            for (String covName: covArray) {
+                                AnnotationProperty annotationProperty = copy.getAnnotationPropertyByName(covName);
+                                if (annotationProperty != null){
+                                    annotationProperty.setChecked(true);
+                                    copy.covariates.add(annotationProperty);
+                                }
+                            }
+                        }
+                        break;
+                }
             }
         }
 
@@ -153,6 +185,20 @@ public class Annotations {
 
     public void setCovariates(List<AnnotationProperty> covariates) {
         this.covariates = covariates;
+    }
+
+    private AnnotationProperty getAnnotationPropertyByName(String name) {
+        AnnotationProperty rtn = null;
+        if (name != null && !name.isEmpty()) {
+            for (AnnotationProperty annotationProperty : annotationPropertyList) {
+                if (annotationProperty.getName().equalsIgnoreCase(name)) {
+                    rtn = annotationProperty;
+                    break;
+                }
+            }
+        }
+
+        return rtn;
     }
 
     @Override

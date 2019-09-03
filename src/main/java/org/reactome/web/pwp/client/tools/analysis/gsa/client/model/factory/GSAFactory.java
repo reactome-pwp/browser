@@ -32,6 +32,7 @@ public class GSAFactory {
 
         AutoBean<ExampleDataset> example();
         AutoBean<ExampleDatasetsResult> exampleDatasets();
+        AutoBean<ExampleParameter> exampleParameter();
         AutoBean<ExampleDatasetSummary> exampleSummary();
         AutoBean<ExampleMetadata> metadata();
 
