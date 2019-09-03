@@ -13,7 +13,6 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.handlers.StepSelectedHandl
 import org.reactome.web.pwp.client.tools.analysis.gsa.style.GSAStyleFactory;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -111,9 +110,8 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
 
     private boolean validateAllParameters() {
         boolean rtn = true;
-        Iterator<Widget> it = parametersPanel.iterator();
-        while (it.hasNext()) {
-            AbstractParameterWidget parameterWidget = (AbstractParameterWidget) it.next();
+        for (Widget widget : parametersPanel) {
+            AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
             if (!parameterWidget.validate()) {
                 Console.info("VALIDATION_ERROR: " + parameterWidget.getName());
                 rtn = false;
@@ -124,9 +122,8 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
 
     private Map<String, String> getParameterValues() {
         Map<String, String> rtn = new HashMap<>();
-        Iterator<Widget> it = parametersPanel.iterator();
-        while (it.hasNext()) {
-            AbstractParameterWidget parameterWidget = (AbstractParameterWidget) it.next();
+        for (Widget widget : parametersPanel) {
+            AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
             rtn.put(parameterWidget.getName(), parameterWidget.getValue());
         }
 

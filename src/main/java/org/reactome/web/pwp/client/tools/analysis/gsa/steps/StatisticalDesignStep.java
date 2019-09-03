@@ -275,7 +275,7 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
 
         for (AnnotationProperty property : allAnnotations) {
             if (!property.getName().equals(selectedComparisonFactor)) {
-                property.setChecked(selectedCovariates.contains(property.getName()));
+                property.setChecked(selectedCovariates.contains(property));
                 covariates.add(property);
             }
         }
