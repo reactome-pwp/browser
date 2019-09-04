@@ -139,7 +139,6 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
 
     private void setReactomeAnalysisServer() {
         String hostName = Window.Location.getHostName();
-        Console.info("HostName: " + hostName);
         String server = "production";
         if (hostName.equalsIgnoreCase("dev.reactome.org")) {
             server = "dev";
@@ -183,6 +182,11 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
     }
 
     private void updateUI() {
+        /*
+         * We only show the properties with 'common' scope to the user at this step
+         * Note: We also hide the reactome server property from the user but we silently set its value
+         * using the setReactomeAnalysisServer() method
+         */
         parameters = wizardContext.getMethod().getParameters().stream()
                 .filter(parameter -> parameter.getScope().equalsIgnoreCase("common"))
                 .filter(parameter -> !parameter.getName().equalsIgnoreCase("reactome_server"))
