@@ -109,7 +109,6 @@ public class AnnotationsPanel extends FlowPanel {
         header.add(title);
 
         Button deleteBtn = new IconButton(RESOURCES.deleteIcon(), RESOURCES.getCSS().deletePropertyBtn(), "Delete annotation property", event -> {
-            Console.info("Deleting ... " + annotationProperty.getName() );
             rtn.removeFromParent();
             dataset.getAnnotations().deleteAnnotationProperty(annotationProperty);
         });

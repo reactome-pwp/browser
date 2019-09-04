@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class Annotations {
-    private static RegExp regExp = RegExp.compile("^[a-zA-Z\\d_]+$");
+    private static RegExp regExp = RegExp.compile("^[a-zA-Z\\d_\\.]+$");
 
     private Map<String, Integer> index = new HashMap<>();
     private List<AnnotationProperty> annotationPropertyList = new ArrayList<>();

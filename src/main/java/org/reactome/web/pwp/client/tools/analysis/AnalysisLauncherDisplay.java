@@ -44,7 +44,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     private SpeciesComparison speciesComparison;
     private TissueDistribution tissueDistribution;
-    private GSAWizard gwsWizard;
+    private GSAWizard gsaWizard;
 
     private List<Button> btns = new LinkedList<>();
     private Button analysisBtn;
@@ -90,7 +90,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.container.setStyleName(RESOURCES.getCSS().container());
 
         this.container.add(new AnalysisWizard(this));
-        this.container.add(gwsWizard = new GSAWizard(this));
+        this.container.add(gsaWizard = new GSAWizard(this));
         this.container.add(speciesComparison = new SpeciesComparison(this));
         this.container.add(tissueDistribution = new TissueDistribution(this));
 
@@ -168,17 +168,17 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     @Override
     public void setAvailableGSAMethods(List<Method> methods) {
-        gwsWizard.setAvailableMethods(methods);
+        gsaWizard.setAvailableMethods(methods);
     }
 
     @Override
     public void setAvailableGSADatasetTypes(List<DatasetType> datasetTypes) {
-        gwsWizard.setAvailableDatasetTypes(datasetTypes);
+        gsaWizard.setAvailableDatasetTypes(datasetTypes);
     }
 
     @Override
     public void setAvailableGSAExampleDatasets(List<ExampleDataset> exampleDatasets) {
-        gwsWizard.setAvailableExampleDatasets(exampleDatasets);
+        gsaWizard.setAvailableExampleDatasets(exampleDatasets);
     }
 
     @Override
