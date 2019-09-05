@@ -7,16 +7,23 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Parameter;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public abstract class AbstractParameterWidget<T> extends FlowPanel {
+    protected static final String HINT_INTEGER = "Please enter an integer value";
+    protected static final String HINT_FLOAT = "Please enter a decimal number";
+
     protected Parameter parameter;
 
     protected String name;
     protected T value;
+
+    private FlowPanel rightGroup;
+    protected Image validationIcon;
 
     public AbstractParameterWidget(Parameter parameter) {
         this.parameter = parameter;
@@ -40,6 +47,16 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
 
     public abstract boolean validate();
 
+    public void showValidationError(boolean visible) {
+        if (validationIcon != null) {
+            validationIcon.setVisible(visible);
+            if (visible) {
+                rightGroup.addStyleName(RESOURCES.getCSS().validationError());
+            } else {
+                rightGroup.removeStyleName(RESOURCES.getCSS().validationError());
+            }
+        }
+    }
 
     private void baseInit() {
         setStyleName(RESOURCES.getCSS().main());
@@ -56,7 +73,24 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
         leftGroup.add(title);
         leftGroup.add(description);
 
+        rightGroup = new FlowPanel();
+        rightGroup.setStyleName(RESOURCES.getCSS().rightGroup());
+
         add(leftGroup);
+        add(rightGroup);
+    }
+
+    protected void includeWidget(Widget widget) {
+        rightGroup.add(widget);
+    }
+
+    protected void addValidationWidget(String hint) {
+        validationIcon = new Image(RESOURCES.errorIcon());
+        validationIcon.setStyleName(RESOURCES.getCSS().validationIcon());
+        validationIcon.setTitle(hint);
+        validationIcon.setVisible(false);
+
+        rightGroup.add(validationIcon);
     }
 
 
@@ -73,6 +107,9 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
         @Source("../../../images/info.png")
         ImageResource infoIcon();
 
+        @Source("../../../images/error.png")
+        ImageResource errorIcon();
+
     }
 
     @CssResource.ImportedWithPrefix("pwp-MethodItem")
@@ -86,9 +123,15 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
 
         String leftGroup();
 
+        String rightGroup();
+
         String title();
 
         String description();
+
+        String validationIcon();
+
+        String validationError();
 
     }
 }

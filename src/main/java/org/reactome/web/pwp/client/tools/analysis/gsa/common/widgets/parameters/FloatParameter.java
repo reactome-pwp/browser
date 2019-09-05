@@ -1,5 +1,6 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.common.widgets.parameters;
 
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.ui.TextBox;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Parameter;
 
@@ -7,6 +8,7 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Parameter
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class FloatParameter extends AbstractParameterWidget<Float> {
+    private static RegExp regExp = RegExp.compile("^\\d+(\\.\\d+)?$");
     private TextBox input;
 
     public FloatParameter(Parameter parameter) {
@@ -32,18 +34,19 @@ public class FloatParameter extends AbstractParameterWidget<Float> {
 
     @Override
     public boolean validate() {
-        try {
-            Float.parseFloat(input.getText());
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return regExp.test(input.getText().trim());
     }
 
     private void initUI() {
         input = new TextBox();
+        input.addKeyUpHandler(e -> {
+            if (validationIcon != null && validationIcon.isVisible()) {
+                showValidationError(false);
+            }
+        });
         setDefault();
 
-        add(input);
+        includeWidget(input);
+        addValidationWidget(HINT_FLOAT);
     }
 }

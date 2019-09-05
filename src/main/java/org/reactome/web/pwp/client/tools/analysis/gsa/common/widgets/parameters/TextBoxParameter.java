@@ -39,6 +39,6 @@ public class TextBoxParameter extends AbstractParameterWidget<String> {
         input = new TextBox();
         setDefault();
 
-        add(input);
+        includeWidget(input);
     }
 }

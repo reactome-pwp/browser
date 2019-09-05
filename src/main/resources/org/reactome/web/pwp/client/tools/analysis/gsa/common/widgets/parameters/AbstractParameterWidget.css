@@ -42,6 +42,14 @@
     align-items: stretch;
 }
 
+.rightGroup {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: stretch;
+
+    color: #0e7cb3;
+}
+
 .title {
     color: #0e7cb3;
     font-size: medium;
@@ -54,6 +62,20 @@
     width: auto;
     cursor: help;
     margin-left: 5px;
+}
+
+.validationIcon {
+    height: 18px;
+    width: auto;
+    cursor: help;
+    margin-right: -21px;
+    align-self: center;
+
+    z-index: 100;
+}
+
+.validationError input{
+    color: firebrick !important;
 }
 
 

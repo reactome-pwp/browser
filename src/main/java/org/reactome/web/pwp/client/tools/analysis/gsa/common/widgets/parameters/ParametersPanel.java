@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Collects and presents all the parameters for a given method,
+ * as they are retrieved from the server
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class ParametersPanel extends FlowPanel {
@@ -56,8 +59,10 @@ public class ParametersPanel extends FlowPanel {
         boolean rtn = true;
         for (Widget widget : getChildren()) {
             AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
+            parameterWidget.showValidationError(false);
             if (!parameterWidget.validate()) {
                 Console.info("Parameter validation error: " + parameterWidget.getName());
+                parameterWidget.showValidationError(true);
                 rtn = false;
             }
         }
