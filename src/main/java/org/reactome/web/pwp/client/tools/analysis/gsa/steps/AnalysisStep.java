@@ -180,7 +180,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     @Override
     public void onResultLinksSuccess(ResultLinks resultLinks) {
         updateStatusPanel(null, "Retrieving analysis links", resultLinks.getReactomeLinks() + " links retrieved");
-        resultLinks.getReactomeLinks().forEach(k -> Console.info(k.getUrl() + " - "  + k.getName() + " - "  + k.getToken()));
+
         String token = resultLinks.getReactomeLinks().get(0).getToken();
         stage = STAGE.GET_RESULT;
 
