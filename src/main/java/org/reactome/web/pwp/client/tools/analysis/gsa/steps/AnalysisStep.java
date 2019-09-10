@@ -179,40 +179,45 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
     @Override
     public void onResultLinksSuccess(ResultLinks resultLinks) {
-        updateStatusPanel(null, "Retrieving analysis links", resultLinks.getReactomeLinks() + " links retrieved");
+        if (resultLinks == null || resultLinks.getReactomeLinks() == null || resultLinks.getReactomeLinks().isEmpty()) {
+            // An error has occurred and no result links are returned.
+            updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, "No result links returned");
+        } else {
+            updateStatusPanel(null, "Retrieving analysis links", resultLinks.getReactomeLinks() + " links retrieved");
 
-        String token = resultLinks.getReactomeLinks().get(0).getToken();
-        stage = STAGE.GET_RESULT;
+            String token = resultLinks.getReactomeLinks().get(0).getToken();
+            stage = STAGE.GET_RESULT;
 
-        updateStatusPanel(null, "Retrieving results...", "");
-        AnalysisClient.getResult(token, new ResultFilter(), AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
-            @Override
-            public void onAnalysisResult(AnalysisResult result, long time) {
-                updateStatusPanel(GSAStyleFactory.RESOURCES.editIcon(), "Results retrieved", "");
-                updateResultsPanel(resultLinks, result);
+            updateStatusPanel(null, "Retrieving results...", "");
+            AnalysisClient.getResult(token, new ResultFilter(), AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
+                @Override
+                public void onAnalysisResult(AnalysisResult result, long time) {
+                    updateStatusPanel(GSAStyleFactory.RESOURCES.editIcon(), "Results retrieved", "");
+                    updateResultsPanel(resultLinks, result);
 
-                if (createReports) {
-                    areReportsCompleted = false;
-                    reportsPanel.setVisible(true);
-                    wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, false), this);
-                    checkReportsStatusUntilCompleted();
-                    nextBtn.setVisible(true);
-                } else {
-                    wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this);
-                    Scheduler.get().scheduleDeferred(() -> wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this));
+                    if (createReports) {
+                        areReportsCompleted = false;
+                        reportsPanel.setVisible(true);
+                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, false), this);
+                        checkReportsStatusUntilCompleted();
+                        nextBtn.setVisible(true);
+                    } else {
+                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this);
+                        Scheduler.get().scheduleDeferred(() -> wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this));
+                    }
                 }
-            }
 
-            @Override
-            public void onAnalysisError(AnalysisError error) {
-                updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, error.getReason());
-            }
+                @Override
+                public void onAnalysisError(AnalysisError error) {
+                    updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, error.getReason());
+                }
 
-            @Override
-            public void onAnalysisServerException(String message) {
-                updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, message);
-            }
-        });
+                @Override
+                public void onAnalysisServerException(String message) {
+                    updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, message);
+                }
+            });
+        }
     }
 
     @Override
