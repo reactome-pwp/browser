@@ -70,6 +70,12 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
     private Image exampleInfoIcon;
     private Label exampleInfoMessage;
 
+    private FlowPanel remoteDatasetPanel;
+
+    private Widget remoteDatasetInfoPanel;
+    private Image remoteDatasetInfoIcon;
+    private Label remoteDatasetInfoMessage;
+
     public AddDatasetPanel(GSAWizardEventBus wizardEventBus, GSAWizardContext wizardContext) {
         this.wizardEventBus = wizardEventBus;
         this.wizardContext = wizardContext;
@@ -164,11 +170,17 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         exampleInfoPanel.setVisible(visible);
     }
 
+    public void showRemoteDatasetInfoPanel(boolean visible) {
+        remoteDatasetInfoPanel.setVisible(visible);
+    }
+
     private void init() {
         setStyleName(RESOURCES.getCSS().main());
         add(getLocalCategoryPanel());
         add(orLabel = new Label("OR"));
         add(getExamplesPanel());
+//        add(new Label("OR"));
+//        add(getRemoteDatasetPanel());
 
         //initialise the file submission form
         form = new FormPanel();
@@ -269,6 +281,11 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         exampleInfoMessage.setText(message);
     }
 
+    private void updateRemoteDatasetInfo(ImageResource icon, String message) {
+        remoteDatasetInfoIcon.setResource(icon);
+        remoteDatasetInfoMessage.setText(message);
+    }
+
     private Widget getExamplesPanel() {
         FlowPanel rtn = new FlowPanel();
         rtn.setStyleName(RESOURCES.getCSS().categoryPanel());
@@ -341,6 +358,78 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
 
             examplesPanel.add(aPanel);
         }
+    }
+
+    private Widget getRemoteDatasetPanel() {
+        FlowPanel rtn = new FlowPanel();
+        rtn.setStyleName(RESOURCES.getCSS().remoteDatasetPanel());
+
+        Image icon = new Image(RESOURCES.folderIcon());
+        icon.setStyleName(RESOURCES.getCSS().icon());
+        Label title = new Label("Import a dataset");
+        title.setStyleName(RESOURCES.getCSS().title());
+        FlowPanel header = new FlowPanel();
+        header.setStyleName(RESOURCES.getCSS().header());
+        header.add(icon);
+        header.add(title);
+
+        remoteDatasetPanel = new FlowPanel();
+        remoteDatasetPanel.setStyleName(RESOURCES.getCSS().itemsPanel());
+
+        rtn.add(header);
+        rtn.add(remoteDatasetPanel);
+        rtn.add(remoteDatasetInfoPanel = getRemoteDatasetInfoPanel());
+        remoteDatasetInfoPanel.setVisible(false);
+
+        getRemoteDatasetWidgets();
+
+        rtn.setVisible(true);
+
+        return rtn;
+    }
+
+    private void getRemoteDatasetWidgets() {
+        HTMLPanel description = new HTMLPanel("Please specify the id of the dataset you would like to import");
+        description.setStyleName(RESOURCES.getCSS().remoteDatasetDescription());
+
+        Button importBtn = new Button();
+        importBtn.setStyleName(RESOURCES.getCSS().importBtn());
+        importBtn.setText("Import");
+        importBtn.setTitle("Import a dataset from another resource");
+        importBtn.setEnabled(false);
+        importBtn.addClickHandler(event -> {
+            //TODO: use the id to query gsa platform
+//            updateRemoteDatasetInfo(RESOURCES.uploadSpinnerIcon(), EXAMPLE_UPLOADING_MSG);
+//            showRemoteDatasetInfoPanel(true);
+        });
+
+        TextBox remoteDatasetId = new TextBox();
+        remoteDatasetId.getElement().setPropertyString("placeholder", "Enter a dataset ID, e.g. ...");
+        remoteDatasetId.setStyleName(RESOURCES.getCSS().remoteDatasetId());
+        remoteDatasetId.addKeyUpHandler(event -> {
+            importBtn.setEnabled(!remoteDatasetId.getText().isEmpty());
+        });
+
+        remoteDatasetPanel.clear();
+        remoteDatasetPanel.add(description);
+        remoteDatasetPanel.add(remoteDatasetId);
+        remoteDatasetPanel.add(importBtn);
+
+    }
+
+    private Widget getRemoteDatasetInfoPanel() {
+        remoteDatasetInfoIcon = new Image(RESOURCES.binIcon());
+        remoteDatasetInfoIcon.setStyleName(RESOURCES.getCSS().infoIcon());
+
+        remoteDatasetInfoMessage = new Label();
+        remoteDatasetInfoMessage.setStyleName(RESOURCES.getCSS().infoMessage());
+
+        FlowPanel infoPanel = new FlowPanel();
+        infoPanel.setStyleName(RESOURCES.getCSS().infoPanel());
+        infoPanel.add(remoteDatasetInfoIcon);
+        infoPanel.add(remoteDatasetInfoMessage);
+
+        return infoPanel;
     }
 
     private void submitExample(ExampleDataset example) {
@@ -495,6 +584,8 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
 
         String categoryPanel();
 
+        String remoteDatasetPanel();
+
         String header();
 
         String title();
@@ -516,6 +607,12 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         String infoIcon();
 
         String infoMessage();
+
+        String remoteDatasetDescription();
+
+        String remoteDatasetId();
+
+        String importBtn();
 
     }
 }
