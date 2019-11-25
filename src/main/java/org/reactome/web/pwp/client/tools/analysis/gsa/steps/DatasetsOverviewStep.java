@@ -123,7 +123,7 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
         container.add(addDatasetPanel);
 
         addNewDatasetBtn = new IconButton(
-                null,
+                "Add Dataset",
                 GSAStyleFactory.RESOURCES.addIcon(),
                 GSAStyleFactory.getStyle().addNewDatasetBtn(),
                 "Add a new dataset",
@@ -162,9 +162,13 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
 
     private void rotateAddButton() {
         if (addDatasetPanel.isExpanded()) {
-            addNewDatasetBtn.removeStyleName(GSAStyleFactory.getStyle().rotate());
+            addNewDatasetBtn.getImage().removeStyleName(GSAStyleFactory.getStyle().rotate());
+            addNewDatasetBtn.setText("Add dataset");
+            addNewDatasetBtn.setTitle("Add a new dataset");
         } else {
-            addNewDatasetBtn.addStyleName(GSAStyleFactory.getStyle().rotate());
+            //addNewDatasetBtn.addStyleName(GSAStyleFactory.getStyle().rotate());
+            addNewDatasetBtn.getImage().setStyleName(GSAStyleFactory.getStyle().rotate());
+            addNewDatasetBtn.setText("Cancel");
             addNewDatasetBtn.setTitle("Cancel");
         }
     }

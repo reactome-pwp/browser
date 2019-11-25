@@ -131,37 +131,53 @@
 
 .addNewDatasetBtn {
     align-self: center;
-    background-color: #0e7cb3;
+    /*background-color: #0e7cb3;*/
+    /*border: none;*/
+    /*outline: none;*/
+    /*border-radius: 20px;*/
+    /*color: white;*/
+    /*padding: 0;*/
+    /*border: 0;*/
+    background-color: rgb(30, 148, 208);
     border: none;
-    outline: none;
-    border-radius: 20px;
+    border-radius: 15px;
     color: white;
-    padding: 0;
-    border: 0;
+    padding: 3px 10px 3px 10px;
+    outline: none;
+    font-size: medium !important;
 
     -webkit-transition: all 0.3s ease-in;
     -moz-transition: all 0.3s ease-in;
     transition: all 0.3s ease-in;
 }
 
-.addNewDatasetBtn>div {
-    margin: 0;
-    position: relative;
-}
+/*.addNewDatasetBtn>div {*/
+/*    margin: 0;*/
+/*    position: relative;*/
+/*}*/
 
 .addNewDatasetBtn span {
-    display: none;
+    /*display: none;*/
+    vertical-align: middle !important;
+    display: inline-block;
+    min-width: 60px;
+    max-width: 160px;
 }
 
 .addNewDatasetBtn img {
-    display: block;
-    height: 32px;
-    width: auto;
-    margin: 3px;
-    padding: 2px;
-    border: 0;
+    /*display: block;*/
+    /*height: 32px;*/
+    /*width: auto;*/
+    /*margin: 3px;*/
+    /*padding: 2px;*/
+    /*border: 0;*/
 
     -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+
+    vertical-align: middle !important;
+    padding-right: 3px;
+    height: 24px;
+    width: auto;
 }
 
 .addNewDatasetBtn:hover {

@@ -58,6 +58,10 @@ public class IconButton extends Button {
         }
     }
 
+    public Image getImage(){
+        return image;
+    }
+
     public void setImage(ImageResource imageResource) {
         image.setResource(imageResource);
         updateHTML();
