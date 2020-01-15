@@ -17,7 +17,7 @@ import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -32,8 +32,8 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
     public static boolean VERBOSE = true;
     private AppController appViewer;
 
-    private List<String> scriptsToLoad = Arrays.asList("https://gsui.genomespace.org/jsui/js/jquery-1.7.2.min.js",
-                                                       "https://gsui.genomespace.org/jsui/upload/gsuploadwindow.js");
+    private List<String> scriptsToLoad = Collections.emptyList();
+
     /**
      * This is the entry point method.
      */
