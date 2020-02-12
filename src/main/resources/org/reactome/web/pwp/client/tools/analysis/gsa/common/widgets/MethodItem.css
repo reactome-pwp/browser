@@ -14,9 +14,9 @@
     font-weight: normal;
     outline: none;
 
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
+    -webkit-transition: flex 0.3s ease-in-out;
+    -moz-transition: flex 0.3s ease-in-out;
+    transition: flex 0.3s ease-in-out;
 
     box-shadow: 6px 6px 10px 3px rgba(0,0,0,0.10);
 }
@@ -29,7 +29,13 @@
 }
 
 .itemExpanded {
-    height: 260px;
+    /*height: 270px;*/
+    /*overflow: auto;*/
+    overflow: auto;
+    height: min-content;
+    height: -moz-min-content;
+    height: -webkit-min-content;
+    padding-bottom: 20px;
 }
 
 .contentPanel {
@@ -53,6 +59,9 @@
     align-items: stretch;
     /*justify-content:space-between;*/
     overflow: auto;
+    height: min-content;
+    height: -moz-min-content;
+    height: -webkit-min-content;
 }
 
 .checkBoxImage {
