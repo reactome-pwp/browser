@@ -13,14 +13,20 @@ public class AnalysisCompletedEvent extends GwtEvent<AnalysisCompletedHandler> {
 
     AnalysisResult analysisResult;
     boolean hideSubmissionDialog;
+    boolean gsaIncludeDisease;
 
     public AnalysisCompletedEvent(AnalysisResult analysisResult) {
-        this(analysisResult, true);
+        this(analysisResult, true, true);
     }
 
-    public AnalysisCompletedEvent(AnalysisResult analysisResult, boolean hideSubmissionDialog ) {
+    public AnalysisCompletedEvent(AnalysisResult analysisResult, boolean gsaIncludeDisease) {
+        this(analysisResult, true, gsaIncludeDisease);
+    }
+
+    public AnalysisCompletedEvent(AnalysisResult analysisResult, boolean hideSubmissionDialog, boolean gsaIncludeDisease) {
         this.analysisResult = analysisResult;
         this.hideSubmissionDialog = hideSubmissionDialog;
+        this.gsaIncludeDisease = gsaIncludeDisease;
     }
 
     @Override
@@ -34,6 +40,10 @@ public class AnalysisCompletedEvent extends GwtEvent<AnalysisCompletedHandler> {
 
     public boolean getHideSubmissionDialog() {
         return hideSubmissionDialog;
+    }
+
+    public boolean isGsaIncludeDisease() {
+        return gsaIncludeDisease;
     }
 
     @Override

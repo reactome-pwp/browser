@@ -153,6 +153,9 @@ public class AnalysisStatus {
     }
 
     public void setSpeciesList(List<String> speciesList) {
+        if (speciesList == null) {
+            speciesList = new ArrayList<>();
+        }
         this.speciesList = speciesList;
     }
 
@@ -208,12 +211,12 @@ public class AnalysisStatus {
     private void setFilter(String key, String value){
         try {
             switch (key.toLowerCase()) {
-                case "resource":        setResource(value);                         break;
-                case "pvalue":          setpValue(Double.valueOf(value));           break;
-                case "includedisease":  setIncludeDisease(Boolean.valueOf(value));  break;
-                case "min":             setMin(Integer.valueOf(value));             break;
-                case "max":             setMax(Integer.valueOf(value));             break;
-                case "species":         setSpeciesList(value);                      break;
+                case "resource":        setResource(value);                                 break;
+                case "pvalue":          setpValue(Double.valueOf(value));                   break;
+                case "includedisease":  setIncludeDisease(Boolean.parseBoolean(value));     break;
+                case "min":             setMin(Integer.valueOf(value));                     break;
+                case "max":             setMax(Integer.valueOf(value));                     break;
+                case "species":         setSpeciesList(value);                              break;
             }
         } catch (Exception e) {
             //Nothing here

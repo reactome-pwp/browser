@@ -189,7 +189,11 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
             stage = STAGE.GET_RESULT;
 
             updateStatusPanel(null, "Retrieving results...", "");
-            AnalysisClient.getResult(token, new ResultFilter(), AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
+
+            boolean includeDisease = wizardContext.getParameters().get("include_disease_pathways") != null && Boolean.parseBoolean(wizardContext.getParameters().get("include_disease_pathways"));
+            ResultFilter analysisResultFilter = new ResultFilter();
+            analysisResultFilter.setIncludeDisease(includeDisease);
+            AnalysisClient.getResult(token, analysisResultFilter, AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
                 @Override
                 public void onAnalysisResult(AnalysisResult result, long time) {
                     updateStatusPanel(GSAStyleFactory.RESOURCES.editIcon(), "Results retrieved", "");
@@ -198,11 +202,11 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                     if (createReports) {
                         areReportsCompleted = false;
                         reportsPanel.setVisible(true);
-                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, false), this);
+                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, false, includeDisease), this);
                         checkReportsStatusUntilCompleted();
                         nextBtn.setVisible(true);
                     } else {
-                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this);
+                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, includeDisease), this);
                         Scheduler.get().scheduleDeferred(() -> wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this));
                     }
                 }

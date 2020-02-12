@@ -6,6 +6,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
 import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
@@ -79,7 +80,12 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
 
         State desiredState = new State(this.currentState);
         desiredState.setDetailsTab(DetailsTabType.ANALYSIS);
-        desiredState.setAnalysisParameters(summary.getToken(), resource.getResource());
+
+        ResultFilter filter = new ResultFilter();
+        filter.setResource(resource.getResource());
+        filter.setIncludeDisease(event.isGsaIncludeDisease());
+
+        desiredState.setAnalysisParameters(summary.getToken(), filter);
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 
