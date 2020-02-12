@@ -42,11 +42,11 @@ public class SelectMethodStep extends AbstractGSAStep implements MethodItem.Hand
         this.availableMethods = methods;
         updateMethodsPanel();
 
-        //Set default selection to DEFAULT
-        MethodItem itemToSelect = findMethodItemByName(DEFAULT_METHOD_NAME);
+//        // Set default selection to DEFAULT
+//        MethodItem itemToSelect = findMethodItemByName(DEFAULT_METHOD_NAME);
 
-        //Select the first method
-//        MethodItem itemToSelect = getFirstMethodItem();
+        // Select the first method
+        MethodItem itemToSelect = getFirstMethodItem();
 
         if (itemToSelect != null) {
             onCheckedChanged(itemToSelect, true);
