@@ -25,6 +25,12 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
     private FlowPanel rightGroup;
     protected Image validationIcon;
 
+    protected AbstractParameterWidget.Handler<T> handler;
+
+    public interface Handler<T> {
+        void onParameterChange(T value);
+    }
+
     public AbstractParameterWidget(Parameter parameter) {
         this.parameter = parameter;
         this.name = parameter.getName();
@@ -93,6 +99,9 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
         rightGroup.add(validationIcon);
     }
 
+    public void setParameterChangeHandler(Handler<T> handler) {
+        this.handler = handler;
+    }
 
     public static Resources RESOURCES;
     static {

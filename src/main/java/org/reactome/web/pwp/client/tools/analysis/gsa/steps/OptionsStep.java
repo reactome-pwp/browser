@@ -12,6 +12,7 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.events.StepSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.gsa.handlers.StepSelectedHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.style.GSAStyleFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +26,14 @@ import java.util.stream.Collectors;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 @SuppressWarnings("Duplicates")
-public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler  {
+public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler, BooleanParameter.Handler<Boolean>  {
     private IconButton nextBtn;
     private IconButton previousBtn;
 
     private List<Parameter> parameters;
     private FlowPanel parametersPanel;
+
+    private List<BooleanParameter> booleanParameters;
 
     public OptionsStep(GSAWizardEventBus wizardEventBus, GSAWizardContext wizardContext) {
         super(wizardEventBus, wizardContext);
@@ -76,6 +79,10 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
     }
 
     private void populateParametersPanel() {
+        if (booleanParameters == null || booleanParameters.isEmpty()) {
+            booleanParameters = new ArrayList<>(5);
+        }
+
         parametersPanel.clear();
         if (parameters == null || parameters.isEmpty()) {
             return;
@@ -83,7 +90,7 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
 
         for (Parameter par : parameters) {
             AbstractParameterWidget widget = null;
-            switch(par.getType()) {
+            switch (par.getType()) {
                 case "string":
                     widget = par.getValues() == null ? new TextBoxParameter(par) : new DropDownParameter(par);
                     break;
@@ -95,6 +102,8 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
                     break;
                 case "bool":
                     widget = new BooleanParameter(par);
+                    widget.setParameterChangeHandler(this);
+                    booleanParameters.add((BooleanParameter) widget);
                     break;
                 default:
                     Console.error("Unknown parameter type [" + par.getType() + "]");
@@ -193,5 +202,13 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler 
                 .collect(Collectors.toList());
 
         populateParametersPanel();
+    }
+
+    @Override
+    public void onParameterChange(Boolean value) {
+        nextBtn.setEnabled(false);
+        if (booleanParameters.stream().anyMatch(booleanParameter -> Boolean.parseBoolean(booleanParameter.getValue()))) {
+            nextBtn.setEnabled(true);
+        }
     }
 }

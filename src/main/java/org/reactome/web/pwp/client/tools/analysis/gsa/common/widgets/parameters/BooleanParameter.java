@@ -49,5 +49,8 @@ public class BooleanParameter extends AbstractParameterWidget<Boolean> implement
     @Override
     public void onValueChange(boolean value) {
         this.value = value;
+        if (handler != null) {
+            handler.onParameterChange(value);
+        }
     }
 }
