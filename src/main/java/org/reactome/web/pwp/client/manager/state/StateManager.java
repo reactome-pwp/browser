@@ -198,6 +198,26 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                 public void onAnalysisServerException(String message) {
                     //TODO
                 }
+
+                @Override
+                public void onTokenAvailabilityCheckedWithSummary(AnalysisSummary summary, boolean available, String message) {
+                    if (!available) {
+                        eventBus.fireEventFromSource(new ErrorMessageEvent(message), StateManager.this);
+                        state.resetAnalysisParameters();
+                        History.newItem(state.toString(), false);
+                    }
+                    currentState = state;
+
+                    State desired = new State(currentState);
+                    ResultFilter filter = state.getAnalysisStatus().getResultFilter();
+                    if (filter != null) {
+                        if (summary != null && !summary.isIncludeDisease()) {
+                            filter.setIncludeDisease(summary.isIncludeDisease());
+                        }
+                    }
+                    desired.setAnalysisParameters(token, filter);
+                    eventBus.fireEventFromSource(new StateChangedEvent(desired), StateManager.this);
+                }
             });
         }
     }

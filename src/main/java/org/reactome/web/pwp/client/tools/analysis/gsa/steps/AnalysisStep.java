@@ -351,7 +351,8 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                     if (link.getName().equalsIgnoreCase("Gene Set Analysis Summary")) {
                         anchor.setText("\u25B6 " + "Click to visualise the result of the Gene Set Analysis");
                         anchor.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-                        anchor.addClickHandler(event -> wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result), this));
+                        boolean includeDisease = wizardContext.getParameters().get("include_disease_pathways") != null && Boolean.parseBoolean(wizardContext.getParameters().get("include_disease_pathways"));
+                        anchor.addClickHandler(event -> wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, includeDisease), this));
                     } else {
                         anchor.setHref(link.getUrl());
                         anchor.setTarget("_blank");

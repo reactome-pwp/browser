@@ -181,7 +181,7 @@ public class AnalysisStatus {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AnalysisStatus that = (AnalysisStatus) o;
-        return includeDisease == that.includeDisease &&
+        return  Objects.equals(includeDisease, that.includeDisease) &&
                 Objects.equals(token, that.token) &&
                 Objects.equals(resource, that.resource) &&
                 Objects.equals(pValue, that.pValue) &&
