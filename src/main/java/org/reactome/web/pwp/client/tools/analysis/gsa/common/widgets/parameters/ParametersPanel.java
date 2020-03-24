@@ -4,10 +4,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExternalDatasource;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Parameter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,13 +19,19 @@ import java.util.Map;
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class ParametersPanel extends FlowPanel {
-    private Method method;
 
     public ParametersPanel(final Method method) {
-        this.method = method;
+        prepareParameters(method.getParameters());
+    }
 
-        for (Parameter par : method.getParameters()) {
-            if(par.getScope().equalsIgnoreCase("common")) continue;
+    public ParametersPanel(final ExternalDatasource externalDatasource) {
+        prepareParameters(externalDatasource.getParameters());
+    }
+
+    public void prepareParameters(List<Parameter> parameters) {
+        for (Parameter par : parameters) {
+            Console.info("PPREPAREPARAMETERS: " + par.getName());
+            if(par.getScope() != null && par.getScope().equalsIgnoreCase("common")) continue;
 
             AbstractParameterWidget widget = null;
             switch(par.getType()) {
@@ -46,7 +54,6 @@ public class ParametersPanel extends FlowPanel {
             if(widget != null) {
                 add(widget);
             }
-
         }
 
         addDomHandler(e -> {
@@ -60,6 +67,8 @@ public class ParametersPanel extends FlowPanel {
         for (Widget widget : getChildren()) {
             AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
             parameterWidget.showValidationError(false);
+            Console.info("Validating KEY: " + parameterWidget.getName());
+            Console.info("Validating VALUE: " + parameterWidget.getValue());
             if (!parameterWidget.validate()) {
                 Console.info("Parameter validation error: " + parameterWidget.getName());
                 parameterWidget.showValidationError(true);
@@ -72,12 +81,11 @@ public class ParametersPanel extends FlowPanel {
     public Map<String, String> getParameterValues() {
         Map<String, String> rtn = new HashMap<>();
         for (Widget widget : getChildren()) {
-            AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
+            AbstractParameterWidget<?> parameterWidget = (AbstractParameterWidget<?>) widget;
             rtn.put(parameterWidget.getName(), parameterWidget.getValue());
+            Console.info(parameterWidget.getName());
         }
 
         return rtn;
     }
-
-
 }

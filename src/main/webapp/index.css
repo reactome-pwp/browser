@@ -257,6 +257,11 @@ body {
     padding: 4px 10px 4px 10px;
 }
 
+.elv-Details-Title.elv-Details-Title-Disease {
+    background-color: #e092b3;
+    color: #BA1149;
+}
+
 .elv-Details-Title div {
     overflow: hidden;
     max-width: 500px;

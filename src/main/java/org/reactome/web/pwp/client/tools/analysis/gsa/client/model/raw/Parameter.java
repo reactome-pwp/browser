@@ -24,4 +24,6 @@ public interface Parameter {
 
     List<String> getValues();
 
+    boolean isRequired();
+
 }

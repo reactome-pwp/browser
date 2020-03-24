@@ -20,6 +20,7 @@ import org.reactome.web.pwp.client.common.handlers.AnalysisCompletedHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.GSAWizard;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDataset;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExternalDatasource;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Method;
 import org.reactome.web.pwp.client.tools.analysis.species.SpeciesComparison;
 import org.reactome.web.pwp.client.tools.analysis.tissues.TissueDistribution;
@@ -179,6 +180,11 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     @Override
     public void setAvailableGSAExampleDatasets(List<ExampleDataset> exampleDatasets) {
         gsaWizard.setAvailableExampleDatasets(exampleDatasets);
+    }
+
+    @Override
+    public void setAvailableExternalDatasources(List<ExternalDatasource> externalDatasources) {
+        gsaWizard.setAvailableExternalDatasources(externalDatasources);
     }
 
     @Override

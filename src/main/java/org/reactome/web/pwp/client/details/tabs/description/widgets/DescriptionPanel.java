@@ -51,6 +51,10 @@ public class DescriptionPanel extends DockLayoutPanel {
     private Widget getTitle(DatabaseObject databaseObject){
         HorizontalPanel titlePanel = new HorizontalPanel();
         titlePanel.setStyleName("elv-Details-Title");
+        if (databaseObject instanceof Event) {
+            if (((Event) databaseObject).getInDisease()) titlePanel.addStyleName("elv-Details-Title-Disease");
+        }
+
         try{
             ImageResource img = databaseObject.getImageResource();
             String helpTitle = databaseObject.getSchemaClass().name;

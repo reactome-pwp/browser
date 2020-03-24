@@ -32,7 +32,7 @@ import java.util.List;
  */
 @SuppressWarnings("Duplicates")
 public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
-        FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler {
+        FormPanel.SubmitHandler, FormPanel.SubmitCompleteHandler, ExternalDatasourceItem.Handler {
     private static final String URL_UPLOAD_FILE = "/GSAServer/upload";
     private static final int UPLOAD_POLLING_PERIOD = 2000;
 
@@ -53,6 +53,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
 
     private List<DatasetType> datasetTypes;
     private List<ExampleDataset> exampleDatasets;
+    private List<ExternalDatasource> externalDatasources;
 
     private boolean isExpanded;
     private boolean uploadInProgress;
@@ -94,6 +95,25 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
     public void setExampleDatasets(List<ExampleDataset> exampleDatasets) {
         this.exampleDatasets = exampleDatasets;
         getExampleWidgets();
+    }
+
+    public void setExternalDatasources(List<ExternalDatasource> externalDatasources) {
+        this.externalDatasources = externalDatasources;
+        getExternalDatasourcesWidget();
+    }
+
+    @Override
+    public void onOptionsExpanded(ExternalDatasourceItem source) {
+        //Collapse all of them first
+        Console.info("AddDatasetPanel > onOptionExpanded");
+        remoteDatasetPanel.forEach(widget -> ((ExternalDatasourceItem)widget).collapse());
+    }
+
+    @Override
+    public void onOptionSubmitted(ExternalDatasourceItem source) {
+        source.validateAllParameters();
+        Console.info("AddDatasetPanel > onOptionSubmitted");
+        Console.info("AddDatasetPanel > onOptionSubmitted > VALUE: " + source.getParameterValues().get("dataset_id"));
     }
 
     @Override
@@ -364,6 +384,48 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         }
     }
 
+    private void getExternalDatasourcesWidget() {
+        remoteDatasetPanel.clear();
+        remoteDatasetPanel.getParent().setVisible(!externalDatasources.isEmpty());
+        orLabel.setVisible(!externalDatasources.isEmpty());
+
+        for (ExternalDatasource externalDatasource : externalDatasources) {
+            remoteDatasetPanel.add(new ExternalDatasourceItem(externalDatasource, this));
+        }
+
+//            Label name = new Label(externalDatasource.getName());
+//            name.setStyleName(RESOURCES.getCSS().typeName());
+//
+//            HTMLPanel description = new HTMLPanel(externalDatasource.getName());
+//            description.setStyleName(RESOURCES.getCSS().typeDescription());
+//
+//            FlowPanel content = new FlowPanel();
+//            content.setStyleName(RESOURCES.getCSS().externalTypeContent());
+//            content.add(name);
+//            content.add(description);
+//
+//            FocusPanel aPanel = new FocusPanel();
+//            aPanel.getElement().setId(externalDatasource.getId());
+//            aPanel.getElement().getStyle().setBackgroundColor(externalDatasource.getColour());
+//            aPanel.addStyleName(RESOURCES.getCSS().externalTypePanel());
+//
+//            FocusPanel paramPanel = new FocusPanel();
+//            ParametersPanel parameters = new ParametersPanel(externalDatasource);
+//            parameters.setStyleName(RESOURCES.getCSS().externalParametersPanel());
+//            paramPanel.add(parameters);
+//            content.add(paramPanel);
+//
+//            aPanel.addClickHandler(event -> {
+//                event.preventDefault();
+//                event.stopPropagation();
+//                ((FocusPanel)event.getSource()).addStyleName(RESOURCES.getCSS().externalTypePanelExpanded());
+//            });
+//            aPanel.add(content);
+
+//            remoteDatasetPanel.add(aPanel);
+//        }
+    }
+
     private Widget getRemoteDatasetPanel() {
         FlowPanel rtn = new FlowPanel();
         rtn.setStyleName(RESOURCES.getCSS().remoteDatasetPanel());
@@ -378,50 +440,49 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         header.add(title);
 
         remoteDatasetPanel = new FlowPanel();
-        remoteDatasetPanel.setStyleName(RESOURCES.getCSS().itemsPanel());
+//        remoteDatasetPanel.setStyleName(RESOURCES.getCSS().itemsPanel());
 
         rtn.add(header);
         rtn.add(remoteDatasetPanel);
-        rtn.add(remoteDatasetInfoPanel = getRemoteDatasetInfoPanel());
-        remoteDatasetInfoPanel.setVisible(false);
 
-        getRemoteDatasetWidgets();
+//        rtn.add(remoteDatasetInfoPanel = getRemoteDatasetInfoPanel());
+//        remoteDatasetInfoPanel.setVisible(false);
 
-        rtn.setVisible(true);
+//        getRemoteDatasetWidgets();
 
         return rtn;
     }
 
-    private void getRemoteDatasetWidgets() {
-        HTMLPanel description = new HTMLPanel("Please specify the id of the dataset you would like to import");
-        description.setStyleName(RESOURCES.getCSS().remoteDatasetDescription());
-
-        Button importBtn = new Button();
-        importBtn.setStyleName(RESOURCES.getCSS().importBtn());
-        importBtn.setText("Import");
-        importBtn.setTitle("Import a dataset from another resource");
-        importBtn.setEnabled(false);
-
-        TextBox remoteDatasetId = new TextBox();
-        remoteDatasetId.getElement().setPropertyString("placeholder", "Enter a dataset ID, e.g. ...");
-        remoteDatasetId.setStyleName(RESOURCES.getCSS().remoteDatasetId());
-        remoteDatasetId.addKeyUpHandler(event -> {
-            importBtn.setEnabled(!remoteDatasetId.getText().isEmpty());
-        });
-
-        importBtn.addClickHandler(event -> {
-            updateRemoteDatasetInfo(RESOURCES.uploadSpinnerIcon(), REMOTE_DATASET_UPLOADING_MSG);
-            showRemoteDatasetInfoPanel(true);
-            submitRemoteDataset(remoteDatasetId.getText());
-        });
-
-
-        remoteDatasetPanel.clear();
-        remoteDatasetPanel.add(description);
-        remoteDatasetPanel.add(remoteDatasetId);
-        remoteDatasetPanel.add(importBtn);
-
-    }
+//    private void getRemoteDatasetWidgets() {
+//        HTMLPanel description = new HTMLPanel("Please specify the id of the dataset you would like to import");
+//        description.setStyleName(RESOURCES.getCSS().remoteDatasetDescription());
+//
+//        Button importBtn = new Button();
+//        importBtn.setStyleName(RESOURCES.getCSS().importBtn());
+//        importBtn.setText("Import");
+//        importBtn.setTitle("Import a dataset from another resource");
+//        importBtn.setEnabled(false);
+//
+//        TextBox remoteDatasetId = new TextBox();
+//        remoteDatasetId.getElement().setPropertyString("placeholder", "Enter a dataset ID, e.g. ...");
+//        remoteDatasetId.setStyleName(RESOURCES.getCSS().remoteDatasetId());
+//        remoteDatasetId.addKeyUpHandler(event -> {
+//            importBtn.setEnabled(!remoteDatasetId.getText().isEmpty());
+//        });
+//
+//        importBtn.addClickHandler(event -> {
+//            updateRemoteDatasetInfo(RESOURCES.uploadSpinnerIcon(), REMOTE_DATASET_UPLOADING_MSG);
+//            showRemoteDatasetInfoPanel(true);
+//            submitRemoteDataset(remoteDatasetId.getText());
+//        });
+//
+//
+//        remoteDatasetPanel.clear();
+//        remoteDatasetPanel.add(description);
+//        remoteDatasetPanel.add(remoteDatasetId);
+//        remoteDatasetPanel.add(importBtn);
+//
+//    }
 
     private Widget getRemoteDatasetInfoPanel() {
         remoteDatasetInfoIcon = new Image(RESOURCES.binIcon());
@@ -507,7 +568,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
                         showRemoteDatasetInfoPanel(true);
                     } else if (status.getStatus().equalsIgnoreCase("complete")) {
                         uploadInProgress = false;
-                        getRemoteDatasetSummary(exampleId);
+                        getExternalDatasourcesSummary();
                     } else if (status.getStatus().equalsIgnoreCase("failed")) {
                         uploadInProgress = false;
                         updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
@@ -535,40 +596,21 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         }, UPLOAD_POLLING_PERIOD);
     }
 
-    private void getRemoteDatasetSummary(String exampleId) {
-        GSAClient.getExampleDatasetSummary(exampleId, new GSAClientHandler.GSAExampleDatasetSummaryHandler() {
+    private void getExternalDatasourcesSummary() {
+        GSAClient.getExternalDatasources(new GSAClientHandler.GSAExternalDatasourcesHandler() {
             @Override
-            public void onExampleDatasetSummarySuccess(ExampleDatasetSummary summary) {
-                uploadInProgress = false;
-                updateRemoteDatasetInfo(RESOURCES.successIcon(), REMOTE_DATASET_SUCCESS_MSG);
-                showRemoteDatasetInfoPanel(true);
-
-                GSADataset dataset = GSADataset.create(summary);
-
-                wizardContext.setDatasetToAnnotate(dataset);
-                Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
-                    @Override
-                    public boolean execute() {
-                        wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.ANNOTATE_DATASET), this);
-                        return false;
-                    }
-                }, 700);
+            public void onExternalDatasourcesSuccess(List<ExternalDatasource> externalDatasources) {
+                Console.info("pickaboo");
             }
 
             @Override
             public void onError(GSAError error) {
-                uploadInProgress = false;
-                Console.info("Error getting example summary: " + error.getDetail());
-                updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
-                showRemoteDatasetInfoPanel(true);
+                Console.info("pickaboo");
             }
 
             @Override
             public void onException(String msg) {
-                uploadInProgress = false;
-                Console.info("Error getting example summary: " + msg);
-                updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
-                showRemoteDatasetInfoPanel(true);
+                Console.info("pickaboo");
             }
         });
     }
@@ -721,11 +763,18 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
 
         String infoMessage();
 
-        String remoteDatasetDescription();
+//        String remoteDatasetDescription();
 
-        String remoteDatasetId();
+//        String remoteDatasetId();
 
         String importBtn();
 
+        String externalParametersPanel();
+
+        String externalTypePanel();
+
+        String externalTypeContent();
+
+        String externalTypePanelExpanded();
     }
 }

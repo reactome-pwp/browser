@@ -126,26 +126,26 @@
     margin-left: 5px;
 }
 
-.remoteDatasetDescription {
-    color: rgb(14, 124, 179);
-    font-size: small;
-    font-weight: 500;
-    align-self: center;
-    text-align: justify;
-    margin: 3px 5px 5px 5px;
-    max-width: 225px;
-}
+/*.remoteDatasetDescription {*/
+/*    color: rgb(14, 124, 179);*/
+/*    font-size: small;*/
+/*    font-weight: 500;*/
+/*    align-self: center;*/
+/*    text-align: justify;*/
+/*    margin: 3px 5px 5px 5px;*/
+/*    max-width: 225px;*/
+/*}*/
 
-.remoteDatasetId {
-    color: #0e7cb3;
-    font-weight: bold;
-    font-size: medium;
-    text-align: justify;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-}
+/*.remoteDatasetId {*/
+/*    color: #0e7cb3;*/
+/*    font-weight: bold;*/
+/*    font-size: medium;*/
+/*    text-align: justify;*/
+/*    margin-left: 5px;*/
+/*    margin-right: 5px;*/
+/*    margin-bottom: 5px;*/
+/*    border-radius: 5px;*/
+/*}*/
 
 .importBtn {
     background-color: rgb(30, 148, 208);
@@ -171,4 +171,53 @@
 .importBtn:disabled, .importBtn:disabled:hover, .importBtn:disabled:active{
     background-color: #9a9c9e;
     cursor: default !important;
+}
+
+.externalTypePanel {
+    width: 300px;
+    margin: 2px 4px;
+    border-radius: 9px;
+    padding: 2px;
+    cursor: pointer;
+    outline: none;
+
+    height: 45px;
+    overflow: hidden;
+}
+
+.externalTypePanelExpanded {
+    height: auto;
+}
+
+.externalTypePanel:hover {
+    background-color: rgb(14, 124, 179) !important;
+}
+
+.externalParametersPanel {
+    flex-grow: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /*justify-content:space-between;*/
+    overflow: auto;
+    height: min-content;
+    height: -moz-min-content;
+    height: -webkit-min-content;
+
+    /*justify-content: space-between;*/
+    padding: 2px;
+    margin-top: 10px;
+    cursor: default;
+    font-family: system-ui, Arial, sans-serif !important;
+    border-radius: 10px;
+}
+
+.externalTypeContent {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.externalParametersPanel div {
+    border-radius: 5px;
 }

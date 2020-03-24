@@ -12,6 +12,7 @@ import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.DatasetType;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExampleDataset;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExternalDatasource;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardEventBus;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.cells.DatasetCell;
@@ -50,6 +51,10 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
 
     public void setExampleDatasets(List<ExampleDataset> exampleDatasets) {
         addDatasetPanel.setExampleDatasets(exampleDatasets);
+    }
+
+    public void setExternalDatasources(List<ExternalDatasource> externalDatasources) {
+        addDatasetPanel.setExternalDatasources(externalDatasources);
     }
 
     @Override

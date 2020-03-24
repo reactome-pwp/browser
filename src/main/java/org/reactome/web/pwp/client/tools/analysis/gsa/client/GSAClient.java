@@ -27,6 +27,7 @@ public class GSAClient {
     private static final String URL_LOAD_EXAMPLE = GSA_SERVER + "/0.1/data/load";
     private static final String URL_EXAMPLE_LOADING_STATUS = GSA_SERVER + "/0.1/data/status";
     private static final String URL_EXAMPLE_SUMMARY = GSA_SERVER + "/0.1/data/summary";
+    private static final String URL_EXTERNAL_DATASOURCE = GSA_SERVER + "/0.1/data/sources";
 
 
     private static final String URL_STATUS = GSA_SERVER + "/0.1/status";
@@ -365,6 +366,42 @@ public class GSAClient {
         return request;
     }
 
+    /***
+     */
+    public static Request getExternalDatasources(final GSAClientHandler.GSAExternalDatasourcesHandler handler) {
+        Request request = null;
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_EXTERNAL_DATASOURCE);
+        requestBuilder.setHeader("Accept", "application/json");
+        try {
+            request = requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    switch (response.getStatusCode()){
+                        case Response.SC_OK:
+                            handler.onExternalDatasourcesSuccess(getExternalDatasources(response.getText(), handler));
+                            break;
+                        default:
+
+                            String json = "[{\"id\":\"example_datasets\",\"name\":\"Example datasets\",\"parameters\":[{\"description\":\"Identifier of the dataset\",\"name\":\"dataset_id\",\"required\":true,\"type\":\"string\"}]},{\"id\":\"ebi_gxa\",\"name\":\"Expression Atlas\",\"parameters\":[{\"description\":\"Identifier of the dataset\",\"name\":\"dataset_id\",\"required\":true,\"type\":\"string\"}]},{\"id\":\"ebi_sc_gxa\",\"name\":\"Single Cell Expression Atlas\",\"parameters\":[{\"description\":\"Identifier of the dataset\",\"name\":\"dataset_id\",\"required\":true,\"type\":\"string\"},{\"description\":\"Parameter k used to create the cell clusters\",\"name\":\"k\",\"required\":true,\"type\":\"int\"}]}]";
+                            handler.onExternalDatasourcesSuccess(getExternalDatasources(json, handler));
+                            break;
+
+//                            GSAError error = getError(response.getText(), handler);
+//                            if (error!=null) {
+//                                handler.onError(error);
+//                            }
+                    }
+                }
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    handler.onException(exception.getMessage());
+                }
+            });
+        } catch (RequestException ex) {
+            handler.onException(ex.getMessage());
+        }
+        return request;
+    }
     private static List<Method> getMethods(final String json, final GSAClientHandler.GSAMethodsHandler handler) {
         List<Method> rtn = null;
         try {
@@ -418,6 +455,18 @@ public class GSAClient {
             rtn = GSAFactory.getModelObject(ExampleDatasetSummary.class, json);
         } catch (GSAException ex) {
             handler.onException("Server unreachable");
+            Console.error(ex.getMessage());
+        }
+        return rtn;
+    }
+
+    private static List<ExternalDatasource> getExternalDatasources(String json, final GSAClientHandler.GSAExternalDatasourcesHandler handler) {
+        List<ExternalDatasource> rtn = null;
+        try {
+            ExternalDatasourceResult result = GSAFactory.getModelObject(ExternalDatasourceResult.class, "{\"external\": " + json + "}");
+            rtn = result != null ? result.getExternal() : null;
+        } catch (GSAException ex) {
+            handler.onException("Server unreachable HHHHI ");
             Console.error(ex.getMessage());
         }
         return rtn;

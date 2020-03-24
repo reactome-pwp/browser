@@ -32,6 +32,10 @@ public interface GSAClientHandler {
         void onExampleDatasetSummarySuccess(ExampleDatasetSummary summary);
     }
 
+    interface GSAExternalDatasourcesHandler extends GSAClientHandler {
+        void onExternalDatasourcesSuccess(List<ExternalDatasource> externalDatasources);
+    }
+
     interface GSAStatusHandler extends GSAClientHandler {
         void onStatusSuccess(Status status);
     }

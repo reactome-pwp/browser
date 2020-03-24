@@ -67,7 +67,7 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
     private void baseInit() {
         setStyleName(RESOURCES.getCSS().main());
 
-        Label title = new Label(parameter.getDisplayName());
+        Label title = parameter.getDisplayName() == null ? new Label(parameter.getName()) : new Label(parameter.getDisplayName());
         title.setStyleName(RESOURCES.getCSS().title());
 
         Image description = new Image(RESOURCES.infoIcon());
