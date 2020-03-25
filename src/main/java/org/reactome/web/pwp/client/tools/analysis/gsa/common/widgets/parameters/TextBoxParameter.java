@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.common.widgets.parameters;
 
 import com.google.gwt.user.client.ui.TextBox;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Parameter;
 
 /**
@@ -21,6 +22,7 @@ public class TextBoxParameter extends AbstractParameterWidget<String> {
 
     @Override
     public void setValue(String value) {
+        Console.info("SET VALUE: " + value);
         this.value = value;
         input.setText(value);
     }

@@ -30,7 +30,6 @@ public class ParametersPanel extends FlowPanel {
 
     public void prepareParameters(List<Parameter> parameters) {
         for (Parameter par : parameters) {
-            Console.info("PPREPAREPARAMETERS: " + par.getName());
             if(par.getScope() != null && par.getScope().equalsIgnoreCase("common")) continue;
 
             AbstractParameterWidget widget = null;

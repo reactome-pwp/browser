@@ -102,7 +102,7 @@ public class ExternalDatasourceItem extends FocusPanel implements ClickHandler {
 //        });
 
         parametersPanel = createParametersPanel();
-        content.add(createParametersPanel());
+        content.add(parametersPanel);
 
         FlowPanel buttonDiv = new FlowPanel();
         buttonDiv.setStyleName(RESOURCES.getCSS().buttonPanel());
