@@ -5,7 +5,7 @@
     padding: 2px;
     cursor: pointer;
     outline: none;
-    height: 45px;
+    height: 55px;
     overflow: hidden;
 }
 
@@ -61,26 +61,6 @@
     margin-top: 3px;
 }
 
-.externalTypeContent {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    border-radius: 9px;
-    height: 55px;
-    margin: 5px;
-}
-
-.externalTypePanel {
-    width: 300px;
-    margin: 2px 4px;
-    border-radius: 9px;
-    padding: 2px;
-    cursor: pointer;
-    outline: none;
-    height: 45px;
-    overflow: hidden;
-}
-
 .buttonPanel {
     width: 100%;
     text-align: center;
@@ -88,7 +68,7 @@
 }
 
 .importBtn {
-    background-color: rgb(30, 148, 208);
+    /*background-color: rgb(30, 148, 208);*/
     border: none;
     border-radius: 15px;
     color: white;
@@ -96,15 +76,14 @@
     outline: none;
     font-size: medium !important;
     vertical-align: middle !important;
+    box-shadow: 1px 2px 5px darkslategrey;
 }
 
 .importBtn:hover {
-    background-color: #177dc0;
     cursor: pointer !important;
 }
 
 .importBtn:active:hover {
-    background-color: #07558b;
     cursor: pointer !important;
 }
 

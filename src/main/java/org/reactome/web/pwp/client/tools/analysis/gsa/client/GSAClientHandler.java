@@ -24,16 +24,16 @@ public interface GSAClientHandler {
         void onExampleDatasetSuccess(List<ExampleDataset> examples);
     }
 
-    interface GSAExampleDatasetLoadHandler extends GSAClientHandler {
-        void onExampleDatasetLoadSuccess(String statusToken);
-    }
-
-    interface GSAExampleDatasetSummaryHandler extends GSAClientHandler {
-        void onExampleDatasetSummarySuccess(ExampleDatasetSummary summary);
-    }
-
     interface GSAExternalDatasourcesHandler extends GSAClientHandler {
         void onExternalDatasourcesSuccess(List<ExternalDatasource> externalDatasources);
+    }
+
+    interface GSADatasetLoadHandler extends GSAClientHandler {
+        void onDatasetLoadSuccess(String statusToken);
+    }
+
+    interface GSADatasetSummaryHandler extends GSAClientHandler {
+        void onDatasetSummarySuccess(ExampleDatasetSummary summary);
     }
 
     interface GSAStatusHandler extends GSAClientHandler {

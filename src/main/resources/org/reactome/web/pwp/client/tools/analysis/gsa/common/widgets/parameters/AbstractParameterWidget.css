@@ -55,6 +55,7 @@
     font-size: medium;
     font-weight: bolder;
     margin-left: 6px;
+    margin-top: 3px;
 }
 
 .description {
@@ -62,6 +63,7 @@
     width: auto;
     cursor: help;
     margin-left: 5px;
+    margin-top: 3px;
 }
 
 .validationIcon {

@@ -65,7 +65,7 @@ public class DatasetsOverviewStep extends AbstractGSAStep implements StepSelecte
                 addDatasetPanel.expandCollapse();
                 addDatasetPanel.showFileInfoPanel(false);
                 addDatasetPanel.showExampleInfoPanel(false);
-                addDatasetPanel.showRemoteDatasetInfoPanel(false);
+                addDatasetPanel.showDatasetInfoPanel(false);
             }
         } else if (event.getStep() == GSAStep.DATASETS) {
             updateUI();

@@ -13,10 +13,15 @@ public interface ExternalDatasource {
 
     String getName();
 
+    String getDescription();
+
     List<Parameter> getParameters();
 
     default String getColour() {
         return DatasetTypesPalette.get().colourFromType(getName());
     }
 
+    default String getDarkerColour() {
+        return DatasetTypesPalette.get().darkerColourFromType(getName());
+    }
 }

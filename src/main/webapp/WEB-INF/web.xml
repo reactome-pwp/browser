@@ -50,24 +50,24 @@
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
-            <param-value>localhost</param-value>
+<!--            <param-value>localhost</param-value>-->
             <!--<param-value>reactome.org</param-value>-->
-<!--            <param-value>dev.reactome.org</param-value>-->
+            <param-value>dev.reactome.org</param-value>
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>
-            <param-value>8080</param-value>
-<!--            <param-value>80</param-value>-->
+<!--            <param-value>8080</param-value>-->
+            <param-value>80</param-value>
         </init-param>
         <!-- ONLY when connecting to localhost -->
-        <init-param>
-            <param-name>proxyProtocol</param-name>
-            <param-value>http</param-value>
-        </init-param>
+<!--        <init-param>-->
+<!--            <param-name>proxyProtocol</param-name>-->
+<!--            <param-value>http</param-value>-->
+<!--        </init-param>-->
         <init-param>
             <param-name>proxyPath</param-name>
-            <param-value>/</param-value>
-<!--            <param-value>/AnalysisService</param-value>-->
+<!--            <param-value>/</param-value>-->
+            <param-value>/AnalysisService</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
@@ -324,7 +324,7 @@
         <servlet-class>org.reactome.server.utils.proxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>proxyHost</param-name>
-            <param-value>35.244.133.251</param-value>
+            <param-value>gsa.reactome.org</param-value>
         </init-param>
         <init-param>
             <param-name>proxyPort</param-name>

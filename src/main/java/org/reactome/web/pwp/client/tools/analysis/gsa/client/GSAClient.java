@@ -2,6 +2,7 @@ package org.reactome.web.pwp.client.tools.analysis.gsa.client;
 
 import com.google.gwt.http.client.*;
 import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.ExternalDataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAException;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAFactory;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.*;
@@ -11,7 +12,7 @@ import java.util.List;
 
 /**
  * This is a client that handles communication with the GSA Service.
- *
+ * <p>
  * NOTE: Please keep in mind that to avoid Cross-Origin restrictions applied by most browsers
  * we proxy the gsa backend (gsa.reactome.org) through our servers at Apache level.
  *
@@ -19,25 +20,23 @@ import java.util.List;
  */
 @SuppressWarnings("Duplicates")
 public class GSAClient {
-    public static String GSA_SERVER = "/GSAServer";
-    private static final String URL_METHODS = GSA_SERVER + "/0.1/methods";
-    private static final String URL_TYPES = GSA_SERVER + "/0.1/types";
+    public static String GSA_SERVER =                           "/GSAServer";
+    private static final String URL_METHODS =                   GSA_SERVER + "/0.1/methods";
+    private static final String URL_TYPES =                     GSA_SERVER + "/0.1/types";
 
-    private static final String URL_GET_EXAMPLES = GSA_SERVER + "/0.1/data/examples";
-    private static final String URL_LOAD_EXAMPLE = GSA_SERVER + "/0.1/data/load";
-    private static final String URL_EXAMPLE_LOADING_STATUS = GSA_SERVER + "/0.1/data/status";
-    private static final String URL_EXAMPLE_SUMMARY = GSA_SERVER + "/0.1/data/summary";
-    private static final String URL_EXTERNAL_DATASOURCE = GSA_SERVER + "/0.1/data/sources";
+    private static final String URL_GET_EXAMPLES =              GSA_SERVER + "/0.1/data/examples";
+    private static final String URL_GET_EXTERNAL_DATASOURCE =   GSA_SERVER + "/0.1/data/sources";
+    private static final String URL_LOAD_DATASET =              GSA_SERVER + "/0.1/data/load";
+    private static final String URL_LOADING_STATUS =            GSA_SERVER + "/0.1/data/status";
+    private static final String URL_SUMMARY =                   GSA_SERVER + "/0.1/data/summary";
 
-
-    private static final String URL_STATUS = GSA_SERVER + "/0.1/status";
-    private static final String URL_REPORTS_STATUS = GSA_SERVER + "/0.1/report_status";
-    private static final String URL_ANALYSIS = GSA_SERVER + "/0.1/analysis";
-    private static final String URL_RESULT = GSA_SERVER + "/0.1/result";
+    private static final String URL_STATUS =                    GSA_SERVER + "/0.1/status";
+    private static final String URL_REPORTS_STATUS =            GSA_SERVER + "/0.1/report_status";
+    private static final String URL_ANALYSIS =                  GSA_SERVER + "/0.1/analysis";
+    private static final String URL_RESULT =                    GSA_SERVER + "/0.1/result";
 
     /**
      * Retrieves the available methods and their specification/parameters.
-     *
      */
     public static Request getMethods(final GSAClientHandler.GSAMethodsHandler handler) {
         Request request = null;
@@ -47,17 +46,18 @@ public class GSAClient {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onMethodsSuccess(getMethods(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -81,17 +81,18 @@ public class GSAClient {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onTypesSuccess(getTypes(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -116,17 +117,18 @@ public class GSAClient {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onExampleDatasetSuccess(getExamples(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -138,25 +140,28 @@ public class GSAClient {
         return request;
     }
 
-    public static Request loadExampleDataset(final String exampleId, final GSAClientHandler.GSAExampleDatasetLoadHandler handler) {
+    public static Request loadDataset(final ExternalDataset externalDataset, final GSAClientHandler.GSADatasetLoadHandler handler) {
         Request request = null;
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_LOAD_EXAMPLE + "/" + exampleId);
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.POST, URL_LOAD_DATASET + "/" + externalDataset.getResourceId());
         requestBuilder.setHeader("Accept", "application/json");
+        requestBuilder.setHeader("Content-Type", "application/json");
+
         try {
-            request = requestBuilder.sendRequest(null, new RequestCallback() {
+            request = requestBuilder.sendRequest(externalDataset.getPostData(), new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
-                            handler.onExampleDatasetLoadSuccess(response.getText());
+                            handler.onDatasetLoadSuccess(response.getText());
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -171,25 +176,26 @@ public class GSAClient {
     /***
      * Returning the current status of the example's loading.
      */
-    public static Request getExampleDatasetLoadingStatus(final String statusToken, final GSAClientHandler.GSAStatusHandler handler) {
+    public static Request getDatasetLoadingStatus(final String statusToken, final GSAClientHandler.GSAStatusHandler handler) {
         Request request = null;
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_EXAMPLE_LOADING_STATUS + "/" + statusToken);
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_LOADING_STATUS + "/" + statusToken);
         requestBuilder.setHeader("Accept", "application/json");
         try {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onStatusSuccess(getStatus(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -205,25 +211,26 @@ public class GSAClient {
      * Retrieves a summary of the loaded example.
      * This function is only available once the example has been fully loaded.
      */
-    public static Request getExampleDatasetSummary(final String exampleId, final GSAClientHandler.GSAExampleDatasetSummaryHandler handler) {
+    public static Request getDatasetSummary(final String exampleId, final GSAClientHandler.GSADatasetSummaryHandler handler) {
         Request request = null;
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_EXAMPLE_SUMMARY + "/" + exampleId);
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_SUMMARY + "/" + exampleId);
         requestBuilder.setHeader("Accept", "application/json");
         try {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
-                            handler.onExampleDatasetSummarySuccess(getExampleSummary(response.getText(), handler));
+                            handler.onDatasetSummarySuccess(getExampleSummary(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -248,17 +255,18 @@ public class GSAClient {
             request = requestBuilder.sendRequest(data, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onAnalysisSubmissionSuccess(response.getText());
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -281,17 +289,18 @@ public class GSAClient {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onStatusSuccess(getStatus(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -314,17 +323,18 @@ public class GSAClient {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onReportsStatusSuccess(getReportsStatus(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -344,17 +354,18 @@ public class GSAClient {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onResultLinksSuccess(getResultLinks(response.getText(), handler));
                             break;
                         default:
                             GSAError error = getError(response.getText(), handler);
-                            if (error!=null) {
+                            if (error != null) {
                                 handler.onError(error);
                             }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -370,28 +381,24 @@ public class GSAClient {
      */
     public static Request getExternalDatasources(final GSAClientHandler.GSAExternalDatasourcesHandler handler) {
         Request request = null;
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_EXTERNAL_DATASOURCE);
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, URL_GET_EXTERNAL_DATASOURCE);
         requestBuilder.setHeader("Accept", "application/json");
         try {
             request = requestBuilder.sendRequest(null, new RequestCallback() {
                 @Override
                 public void onResponseReceived(Request request, Response response) {
-                    switch (response.getStatusCode()){
+                    switch (response.getStatusCode()) {
                         case Response.SC_OK:
                             handler.onExternalDatasourcesSuccess(getExternalDatasources(response.getText(), handler));
                             break;
                         default:
-
-                            String json = "[{\"id\":\"example_datasets\",\"name\":\"Example datasets\",\"parameters\":[{\"description\":\"Identifier of the dataset\",\"name\":\"dataset_id\",\"required\":true,\"type\":\"string\"}]},{\"id\":\"ebi_gxa\",\"name\":\"Expression Atlas\",\"parameters\":[{\"description\":\"Identifier of the dataset\",\"name\":\"dataset_id\",\"required\":true,\"type\":\"string\"}]},{\"id\":\"ebi_sc_gxa\",\"name\":\"Single Cell Expression Atlas\",\"parameters\":[{\"description\":\"Identifier of the dataset\",\"name\":\"dataset_id\",\"required\":true,\"type\":\"string\"},{\"description\":\"Parameter k used to create the cell clusters\",\"name\":\"k\",\"required\":true,\"type\":\"int\"}]}]";
-                            handler.onExternalDatasourcesSuccess(getExternalDatasources(json, handler));
-                            break;
-
-//                            GSAError error = getError(response.getText(), handler);
-//                            if (error!=null) {
-//                                handler.onError(error);
-//                            }
+                            GSAError error = getError(response.getText(), handler);
+                            if (error!=null) {
+                                handler.onError(error);
+                            }
                     }
                 }
+
                 @Override
                 public void onError(Request request, Throwable exception) {
                     handler.onException(exception.getMessage());
@@ -402,6 +409,7 @@ public class GSAClient {
         }
         return request;
     }
+
     private static List<Method> getMethods(final String json, final GSAClientHandler.GSAMethodsHandler handler) {
         List<Method> rtn = null;
         try {
@@ -449,7 +457,8 @@ public class GSAClient {
         return rtn;
     }
 
-    private static ExampleDatasetSummary getExampleSummary(final String json, final GSAClientHandler.GSAExampleDatasetSummaryHandler handler) {
+
+    private static ExampleDatasetSummary getExampleSummary(final String json, final GSAClientHandler.GSADatasetSummaryHandler handler) {
         ExampleDatasetSummary rtn = null;
         try {
             rtn = GSAFactory.getModelObject(ExampleDatasetSummary.class, json);
@@ -466,7 +475,7 @@ public class GSAClient {
             ExternalDatasourceResult result = GSAFactory.getModelObject(ExternalDatasourceResult.class, "{\"external\": " + json + "}");
             rtn = result != null ? result.getExternal() : null;
         } catch (GSAException ex) {
-            handler.onException("Server unreachable HHHHI ");
+            handler.onException("Server unreachable");
             Console.error(ex.getMessage());
         }
         return rtn;

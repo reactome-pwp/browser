@@ -16,6 +16,7 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Parameter
 public abstract class AbstractParameterWidget<T> extends FlowPanel {
     protected static final String HINT_INTEGER = "Please enter an integer value";
     protected static final String HINT_FLOAT = "Please enter a decimal number";
+    protected static final String HINT_REQUIRED = "* Required field";
 
     protected Parameter parameter;
 
@@ -67,7 +68,9 @@ public abstract class AbstractParameterWidget<T> extends FlowPanel {
     private void baseInit() {
         setStyleName(RESOURCES.getCSS().main());
 
-        Label title = parameter.getDisplayName() == null ? new Label(parameter.getName()) : new Label(parameter.getDisplayName());
+        String required = parameter.isRequired() ? "* " : "";
+        String lbl = required + (parameter.getDisplayName() == null ? parameter.getName() : parameter.getDisplayName());
+        Label title = new Label(lbl);
         title.setStyleName(RESOURCES.getCSS().title());
 
         Image description = new Image(RESOURCES.infoIcon());

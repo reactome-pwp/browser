@@ -20,7 +20,6 @@ public class ExternalDatasourceItem extends FocusPanel implements ClickHandler {
     private ExternalDatasource externalDatasource;
     private boolean isExpanded;
     private ParametersPanel parametersPanel;
-    private Button submitBtn;
 
     public interface Handler {
         void onOptionsExpanded(ExternalDatasourceItem source);
@@ -41,9 +40,73 @@ public class ExternalDatasourceItem extends FocusPanel implements ClickHandler {
     public void onClick(ClickEvent event) {
         event.preventDefault();
         event.stopPropagation();
-        Console.info("ExternalDatasourceItem > onClick [" + isExpanded + "]");
-        handler.onOptionsExpanded(this);
-        expandCollapse();
+        if (event.getSource().equals(this) && isExpanded) {
+            collapse();
+        } else {
+            handler.onOptionsExpanded(this);
+            expandCollapse();
+        }
+    }
+
+    private void init() {
+        setStyleName(RESOURCES.getCSS().item());
+        getElement().setId(externalDatasource.getId());
+        getElement().getStyle().setBackgroundColor(externalDatasource.getColour());
+
+        FlowPanel content = new FlowPanel();
+
+        Label name = new Label(externalDatasource.getName());
+        name.setStyleName(RESOURCES.getCSS().typeName());
+        content.add(name);
+
+        HTMLPanel description = new HTMLPanel(externalDatasource.getDescription());
+        description.setStyleName(RESOURCES.getCSS().typeDescription());
+        content.add(description);
+
+        parametersPanel = createParametersPanel();
+        content.add(parametersPanel);
+
+        FlowPanel buttonDiv = new FlowPanel();
+        buttonDiv.setStyleName(RESOURCES.getCSS().buttonPanel());
+        buttonDiv.add(createSubmitButton());
+        content.add(buttonDiv);
+
+        add(content);
+    }
+
+    private Button createSubmitButton() {
+        Button retBtn = new Button();
+        retBtn.setStyleName(RESOURCES.getCSS().importBtn());
+        retBtn.getElement().getStyle().setBackgroundColor(externalDatasource.getDarkerColour());
+        retBtn.setText("Import");
+        retBtn.setTitle("Import a dataset from another resource");
+        retBtn.setEnabled(true);
+
+        retBtn.addClickHandler(event -> {
+            event.preventDefault();
+            event.stopPropagation();
+            if (validateAllParameters()) {
+                handler.onOptionSubmitted(this);
+            }
+        });
+        return retBtn;
+    }
+
+    private ParametersPanel createParametersPanel() {
+        ParametersPanel parameters = new ParametersPanel(externalDatasource);
+        parameters.setStyleName(RESOURCES.getCSS().parametersPanel());
+        return parameters;
+    }
+
+    public void expandCollapse() {
+        Console.info("ExternalDatasourceItem > expandCollapse ["+ isExpanded + "]");
+        if (isExpanded) {
+            removeStyleName(RESOURCES.getCSS().itemExpanded());
+        } else {
+            addStyleName(RESOURCES.getCSS().itemExpanded());
+        }
+        isExpanded = !isExpanded;
+        Console.info("ExternalDatasourceItem > expandCollapse final ["+ isExpanded + "]");
     }
 
     public boolean isExpanded() {
@@ -67,82 +130,6 @@ public class ExternalDatasourceItem extends FocusPanel implements ClickHandler {
 
     public Map<String, String> getParameterValues() {
         return parametersPanel.getParameterValues();
-    }
-
-    private void init() {
-        setStyleName(RESOURCES.getCSS().item());
-
-//        FlowPanel content = new FlowPanel();
-//        content.setStyleName(RESOURCES.getCSS().contentPanel());
-
-
-        //content.setStyleName(RESOURCES.getCSS().externalTypeContent());
-        getElement().setId(externalDatasource.getId());
-        getElement().getStyle().setBackgroundColor(externalDatasource.getColour());
-
-        FlowPanel content = new FlowPanel();
-
-        Label name = new Label(externalDatasource.getName());
-        name.setStyleName(RESOURCES.getCSS().typeName());
-        content.add(name);
-
-        HTMLPanel description = new HTMLPanel(externalDatasource.getName());
-        description.setStyleName(RESOURCES.getCSS().typeDescription());
-        content.add(description);
-
-//        FocusPanel aPanel = new FocusPanel();
-//        aPanel.getElement().setId(externalDatasource.getId());
-//        aPanel.getElement().getStyle().setBackgroundColor(externalDatasource.getColour());
-//        aPanel.addStyleName(RESOURCES.getCSS().externalTypePanel());
-//
-//        addClickHandler(event -> {
-//            event.preventDefault();
-//            event.stopPropagation();
-//            expandCollapse();
-//        });
-
-        parametersPanel = createParametersPanel();
-        content.add(parametersPanel);
-
-        FlowPanel buttonDiv = new FlowPanel();
-        buttonDiv.setStyleName(RESOURCES.getCSS().buttonPanel());
-        buttonDiv.add(submitBtn = createSubmitButton());
-
-        content.add(buttonDiv);
-        add(content);
-    }
-
-    private Button createSubmitButton() {
-        Button retBtn = new Button();
-        retBtn.setStyleName(RESOURCES.getCSS().importBtn());
-        retBtn.setText("Import");
-        retBtn.setTitle("Import a dataset from another resource");
-        retBtn.setEnabled(true);
-
-        retBtn.addClickHandler(event -> {
-            event.preventDefault();
-            event.stopPropagation();
-            handler.onOptionSubmitted(this);
-        });
-        return retBtn;
-    }
-
-    public void expandCollapse() {
-        Console.info("ExternalDatasourceItem > expandCollapse ["+ isExpanded + "]");
-        if (isExpanded) {
-            removeStyleName(RESOURCES.getCSS().itemExpanded());
-        } else {
-//            handler.onOptionsExpanded(this);
-            addStyleName(RESOURCES.getCSS().itemExpanded());
-        }
-        isExpanded = !isExpanded;
-        Console.info("ExternalDatasourceItem > expandCollapse final ["+ isExpanded + "]");
-    }
-
-    private ParametersPanel createParametersPanel() {
-        ParametersPanel parameters = new ParametersPanel(externalDatasource);
-        parameters.setStyleName(RESOURCES.getCSS().parametersPanel());
-        return parameters;
     }
 
     public static Resources RESOURCES;
@@ -174,18 +161,18 @@ public class ExternalDatasourceItem extends FocusPanel implements ClickHandler {
 
         String itemExpanded();
 
-        String typeName();
-        String typeDescription();
-        String externalTypeContent();
-        String externalTypePanel();
         String parametersPanel();
-
 
         String title();
 
         String description();
 
+        String typeName();
+
+        String typeDescription();
+
         String buttonPanel();
+
         String importBtn();
 
     }

@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClientHandler;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.ExternalDataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAException;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAFactory;
@@ -28,6 +29,9 @@ import java.util.List;
  * NOTE: Please keep in mind that to avoid Cross-Origin restrictions applied by most browsers
  * we proxy the gsa backend (gsa.reactome.org) through our servers at Apache level.
  *
+ * Examples and External Datasources come from the different endpoint, however, when posting data
+ * they are using the same endpoint.
+ *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 @SuppressWarnings("Duplicates")
@@ -40,13 +44,11 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
     private static final String UPLOAD_SUCCESS_MSG = "File uploaded successfully";
     private static final String UPLOAD_FAILED_MSG = "File upload failed. Please try again.";
 
-    private static final String EXAMPLE_UPLOADING_MSG = "Please wait while uploading example ...";
-    private static final String EXAMPLE_UPLOAD_SUCCESS_MSG = "Example uploaded successfully";
-    private static final String EXAMPLE_UPLOAD_FAILED_MSG = "Example upload failed. Please try again.";
+    private static final String DATASET_QUERYING_MSG = "Please wait while querying dataset ...";
+    private static final String DATASET_SUCCESS_MSG = "Dataset queried successfully";
+    private static final String DATASET_FAILED_MSG = "Dataset query failed. Please try again.";
 
-    private static final String REMOTE_DATASET_UPLOADING_MSG = "Please wait while querying remote dataset ...";
-    private static final String REMOTE_DATASET_SUCCESS_MSG = "Example uploaded successfully";
-    private static final String REMOTE_DATASET_FAILED_MSG = "Example upload failed. Please try again.";
+    private static final String EXAMPLE_DATASET_RESOURCE_ID = "example_datasets";
 
     private GSAWizardEventBus wizardEventBus;
     private GSAWizardContext wizardContext;
@@ -75,11 +77,11 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
     private Image exampleInfoIcon;
     private Label exampleInfoMessage;
 
-    private FlowPanel remoteDatasetPanel;
+    private FlowPanel datasetPanel;
 
-    private Widget remoteDatasetInfoPanel;
-    private Image remoteDatasetInfoIcon;
-    private Label remoteDatasetInfoMessage;
+    private Widget datasetInfoPanel;
+    private Image datasetInfoIcon;
+    private Label datasetInfoMessage;
 
     public AddDatasetPanel(GSAWizardEventBus wizardEventBus, GSAWizardContext wizardContext) {
         this.wizardEventBus = wizardEventBus;
@@ -105,15 +107,16 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
     @Override
     public void onOptionsExpanded(ExternalDatasourceItem source) {
         //Collapse all of them first
-        Console.info("AddDatasetPanel > onOptionExpanded");
-        remoteDatasetPanel.forEach(widget -> ((ExternalDatasourceItem)widget).collapse());
+        datasetPanel.forEach(widget -> ((ExternalDatasourceItem)widget).collapse());
     }
 
     @Override
-    public void onOptionSubmitted(ExternalDatasourceItem source) {
-        source.validateAllParameters();
-        Console.info("AddDatasetPanel > onOptionSubmitted");
-        Console.info("AddDatasetPanel > onOptionSubmitted > VALUE: " + source.getParameterValues().get("dataset_id"));
+    public void onOptionSubmitted(ExternalDatasourceItem externalDatasourceItem) {
+        if(externalDatasourceItem.validateAllParameters()) {
+            updateDatasetInfo(RESOURCES.uploadSpinnerIcon(), DATASET_QUERYING_MSG);
+            showDatasetInfoPanel(true);
+            submitDataset(externalDatasourceItem);
+        }
     }
 
     @Override
@@ -194,8 +197,8 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         exampleInfoPanel.setVisible(visible);
     }
 
-    public void showRemoteDatasetInfoPanel(boolean visible) {
-        remoteDatasetInfoPanel.setVisible(visible);
+    public void showDatasetInfoPanel(boolean visible) {
+        datasetInfoPanel.setVisible(visible);
     }
 
     private void init() {
@@ -204,7 +207,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         add(orLabel = new Label("OR"));
         add(getExamplesPanel());
         add(new Label("OR"));
-        add(getRemoteDatasetPanel());
+        add(getDatasetPanel());
 
         //initialise the file submission form
         form = new FormPanel();
@@ -305,9 +308,9 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         exampleInfoMessage.setText(message);
     }
 
-    private void updateRemoteDatasetInfo(ImageResource icon, String message) {
-        remoteDatasetInfoIcon.setResource(icon);
-        remoteDatasetInfoMessage.setText(message);
+    private void updateDatasetInfo(ImageResource icon, String message) {
+        datasetInfoIcon.setResource(icon);
+        datasetInfoMessage.setText(message);
     }
 
     private Widget getExamplesPanel() {
@@ -385,50 +388,20 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
     }
 
     private void getExternalDatasourcesWidget() {
-        remoteDatasetPanel.clear();
-        remoteDatasetPanel.getParent().setVisible(!externalDatasources.isEmpty());
+        datasetPanel.clear();
+        datasetPanel.getParent().setVisible(!externalDatasources.isEmpty());
         orLabel.setVisible(!externalDatasources.isEmpty());
 
         for (ExternalDatasource externalDatasource : externalDatasources) {
-            remoteDatasetPanel.add(new ExternalDatasourceItem(externalDatasource, this));
+            if (!externalDatasource.getId().contains(EXAMPLE_DATASET_RESOURCE_ID)) { // examples are loaded in getExamples()
+                datasetPanel.add(new ExternalDatasourceItem(externalDatasource, this));
+            }
         }
-
-//            Label name = new Label(externalDatasource.getName());
-//            name.setStyleName(RESOURCES.getCSS().typeName());
-//
-//            HTMLPanel description = new HTMLPanel(externalDatasource.getName());
-//            description.setStyleName(RESOURCES.getCSS().typeDescription());
-//
-//            FlowPanel content = new FlowPanel();
-//            content.setStyleName(RESOURCES.getCSS().externalTypeContent());
-//            content.add(name);
-//            content.add(description);
-//
-//            FocusPanel aPanel = new FocusPanel();
-//            aPanel.getElement().setId(externalDatasource.getId());
-//            aPanel.getElement().getStyle().setBackgroundColor(externalDatasource.getColour());
-//            aPanel.addStyleName(RESOURCES.getCSS().externalTypePanel());
-//
-//            FocusPanel paramPanel = new FocusPanel();
-//            ParametersPanel parameters = new ParametersPanel(externalDatasource);
-//            parameters.setStyleName(RESOURCES.getCSS().externalParametersPanel());
-//            paramPanel.add(parameters);
-//            content.add(paramPanel);
-//
-//            aPanel.addClickHandler(event -> {
-//                event.preventDefault();
-//                event.stopPropagation();
-//                ((FocusPanel)event.getSource()).addStyleName(RESOURCES.getCSS().externalTypePanelExpanded());
-//            });
-//            aPanel.add(content);
-
-//            remoteDatasetPanel.add(aPanel);
-//        }
     }
 
-    private Widget getRemoteDatasetPanel() {
+    private Widget getDatasetPanel() {
         FlowPanel rtn = new FlowPanel();
-        rtn.setStyleName(RESOURCES.getCSS().remoteDatasetPanel());
+        rtn.setStyleName(RESOURCES.getCSS().datasetPanel());
 
         Image icon = new Image(RESOURCES.folderIcon());
         icon.setStyleName(RESOURCES.getCSS().icon());
@@ -439,72 +412,41 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         header.add(icon);
         header.add(title);
 
-        remoteDatasetPanel = new FlowPanel();
-//        remoteDatasetPanel.setStyleName(RESOURCES.getCSS().itemsPanel());
-
         rtn.add(header);
-        rtn.add(remoteDatasetPanel);
 
-//        rtn.add(remoteDatasetInfoPanel = getRemoteDatasetInfoPanel());
-//        remoteDatasetInfoPanel.setVisible(false);
+        datasetPanel = new FlowPanel();
+        rtn.add(datasetPanel);
 
-//        getRemoteDatasetWidgets();
+        rtn.add(datasetInfoPanel = getDatasetInfoPanel());
+        datasetInfoPanel.setVisible(false);
 
         return rtn;
     }
 
-//    private void getRemoteDatasetWidgets() {
-//        HTMLPanel description = new HTMLPanel("Please specify the id of the dataset you would like to import");
-//        description.setStyleName(RESOURCES.getCSS().remoteDatasetDescription());
-//
-//        Button importBtn = new Button();
-//        importBtn.setStyleName(RESOURCES.getCSS().importBtn());
-//        importBtn.setText("Import");
-//        importBtn.setTitle("Import a dataset from another resource");
-//        importBtn.setEnabled(false);
-//
-//        TextBox remoteDatasetId = new TextBox();
-//        remoteDatasetId.getElement().setPropertyString("placeholder", "Enter a dataset ID, e.g. ...");
-//        remoteDatasetId.setStyleName(RESOURCES.getCSS().remoteDatasetId());
-//        remoteDatasetId.addKeyUpHandler(event -> {
-//            importBtn.setEnabled(!remoteDatasetId.getText().isEmpty());
-//        });
-//
-//        importBtn.addClickHandler(event -> {
-//            updateRemoteDatasetInfo(RESOURCES.uploadSpinnerIcon(), REMOTE_DATASET_UPLOADING_MSG);
-//            showRemoteDatasetInfoPanel(true);
-//            submitRemoteDataset(remoteDatasetId.getText());
-//        });
-//
-//
-//        remoteDatasetPanel.clear();
-//        remoteDatasetPanel.add(description);
-//        remoteDatasetPanel.add(remoteDatasetId);
-//        remoteDatasetPanel.add(importBtn);
-//
-//    }
+    private Widget getDatasetInfoPanel() {
+        datasetInfoIcon = new Image(RESOURCES.binIcon());
+        datasetInfoIcon.setStyleName(RESOURCES.getCSS().infoIcon());
 
-    private Widget getRemoteDatasetInfoPanel() {
-        remoteDatasetInfoIcon = new Image(RESOURCES.binIcon());
-        remoteDatasetInfoIcon.setStyleName(RESOURCES.getCSS().infoIcon());
-
-        remoteDatasetInfoMessage = new Label();
-        remoteDatasetInfoMessage.setStyleName(RESOURCES.getCSS().infoMessage());
+        datasetInfoMessage = new Label();
+        datasetInfoMessage.setStyleName(RESOURCES.getCSS().infoMessage());
 
         FlowPanel infoPanel = new FlowPanel();
         infoPanel.setStyleName(RESOURCES.getCSS().infoPanel());
-        infoPanel.add(remoteDatasetInfoIcon);
-        infoPanel.add(remoteDatasetInfoMessage);
+        infoPanel.add(datasetInfoIcon);
+        infoPanel.add(datasetInfoMessage);
 
         return infoPanel;
     }
 
     private void submitExample(ExampleDataset example) {
+        ExternalDataset ee = new ExternalDataset(EXAMPLE_DATASET_RESOURCE_ID);
+        ee.addDatasetId(example.getId());
+
         uploadInProgress = true;
-        GSAClient.loadExampleDataset(example.getId(), new GSAClientHandler.GSAExampleDatasetLoadHandler() {
+        GSAClient.loadDataset(ee, new GSAClientHandler.GSADatasetLoadHandler() {
             @Override
-            public void onExampleDatasetLoadSuccess(String statusToken) {
-                updateExampleInfo(RESOURCES.uploadSpinnerIcon(), EXAMPLE_UPLOADING_MSG);
+            public void onDatasetLoadSuccess(String statusToken) {
+                updateExampleInfo(RESOURCES.uploadSpinnerIcon(), DATASET_QUERYING_MSG);
                 showExampleInfoPanel(true);
 
                 checkExampleLoadingStatusUntilCompleted(statusToken, example);
@@ -513,66 +455,68 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
             @Override
             public void onError(GSAError error) {
                 uploadInProgress = false;
-                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                updateExampleInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
                 showExampleInfoPanel(true);
             }
 
             @Override
             public void onException(String msg) {
                 uploadInProgress = false;
-                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                updateExampleInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
                 showExampleInfoPanel(true);
             }
         });
 
     }
-    private void submitRemoteDataset(String exampleId) {
+
+    private void submitDataset(ExternalDatasourceItem externalDatasourceItem) {
+        ExternalDataset externalDataset = new ExternalDataset(externalDatasourceItem.getExternalDatasource().getId(), externalDatasourceItem.getParameterValues());
+
         uploadInProgress = true;
-        GSAClient.loadExampleDataset(exampleId, new GSAClientHandler.GSAExampleDatasetLoadHandler() {
+        GSAClient.loadDataset(externalDataset, new GSAClientHandler.GSADatasetLoadHandler() {
             @Override
-            public void onExampleDatasetLoadSuccess(String statusToken) {
-                updateRemoteDatasetInfo(RESOURCES.uploadSpinnerIcon(), REMOTE_DATASET_UPLOADING_MSG);
-                showRemoteDatasetInfoPanel(true);
+            public void onDatasetLoadSuccess(String statusToken) {
+                updateDatasetInfo(RESOURCES.uploadSpinnerIcon(), DATASET_QUERYING_MSG);
+                showDatasetInfoPanel(true);
 
-                checkRemoteDatasetLoadingStatusUntilCompleted(statusToken, exampleId);
+                checkDatasetLoadingStatusUntilCompleted(statusToken);
             }
-
             @Override
             public void onError(GSAError error) {
                 uploadInProgress = false;
-                updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
-                showRemoteDatasetInfoPanel(true);
+                updateDatasetInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
+                showDatasetInfoPanel(true);
             }
 
             @Override
             public void onException(String msg) {
                 uploadInProgress = false;
-                updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
-                showRemoteDatasetInfoPanel(true);
+                updateDatasetInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
+                showDatasetInfoPanel(true);
             }
         });
     }
 
-    private void checkRemoteDatasetLoadingStatusUntilCompleted(String statusToken, String exampleId) {
+    private void checkDatasetLoadingStatusUntilCompleted(String statusToken) {
         if (statusToken == null || statusToken.isEmpty()) return;
 
         Scheduler.get().scheduleFixedPeriod(() -> {
             if (!uploadInProgress) return false;
 
-            GSAClient.getExampleDatasetLoadingStatus(statusToken, new GSAClientHandler.GSAStatusHandler() {
+            GSAClient.getDatasetLoadingStatus(statusToken, new GSAClientHandler.GSAStatusHandler() {
                 @Override
                 public void onStatusSuccess(Status status) {
                     if (status.getStatus().equalsIgnoreCase("running")) {
                         uploadInProgress = true;
-                        updateRemoteDatasetInfo(RESOURCES.uploadSpinnerIcon(), REMOTE_DATASET_UPLOADING_MSG);
-                        showRemoteDatasetInfoPanel(true);
+                        updateDatasetInfo(RESOURCES.uploadSpinnerIcon(), DATASET_QUERYING_MSG);
+                        showDatasetInfoPanel(true);
                     } else if (status.getStatus().equalsIgnoreCase("complete")) {
                         uploadInProgress = false;
-                        getExternalDatasourcesSummary();
+                        getExternalDatasourcesSummary(status.getDatasetId());
                     } else if (status.getStatus().equalsIgnoreCase("failed")) {
                         uploadInProgress = false;
-                        updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
-                        showRemoteDatasetInfoPanel(true);
+                        updateDatasetInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
+                        showDatasetInfoPanel(true);
                     }
                 }
 
@@ -580,39 +524,20 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
                 public void onError(GSAError error) {
                     uploadInProgress = false;
                     Console.info("Error uploading example: " + error.getTitle());
-                    updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
-                    showRemoteDatasetInfoPanel(true);
+                    updateDatasetInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
+                    showDatasetInfoPanel(true);
                 }
 
                 @Override
                 public void onException(String msg) {
                     uploadInProgress = false;
                     Console.info("Error uploading example: " + msg);
-                    updateRemoteDatasetInfo(RESOURCES.errorIcon(), REMOTE_DATASET_FAILED_MSG);
-                    showRemoteDatasetInfoPanel(true);
+                    updateDatasetInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
+                    showDatasetInfoPanel(true);
                 }
             });
             return true;
         }, UPLOAD_POLLING_PERIOD);
-    }
-
-    private void getExternalDatasourcesSummary() {
-        GSAClient.getExternalDatasources(new GSAClientHandler.GSAExternalDatasourcesHandler() {
-            @Override
-            public void onExternalDatasourcesSuccess(List<ExternalDatasource> externalDatasources) {
-                Console.info("pickaboo");
-            }
-
-            @Override
-            public void onError(GSAError error) {
-                Console.info("pickaboo");
-            }
-
-            @Override
-            public void onException(String msg) {
-                Console.info("pickaboo");
-            }
-        });
     }
 
     private void checkExampleLoadingStatusUntilCompleted(String statusToken, ExampleDataset example) {
@@ -621,20 +546,19 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         Scheduler.get().scheduleFixedPeriod(() -> {
             if (!uploadInProgress) return false;
 
-            GSAClient.getExampleDatasetLoadingStatus(statusToken, new GSAClientHandler.GSAStatusHandler() {
+            GSAClient.getDatasetLoadingStatus(statusToken, new GSAClientHandler.GSAStatusHandler() {
                 @Override
                 public void onStatusSuccess(Status status) {
                     if (status.getStatus().equalsIgnoreCase("running")) {
                         uploadInProgress = true;
-                        updateExampleInfo(RESOURCES.uploadSpinnerIcon(), EXAMPLE_UPLOADING_MSG);
+                        updateExampleInfo(RESOURCES.uploadSpinnerIcon(), DATASET_QUERYING_MSG);
                         showExampleInfoPanel(true);
                     } else if (status.getStatus().equalsIgnoreCase("complete")) {
                         uploadInProgress = false;
                         getExampleSummary(example);
-
                     } else if (status.getStatus().equalsIgnoreCase("failed")) {
                         uploadInProgress = false;
-                        updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                        updateExampleInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
                         showExampleInfoPanel(true);
                     }
                 }
@@ -643,7 +567,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
                 public void onError(GSAError error) {
                     uploadInProgress = false;
                     Console.info("Error uploading example: " + error.getTitle());
-                    updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                    updateExampleInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
                     showExampleInfoPanel(true);
                 }
 
@@ -651,7 +575,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
                 public void onException(String msg) {
                     uploadInProgress = false;
                     Console.info("Error uploading example: " + msg);
-                    updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                    updateExampleInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
                     showExampleInfoPanel(true);
                 }
             });
@@ -659,12 +583,52 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
         }, UPLOAD_POLLING_PERIOD);
     }
 
-    private void getExampleSummary(ExampleDataset example) {
-        GSAClient.getExampleDatasetSummary(example.getId(), new GSAClientHandler.GSAExampleDatasetSummaryHandler() {
+    private void getExternalDatasourcesSummary(String datasetId) {
+
+        GSAClient.getDatasetSummary(datasetId, new GSAClientHandler.GSADatasetSummaryHandler() {
             @Override
-            public void onExampleDatasetSummarySuccess(ExampleDatasetSummary summary) {
+            public void onDatasetSummarySuccess(ExampleDatasetSummary summary) {
                 uploadInProgress = false;
-                updateExampleInfo(RESOURCES.successIcon(), EXAMPLE_UPLOAD_SUCCESS_MSG);
+                updateDatasetInfo(RESOURCES.successIcon(), DATASET_SUCCESS_MSG);
+                showDatasetInfoPanel(true);
+
+                GSADataset dataset = GSADataset.create(summary);
+
+                wizardContext.setDatasetToAnnotate(dataset);
+                Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+                    @Override
+                    public boolean execute() {
+                        wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.ANNOTATE_DATASET), this);
+                        return false;
+                    }
+                }, 700);
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                uploadInProgress = false;
+                Console.info("Error getting example summary: " + error.getDetail());
+                updateDatasetInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
+                showDatasetInfoPanel(true);
+            }
+
+            @Override
+            public void onException(String msg) {
+                uploadInProgress = false;
+                Console.info("Error getting example summary: " + msg);
+                updateDatasetInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
+                showDatasetInfoPanel(true);
+            }
+        });
+
+    }
+
+    private void getExampleSummary(ExampleDataset example) {
+        GSAClient.getDatasetSummary(example.getId(), new GSAClientHandler.GSADatasetSummaryHandler() {
+            @Override
+            public void onDatasetSummarySuccess(ExampleDatasetSummary summary) {
+                uploadInProgress = false;
+                updateExampleInfo(RESOURCES.successIcon(), DATASET_SUCCESS_MSG);
                 showExampleInfoPanel(true);
 
                 GSADataset dataset = GSADataset.create(summary);
@@ -683,7 +647,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
             public void onError(GSAError error) {
                 uploadInProgress = false;
                 Console.info("Error getting example summary: " + error.getDetail());
-                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                updateExampleInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
                 showExampleInfoPanel(true);
             }
 
@@ -691,7 +655,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
             public void onException(String msg) {
                 uploadInProgress = false;
                 Console.info("Error getting example summary: " + msg);
-                updateExampleInfo(RESOURCES.errorIcon(), EXAMPLE_UPLOAD_FAILED_MSG);
+                updateExampleInfo(RESOURCES.errorIcon(), DATASET_FAILED_MSG);
                 showExampleInfoPanel(true);
             }
         });
@@ -739,7 +703,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
 
         String categoryPanel();
 
-        String remoteDatasetPanel();
+        String datasetPanel();
 
         String header();
 
@@ -763,18 +727,5 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
 
         String infoMessage();
 
-//        String remoteDatasetDescription();
-
-//        String remoteDatasetId();
-
-        String importBtn();
-
-        String externalParametersPanel();
-
-        String externalTypePanel();
-
-        String externalTypeContent();
-
-        String externalTypePanelExpanded();
     }
 }
