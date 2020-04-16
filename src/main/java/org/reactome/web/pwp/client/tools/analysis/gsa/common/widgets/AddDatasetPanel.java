@@ -508,7 +508,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
                 public void onStatusSuccess(Status status) {
                     if (status.getStatus().equalsIgnoreCase("running")) {
                         uploadInProgress = true;
-                        updateDatasetInfo(RESOURCES.uploadSpinnerIcon(), DATASET_QUERYING_MSG);
+                        updateDatasetInfo(RESOURCES.uploadSpinnerIcon(), status.getDescription());
                         showDatasetInfoPanel(true);
                     } else if (status.getStatus().equalsIgnoreCase("complete")) {
                         uploadInProgress = false;
