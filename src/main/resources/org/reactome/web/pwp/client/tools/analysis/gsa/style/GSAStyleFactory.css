@@ -379,6 +379,14 @@
     font-style: italic;
 }
 
+.analysisInfoEmailPanel {
+    max-width: 750px;
+    color: rgb(14, 124, 179);
+    font-size: small;
+    font-weight: bold;
+    font-style: italic;
+}
+
 .statusPanel {
     width: 600px;
     color: rgb(14, 124, 179);
@@ -451,6 +459,10 @@
     color: rgb(14, 124, 179);
     display: flex;
     flex-direction: column;
+}
+
+.reportsPanelLine {
+    flex-direction: row;
 }
 
 .reportsPanel img {

@@ -62,6 +62,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     private FlowPanel reportsPanel;
 
     private FlowPanel infoPanel;
+    private FlowPanel emailInfoPanel;
 
     private String gsaToken;
     private boolean isAnalysisCompleted;
@@ -123,6 +124,11 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         infoPanel.add(new HTML(GSAStyleFactory.RESOURCES.analysisInfo().getText()));
         centered.add(infoPanel);
 
+        emailInfoPanel = new FlowPanel();
+        emailInfoPanel.setStyleName(GSAStyleFactory.getStyle().analysisInfoEmailPanel());
+        emailInfoPanel.add(new HTML(GSAStyleFactory.RESOURCES.analysisInfoEmail().getText()));
+        centered.add(emailInfoPanel);
+
         addNavigationButtons();
 
         add(new ScrollPanel(container));
@@ -164,16 +170,18 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     public void onReportsStatusSuccess(Status reportsStatus) {
         if (reportsStatus.getStatus().equalsIgnoreCase("running")) {
             areReportsCompleted = false;
+            updateReportsPanel(null);
 
         } else if (reportsStatus.getStatus().equalsIgnoreCase("complete")) {
             areReportsCompleted = true;
             infoPanel.setVisible(false);
+            emailInfoPanel.setVisible(false);
             updateReportsPanel(reportsStatus.getReports());
 
         } else if (reportsStatus.getStatus().equalsIgnoreCase("failed")) {
             areReportsCompleted = true;
             infoPanel.setVisible(false);
-
+            emailInfoPanel.setVisible(false);
         }
     }
 
@@ -202,8 +210,8 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                     if (createReports) {
                         areReportsCompleted = false;
                         reportsPanel.setVisible(true);
-                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, false, includeDisease), this);
                         checkReportsStatusUntilCompleted();
+                        wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, false, includeDisease), this);
                         nextBtn.setVisible(true);
                     } else {
                         wizardEventBus.fireEventFromSource(new AnalysisCompletedEvent(result, includeDisease), this);
@@ -250,7 +258,8 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
 
         // If user has provided with an email then show a
         // message explaining he will get an email
-//        String email = wizardContext.getParameters().get("email");
+        String email = wizardContext.getParameters().get("email");
+        emailInfoPanel.setVisible(email != null && !email.trim().isEmpty());
         infoPanel.setVisible(true);
 
         GSAClient.analyse(wizardContext.toJSON(), this);
@@ -331,6 +340,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         reportsPanel.setVisible(false);
         errorPanel.setVisible(true);
         infoPanel.setVisible(false);
+        emailInfoPanel.setVisible(false);
     }
 
     private FlowPanel getResultsPanel() {
@@ -369,16 +379,26 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     }
 
     private FlowPanel getReportsPanel() {
-        FlowPanel fp = new FlowPanel();
-        fp.addStyleName(GSAStyleFactory.getStyle().reportsPanel());
-        fp.add(new Image(GSAStyleFactory.RESOURCES.previousIcon()));
-        fp.add(new Label("\u25B6 Retrieving reports..."));
-        return fp;
+        Image spinnerIcon = new Image(GSAStyleFactory.RESOURCES.spinnerIcon());
+        Label title = new Label("Retrieving reports...");
+        title.setStyleName(GSAStyleFactory.RESOURCES.getCSS().titleFont());
+
+        FlowPanel flowPanel = reportsPanel;
+        if (flowPanel == null) flowPanel = new FlowPanel();
+
+        flowPanel.setStyleName(GSAStyleFactory.getStyle().reportsPanel());
+        flowPanel.addStyleName(GSAStyleFactory.getStyle().reportsPanelLine());
+
+        flowPanel.add(spinnerIcon);
+        flowPanel.add(title);
+
+        return flowPanel;
     }
 
     private void updateReportsPanel(List<Report> reports) {
         if (reports != null && !reports.isEmpty()) {
             reportsPanel.clear();
+            reportsPanel.removeStyleName(GSAStyleFactory.getStyle().reportsPanelLine());
             Label title = new Label("\u25B6 Available reports:");
             title.setStyleName(GSAStyleFactory.getStyle().titleFont());
             reportsPanel.add(title);
@@ -403,7 +423,12 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                 GSAStyleFactory.RESOURCES.nextIcon(),
                 GSAStyleFactory.getStyle().navigationBtn(),
                 "Go back to the first step",
-                event -> { wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this); });
+                event -> {
+                    areReportsCompleted = false;
+                    reportsPanel.clear();
+                    reportsPanel = getReportsPanel();
+                    wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.METHODS), this);
+                });
         nextBtn.setEnabled(true);
         nextBtn.setVisible(false);
         addRightButton(nextBtn);
@@ -415,7 +440,9 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
                 "Go back to your data",
                 event -> {
                     isAnalysisCompleted = true;
-                    areReportsCompleted = true;
+                    areReportsCompleted = false;
+                    reportsPanel.clear();
+                    reportsPanel = getReportsPanel();
                     wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.OPTIONS), this);
                 });
         addLeftButton(previousBtn);

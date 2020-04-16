@@ -41,6 +41,9 @@ public class GSAStyleFactory {
         @Source("../common/AnalysisInfo.html")
         TextResource analysisInfo();
 
+        @Source("../common/AnalysisInfoEmail.html")
+        TextResource analysisInfoEmail();
+
         @Source("../images/next.png")
         ImageResource nextIcon();
 
@@ -61,6 +64,9 @@ public class GSAStyleFactory {
 
         @Source("../images/analysis_error.png")
         ImageResource analysisErrorIcon();
+
+        @Source("../images/upload_spinner.gif")
+        ImageResource spinnerIcon();
     }
 
     /**
@@ -133,6 +139,8 @@ public class GSAStyleFactory {
 
         String analysisInfoPanel();
 
+        String analysisInfoEmailPanel();
+
         String statusPanel();
 
         String titleFont();
@@ -142,6 +150,8 @@ public class GSAStyleFactory {
         String resultsPanel();
 
         String reportsPanel();
+
+        String reportsPanelLine();
 
     }
 }
