@@ -80,8 +80,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         FlowPanel buttonsPanel = new FlowPanel();               // Tab buttons panel
         buttonsPanel.setStyleName(RESOURCES.getCSS().buttonsPanel());
         buttonsPanel.addStyleName(RESOURCES.getCSS().unselectable());
-        buttonsPanel.add(this.analysisBtn = getButton("Analyse your data", RESOURCES.analysisTabIcon()));
-        buttonsPanel.add(this.gsaBtn = getButton("Gene Set Analysis", RESOURCES.gsaTabIcon()));
+        buttonsPanel.add(this.analysisBtn = getButton("Analyse gene list", RESOURCES.analysisTabIcon()));
+        buttonsPanel.add(this.gsaBtn = getButton("Analyse gene expression", RESOURCES.gsaTabIcon()));
         buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
         buttonsPanel.add(this.experimentsBtn = getButton("Tissue Distribution", RESOURCES.tissuesTabIcon()));
         buttonsPanel.add(getVersionInfo());
