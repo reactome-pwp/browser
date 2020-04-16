@@ -66,8 +66,6 @@ public class ParametersPanel extends FlowPanel {
         for (Widget widget : getChildren()) {
             AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
             parameterWidget.showValidationError(false);
-            Console.info("Validating KEY: " + parameterWidget.getName());
-            Console.info("Validating VALUE: " + parameterWidget.getValue());
             if (!parameterWidget.validate()) {
                 Console.info("Parameter validation error: " + parameterWidget.getName());
                 parameterWidget.showValidationError(true);
@@ -82,7 +80,6 @@ public class ParametersPanel extends FlowPanel {
         for (Widget widget : getChildren()) {
             AbstractParameterWidget<?> parameterWidget = (AbstractParameterWidget<?>) widget;
             rtn.put(parameterWidget.getName(), parameterWidget.getValue());
-            Console.info(parameterWidget.getName());
         }
 
         return rtn;
