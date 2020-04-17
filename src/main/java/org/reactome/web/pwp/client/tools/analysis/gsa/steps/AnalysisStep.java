@@ -170,13 +170,13 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     public void onReportsStatusSuccess(Status reportsStatus) {
         if (reportsStatus.getStatus().equalsIgnoreCase("running")) {
             areReportsCompleted = false;
-            updateReportsPanel(null);
+            updateReportsPanel(reportsStatus);
 
         } else if (reportsStatus.getStatus().equalsIgnoreCase("complete")) {
             areReportsCompleted = true;
             infoPanel.setVisible(false);
             emailInfoPanel.setVisible(false);
-            updateReportsPanel(reportsStatus.getReports());
+            updateReportsPanel(reportsStatus);
 
         } else if (reportsStatus.getStatus().equalsIgnoreCase("failed")) {
             areReportsCompleted = true;
@@ -378,13 +378,31 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         reportsPanel.setVisible(false);
     }
 
+    /**
+     * Create reportsPanel with default message.
+     * API call to status endpoint will update the message
+     * @see private FlowPanel getReportsPanel(String labelTxt)
+     * @return reportsPanel with default text
+     */
     private FlowPanel getReportsPanel() {
+        return getReportsPanel("Retrieving reports");
+    }
+
+    /**
+     * Prepare the reports Panel with spinning wheel and text.
+     *
+     * @param labelTxt panel label
+     * @return the panel
+     */
+    private FlowPanel getReportsPanel(String labelTxt) {
+
         Image spinnerIcon = new Image(GSAStyleFactory.RESOURCES.spinnerIcon());
-        Label title = new Label("Retrieving reports...");
+        Label title = new Label(labelTxt+"...");
         title.setStyleName(GSAStyleFactory.RESOURCES.getCSS().titleFont());
 
         FlowPanel flowPanel = reportsPanel;
         if (flowPanel == null) flowPanel = new FlowPanel();
+        else flowPanel.clear();
 
         flowPanel.setStyleName(GSAStyleFactory.getStyle().reportsPanel());
         flowPanel.addStyleName(GSAStyleFactory.getStyle().reportsPanelLine());
@@ -395,7 +413,14 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
         return flowPanel;
     }
 
-    private void updateReportsPanel(List<Report> reports) {
+    /**
+     * Update reportsPanel based on the Status response.
+     * Shows report links when reports are done.
+     *
+     * @param reportStatus status provided by the GSA API
+     */
+    private void updateReportsPanel(Status reportStatus) {
+        List<Report> reports = reportStatus.getReports();
         if (reports != null && !reports.isEmpty()) {
             reportsPanel.clear();
             reportsPanel.removeStyleName(GSAStyleFactory.getStyle().reportsPanelLine());
@@ -414,6 +439,9 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
             errorPanel.setVisible(false);
             resultsPanel.setVisible(true);
             reportsPanel.setVisible(true);
+        } else {
+            //update status description, report isn't done
+            reportsPanel = getReportsPanel(reportStatus.getDescription());
         }
     }
 
