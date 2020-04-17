@@ -16,18 +16,24 @@ public class DatasetTypesPalette {
     private static DatasetTypesPalette instance;
     private static int index = 0;
 
+    // Color name: https://abouts.co/color/FC6E51
     private List<String> colourPalette = Arrays.asList(
-            "#ED5565", //GRAPEFRUIT
-            "#A0D468", //GRASS
-            "#48CFAD", //MINT
-            "#4FC1E9", //AQUA
-            "#4A89DC", //BLUE JEANS
-            "#AC92EC", //LAVANDER
-            "#D770AD", //PINK ROSE
-            "#FC6E51", //BITTERSWEET
-            "#FFCE54"  //SUNFLOWER
+            "#ED5565", // GRAPEFRUIT
+            "#A0D468", // GRASS
+            "#48CFAD", // MINT
+            "#4FC1E9", // AQUA
+            "#4A89DC", // BLUE JEANS
+            "#AC92EC", // LAVANDER
+            "#D770AD", // PINK ROSE
+            "#FC6E51", // BITTERSWEET
+            "#FFCE54", // SUNFLOWER
+            "#C6AA76", // LATTE
+            "#e3adb5", // ROSEFOG
+            "#684771", // CYBERGRAPE
+            "#587a8f"  // SMALTBLUE
     );
 
+    // 20% darker - https://www.hexcolortool.com/
     private  Map<String, String> darkerColourPalette  = new HashMap<String, String>() {{
         put("#ED5565", "#BE4451");
         put("#A0D468", "#80AA53");
@@ -38,6 +44,10 @@ public class DatasetTypesPalette {
         put("#D770AD", "#AC5A8A");
         put("#FC6E51", "#CA5841");
         put("#FFCE54", "#CCA543");
+        put("#C6AA76", "#937743");
+        put("#e3adb5", "#B07A82");
+        put("#684771", "#35143E");
+        put("#587a8f", "#25475C");
     }};
 
     private Map<String, String> typesMap = new HashMap<>();

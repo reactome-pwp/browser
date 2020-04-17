@@ -18,7 +18,7 @@ public interface ExampleDataset {
     String getType();
 
     default String getColour() {
-        return DatasetTypesPalette.get().colourFromType(getType());
+        return DatasetTypesPalette.get().colourFromType(getId());
     }
 
 }
