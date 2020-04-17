@@ -46,6 +46,9 @@ import org.reactome.web.pwp.client.messages.MessagesPresenter;
 import org.reactome.web.pwp.client.tools.analysis.AnalysisLauncher;
 import org.reactome.web.pwp.client.tools.analysis.AnalysisLauncherDisplay;
 import org.reactome.web.pwp.client.tools.analysis.AnalysisLauncherPresenter;
+import org.reactome.web.pwp.client.tools.citation.CitationLauncher;
+import org.reactome.web.pwp.client.tools.citation.CitationLauncherDisplay;
+import org.reactome.web.pwp.client.tools.citation.CitationLauncherPresenter;
 import org.reactome.web.pwp.client.tools.launcher.ToolLauncher;
 import org.reactome.web.pwp.client.tools.launcher.ToolLauncherDisplay;
 import org.reactome.web.pwp.client.tools.launcher.ToolLauncherPresenter;
@@ -207,6 +210,10 @@ public class AppController implements BrowserReadyHandler {
     private void initialiseTools(){
         AnalysisLauncher.Display analysisDisplay = new AnalysisLauncherDisplay();
         new AnalysisLauncherPresenter(this.eventBus, analysisDisplay);
+
+        CitationLauncher.Display citationDisplay = new CitationLauncherDisplay();
+        new CitationLauncherPresenter(this.eventBus, citationDisplay);
+
     }
 
     private void printMessage(){

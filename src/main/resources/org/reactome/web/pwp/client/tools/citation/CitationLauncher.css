@@ -1,0 +1,83 @@
+.popupPanel {
+    border: 3px solid gray !important;
+    border-radius: 15px;
+    padding: 5px 10px 10px 10px;
+    background-color: rgb(30, 148, 208) !important;
+    z-index: 100; /* Avoids the zombie spotted when GXA tab is visible xD */
+}
+
+.header {
+    float: left;
+    padding: 2px 0 2px 0;
+    width: 100%;
+}
+
+
+.headerText {
+    float: left;
+    min-width: 370px;
+    color: white;
+    font-weight: bolder;
+    font-size: large;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    cursor: default;
+}
+
+@sprite .close {
+    gwt-image: 'closeNormal';
+    outline: none;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+    float: right;
+    margin-bottom: 10px;
+}
+
+@sprite .close:hover {
+    gwt-image: 'closeHovered';
+}
+
+@sprite .close:active:hover {
+    gwt-image: 'closeClicked' ;
+}
+
+
+.unselectable {
+    -webkit-touch-callout: none; /* Prevents selection */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+.mainPanel {
+    height: 300px !important;
+    width: 600px !important;
+    /*width: 100%;*/
+    padding: 2px 0 0 2px;
+}
+
+
+.citationPanel {
+    /*min-width: 100px;*/
+    min-height: 100px;
+    width: 100%;
+    /*padding: 2px 0 0 2px;*/
+    margin-top: 40px;
+    background-color: white;
+}
+
+.citationText {
+    color: #333;
+    font-size: 14px;
+    padding: 2px 2px 2px 2px;
+}
+
+.buttonPanel {
+    background-color: white;
+}
+

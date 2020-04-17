@@ -60,3 +60,48 @@
     background-color: #9a9c9e;
     cursor: default !important;
 }
+
+/* CSS for the citation button */
+.citationBtn {
+    background-color: #58C3E5;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 0;
+    outline: none;
+}
+
+.citationBtn>div {
+    margin: 0;
+    position: relative;
+}
+
+.citationBtn span {
+    display: none;
+}
+
+.citationBtn img {
+    display: block;
+    height: 30px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.citationBtn:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
+}
+
+.citationBtn:active:hover {
+    background-color: #066B9E;
+    cursor: pointer !important;
+}
+
+.citationBtn:disabled, .citationBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
+}

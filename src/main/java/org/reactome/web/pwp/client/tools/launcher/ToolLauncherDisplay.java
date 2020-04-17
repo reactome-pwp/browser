@@ -22,6 +22,7 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
 
     private ToolLauncher.Presenter presenter;
     private IconButton analysisBtn;
+    private IconButton citationBtn;
 
     private final static String TOOLTIP = "Analyse your data...";
     private final static String TOOLTIP_WARNING = "The AnalysisService and the ContentService are running with different database versions.";
@@ -29,18 +30,37 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
 
 
     public ToolLauncherDisplay() {
+        FlowPanel container = new FlowPanel();
+
         this.analysisBtn = new IconButton("", RESOURCES.analysisIcon());
         this.analysisBtn.setTitle("Analyse your data...");
         this.analysisBtn.setStyleName(RESOURCES.getCSS().analysisBtn());
         this.analysisBtn.addClickHandler(this);
 
-        FlowPanel flowPanel = new FlowPanel();
-        flowPanel.setStyleName(RESOURCES.getCSS().launcherPanel());
-        flowPanel.add(new SimplePanel(new InlineLabel("Analysis:")));
-        flowPanel.add(this.analysisBtn);
+        FlowPanel analysisFlowPanel = new FlowPanel();
+        analysisFlowPanel.setStyleName(RESOURCES.getCSS().launcherPanel());
+        analysisFlowPanel.add(new SimplePanel(new InlineLabel("Analysis:")));
+        analysisFlowPanel.add(this.analysisBtn);
         //The analysis tools are not available for the curation sites
-        flowPanel.setVisible(!AppConfig.getIsCurator());
-        initWidget(flowPanel);
+        analysisFlowPanel.setVisible(!AppConfig.getIsCurator());
+
+        // initializing the citation button
+        this.citationBtn = new IconButton("", RESOURCES.citationIcon());
+        this.citationBtn.setTitle("Citation");
+        this.citationBtn.setStyleName(RESOURCES.getCSS().citationBtn());
+        this.citationBtn.addClickHandler(this);
+
+        FlowPanel citationFlowPanel = new FlowPanel();
+        citationFlowPanel.setStyleName(RESOURCES.getCSS().launcherPanel());
+        citationFlowPanel.add(new SimplePanel(new InlineLabel("Citation:")));
+        citationFlowPanel.add(this.citationBtn);
+        // citation button not available for curator tools
+        citationFlowPanel.setVisible(!AppConfig.getIsCurator());
+
+        container.add(analysisFlowPanel);
+        container.add(citationFlowPanel);
+        initWidget(container);
+
     }
 
     @Override
@@ -49,6 +69,7 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
     }
 
     @Override
+    // to-do: add stuff related to the citation button
     public void setStatus(ToolLauncher.ToolStatus status) {
         switch (status) {
             case ACTIVE:
@@ -72,6 +93,9 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         if(btn.equals(this.analysisBtn)){
             presenter.toolSelected(PathwayPortalTool.ANALYSIS);
         }
+        else if (btn.equals(this.citationBtn)) {
+            presenter.toolSelected(PathwayPortalTool.CITATION);
+        }
     }
 
     public static Resources RESOURCES;
@@ -93,6 +117,8 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         @Source("images/analysis.png")
         ImageResource analysisIcon();
 
+        @Source("images/citation.png")
+        ImageResource citationIcon();
     }
 
     /**
@@ -108,6 +134,8 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
         String launcherPanel();
 
         String analysisBtn();
+
+        String citationBtn();
 
     }
 }

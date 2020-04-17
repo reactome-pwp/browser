@@ -6,7 +6,8 @@ package org.reactome.web.pwp.client.common;
 public enum PathwayPortalTool {
 
     NONE        ("XX", "No Tool"),
-    ANALYSIS    ("AT", "Analysis Tool");
+    ANALYSIS    ("AT", "Analysis Tool"),
+    CITATION     ("CT", "Cite Us!");
 
     private String code;
     private String title;
