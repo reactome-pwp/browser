@@ -24,8 +24,9 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
     private IconButton analysisBtn;
     private IconButton citationBtn;
 
-    private final static String TOOLTIP = "Analyse your data...";
-    private final static String TOOLTIP_WARNING = "The AnalysisService and the ContentService are running with different database versions.";
+    private final static String ANALYSIS_TOOLTIP = "Analyse your data...";
+    private final static String CITATION_TOOLTIP = "Get Citation...";
+    private final static String ANALYSIS_TOOLTIP_WARNING = "The AnalysisService and the ContentService are running with different database versions.";
     private final static String TOOLTIP_ERROR = "Unable to connect to the server.";
 
 
@@ -69,20 +70,25 @@ public class ToolLauncherDisplay extends Composite implements ToolLauncher.Displ
     }
 
     @Override
-    // to-do: add stuff related to the citation button
     public void setStatus(ToolLauncher.ToolStatus status) {
         switch (status) {
             case ACTIVE:
                 analysisBtn.clearOverlayIcon();
-                this.analysisBtn.setTitle(TOOLTIP);
+                this.analysisBtn.setTitle(ANALYSIS_TOOLTIP);
+
+                citationBtn.clearOverlayIcon();
+                this.citationBtn.setTitle(CITATION_TOOLTIP);
                 break;
             case WARNING:
                 analysisBtn.setOverlayIcon(CommonImages.INSTANCE.warning());
-                this.analysisBtn.setTitle(TOOLTIP_WARNING);
+                this.analysisBtn.setTitle(ANALYSIS_TOOLTIP_WARNING);
                 break;
             case ERROR:
                 analysisBtn.setOverlayIcon(CommonImages.INSTANCE.error());
                 this.analysisBtn.setTitle(TOOLTIP_ERROR);
+
+                citationBtn.setOverlayIcon(CommonImages.INSTANCE.error());
+                this.citationBtn.setTitle(TOOLTIP_ERROR);
                 break;
         }
     }

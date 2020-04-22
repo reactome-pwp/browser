@@ -12,7 +12,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.launcher.LauncherButton;
 
 import java.util.Date;
@@ -23,7 +22,7 @@ public class CitationLauncherDisplay extends PopupPanel implements CitationLaunc
     private CitationLauncher.Presenter presenter;
     private Label citation;
     private HorizontalPanel buttonBar;
-
+    private Label buttonBarHeading;
 
     public CitationLauncherDisplay() {
         super(true, true);
@@ -49,7 +48,11 @@ public class CitationLauncherDisplay extends PopupPanel implements CitationLaunc
         citationPanel.add(citation);
         mainPanel.add(citationPanel);
 
-        buttonBar = new HorizontalPanel();
+        buttonBarHeading = new Label();
+        buttonBarHeading.addStyleName(RESOURCES.getCSS().buttonHeading());
+        mainPanel.add(buttonBarHeading);
+
+        buttonBar = new HorizontalPanel();                             // panel with all the export buttons
         FlowPanel buttonPanel = new FlowPanel();
         buttonPanel.addStyleName(RESOURCES.getCSS().buttonPanel());
         buttonPanel.add(buttonBar);
@@ -60,7 +63,6 @@ public class CitationLauncherDisplay extends PopupPanel implements CitationLaunc
 
     @Override
     public void show() {
-        Console.info("in method CitationLauncherDisplay show");
         super.show();
     }
 
@@ -103,26 +105,31 @@ public class CitationLauncherDisplay extends PopupPanel implements CitationLaunc
     }
 
     public void setExportBar(String id) {
-        for (ExportFormat ef : ExportFormat.values()) {
-            buttonBar.add(getExportButton(ef.getIcon(), ef.getTitle(), ef.getUrl() + "&id=" + id
+        this.buttonBarHeading.setText("Download As: ");
+        for (ExportType ef : ExportType.values()) {
+            this.buttonBar.add(getExportButton(ef.getIcon(), ef.getTitle(), ef.getUrl() + "&id=" + id
                             + "&dateAccessed=" + DateTimeFormat.getFormat("E MMM dd yyyy").format(new Date()),
                     "reactome_citation_" + id + ef.getExt()));
         }
     }
 
-    public Anchor getExportButton(ImageResource icon, String title, String url, String filename) {
-        Anchor anchor = new Anchor(SafeHtmlUtils.fromTrustedString(new Image(icon).toString()), url, "_blank");
+    public FlowPanel getExportButton(ImageResource icon, String title, String url, String filename) {
+
+        FlowPanel button = new FlowPanel();
+        button.addStyleName(RESOURCES.getCSS().exportItem());
+        button.setTitle(title);
+
+        FlowPanel image = new FlowPanel();
+        image.add(new Image(icon));
+
+        Anchor anchor = new Anchor(SafeHtmlUtils.fromTrustedString(image.toString()), url, "_blank");
         anchor.getElement().setAttribute("rel", "noindex,nofollow");
         anchor.getElement().setAttribute("download", filename);
-        anchor.setTitle(title);
-        return anchor;
-    }
 
-    public Anchor getDownloadButton() {
-        Anchor anchor = new Anchor();
-        return null;
-    }
+        button.add(anchor);
 
+        return button;
+    }
 
     public static CitationLauncherDisplay.Resources RESOURCES;
 
@@ -140,9 +147,6 @@ public class CitationLauncherDisplay extends PopupPanel implements CitationLaunc
          */
         @Source(CitationLauncherDisplay.ResourceCSS.CSS)
         CitationLauncherDisplay.ResourceCSS getCSS();
-
-        @Source("images/citationIcon.png")
-        ImageResource citationIcon();
 
         @Source("images/close_clicked.png")
         ImageResource closeClicked();
@@ -181,5 +185,9 @@ public class CitationLauncherDisplay extends PopupPanel implements CitationLaunc
         String unselectable();
 
         String buttonPanel();
+
+        String exportItem();
+
+        String buttonHeading();
     }
 }

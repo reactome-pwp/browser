@@ -57,16 +57,13 @@
 .mainPanel {
     height: 300px !important;
     width: 600px !important;
-    /*width: 100%;*/
     padding: 2px 0 0 2px;
 }
 
 
 .citationPanel {
-    /*min-width: 100px;*/
     min-height: 100px;
     width: 100%;
-    /*padding: 2px 0 0 2px;*/
     margin-top: 40px;
     background-color: white;
 }
@@ -74,10 +71,48 @@
 .citationText {
     color: #333;
     font-size: 14px;
-    padding: 2px 2px 2px 2px;
+    padding: 4px 8px 4px 8px;
+}
+
+.buttonHeading {
+    font-size: 18px;
+    color: white;
 }
 
 .buttonPanel {
     background-color: white;
 }
 
+.exportItem {
+    height: 50px;
+    width: 50px;
+    margin: 15px 15px 15px 15px;
+    background-color: #58c3e5;
+    text-decoration: none;
+    color: white;
+    padding: 6px;
+    display: inline-block;
+    line-height: 1em;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+    overflow: hidden;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+
+    white-space: nowrap;
+    direction: rtl;     /* Change this to make the options appear from the right*/
+}
+
+.exportItem img {
+    display: inline-block;
+    width: 100%;
+    max-width: 50px;
+    height: auto;
+}
+
+.exportItem:hover {
+    background-color: #5cccee;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.35);
+}
