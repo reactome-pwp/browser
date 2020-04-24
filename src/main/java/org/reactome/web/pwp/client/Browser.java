@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
 
-    public static final String VERSION = "3.6";
+    public static final String VERSION = "3.7";
     public static final Boolean BETA = false;
 
     public static boolean VERBOSE = true;
