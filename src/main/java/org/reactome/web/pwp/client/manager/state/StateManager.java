@@ -6,6 +6,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
+import org.reactome.web.analysis.client.filter.ResultFilter;
 import org.reactome.web.analysis.client.model.AnalysisSummary;
 import org.reactome.web.analysis.client.model.ResourceSummary;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
@@ -79,7 +80,12 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
 
         State desiredState = new State(this.currentState);
         desiredState.setDetailsTab(DetailsTabType.ANALYSIS);
-        desiredState.setAnalysisParameters(summary.getToken(), resource.getResource());
+
+        ResultFilter filter = new ResultFilter();
+        filter.setResource(resource.getResource());
+        filter.setIncludeDisease(event.isGsaIncludeDisease());
+
+        desiredState.setAnalysisParameters(summary.getToken(), filter);
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 
@@ -191,6 +197,26 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                 @Override
                 public void onAnalysisServerException(String message) {
                     //TODO
+                }
+
+                @Override
+                public void onTokenAvailabilityCheckedWithSummary(AnalysisSummary summary, boolean available, String message) {
+                    if (!available) {
+                        eventBus.fireEventFromSource(new ErrorMessageEvent(message), StateManager.this);
+                        state.resetAnalysisParameters();
+                        History.newItem(state.toString(), false);
+                    }
+                    currentState = state;
+
+                    State desired = new State(currentState);
+                    ResultFilter filter = state.getAnalysisStatus().getResultFilter();
+                    if (filter != null) {
+                        if (summary != null && !summary.isIncludeDisease()) {
+                            filter.setIncludeDisease(summary.isIncludeDisease());
+                        }
+                    }
+                    desired.setAnalysisParameters(token, filter);
+                    eventBus.fireEventFromSource(new StateChangedEvent(desired), StateManager.this);
                 }
             });
         }

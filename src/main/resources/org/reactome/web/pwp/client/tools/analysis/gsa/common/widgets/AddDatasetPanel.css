@@ -1,0 +1,131 @@
+.main {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    overflow: hidden;
+    height: 0;
+    width: 99%;
+    margin: 5px auto;
+    /*padding: 2px;*/
+
+    font-family: system-ui, Arial, sans-serif !important;
+    font-size: medium;
+    font-weight: bold;
+    outline: none;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.expanded {
+    height: 400px;
+}
+
+.categoryPanel {
+    background: white;
+    border: 2px solid rgb(14, 124, 179);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+}
+
+.datasetPanel {
+    background: white;
+    border: 2px solid rgb(14, 124, 179);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    max-width: 340px;
+}
+
+.header {
+    display: flex;
+    align-items: stretch;
+    margin-top: 3px;
+}
+
+.title {
+    color: rgb(14, 124, 179);
+    font-size: large;
+    justify-content: center;
+    margin-left: 5px;
+    margin-right: 8px;
+}
+
+.icon {
+    height: 19px;
+    width: auto;
+    margin-left: 6px;
+    justify-content: center;
+}
+
+.itemsPanel {
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    overflow-y: auto;
+    margin-bottom: 25px;
+}
+
+.typePanel {
+    min-height: 55px;
+    width: 300px;
+    margin: 2px 4px;
+    border-radius: 9px;
+    padding: 2px;
+    cursor: pointer;
+    outline: none;
+    /*overflow-y: auto;*/
+}
+
+.typePanel:hover {
+    background-color: rgb(14, 124, 179) !important;
+}
+
+.typeContent {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.typeName {
+    color: white;
+    font-size: medium;
+    align-self: center;
+    text-align: center;
+}
+
+.typeDescription {
+    color: white;
+    font-size: x-small;
+    font-weight: 500;
+    align-self: center;
+    text-align: center;
+    margin-top: 3px;
+}
+
+.infoPanel {
+    margin-top: 2px;
+    max-width: 340px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    max-height: 30px;
+}
+
+.infoIcon {
+    height: 20px;
+    width: auto;
+    margin-left: 5px;
+}
+
+.infoMessage {
+    font-size: medium;
+    margin-left: 5px;
+}

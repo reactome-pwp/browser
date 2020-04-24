@@ -44,11 +44,22 @@ public class IconButton extends Button {
         addClickHandler(clickHandler);
     }
 
+    public IconButton(String text, ImageResource imageResource, String style, String tooltip, ClickHandler clickHandler) {
+        this(text, imageResource);
+        this.setStyleName(style);
+        this.setTitle(tooltip);
+        addClickHandler(clickHandler);
+    }
+
     public void setText(String text) {
         if(label!=null) {
             label.setText(text);
             updateHTML();
         }
+    }
+
+    public Image getImage(){
+        return image;
     }
 
     public void setImage(ImageResource imageResource) {

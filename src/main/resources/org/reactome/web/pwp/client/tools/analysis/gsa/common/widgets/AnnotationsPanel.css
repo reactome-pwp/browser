@@ -1,0 +1,210 @@
+.main {
+    background: #326599;
+    display: flex;
+    align-items: flex-start;
+    justify-items: flex-start;
+    height: 240px;
+    margin: 5px;
+
+    font-family: system-ui, Arial, sans-serif !important;
+    font-size: medium;
+    font-weight: normal;
+
+    overflow-y: auto;
+
+}
+
+.samplesPanel {
+    /*background: darkorange;*/
+    margin-right: 5px;
+    min-width: 10%;
+    max-width: 200px;
+}
+
+.sampleItem {
+    background: darkorange;
+    /*background: gray;*/
+    border-radius: 5px;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 0 1px 0;
+    padding: 2px 4px 3px 4px;
+    overflow-y: hidden;
+
+    outline: none;
+}
+
+.sampleItem:first-child {
+    margin-top: 41px;
+}
+
+.propertiesPanel {
+    /*background: darkseagreen;*/
+    margin-right: 5px;
+    display: flex;
+
+    overflow: auto;
+}
+
+.propertiesGroup {
+    background: rebeccapurple;
+    outline: none;
+    margin-right: 3px;
+    max-width: 150px;
+
+    align-self: flex-start;
+}
+
+.propertiesGroup:hover {
+    background: firebrick;
+}
+
+.propertiesItem {
+    background: cornflowerblue;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 0 1px 0;
+    padding: 2px 0 3px 0;
+    text-align: center;
+    overflow-y: hidden;
+
+    outline: none;
+}
+
+.propertiesItem input[type=text] {
+    padding: 0;
+    height: 100%;
+    position: relative;
+    left: 0;
+    outline: none;
+    border: 0 solid #cdcdcd;
+    /*border-color: rgba(0, 0, 0, .15);*/
+    background-color: transparent;
+    font-size: medium;
+    font-weight: bold;
+    max-width: 120px;
+    text-align: center;
+}
+
+.propertiesItem input[type=text]:focus {
+    background-color: white;
+}
+
+.propertiesItemInput {
+    padding: 0;
+    height: 40px;
+    margin-bottom: 1px;
+    position: relative;
+    left: 0;
+    outline: none;
+    border: 0 solid #cdcdcd;
+    /*border-color: rgba(0, 0, 0, .15);*/
+    background-color: cornflowerblue;
+    font-size: medium;
+    max-width: 150px;
+    text-align: center;
+}
+
+.propertiesItemInput:focus {
+    background-color: white;
+}
+
+.propertiesItemTitle {
+    background: cadetblue;
+}
+
+.propertiesItemTitle img {
+    height: 20px;
+    width: auto;
+}
+
+.addNewPropertyBtn {
+    align-self: center;
+    background-color: #0e7cb3;
+    border: none;
+    outline: none;
+    border-radius: 19px;
+    color: white;
+    padding: 0;
+    border: 0;
+    margin: 5px;
+}
+
+.addNewPropertyBtn>div {
+    margin: 0;
+    position: relative;
+}
+
+.addNewPropertyBtn span {
+    display: none;
+}
+
+.addNewPropertyBtn img {
+    display: block;
+    height: 32px;
+    width: auto;
+    margin: 3px;
+    padding: 0;
+    border: 0;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.addNewPropertyBtn:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
+}
+
+.addNewPropertyBtn:active:hover {
+    background-color: #035d9c;
+    cursor: pointer !important;
+}
+
+.deletePropertyBtn {
+    align-self: center;
+    background-color: #0e7cb3;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: white;
+    padding: 0;
+    border: 0;
+    margin: 5px;
+}
+
+.deletePropertyBtn>div {
+    margin: 0;
+    position: relative;
+}
+
+.deletePropertyBtn span {
+    display: none;
+}
+
+.deletePropertyBtn img {
+    display: block;
+    height: 12px;
+    width: auto;
+    margin: 3px;
+    padding: 0;
+    border: 0;
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+}
+
+.deletePropertyBtn:hover {
+    background-color: #1E95CF;
+    cursor: pointer !important;
+}
+
+.deletePropertyBtn:active:hover {
+    background-color: #035d9c;
+    cursor: pointer !important;
+}
+
+.deletePropertyBtn:disabled, .deletePropertyBtn:disabled:hover, .deletePropertyBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
+}
+
+

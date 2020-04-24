@@ -1,0 +1,93 @@
+.item {
+    width: 300px;
+    margin: 5px 14px;
+    border-radius: 9px;
+    padding: 2px;
+    cursor: pointer;
+    outline: none;
+    height: 55px;
+    overflow: hidden;
+}
+
+.itemExpanded {
+    overflow: auto;
+    height: min-content;
+    height: -moz-min-content;
+    height: -webkit-min-content;
+    padding-bottom: 7px;
+}
+
+.parametersPanel {
+    flex-grow: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: auto;
+    height: min-content;
+    height: -moz-min-content;
+    height: -webkit-min-content;
+    margin-top: 20px;
+}
+
+.title {
+    color: #0e7cb3;
+    font-size: large;
+    font-weight: bold;
+    padding-top: 3px;
+}
+
+.description {
+    color: #0e7cb3;
+    max-width: 445px;
+    margin-top: 3px;
+    align-self: center;
+    line-height: 1.1em;
+    padding-top: 3px;
+}
+
+.typeName {
+    color: white;
+    font-size: medium;
+    align-self: center;
+    text-align: center;
+}
+
+.typeDescription {
+    color: white;
+    font-size: x-small;
+    font-weight: 500;
+    align-self: center;
+    text-align: center;
+    margin-top: 3px;
+}
+
+.buttonPanel {
+    width: 100%;
+    text-align: center;
+    padding-top: 7px;
+}
+
+.importBtn {
+    /*background-color: rgb(30, 148, 208);*/
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 2px 10px 4px 10px;
+    outline: none;
+    font-size: medium !important;
+    vertical-align: middle !important;
+    box-shadow: 1px 2px 5px darkslategrey;
+}
+
+.importBtn:hover {
+    cursor: pointer !important;
+}
+
+.importBtn:active:hover {
+    cursor: pointer !important;
+}
+
+.importBtn:disabled, .importBtn:disabled:hover, .importBtn:disabled:active{
+    background-color: #9a9c9e;
+    cursor: default !important;
+}

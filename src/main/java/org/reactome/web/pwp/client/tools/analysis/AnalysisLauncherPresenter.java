@@ -8,6 +8,10 @@ import org.reactome.web.pwp.client.common.PathwayPortalTool;
 import org.reactome.web.pwp.client.common.events.*;
 import org.reactome.web.pwp.client.common.handlers.BrowserReadyHandler;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.client.common.utils.Console;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClientHandler;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.*;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.ExperimentSummariesClient;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentError;
 import org.reactome.web.pwp.client.tools.analysis.tissues.client.model.ExperimentSummary;
@@ -34,6 +38,10 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
     private org.reactome.web.analysis.client.model.DBInfo analysisInfo;
 
     private boolean summariesRetrieved;
+    private boolean methodsRetrieved;
+    private boolean typesRetrieved;
+    private boolean examplesRetrieved;
+    private boolean externalDatasources;
 
     public AnalysisLauncherPresenter(EventBus eventBus, AnalysisLauncher.Display display) {
         super(eventBus);
@@ -51,7 +59,9 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
 
     @Override
     public void analysisCompleted(AnalysisCompletedEvent event) {
-        this.display.hide();
+        if (event.getHideSubmissionDialog()) {
+            this.display.hide();
+        }
         this.eventBus.fireEventFromSource(event, this);
     }
 
@@ -67,6 +77,10 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
         if (tool.equals(PathwayPortalTool.ANALYSIS)) {
             if (!summariesRetrieved)        retrieveExperimentSummaries();
             if (analysisInfo == null)       retrieveAnalysisInfo();
+            if (!methodsRetrieved)          retrieveAvailableGSAMethods();
+            if (!typesRetrieved)            retrieveAvailableGSADatasetTypes();
+            if (!examplesRetrieved)         retrieveAvailableGSAExampleDatasets();
+            if (!externalDatasources)       retrieveAvailableGSAExternalDatasources();
             display.show();
             display.center();
         } else {
@@ -90,7 +104,6 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             @Override
             public void onContentClientError(ContentClientError error) {
                 display.setSpeciesList(new LinkedList<>());
-                //TODO
                 eventBus.fireEventFromSource(new ErrorMessageEvent(error.getMessage().get(0)), this);
             }
         });
@@ -112,6 +125,94 @@ public class AnalysisLauncherPresenter extends AbstractPresenter implements Anal
             @Override
             public void onSummariesException(String msg) {
                 display.setExperimentSummaries(new LinkedList<>());
+            }
+        });
+    }
+
+    private void retrieveAvailableGSAMethods() {
+        GSAClient.getMethods(new GSAClientHandler.GSAMethodsHandler() {
+            @Override
+            public void onMethodsSuccess(List<Method> methods) {
+                display.setAvailableGSAMethods(methods);
+                methodsRetrieved = true;
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                Console.error("Error: " + error.getTitle() + " " + error.getDetail());
+                display.setAvailableGSAMethods(new LinkedList<>());
+            }
+
+            @Override
+            public void onException(String msg) {
+                Console.info("Exception: " + msg);
+                display.setAvailableGSAMethods(new LinkedList<>());
+            }
+        });
+    }
+
+    private void retrieveAvailableGSADatasetTypes() {
+        GSAClient.getDatasetTypes(new GSAClientHandler.GSADatasetTypesHandler() {
+            @Override
+            public void onTypesSuccess(List<DatasetType> types) {
+                display.setAvailableGSADatasetTypes(types);
+                typesRetrieved = true;
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                Console.error("Error: " + error.getTitle() + " " + error.getDetail());
+                display.setAvailableGSADatasetTypes(new LinkedList<>());
+            }
+
+            @Override
+            public void onException(String msg) {
+                Console.info("Exception: " + msg);
+                display.setAvailableGSADatasetTypes(new LinkedList<>());
+            }
+        });
+    }
+
+    private void retrieveAvailableGSAExampleDatasets() {
+        GSAClient.getExampleDatasets(new GSAClientHandler.GSAExampleDatasetsHandler() {
+            @Override
+            public void onExampleDatasetSuccess(List<ExampleDataset> examples) {
+                display.setAvailableGSAExampleDatasets(examples);
+                examplesRetrieved = true;
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                Console.error("Error: " + error.getTitle() + " " + error.getDetail());
+                display.setAvailableGSAExampleDatasets(new LinkedList<>());
+            }
+
+            @Override
+            public void onException(String msg) {
+                Console.info("Exception: " + msg);
+                display.setAvailableGSAExampleDatasets(new LinkedList<>());
+            }
+        });
+    }
+
+    private void retrieveAvailableGSAExternalDatasources() {
+        GSAClient.getExternalDatasources(new GSAClientHandler.GSAExternalDatasourcesHandler() {
+            @Override
+            public void onExternalDatasourcesSuccess(List<ExternalDatasource> externalDatasourcesList) {
+                display.setAvailableExternalDatasources(externalDatasourcesList);
+                externalDatasources = true;
+            }
+
+            @Override
+            public void onError(GSAError error) {
+                Console.error("Error: " + error.getTitle() + " " + error.getDetail());
+                display.setAvailableExternalDatasources(new LinkedList<>());
+            }
+
+            @Override
+            public void onException(String msg) {
+                Console.info("Exception: " + msg);
+                display.setAvailableExternalDatasources(new LinkedList<>());
             }
         });
     }

@@ -14,8 +14,10 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 /**
- * A custom {@link Cell} used to render the autocomplete items
+ * A custom {@link Cell} with a checkbox used to render the Species in
+ * the filtering of the analysis results
  *
+ * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
 public class SpeciesCell extends AbstractCell<Species> {
 

@@ -1,0 +1,84 @@
+.main {
+    background: #d5d5d7;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 2px;
+    margin-top: 2px;
+    cursor: default;
+
+    font-family: system-ui, Arial, sans-serif !important;
+}
+
+.main select {
+    margin-right: 10px;
+    color: #0e7cb3;
+    font-weight: bold;
+    font-size: medium;
+    text-align: right;
+    max-width: 140px;
+
+    font-family: system-ui, Arial, sans-serif !important;
+    -webkit-appearance: menulist-button;
+}
+
+.main input {
+    margin-right: 10px;
+    color: #0e7cb3;
+    font-weight: bold;
+    font-size: medium;
+    text-align: right;
+    max-width: 140px;
+
+    font-family: system-ui, Arial, sans-serif !important;
+}
+
+.flipSwitch {
+    margin-right: 10px;
+}
+
+.leftGroup {
+    display: inline-flex;
+    align-items: stretch;
+}
+
+.rightGroup {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: stretch;
+
+    color: #0e7cb3;
+}
+
+.title {
+    color: #0e7cb3;
+    font-size: medium;
+    font-weight: bolder;
+    margin-left: 6px;
+    margin-top: 3px;
+}
+
+.description {
+    height: 20px;
+    width: auto;
+    cursor: help;
+    margin-left: 5px;
+    margin-top: 3px;
+}
+
+.validationIcon {
+    height: 18px;
+    width: auto;
+    cursor: help;
+    margin-right: -21px;
+    align-self: center;
+
+    z-index: 100;
+}
+
+.validationError input{
+    color: firebrick !important;
+}
+
+
+

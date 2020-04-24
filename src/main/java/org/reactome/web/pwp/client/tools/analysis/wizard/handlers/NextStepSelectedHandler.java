@@ -7,5 +7,7 @@ import org.reactome.web.pwp.client.tools.analysis.wizard.events.NextStepSelected
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
 public interface NextStepSelectedHandler extends EventHandler {
+
     void onNextStepSelected(NextStepSelectedEvent event);
+
 }

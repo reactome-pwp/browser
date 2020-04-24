@@ -8,7 +8,7 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.6.4-SNAPSHOT</version>
+    <version>3.7-SNAPSHOT</version>
     <name>Reactome Pathway Portal</name>
 
     <description>
@@ -25,6 +25,12 @@
             <id>fabregat</id>
             <name>Antonio Fabregat</name>
             <email>fabregat@ebi.ac.uk</email>
+            <organization>http://www.ebi.ac.uk/</organization>
+        </developer>
+        <developer>
+            <id>ksidiro</id>
+            <name>Kostas Sidiropoulos</name>
+            <email>ksidiro@ebi.ac.uk</email>
             <organization>http://www.ebi.ac.uk/</organization>
         </developer>
     </developers>
@@ -44,15 +50,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <reactome.web.analyitics>2.0.1</reactome.web.analyitics>
-        <reactome.web.analysis-client>1.5.1</reactome.web.analysis-client>
+        <reactome.web.analysis-client>1.5.2</reactome.web.analysis-client>
         <reactome.web.carrousel>1.0.2</reactome.web.carrousel>
-        <reactome.web.diagram>3.6.7</reactome.web.diagram>
-        <reactome.web.fireworks>1.8.6</reactome.web.fireworks>
+        <reactome.web.diagram>3.6.9</reactome.web.diagram>
+        <reactome.web.fireworks>1.8.7</reactome.web.fireworks>
         <reactome.web.model>2.1.21-SNAPSHOT</reactome.web.model>
         <reactome.web.pdb>2.3.1</reactome.web.pdb>
         <reactome.web.chebi>1.2.0</reactome.web.chebi>
         <reactome.web.rhea>1.3.1</reactome.web.rhea>
         <reactome.web.gxa>3.0.3</reactome.web.gxa>
+        <elemental2.version>1.0.0-RC1</elemental2.version>
 
         <reactome.utils.version>1.0.7</reactome.utils.version>
 
@@ -152,6 +159,13 @@
             <groupId>org.reactome.server.utils</groupId>
             <artifactId>reactome-utils</artifactId>
             <version>${reactome.utils.version}</version>
+        </dependency>
+
+        <!-- Elemental 2.0 -->
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-core</artifactId>
+            <version>${elemental2.version}</version>
         </dependency>
 
         <!-- logging dependencies, delegate all to slf4j and use logback -->
