@@ -114,7 +114,7 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
             populateGroupTwoBox();
             populateCovariatesListBox();
 
-            nextBtn.setEnabled(selectedComparisonFactor != null && checkGroupBoxes());
+            nextBtn.setEnabled(enableNextButton());
         });
         return comparisonPanel;
     }
@@ -162,7 +162,7 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
         groupOneBox.addChangeHandler(event -> {
             String value = groupOneBox.getValue(groupOneBox.getSelectedIndex());
             groupOne = !value.equals(NO_VALUE) ? groupOneBox.getValue(groupOneBox.getSelectedIndex()) : null;
-            nextBtn.setEnabled(selectedComparisonFactor != null && checkGroupBoxes());
+            nextBtn.setEnabled(enableNextButton());
         });
         return groupOnePanel;
     }
@@ -209,7 +209,7 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
         groupTwoBox.addChangeHandler(event -> {
             String value = groupTwoBox.getValue(groupTwoBox.getSelectedIndex());
             groupTwo = !value.equals(NO_VALUE) ? groupTwoBox.getValue(groupTwoBox.getSelectedIndex()) : null;
-            nextBtn.setEnabled(selectedComparisonFactor != null && checkGroupBoxes());
+            nextBtn.setEnabled(enableNextButton());
         });
         return groupTwoPanel;
     }
@@ -260,6 +260,8 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
                     selectedCovariates.add(property);
                 }
             }
+
+            nextBtn.setEnabled(enableNextButton());
         });
         covariatesPanel.add(covariatesListBox);
 
@@ -288,9 +290,19 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
         covariatesPanel.setVisible(covariates.size() > 0 && !comparisonBox.getSelectedValue().equals(NO_VALUE));
     }
 
-    private boolean checkGroupBoxes(){
+    private boolean checkGroupBoxes() {
         if (!groupOnePanel.isVisible() && !groupTwoPanel.isVisible()) return true;
         return groupOne != null && groupTwo != null;
+    }
+
+    private boolean checkCovariatesBox() {
+        if (!covariatesListBox.isVisible()) return true;
+
+        return selectedCovariates.size() > 0;
+    }
+
+    private boolean enableNextButton() {
+        return selectedComparisonFactor != null && checkGroupBoxes() && checkCovariatesBox();
     }
 
     private void addNavigationButtons() {
@@ -335,7 +347,7 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
         populateGroupTwoBox();
         populateCovariatesListBox();
 
-        nextBtn.setEnabled(selectedComparisonFactor != null && checkGroupBoxes());
+        nextBtn.setEnabled(enableNextButton());
 
     }
 

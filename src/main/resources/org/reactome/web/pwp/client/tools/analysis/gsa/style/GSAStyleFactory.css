@@ -325,10 +325,11 @@
 }
 
 .covariatesListBox {
-    height: 100px;
+    height: 300px;
     overflow: auto;
     padding: 7px;
     font-size: medium;
+    max-height: 310px;
 }
 
 .covariatesListBox input[type=checkbox] {
