@@ -296,9 +296,7 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
     }
 
     private boolean checkCovariatesBox() {
-        if (!covariatesListBox.isVisible()) return true;
-
-        return selectedCovariates.size() > 0;
+        return true;
     }
 
     private boolean enableNextButton() {
