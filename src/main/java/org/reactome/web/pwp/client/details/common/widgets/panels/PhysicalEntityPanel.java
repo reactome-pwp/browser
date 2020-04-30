@@ -134,7 +134,6 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
     Widget getCrossReferenceTree(){
         TreeItem references = new TreeItem(SafeHtmlUtils.fromString("External cross-references"));
-
         DatabaseIdentifierPanel dbIdPanel = new DatabaseIdentifierPanel(physicalEntity);
         TreeItem reference = dbIdPanel.asTreeItem();
         reference.setState(true, false);
@@ -142,7 +141,8 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
         //Links to the complex portal have been added as cross references for Complexes but they
         //do not have reference entity. The first condition is a hack to accommodate this case
-        if(!(this.physicalEntity instanceof Complex) && !this.physicalEntity.getCrossReference().isEmpty()){
+        if(!(this.physicalEntity instanceof Complex) && !(this.physicalEntity instanceof GenomeEncodedEntity) &&
+           !(this.physicalEntity instanceof OtherEntity) && !this.physicalEntity.getCrossReference().isEmpty()){
             Collections.sort(physicalEntity.getCrossReference());
             for (DatabaseIdentifier databaseIdentifier : this.physicalEntity.getCrossReference()) {
                 dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);

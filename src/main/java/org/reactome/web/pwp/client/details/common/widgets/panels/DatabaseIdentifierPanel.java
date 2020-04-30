@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.details.common.widgets.panels;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TreeItem;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.model.client.classes.*;
 
 /**
@@ -62,6 +63,22 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
                 initialize();
                 break;
             }
+        } else if (pe instanceof OtherEntity) {
+            for (DatabaseIdentifier identifier : pe.getCrossReference()) {
+                this.reference = identifier.getDatabaseName();
+                this.id = identifier.getIdentifier();
+                this.url = identifier.getUrl();
+                initialize();
+                break;
+            }
+        } else if (pe instanceof GenomeEncodedEntity) {
+            for (DatabaseIdentifier identifier : pe.getCrossReference()) {
+                this.reference = identifier.getDatabaseName();
+                this.id = identifier.getIdentifier();
+                this.url = identifier.getUrl();
+                initialize();
+                break;
+            }
         } else {
             initWidget(new Label("No reference entity"));
         }
@@ -92,6 +109,7 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
     }
 
     public TreeItem asTreeItem() {
+        Console.info("tree item: " + this.treeItem);
         return this.treeItem;
     }
 
