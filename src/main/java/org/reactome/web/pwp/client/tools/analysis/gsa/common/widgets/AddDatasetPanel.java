@@ -146,7 +146,7 @@ public class AddDatasetPanel extends FlowPanel implements ChangeHandler,
                     GSAError error = GSAFactory.getModelObject(GSAError.class, json);
                     Console.info(error.getStatus() + " -> " + error.getTitle());
                     form.reset();
-                    updateFileInfo(RESOURCES.errorIcon(), UPLOAD_FAILED_MSG);
+                    updateFileInfo(RESOURCES.errorIcon(), error.getDetail());
                     showFileInfoPanel(true);
                 } else {
                     // Create a new dataset and store it in the context

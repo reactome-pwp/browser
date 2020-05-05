@@ -2,6 +2,8 @@ package org.reactome.web.pwp.client.tools.analysis.gsa.steps;
 
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.AnnotationProperty;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.Annotations;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardContext;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.GSAWizardEventBus;
@@ -10,18 +12,25 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.events.StepSelectedEvent;
 import org.reactome.web.pwp.client.tools.analysis.gsa.handlers.StepSelectedHandler;
 import org.reactome.web.pwp.client.tools.analysis.gsa.style.GSAStyleFactory;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Allows the user to annotate the selected dataset through a table-like widget
  *
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
  */
-public class AnnotateDatasetStep extends AbstractGSAStep implements StepSelectedHandler {
+public class AnnotateDatasetStep extends AbstractGSAStep implements StepSelectedHandler, AnnotationsPanel.Handler {
 
     private IconButton nextBtn;
     private IconButton previousBtn;
     private TextBox nameTB;
     private SimplePanel annotationsPlaceholder;
     private AnnotationsPanel annotationsPanel;
+
+    private boolean enableNextBtn = false;
 
     private GSADataset dataset;
 
@@ -76,6 +85,20 @@ public class AnnotateDatasetStep extends AbstractGSAStep implements StepSelected
         wizardEventBus.addHandler(StepSelectedEvent.TYPE, this);
     }
 
+    @Override
+    public void onAnnotationPropertyChanged(Annotations a) {
+        Set<Boolean> ret = new HashSet<>(2);
+        List<AnnotationProperty> annProps = a.getAllAnnotations();
+        for (AnnotationProperty annProp : annProps) {
+            Set<String> uniqueValues = new HashSet<>(Arrays.asList(annProp.getValues()));
+            uniqueValues.removeAll(Arrays.asList("", null));
+            ret.add(uniqueValues.size() >= 2);
+        }
+
+        enableNextBtn = ret.contains(true);
+        nextBtn.setEnabled(enableNextBtn);
+    }
+
     private void addNavigationButtons() {
         nextBtn = new IconButton(
                 "Continue",
@@ -92,7 +115,7 @@ public class AnnotateDatasetStep extends AbstractGSAStep implements StepSelected
                     wizardContext.setDatasetToAnnotate(dataset);
                     wizardEventBus.fireEventFromSource(new StepSelectedEvent(GSAStep.STATISTICAL_DESIGN), this);
                 });
-        nextBtn.setEnabled(true);
+        nextBtn.setEnabled(enableNextBtn);
         addRightButton(nextBtn);
 
         previousBtn = new IconButton(
@@ -107,7 +130,7 @@ public class AnnotateDatasetStep extends AbstractGSAStep implements StepSelected
     private void updateUI() {
         dataset = wizardContext.getDatasetToAnnotate();
         nameTB.setText(dataset.getName());
-        annotationsPanel = new AnnotationsPanel(dataset);
+        annotationsPanel = new AnnotationsPanel(dataset, this);
         annotationsPlaceholder.clear();
         annotationsPlaceholder.add(annotationsPanel);
     }

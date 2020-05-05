@@ -128,8 +128,10 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
 
         if (allAnnotations != null && !allAnnotations.isEmpty()) {
             for (AnnotationProperty property : allAnnotations) {
-                String name = property.getName();
-                comparisonBox.addItem(name, name);
+                if (property.isVisible()) {
+                    String name = property.getName();
+                    comparisonBox.addItem(name, name);
+                }
             }
             setSelection(comparisonBox, selectedComparisonFactor);
         }
@@ -278,9 +280,11 @@ public class StatisticalDesignStep extends AbstractGSAStep implements StepSelect
         }
 
         for (AnnotationProperty property : allAnnotations) {
-            if (!property.getName().equals(selectedComparisonFactor)) {
-                property.setChecked(selectedCovariates.contains(property));
-                covariates.add(property);
+            if (property.isVisible()) {
+                if (!property.getName().equals(selectedComparisonFactor)) {
+                    property.setChecked(selectedCovariates.contains(property));
+                    covariates.add(property);
+                }
             }
         }
 

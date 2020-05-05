@@ -1,6 +1,8 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
@@ -11,6 +13,7 @@ public class AnnotationProperty {
     private String name;
     private String[] values;
     private boolean isChecked;
+    private Set<String> uniqueValues;
 
     public AnnotationProperty(String name, int size) {
         this.name = name;
@@ -59,6 +62,17 @@ public class AnnotationProperty {
 
     private boolean isIndexCorrect(int index) {
         return !(index < 0 || index >= values.length);
+    }
+
+    /**
+     * Property should only be visible if it contains more than one unique value;
+     * e.g values [p1,p1,p1,p1] = visible false;
+     * e.g values [p1,p2,p1,p2] = visible true;
+     */
+    public boolean isVisible() {
+        uniqueValues = new HashSet<>(Arrays.asList(values));
+        uniqueValues.removeAll(Arrays.asList("", null));
+        return uniqueValues.size() > 1;
     }
 
     @Override

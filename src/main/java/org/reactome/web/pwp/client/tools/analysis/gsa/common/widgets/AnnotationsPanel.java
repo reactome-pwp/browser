@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.button.IconButton;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.AnnotationProperty;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.Annotations;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 
 import java.util.List;
@@ -30,10 +31,18 @@ public class AnnotationsPanel extends FlowPanel {
 
     private int nextId = 1;
 
-    public AnnotationsPanel(GSADataset dataset) {
+    private Handler handler;
+
+    public interface Handler {
+        void onAnnotationPropertyChanged(Annotations a);
+    }
+
+    public AnnotationsPanel(GSADataset dataset, Handler handler) {
         this.dataset = dataset;
+        this.handler = handler;
         init();
         initNextId();
+
     }
 
     private void init() {
@@ -111,6 +120,7 @@ public class AnnotationsPanel extends FlowPanel {
         Button deleteBtn = new IconButton(RESOURCES.deleteIcon(), RESOURCES.getCSS().deletePropertyBtn(), "Delete annotation property", event -> {
             rtn.removeFromParent();
             dataset.getAnnotations().deleteAnnotationProperty(annotationProperty);
+            this.handler.onAnnotationPropertyChanged(dataset.getAnnotations());
         });
         header.add(deleteBtn);
         rtn.add(header);
@@ -131,10 +141,23 @@ public class AnnotationsPanel extends FlowPanel {
                 } else {
                     sampleTB.setText(values[k]);
                 }
+                this.handler.onAnnotationPropertyChanged(dataset.getAnnotations());
             });
+            sampleTB.addKeyUpHandler(event -> {
+                if (sampleTB.getText().isEmpty()) {
+                    values[k] = "";
+                } else if (regExp.exec(sampleTB.getText()) != null) {
+                    values[k] = sampleTB.getText();
+                } else {
+                    sampleTB.setText(values[k]);
+                }
+                this.handler.onAnnotationPropertyChanged(dataset.getAnnotations());
+            });
+
             rtn.add(sampleTB);
         }
 
+        this.handler.onAnnotationPropertyChanged(dataset.getAnnotations());
         return rtn;
     }
 
