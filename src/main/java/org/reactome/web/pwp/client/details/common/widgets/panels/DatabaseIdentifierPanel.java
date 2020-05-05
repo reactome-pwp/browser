@@ -45,22 +45,6 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
         } else if (pe instanceof Drug) {
             Drug drug = pe.cast();
             re = drug.getReferenceEntity();
-        } else if (pe instanceof OtherEntity) {
-            OtherEntity drug = pe.cast();
-            for (DatabaseIdentifier identifier : drug.getCrossReference()) {
-                this.reference = identifier.getDatabaseName();
-                this.id = identifier.getIdentifier();
-                this.url = identifier.getUrl();
-                initialize();
-            }
-        } else if (pe instanceof GenomeEncodedEntity) {
-            GenomeEncodedEntity gee = pe.cast();
-            for (DatabaseIdentifier identifier : gee.getCrossReference()) {
-                this.reference = identifier.getDatabaseName();
-                this.id = identifier.getIdentifier();
-                this.url = identifier.getUrl();
-                initialize();
-            }
         }
 
         if (re != null){
