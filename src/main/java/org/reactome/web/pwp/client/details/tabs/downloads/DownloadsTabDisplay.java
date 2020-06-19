@@ -18,6 +18,7 @@ import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadItem;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadType;
 import org.reactome.web.pwp.client.details.tabs.downloads.widgets.DownloadURLBuilder;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
+import org.reactome.web.pwp.model.client.classes.Event;
 
 import java.util.List;
 
@@ -127,6 +128,10 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     private Widget getTitle(DatabaseObject databaseObject){
         HorizontalPanel titlePanel = new HorizontalPanel();
         titlePanel.setStyleName("elv-Download-Title");
+        if (((Event) databaseObject).getInDisease()) {
+            titlePanel.addStyleName("elv-Download-Title-Disease");
+        }
+
         try{
             ImageResource img = databaseObject.getImageResource();
             String helpTitle = databaseObject.getSchemaClass().name;

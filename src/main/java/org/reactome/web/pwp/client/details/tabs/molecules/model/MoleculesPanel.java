@@ -119,6 +119,8 @@ public class MoleculesPanel extends DockLayoutPanel implements MouseOverHandler,
     private Widget getTitle(DatabaseObject databaseObject) {
         HorizontalPanel titlePanel = new HorizontalPanel();
         titlePanel.setStyleName("elv-Details-Title");
+        if (((Event) databaseObject).getInDisease()) titlePanel.addStyleName("elv-Details-Title-Disease");
+
         try{
             ImageResource img = databaseObject.getImageResource();
             String helpTitle = databaseObject.getSchemaClass().name;
