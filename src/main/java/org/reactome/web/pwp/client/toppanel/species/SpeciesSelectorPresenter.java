@@ -2,6 +2,7 @@ package org.reactome.web.pwp.client.toppanel.species;
 
 import com.google.gwt.event.shared.EventBus;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
+import org.reactome.web.pwp.client.common.events.SpeciesListRetrievedEvent;
 import org.reactome.web.pwp.client.common.events.SpeciesSelectedEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
@@ -66,6 +67,7 @@ public class SpeciesSelectorPresenter extends AbstractPresenter implements Speci
                 speciesList = list;
                 display.setData(speciesList);
                 loaded = true;
+                eventBus.fireEventFromSource(new SpeciesListRetrievedEvent(speciesList), this);
                 switchDisplayToSpecies(currentSpecies);
             }
 
@@ -83,4 +85,5 @@ public class SpeciesSelectorPresenter extends AbstractPresenter implements Speci
             }
         });
     }
+
 }

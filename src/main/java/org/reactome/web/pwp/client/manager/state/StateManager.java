@@ -32,7 +32,7 @@ import java.util.List;
 public class StateManager implements BrowserModule.Manager, ValueChangeHandler<String>,
         State.StateLoadedHandler, StateChangedHandler, DatabaseObjectSelectedHandler, DetailsTabChangedHandler,
         DiagramObjectsFlagResetHandler, AnalysisCompletedHandler, AnalysisResetHandler, AnalysisFilterChangedHandler,
-        ToolSelectedHandler, TermFlaggedHandler {
+        ToolSelectedHandler, TermFlaggedHandler, SpeciesListRetrievedHandler {
 
     private EventBus eventBus;
 
@@ -53,6 +53,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
         this.eventBus.addHandler(DiagramObjectsFlagResetEvent.TYPE, this);
         this.eventBus.addHandler(AnalysisFilterChangedEvent.TYPE, this);
         this.eventBus.addHandler(TermFlaggedEvent.TYPE, this);
+        this.eventBus.addHandler(SpeciesListRetrievedEvent.TYPE, this);
     }
 
     @Override
@@ -97,6 +98,12 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     }
 
     @Override
+    public void onSpeciesListRetrieved(SpeciesListRetrievedEvent event) {
+        State state = new State(this.currentState);
+        state.setSpeciesList(event.getSpeciesList());
+    }
+
+    @Override
     public void onDatabaseObjectSelected(DatabaseObjectSelectedEvent event) {
         Selection newSelection = event.getSelection();
         Selection currentSelection = new Selection(currentState);
@@ -128,7 +135,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                         currentState.setEvent(e);
                         currentState.setPath(path);
                     }
-                    if (species != null && !species.equals(currentState.getSpecies())) {
+                    if (species != null && !species.equals(currentState.getSpecies()) && currentState.getSpeciesList().contains(species)) {
                         eventBus.fireEventFromSource(new SpeciesSelectedEvent(species), this);
                         return;
                     }

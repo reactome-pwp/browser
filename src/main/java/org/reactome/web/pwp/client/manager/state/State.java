@@ -30,6 +30,7 @@ public class State {
     }
 
     private Species species;
+    private List<Species> speciesList;
 
     /**
      * event can either be a Pathway or a ReactionLikeEvent (these are linkable as default parameters)
@@ -131,7 +132,12 @@ public class State {
         this.analysisStatus = state.analysisStatus;
         this.flag = state.flag;
         this.flagIncludeInteractors = state.flagIncludeInteractors;
+        this.speciesList = state.speciesList;
     }
+
+    public void setSpeciesList(List<Species> speciesList) { this.speciesList = speciesList;}
+
+    public List<Species> getSpeciesList() { return this.speciesList;}
 
     void doConsistencyCheck(final StateLoadedHandler handler) {
         if (event != null) {
