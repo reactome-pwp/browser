@@ -128,9 +128,7 @@ public class DownloadsTabDisplay extends ResizeComposite implements DownloadsTab
     private Widget getTitle(DatabaseObject databaseObject){
         HorizontalPanel titlePanel = new HorizontalPanel();
         titlePanel.setStyleName("elv-Download-Title");
-        if (((Event) databaseObject).getInDisease()) {
-            titlePanel.addStyleName("elv-Download-Title-Disease");
-        }
+        if (((Event) databaseObject).getInDisease()) { titlePanel.addStyleName("elv-Download-Title-Disease"); }
 
         try{
             ImageResource img = databaseObject.getImageResource();
