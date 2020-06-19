@@ -38,6 +38,8 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
 
     private State currentState;
 
+    private List<Species> speciesList;
+
     public StateManager(EventBus eventBus) {
         this.eventBus = eventBus;
         new TitleManager(eventBus);
@@ -99,8 +101,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
 
     @Override
     public void onSpeciesListRetrieved(SpeciesListRetrievedEvent event) {
-        State state = new State(this.currentState);
-        state.setSpeciesList(event.getSpeciesList());
+        this.speciesList = event.getSpeciesList();
     }
 
     @Override
@@ -135,7 +136,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
                         currentState.setEvent(e);
                         currentState.setPath(path);
                     }
-                    if (species != null && !species.equals(currentState.getSpecies()) && currentState.getSpeciesList().contains(species)) {
+                    if (species != null && !species.equals(currentState.getSpecies()) && speciesList.contains(species)) {
                         eventBus.fireEventFromSource(new SpeciesSelectedEvent(species), this);
                         return;
                     }
