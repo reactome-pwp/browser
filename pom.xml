@@ -54,7 +54,7 @@
         <reactome.web.carrousel>1.0.2</reactome.web.carrousel>
         <reactome.web.diagram>3.6.9</reactome.web.diagram>
         <reactome.web.fireworks>1.8.7</reactome.web.fireworks>
-        <reactome.web.model>2.1.21-SNAPSHOT</reactome.web.model>
+        <reactome.web.model>2.1.21</reactome.web.model>
         <reactome.web.pdb>2.3.1</reactome.web.pdb>
         <reactome.web.chebi>1.2.0</reactome.web.chebi>
         <reactome.web.rhea>1.3.1</reactome.web.rhea>
