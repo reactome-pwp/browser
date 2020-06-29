@@ -416,6 +416,11 @@ body {
     float: left;
 }
 
+.elv-Download-Title.elv-Download-Title-Disease {
+    background-color: #e092b3;
+    color: #BA1149;
+}
+
 .elv-Download-ItemsPanel {
     margin: 5px;
 }
