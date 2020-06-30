@@ -8,7 +8,7 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.7-SNAPSHOT</version>
+    <version>3.7</version>
     <name>Reactome Pathway Portal</name>
 
     <description>
