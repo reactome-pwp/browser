@@ -8,7 +8,7 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.7-SNAPSHOT</version>
+    <version>3.7.2-SNAPSHOT</version>
     <name>Reactome Pathway Portal</name>
 
     <description>
@@ -22,16 +22,17 @@
 
     <developers>
         <developer>
-            <id>fabregat</id>
-            <name>Antonio Fabregat</name>
-            <email>fabregat@ebi.ac.uk</email>
+            <id>gviteri</id>
+            <name>Guilherme Viteri</name>
+            <email>gviteri@ebi.ac.uk</email>
             <organization>http://www.ebi.ac.uk/</organization>
         </developer>
         <developer>
             <id>ksidiro</id>
             <name>Kostas Sidiropoulos</name>
-            <email>ksidiro@ebi.ac.uk</email>
-            <organization>http://www.ebi.ac.uk/</organization>
+        </developer>
+        <developer>
+            <id>amundo</id>
         </developer>
     </developers>
 
@@ -52,9 +53,9 @@
         <reactome.web.analyitics>2.0.1</reactome.web.analyitics>
         <reactome.web.analysis-client>1.5.2</reactome.web.analysis-client>
         <reactome.web.carrousel>1.0.2</reactome.web.carrousel>
-        <reactome.web.diagram>3.6.9</reactome.web.diagram>
-        <reactome.web.fireworks>1.8.7</reactome.web.fireworks>
-        <reactome.web.model>2.1.21</reactome.web.model>
+        <reactome.web.diagram>3.6.11-SNAPSHOT</reactome.web.diagram>
+        <reactome.web.fireworks>1.8.8-SNAPSHOT</reactome.web.fireworks>
+        <reactome.web.model>2.1.22</reactome.web.model>
         <reactome.web.pdb>2.3.1</reactome.web.pdb>
         <reactome.web.chebi>1.2.0</reactome.web.chebi>
         <reactome.web.rhea>1.3.1</reactome.web.rhea>

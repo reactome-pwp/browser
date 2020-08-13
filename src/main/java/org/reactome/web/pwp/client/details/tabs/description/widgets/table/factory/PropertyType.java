@@ -20,6 +20,7 @@ public enum PropertyType {
     PRECEDING_EVENTS("Preceding Event(s)"),
     FOLLOWING_EVENTS("Following Event(s)"),
     MODIFICATION("Post-translational modification"),
+    TRANSCRIPTIONAL_MODIFICATION("Post-transcriptional modification"),
     MUTATION("Modification due to mutation"),
     COORDINATES("Coordinates in the Reference Sequence"),
     CELLULAR_COMPARTMENT("Cellular compartment"),
