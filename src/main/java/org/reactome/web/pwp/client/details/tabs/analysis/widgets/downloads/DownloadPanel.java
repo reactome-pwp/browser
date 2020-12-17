@@ -5,6 +5,9 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Report;
+
+import java.util.List;
 
 /**
  * A panel that displays all the available download options
@@ -33,8 +36,20 @@ public class DownloadPanel extends DockLayoutPanel {
         main.clear();
 
         String token = analysisResult.getSummary().getToken();
-        for(AnalysisDownloadType type : AnalysisDownloadType.values()) {
+        boolean isGsa = analysisResult.getSummary().getGsaToken() != null && !analysisResult.getSummary().getGsaToken().isEmpty(); //true
+        for (AnalysisDownloadType type : AnalysisDownloadType.values()) {
+            if (type.equals(AnalysisDownloadType.GSA_REPORT)) continue; // skip it.
+            // skip traditional PDF report when GSA has been performed. GSA Reports will be added #showGsaReportOptions
+            if(type.equals(AnalysisDownloadType.PDF_REPORT) && isGsa) continue;
             main.add(new AnalysisDownloadItem(type, token, resource, species));
+        }
+    }
+
+    public void showGsaReportOptions(List<Report> reportList) {
+        if (reportList == null || reportList.isEmpty()) return;
+        for (Report report : reportList) {
+            // insert GSA report before the default
+            main.insert(new GSAAnalysisDownloadItem(report), 0);
         }
     }
 }

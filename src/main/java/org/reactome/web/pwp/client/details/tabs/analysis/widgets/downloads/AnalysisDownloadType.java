@@ -14,8 +14,8 @@ public enum AnalysisDownloadType {
     RESULTS_JSON   (Resources.INSTANCE.resultsJSONIcon(),   Resources.INSTANCE.resultsJSONInfo(),   "Complete analysis results",    "/AnalysisService/download/###TOKEN###/result.json.gz"),
     MAPPINGS       (Resources.INSTANCE.mappingsIcon(),      Resources.INSTANCE.mappingsInfo(),      "Identifier mappings",          "/AnalysisService/download/###TOKEN###/entities/found/###RESOURCE###/mapping.csv"),
     PDF_REPORT     (Resources.INSTANCE.pdfReportIcon(),     Resources.INSTANCE.pdfReportInfo(),     "Analysis report",              "/AnalysisService/report/###TOKEN###/###SPECIES###/report.pdf?resource=###RESOURCE###&diagramProfile=###D_PROFILE###&analysisProfile=###A_PROFILE###&fireworksProfile=###F_PROFILE###"),
-    NOT_FOUND      (Resources.INSTANCE.notFoundIcon(),      Resources.INSTANCE.notFoundInfo(),      "Not found identifiers",        "/AnalysisService/download/###TOKEN###/entities/notfound/not_found.csv");
-
+    NOT_FOUND      (Resources.INSTANCE.notFoundIcon(),      Resources.INSTANCE.notFoundInfo(),      "Not found identifiers",        "/AnalysisService/download/###TOKEN###/entities/notfound/not_found.csv"),
+    GSA_REPORT     (Resources.INSTANCE.pdfReportIcon(),     Resources.INSTANCE.gsaReportInfo(), "","");
 
     private transient ImageResource icon;
     private String title;
@@ -78,6 +78,9 @@ public enum AnalysisDownloadType {
 
         @Source("info/NotFoundIdentifiersInfo.html")
         TextResource notFoundInfo();
+
+        @Source("info/GSAReportInfo.html")
+        TextResource gsaReportInfo();
 
     }
 
