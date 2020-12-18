@@ -165,6 +165,7 @@ public class StateManager implements BrowserModule.Manager, ValueChangeHandler<S
     public void onDiagramObjectsFlagReset(DiagramObjectsFlagResetEvent event) {
         State desiredState = new State(this.currentState);
         desiredState.setFlag(null);
+        desiredState.setFlagIncludeInteractors(false); //want to set this to false regardless to remove it from url on Flag close.
         this.eventBus.fireEventFromSource(new StateChangedEvent(desiredState), this);
     }
 
