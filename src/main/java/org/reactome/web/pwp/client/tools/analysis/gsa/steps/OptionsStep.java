@@ -128,7 +128,6 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler,
         for (Widget widget : parametersPanel) {
             AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
             if (!parameterWidget.validate()) {
-                Console.info("VALIDATION_ERROR: " + parameterWidget.getName());
                 rtn = false;
             }
         }

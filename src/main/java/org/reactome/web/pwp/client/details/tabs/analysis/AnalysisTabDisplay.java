@@ -244,8 +244,8 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
     }
 
     @Override
-    public void showGsaReports(List<Report> reportList) {
-        this.downloadPanel.showGsaReportOptions(reportList);
+    public void showGsaReports(List<Report> reportList, String gsaToken) {
+        this.downloadPanel.showGsaReportOptions(reportList, gsaToken);
     }
 
     @Override

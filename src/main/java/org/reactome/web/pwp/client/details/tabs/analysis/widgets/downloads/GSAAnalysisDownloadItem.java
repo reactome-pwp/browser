@@ -7,6 +7,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Report;
 
 /**
@@ -15,8 +16,10 @@ import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Report;
 public class GSAAnalysisDownloadItem extends FocusPanel implements ClickHandler {
 
     private Report report;
+    private String gsaToken;
 
-    public GSAAnalysisDownloadItem(Report report) {
+    public GSAAnalysisDownloadItem(Report report, String gsaToken) {
+        this.gsaToken = gsaToken;
         this.report = report;
         setStyleName(RESOURCES.getCSS().item());
 
@@ -49,8 +52,8 @@ public class GSAAnalysisDownloadItem extends FocusPanel implements ClickHandler 
 
     @Override
     public void onClick(ClickEvent event) {
-        String link = report.getUrl();
-        Window.open(link, "_blank", "");
+        String format = report.getUrl().substring(report.getUrl().lastIndexOf(".") + 1).toLowerCase();
+        Window.open(GSAClient.URL_RESULT + "/" + gsaToken + "." + format, "_blank", "");
     }
 
     public static Resources RESOURCES;

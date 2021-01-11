@@ -26,6 +26,6 @@ public interface AnalysisTab {
         void selectPathway(Pathway pathway);
         void showResult(AnalysisResult analysisResult, Filter filter);
         void setSpecies(String species);
-        void showGsaReports(List<Report> reportList);
+        void showGsaReports(List<Report> reportList, String gsaToken);
     }
 }

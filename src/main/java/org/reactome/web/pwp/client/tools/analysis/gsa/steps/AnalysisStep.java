@@ -163,7 +163,6 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
             isAnalysisCompleted = true;
             updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, status.getDescription());
         }
-        Console.info(status.getStatus() + " - " + status.getCompleted() + " - " + isAnalysisCompleted);
     }
 
     @Override

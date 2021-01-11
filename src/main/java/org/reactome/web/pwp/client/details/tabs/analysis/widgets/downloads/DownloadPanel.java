@@ -45,11 +45,11 @@ public class DownloadPanel extends DockLayoutPanel {
         }
     }
 
-    public void showGsaReportOptions(List<Report> reportList) {
+    public void showGsaReportOptions(List<Report> reportList, String gsaToken) {
         if (reportList == null || reportList.isEmpty()) return;
         for (Report report : reportList) {
             // insert GSA report before the default
-            main.insert(new GSAAnalysisDownloadItem(report), 0);
+            main.insert(new GSAAnalysisDownloadItem(report, gsaToken), 0);
         }
     }
 }

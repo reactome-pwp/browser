@@ -1,11 +1,13 @@
 package org.reactome.web.pwp.client.details.tabs.analysis;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.*;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
 import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
+import org.reactome.web.analysis.client.model.AnalysisType;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.DatabaseObjectHoveredEvent;
@@ -41,6 +43,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
     private AnalysisTab.Display display;
     private AnalysisStatus analysisStatus = new AnalysisStatus();
     private Pathway selected;
+    private boolean areReportsCompleted = false;
 
     public AnalysisTabPresenter(EventBus eventBus, AnalysisTab.Display display) {
         super(eventBus);
@@ -80,6 +83,18 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         }
     }
 
+    private void checkReportsStatusUntilCompleted(String gsaToken) {
+        if (gsaToken == null || gsaToken.isEmpty()) return;
+
+        Scheduler.get().scheduleFixedPeriod(() -> {
+            if (areReportsCompleted) return false;
+
+            loadGSAReportLinks(gsaToken);
+
+            return true;
+        }, 2000);
+    }
+
     private void loadGSAReportLinks(String gsaToken) {
         if (gsaToken == null || gsaToken.isEmpty()) return;
 
@@ -92,7 +107,10 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
                     if (response.getStatusCode() == Response.SC_OK) {
                         try {
                             Status st = GSAFactory.getModelObject(Status.class, response.getText());
-                            display.showGsaReports(st.getReports());
+                            if (st.getStatus().equalsIgnoreCase("complete")) {
+                                areReportsCompleted = true;
+                                display.showGsaReports(st.getReports(), gsaToken);
+                            }
                         } catch (GSAException ignored) { }
                     } else {
                         try {
@@ -101,19 +119,23 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
                                 Console.error("Couldn't retrieve reports from ReactomeGSA -> [Status: " + error.getStatus() + ", Title: " + error.getTitle() + ", Detail: " + error.getDetail() + "]");
                             }
                         } catch (GSAException ignored) { }
-                        display.showGsaReports(null);
+
+                        areReportsCompleted = true;
+                        display.showGsaReports(null, null);
                     }
                 }
 
                 @Override
                 public void onError(Request request, Throwable exception) {
                     Console.error("Couldn't retrieve reports from ReactomeGSA " + exception.getMessage());
-                    display.showGsaReports(null);
+                    areReportsCompleted = true;
+                    display.showGsaReports(null, null);
                 }
             });
         } catch (RequestException ex) {
             Console.error("Couldn't retrieve reports from ReactomeGSA " + ex.getMessage());
-            display.showGsaReports(null);
+            areReportsCompleted = true;
+            display.showGsaReports(null, null);
         }
     }
 
@@ -178,8 +200,12 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         AnalysisClient.getResult(token, filter, AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
-                // load GSA reports only when gsa token is available
-                loadGSAReportLinks(result.getSummary().getGsaToken());
+
+                if (result.getSummary().getType().equals(AnalysisType.GSA_REGULATION.name())
+                        || result.getSummary().getType().equals(AnalysisType.GSA_STATISTICS.name())
+                        || result.getSummary().getType().equals(AnalysisType.GSVA.name())) {
+                    checkReportsStatusUntilCompleted(result.getSummary().getGsaToken());
+                }
 
                 Long speciesId = result.getSummary().getSpecies();
                 if (speciesId != null) {
