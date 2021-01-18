@@ -14,14 +14,16 @@ public class Token {
     public static String DELIMITER;        // Default in Reactome is "&" -> to be set in Browser.java
 
     private Map<StateKey, String> parameters;
+    private Map<String, String> extraParamMap;
     private boolean wellFormed = true;
 
     public Token(String token) throws TokenMalformedException {
         if(DEFAULT_SPECIES_ID==null || DELIMITER==null) throw new RuntimeException("Please initialise DEFAULT_SPECIES_ID and DELIMITER");
         if (token.startsWith("/")) token = token.substring(1);
 //        if(token.isEmpty()) token = StateKey.SPECIES.getDefaultKey() + "=" + DEFAULT_SPECIES_ID;
-
+        
         this.parameters = new HashMap<>();
+        this.extraParamMap = new HashMap<>();
         try {
             @SuppressWarnings("NonJREEmulationClassesInClientCode")
             String[] tokens = token.split(DELIMITER);
@@ -38,7 +40,7 @@ public class Token {
                         if (key != null) {
                             parameters.put(key, ts[1]);
                         } else {
-                            wellFormed = false;
+                            extraParamMap.put(ts[0], ts[1]);
                         }
                     }
                 }
@@ -60,6 +62,10 @@ public class Token {
 
     public Map<StateKey, String> getParameters() {
         return this.parameters;
+    }
+    
+    public Map<String, String> getExtraParams() {
+    	return extraParamMap;
     }
 
     public List<String> getToLoad(){
