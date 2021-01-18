@@ -51,10 +51,12 @@ public class State {
 
     private String flag;
     private boolean flagIncludeInteractors = false;
+    private Map<String, String> extraParams; //to enable extensions of Reactome project to add extra url parameters
 
     public State(Token token, final StateLoadedHandler handler) {
         List<String> toLoad = token.getToLoad();
         final Map<StateKey, String> parameters = token.getParameters();
+        this.extraParams = token.getExtraParams();
         ContentClient.query(toLoad, new ContentClientHandler.ObjectMapLoaded() {
             private String token;
             private String filter;
@@ -131,6 +133,7 @@ public class State {
         this.analysisStatus = state.analysisStatus;
         this.flag = state.flag;
         this.flagIncludeInteractors = state.flagIncludeInteractors;
+        this.extraParams = state.extraParams;
     }
 
     void doConsistencyCheck(final StateLoadedHandler handler) {
@@ -336,12 +339,19 @@ public class State {
             }
 //            addDelimiter=true;
         }
+        if(extraParams != null) {
+        	extraParams.forEach((k,v) -> {
+        		token.append("&");
+        		token.append(k);
+        		token.append("=");
+        		token.append(v);
+        	});
+        }
         return token.toString();
     }
 
     /**
      * Returns the path until the loaded diagram (without including it)
-     *
      * @return the path until the loaded diagram (without including it)
      */
     private Path getPrunedPath() {
