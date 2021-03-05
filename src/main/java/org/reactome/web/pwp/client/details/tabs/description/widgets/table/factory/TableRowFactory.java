@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -22,7 +23,8 @@ public abstract class TableRowFactory {
     public static Widget getTranslationalModification(String title, List<AbstractModifiedResidue> abstractModifiedResidues) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (AbstractModifiedResidue modifiedResidue : abstractModifiedResidues) {
-            if(modifiedResidue instanceof TranslationalModification) panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
+            if (modifiedResidue instanceof TranslationalModification)
+                panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
         }
         return getOverviewRow(title, panels);
     }
@@ -30,9 +32,14 @@ public abstract class TableRowFactory {
     public static Widget getGeneticallyModifiedResidue(String title, List<AbstractModifiedResidue> abstractModifiedResidues) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (AbstractModifiedResidue modifiedResidue : abstractModifiedResidues) {
-            if(modifiedResidue instanceof GeneticallyModifiedResidue) panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
+            if (modifiedResidue instanceof GeneticallyModifiedResidue)
+                panels.add(new AbstractModifiedResiduePanel(modifiedResidue));
         }
         return getOverviewRow(title, panels);
+    }
+
+    public static Widget getSynonymRow(String title, List<String> names) {
+        return getOverviewRow(title, names.stream().skip(1).map(TextPanel::new).collect(Collectors.toList()));
     }
 
     public static Widget getCatalystActivityRow(String title, List<CatalystActivity> catalystActivities) {

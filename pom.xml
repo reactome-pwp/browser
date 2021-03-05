@@ -9,7 +9,8 @@
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
     <version>3.7.3</version>
-    <name>Reactome Pathway Portal</name>
+
+    <name>Pathway Portal</name>
 
     <description>
         The Pathway Browser is Reactome’s primary means of viewing and interacting with specific pathways
