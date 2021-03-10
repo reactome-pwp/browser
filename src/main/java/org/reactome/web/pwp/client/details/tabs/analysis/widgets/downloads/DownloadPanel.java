@@ -40,7 +40,7 @@ public class DownloadPanel extends DockLayoutPanel {
         for (AnalysisDownloadType type : AnalysisDownloadType.values()) {
             if (type.equals(AnalysisDownloadType.GSA_REPORT)) continue; // skip it.
             // skip traditional PDF report when GSA has been performed. GSA Reports will be added #showGsaReportOptions
-            if(type.equals(AnalysisDownloadType.PDF_REPORT) && isGsa) continue;
+//            if(type.equals(AnalysisDownloadType.PDF_REPORT) && isGsa) continue;
             main.add(new AnalysisDownloadItem(type, token, resource, species));
         }
     }
