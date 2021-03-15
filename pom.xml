@@ -54,7 +54,7 @@
         <reactome.web.analyitics>2.0.1</reactome.web.analyitics>
         <reactome.web.analysis-client>1.5.3</reactome.web.analysis-client>
         <reactome.web.carrousel>1.0.2</reactome.web.carrousel>
-        <reactome.web.diagram>3.7.0</reactome.web.diagram>
+        <reactome.web.diagram>3.7.0-SNAPSHOT</reactome.web.diagram>
         <reactome.web.fireworks>1.9.1</reactome.web.fireworks>
         <reactome.web.model>2.1.22</reactome.web.model>
         <reactome.web.pdb>2.3.1</reactome.web.pdb>
