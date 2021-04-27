@@ -32,6 +32,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.handler
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.AnalysisSummaryPanel;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.ActionSelectedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.handlers.ActionSelectedHandler;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Report;
 import org.reactome.web.pwp.model.client.classes.Pathway;
 
 import java.util.LinkedList;
@@ -240,6 +241,11 @@ public class AnalysisTabDisplay extends ResizeComposite implements AnalysisTab.D
             this.entitiesEntitiesFoundPanel.setResource(filter.getResource());
             this.entitiesEntitiesFoundPanel.showFoundEntities(resources, columnNames);
         }
+    }
+
+    @Override
+    public void showGsaReports(List<Report> reportList, String gsaToken) {
+        this.downloadPanel.showGsaReportOptions(reportList, gsaToken);
     }
 
     @Override

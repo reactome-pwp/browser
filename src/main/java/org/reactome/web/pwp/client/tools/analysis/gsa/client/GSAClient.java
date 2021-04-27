@@ -21,19 +21,19 @@ import java.util.List;
 @SuppressWarnings("Duplicates")
 public class GSAClient {
     public static String GSA_SERVER =                           "/GSAServer";
-    private static final String URL_METHODS =                   GSA_SERVER + "/0.1/methods";
-    private static final String URL_TYPES =                     GSA_SERVER + "/0.1/types";
+    public static final String URL_METHODS =                   GSA_SERVER + "/0.1/methods";
+    public static final String URL_TYPES =                     GSA_SERVER + "/0.1/types";
 
-    private static final String URL_GET_EXAMPLES =              GSA_SERVER + "/0.1/data/examples";
-    private static final String URL_GET_EXTERNAL_DATASOURCE =   GSA_SERVER + "/0.1/data/sources";
-    private static final String URL_LOAD_DATASET =              GSA_SERVER + "/0.1/data/load";
-    private static final String URL_LOADING_STATUS =            GSA_SERVER + "/0.1/data/status";
-    private static final String URL_SUMMARY =                   GSA_SERVER + "/0.1/data/summary";
+    public static final String URL_GET_EXAMPLES =              GSA_SERVER + "/0.1/data/examples";
+    public static final String URL_GET_EXTERNAL_DATASOURCE =   GSA_SERVER + "/0.1/data/sources";
+    public static final String URL_LOAD_DATASET =              GSA_SERVER + "/0.1/data/load";
+    public static final String URL_LOADING_STATUS =            GSA_SERVER + "/0.1/data/status";
+    public static final String URL_SUMMARY =                   GSA_SERVER + "/0.1/data/summary";
 
-    private static final String URL_STATUS =                    GSA_SERVER + "/0.1/status";
-    private static final String URL_REPORTS_STATUS =            GSA_SERVER + "/0.1/report_status";
-    private static final String URL_ANALYSIS =                  GSA_SERVER + "/0.1/analysis";
-    private static final String URL_RESULT =                    GSA_SERVER + "/0.1/result";
+    public static final String URL_STATUS =                    GSA_SERVER + "/0.1/status";
+    public static final String URL_REPORTS_STATUS =            GSA_SERVER + "/0.1/report_status";
+    public static final String URL_ANALYSIS =                  GSA_SERVER + "/0.1/analysis";
+    public static final String URL_RESULT =                    GSA_SERVER + "/0.1/result";
 
     /**
      * Retrieves the available methods and their specification/parameters.

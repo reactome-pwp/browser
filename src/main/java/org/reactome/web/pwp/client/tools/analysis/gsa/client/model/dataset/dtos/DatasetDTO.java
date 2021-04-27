@@ -3,7 +3,6 @@ package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.dtos
 import jsinterop.annotations.JsOverlay;
 import jsinterop.annotations.JsType;
 import jsinterop.base.JsPropertyMap;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.AnnotationProperty;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.dataset.GSADataset;
 
@@ -32,7 +31,6 @@ public class DatasetDTO {
     @JsOverlay
     @SuppressWarnings("Duplicates")
     public static DatasetDTO create(GSADataset dataset) {
-        Console.info("dataset: " + dataset.toString());
         DatasetDTO rtn = new DatasetDTO();
         rtn.name = dataset.getName();
         rtn.type = dataset.getType();

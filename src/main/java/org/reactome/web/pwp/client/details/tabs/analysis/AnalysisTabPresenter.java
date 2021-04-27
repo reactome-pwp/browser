@@ -1,10 +1,13 @@
 package org.reactome.web.pwp.client.details.tabs.analysis;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.*;
 import org.reactome.web.analysis.client.AnalysisClient;
 import org.reactome.web.analysis.client.AnalysisHandler;
 import org.reactome.web.analysis.client.model.AnalysisError;
 import org.reactome.web.analysis.client.model.AnalysisResult;
+import org.reactome.web.analysis.client.model.AnalysisType;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.DatabaseObjectHoveredEvent;
@@ -12,11 +15,17 @@ import org.reactome.web.pwp.client.common.events.DatabaseObjectSelectedEvent;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
 import org.reactome.web.pwp.client.common.events.StateChangedEvent;
 import org.reactome.web.pwp.client.common.module.AbstractPresenter;
+import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.Filter;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.filtering.events.FilterAppliedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.results.AnalysisResultTable;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.summary.events.AnalysisFilterChangedEvent;
 import org.reactome.web.pwp.client.manager.state.State;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.GSAClient;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAException;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.factory.GSAFactory;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.GSAError;
+import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Status;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
 import org.reactome.web.pwp.model.client.classes.Pathway;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
@@ -34,6 +43,7 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
     private AnalysisTab.Display display;
     private AnalysisStatus analysisStatus = new AnalysisStatus();
     private Pathway selected;
+    private boolean areReportsCompleted = false;
 
     public AnalysisTabPresenter(EventBus eventBus, AnalysisTab.Display display) {
         super(eventBus);
@@ -70,6 +80,62 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
             this.analysisStatus = analysisStatus.clone();
             Filter filter = Filter.fromAnalysisStatus(this.analysisStatus);
             this.loadAnalysisData(analysisStatus.getToken(), filter);
+        }
+    }
+
+    private void checkReportsStatusUntilCompleted(String gsaToken) {
+        if (gsaToken == null || gsaToken.isEmpty()) return;
+
+        Scheduler.get().scheduleFixedPeriod(() -> {
+            if (areReportsCompleted) return false;
+
+            loadGSAReportLinks(gsaToken);
+
+            return true;
+        }, 2000);
+    }
+
+    private void loadGSAReportLinks(String gsaToken) {
+        if (gsaToken == null || gsaToken.isEmpty()) return;
+
+        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, GSAClient.URL_REPORTS_STATUS + "/" + gsaToken);
+        requestBuilder.setHeader("Accept", "application/json");
+        try {
+            requestBuilder.sendRequest(null, new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request request, Response response) {
+                    if (response.getStatusCode() == Response.SC_OK) {
+                        try {
+                            Status st = GSAFactory.getModelObject(Status.class, response.getText());
+                            if (st.getStatus().equalsIgnoreCase("complete")) {
+                                areReportsCompleted = true;
+                                display.showGsaReports(st.getReports(), gsaToken);
+                            }
+                        } catch (GSAException ignored) { }
+                    } else {
+                        try {
+                            GSAError error = GSAFactory.getModelObject(GSAError.class, response.getText());
+                            if (error != null) {
+                                Console.error("Couldn't retrieve reports from ReactomeGSA -> [Status: " + error.getStatus() + ", Title: " + error.getTitle() + ", Detail: " + error.getDetail() + "]");
+                            }
+                        } catch (GSAException ignored) { }
+
+                        areReportsCompleted = true;
+                        display.showGsaReports(null, null);
+                    }
+                }
+
+                @Override
+                public void onError(Request request, Throwable exception) {
+                    Console.error("Couldn't retrieve reports from ReactomeGSA " + exception.getMessage());
+                    areReportsCompleted = true;
+                    display.showGsaReports(null, null);
+                }
+            });
+        } catch (RequestException ex) {
+            Console.error("Couldn't retrieve reports from ReactomeGSA " + ex.getMessage());
+            areReportsCompleted = true;
+            display.showGsaReports(null, null);
         }
     }
 
@@ -134,6 +200,13 @@ public class AnalysisTabPresenter extends AbstractPresenter implements AnalysisT
         AnalysisClient.getResult(token, filter, AnalysisResultTable.PAGE_SIZE, 1, null, null, new AnalysisHandler.Result() {
             @Override
             public void onAnalysisResult(final AnalysisResult result, long time) {
+
+                if (result.getSummary().getType().equals(AnalysisType.GSA_REGULATION.name())
+                        || result.getSummary().getType().equals(AnalysisType.GSA_STATISTICS.name())
+                        || result.getSummary().getType().equals(AnalysisType.GSVA.name())) {
+                    checkReportsStatusUntilCompleted(result.getSummary().getGsaToken());
+                }
+
                 Long speciesId = result.getSummary().getSpecies();
                 if (speciesId != null) {
                     ContentClient.query(result.getSummary().getSpecies(), new ContentClientHandler.ObjectLoaded<DatabaseObject>() {

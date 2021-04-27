@@ -13,7 +13,7 @@ import java.util.List;
  * @author Kostas Sidiropoulos (ksidiro@ebi.ac.uk)
  */
 public enum DownloadType {
-    SBML        ("SBML", ContentClientAbstract.CONTENT_SERVICE + "exporter/event/__STID__.sbml", "SMBL", DownloadIcons.INSTANCE.SBMLIcon(), Group.FORMAT),
+    SBML        ("SBML", ContentClientAbstract.CONTENT_SERVICE + "exporter/event/__STID__.sbml", "SBML", DownloadIcons.INSTANCE.SBMLIcon(), Group.FORMAT),
     SBGN        ("SBGN", ContentClientAbstract.CONTENT_SERVICE + "exporter/event/__STID__.sbgn", "SBGN", DownloadIcons.INSTANCE.SBGNIcon(), Group.FORMAT),
     BIOPAX_2    ("BIOPAX 2", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level2/__ID__", "Biopax 2", DownloadIcons.INSTANCE.BioPAX2Icon(), Group.FORMAT ),
     BIOPAX_3    ("BIOPAX 3", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level3/__ID__", "Biopax 3", DownloadIcons.INSTANCE.BioPAX3Icon(), Group.FORMAT),

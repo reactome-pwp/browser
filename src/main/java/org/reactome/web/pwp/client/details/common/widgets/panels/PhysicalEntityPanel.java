@@ -142,7 +142,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         //Links to the complex portal have been added as cross references for Complexes but they
         //do not have reference entity. The first condition is a hack to accommodate this case
         if(!(this.physicalEntity instanceof Complex) && !(this.physicalEntity instanceof GenomeEncodedEntity) &&
-           !(this.physicalEntity instanceof OtherEntity) && !this.physicalEntity.getCrossReference().isEmpty()){
+           !(this.physicalEntity instanceof OtherEntity) && !(this.physicalEntity instanceof Polymer) && !this.physicalEntity.getCrossReference().isEmpty()){
             Collections.sort(physicalEntity.getCrossReference());
             for (DatabaseIdentifier databaseIdentifier : this.physicalEntity.getCrossReference()) {
                 dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);

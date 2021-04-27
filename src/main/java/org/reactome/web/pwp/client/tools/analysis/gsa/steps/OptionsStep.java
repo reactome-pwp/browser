@@ -110,7 +110,13 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler,
                     break;
             }
             if(widget != null) {
-                widget.setValue(wizardContext.getParameters().getOrDefault(par.getName(), par.getDefault()));
+                String prop = par.getName();
+                if (prop != null && prop.equals("create_reports")) {
+                    // Request from 14/10/2020 - default value from the API is FALSE, setting to TRUE for PWB
+                    widget.setValue("True");
+                } else {
+                    widget.setValue(wizardContext.getParameters().getOrDefault(par.getName(), par.getDefault()));
+                }
                 parametersPanel.add(widget);
             }
 
@@ -122,7 +128,6 @@ public class OptionsStep extends AbstractGSAStep implements StepSelectedHandler,
         for (Widget widget : parametersPanel) {
             AbstractParameterWidget parameterWidget = (AbstractParameterWidget) widget;
             if (!parameterWidget.validate()) {
-                Console.info("VALIDATION_ERROR: " + parameterWidget.getName());
                 rtn = false;
             }
         }

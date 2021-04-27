@@ -54,8 +54,10 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
 
         List<TranslationalModification> tms = new ArrayList<>();
         List<GeneticallyModifiedResidue> gms = new ArrayList<>();
+        List<TranscriptionalModification> tcm = new ArrayList<>();
         for (AbstractModifiedResidue residue : modifiedResidueList) {
-            if(residue instanceof GeneticallyModifiedResidue) gms.add((GeneticallyModifiedResidue) residue);
+            if (residue instanceof GeneticallyModifiedResidue) gms.add((GeneticallyModifiedResidue) residue);
+            else if (residue instanceof TranscriptionalModification) tcm.add((TranscriptionalModification)residue);
             else tms.add((TranslationalModification) residue);
         }
 
@@ -70,6 +72,14 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
         if (!gms.isEmpty()) {
             vp.add(new Label(PropertyType.MUTATION.getTitle() + ":"));
             for (AbstractModifiedResidue modifiedResidue : gms) {
+                Widget mPanel = new AbstractModifiedResiduePanel(this, modifiedResidue);
+                mPanel.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+                vp.add(mPanel);
+            }
+        }
+        if (!tcm.isEmpty()) {
+            vp.add(new Label(PropertyType.TRANSCRIPTIONAL_MODIFICATION.getTitle() + ":"));
+            for (AbstractModifiedResidue modifiedResidue : tcm) {
                 Widget mPanel = new AbstractModifiedResiduePanel(this, modifiedResidue);
                 mPanel.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
                 vp.add(mPanel);

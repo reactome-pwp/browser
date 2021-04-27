@@ -70,6 +70,14 @@ public class DatabaseIdentifierPanel extends DetailsPanel {
                 initialize();
                 break;
             }
+        } else if (pe instanceof Polymer) {
+            for (DatabaseIdentifier identifier : pe.getCrossReference()) {
+                this.reference = identifier.getDatabaseName();
+                this.id = identifier.getIdentifier();
+                this.url = identifier.getUrl();
+                initialize();
+                break;
+            }
         } else if (pe instanceof GenomeEncodedEntity) {
             for (DatabaseIdentifier identifier : pe.getCrossReference()) {
                 this.reference = identifier.getDatabaseName();

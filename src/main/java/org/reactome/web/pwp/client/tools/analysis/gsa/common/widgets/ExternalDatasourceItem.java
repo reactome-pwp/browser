@@ -7,7 +7,6 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.ExternalDatasource;
 import org.reactome.web.pwp.client.tools.analysis.gsa.common.widgets.parameters.ParametersPanel;
 
@@ -99,14 +98,12 @@ public class ExternalDatasourceItem extends FocusPanel implements ClickHandler {
     }
 
     public void expandCollapse() {
-        Console.info("ExternalDatasourceItem > expandCollapse ["+ isExpanded + "]");
         if (isExpanded) {
             removeStyleName(RESOURCES.getCSS().itemExpanded());
         } else {
             addStyleName(RESOURCES.getCSS().itemExpanded());
         }
         isExpanded = !isExpanded;
-        Console.info("ExternalDatasourceItem > expandCollapse final ["+ isExpanded + "]");
     }
 
     public boolean isExpanded() {

@@ -43,7 +43,7 @@ public class DescriptionTabPresenter extends AbstractPresenter implements Descri
             currentlyShown = null;
             display.setInitialState();
         }else if(!databaseObject.equals(currentlyShown)) {
-            databaseObject.load(new ContentClientHandler.ObjectLoaded() {
+            databaseObject.load(new ContentClientHandler.ObjectLoaded<DatabaseObject>() {
                 @Override
                 public void onObjectLoaded(DatabaseObject databaseObject) {
                     currentlyShown = databaseObject;

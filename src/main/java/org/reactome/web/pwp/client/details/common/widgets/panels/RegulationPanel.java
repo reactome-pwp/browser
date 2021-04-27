@@ -100,6 +100,16 @@ public class RegulationPanel extends DetailsPanel implements OpenHandler<Disclos
             }
         }
 
+        if (!this.regulation.getActiveUnit().isEmpty()) {
+            vp.add(new Label("Active Unit:"));
+            for (PhysicalEntity physicalEntity : this.regulation.getActiveUnit()) {
+                Widget aux = new PhysicalEntityPanel(this, physicalEntity);
+                aux.setWidth("100%");
+                aux.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+                vp.add(aux);
+            }
+        }
+
         if (!this.regulation.getLiteratureReference().isEmpty()) {
             DisclosurePanel literatureReferences = new DisclosurePanel("Published experimental evidence...");
             literatureReferences.setWidth("100%");
