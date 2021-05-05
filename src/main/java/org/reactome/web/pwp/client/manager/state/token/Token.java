@@ -40,7 +40,7 @@ public class Token {
                         if (key != null) {
                             parameters.put(key, ts[1]);
                         } else {
-                            extraParamMap.put(ts[0], ts[1]);
+                            extraParamMap.put(ts[0], ts[1] == null ? ts[0] : ts[1]);
                         }
                     }
                 }

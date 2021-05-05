@@ -9,7 +9,6 @@
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
     <version>3.7.3</version>
-
     <name>Pathway Portal</name>
 
     <description>

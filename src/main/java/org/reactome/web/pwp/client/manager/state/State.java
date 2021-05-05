@@ -342,6 +342,13 @@ public class State {
         if(extraParams != null) {
         	extraParams.forEach((k,v) -> {
         		token.append("&");
+        		
+        		//in case of singleton parameter, dont add = and v
+        		if(k == v) {
+        			token.append(k);
+        			return;
+        		}
+        		
         		token.append(k);
         		token.append("=");
         		token.append(v);

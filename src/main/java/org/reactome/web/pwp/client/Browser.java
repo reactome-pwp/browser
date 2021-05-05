@@ -62,7 +62,7 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
         showErrorMessage();
     }
 
-    private void initConfig() {
+    protected void initConfig() {
         String hostName = Window.Location.getHostName();
         Browser.VERBOSE = (hostName.equals("localhost") || hostName.equals("127.0.0.1"));
         TitleChangedEvent.REPORT = false;
