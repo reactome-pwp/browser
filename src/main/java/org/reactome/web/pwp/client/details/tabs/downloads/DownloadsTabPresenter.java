@@ -120,7 +120,7 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
     }
 
     private void requestDBName() {
-        String url = ContentClient.SERVER + "/ReactomeRESTfulAPI/RESTfulWS/getDBName";
+        String url = ContentClient.SERVER + ContentClient.CONTENT_SERVICE + "/data/database/name";
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         try {
             requestBuilder.sendRequest(null, new RequestCallback() {

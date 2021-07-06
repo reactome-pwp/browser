@@ -52,7 +52,7 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <reactome.web.analytics>2.0.1</reactome.web.analytics>
+        <reactome.web.analytics>2.0.1-SNAPSHOT</reactome.web.analytics>
         <reactome.web.analysis-client>1.5.4-SNAPSHOT</reactome.web.analysis-client>
         <reactome.web.carrousel>1.1.0-SNAPSHOT</reactome.web.carrousel>
         <reactome.web.diagram>4.0.0-SNAPSHOT</reactome.web.diagram>
@@ -265,6 +265,24 @@
                     <startupUrls>
                         <startupUrl>index.html</startupUrl>
                     </startupUrls>
+                </configuration>
+            </plugin>
+
+            <!-- Copy static web files before executing gwt:run -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <webappDirectory>${webappDirectory}</webappDirectory>
                 </configuration>
             </plugin>
         </plugins>
