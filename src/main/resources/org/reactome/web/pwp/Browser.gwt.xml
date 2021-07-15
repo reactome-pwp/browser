@@ -13,7 +13,7 @@
     <inherits name="org.reactome.web.diagram.DiagramViewer"/>
     <inherits name="org.reactome.web.fireworks.Fireworks"/>
     <inherits name='org.reactome.web.pwp.model.PathwayPortalModel'/>
-    <inherits name="org.reactome.web.utils.analytics.client.GoogleAnalytics"/>
+    <inherits name="org.reactome.web.utils.analytics.GoogleAnalytics"/>
     <inherits name="uk.ac.ebi.pwp.widgets.chebi.ChEBI"/>
     <inherits name="uk.ac.ebi.pwp.widgets.gxa.GXA"/>
     <inherits name="uk.ac.ebi.pwp.widgets.pdb.PDB"/>
