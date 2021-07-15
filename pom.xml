@@ -53,7 +53,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <reactome.web.analytics>2.0.1-SNAPSHOT</reactome.web.analytics>
-        <reactome.web.analysis-client>1.5.4-SNAPSHOT</reactome.web.analysis-client>
+        <reactome.web.analysis-client>2.0.0-SNAPSHOT</reactome.web.analysis-client>
         <reactome.web.carrousel>1.1.0-SNAPSHOT</reactome.web.carrousel>
         <reactome.web.diagram>4.0.0-SNAPSHOT</reactome.web.diagram>
         <reactome.web.fireworks>2.0.0-SNAPSHOT</reactome.web.fireworks>
