@@ -8,7 +8,7 @@ import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleF
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPager;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound.NotFoundTable;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +24,7 @@ public class EntitiesFoundPanel extends DockLayoutPanel {
     private CustomPager pager;
 
     private Handler handler;
+
     public interface Handler {
         void onEntitiesFoundPanelClosed();
     }
@@ -36,19 +37,15 @@ public class EntitiesFoundPanel extends DockLayoutPanel {
         this.pager.setPageSize(NotFoundTable.PAGE_SIZE);
     }
 
-    public void showFoundEntities(List<String> resources, List<String> columnNames){
-        if(!forceLoad) return; //Will only force to reload the data when the analysis details has been changed
+    public void showFoundEntities(List<String> resources, List<String> columnNames) {
+        if (!forceLoad) return; //Will only force to reload the data when the analysis details has been changed
         this.forceLoad = false;
 
         EntitiesFoundTable table;
-        if(this.resource.equals("TOTAL")){
-            table = new EntitiesFoundTable(resources, columnNames);
-        }else{
-            table = new EntitiesFoundTable(Arrays.asList(this.resource), columnNames);
-        }
+        table = new EntitiesFoundTable();
         this.pager.setDisplay(table);
 
-        new EntitiesFoundAsyncDataProvider(table, this.pager, this.token, this.pathwayId, this.resource);
+        new EntitiesFoundAsyncDataProvider(table, this.pager, this.token, this.pathwayId, this.resource, this.resource.equals("TOTAL") ? resources : Collections.singletonList(this.resource), columnNames);
 
         this.clear();
         this.addNorth(getHeader(pathwayName), 1.2);
