@@ -4,6 +4,7 @@ import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Command;
+import org.reactome.web.pwp.client.Browser;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.DatabaseObjectSelectedEvent;
 import org.reactome.web.pwp.client.common.events.DetailsTabChangedEvent;
@@ -49,6 +50,14 @@ public class GAManager implements BrowserModule.Manager,
 
         LocationHelper.Location location = LocationHelper.getLocation();
         try{
+            //Browser has variables for GA_TOKEN and GA_DOMAIN. if not null, use
+            //otherwise proceed with switch case
+            if(Browser.GA_TOKEN != null && Browser.GA_DOMAIN != null) {
+                GATracker.setAccount(Browser.GA_TOKEN, Browser.GA_DOMAIN);
+                this.gaTrackerActive  = true;
+                return;
+            }
+
             switch (location){
                 case PRODUCTION:
                     GATracker.setAccount("UA-42985898-1", "reactome.org");

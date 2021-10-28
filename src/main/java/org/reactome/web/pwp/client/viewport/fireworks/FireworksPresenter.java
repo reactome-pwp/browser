@@ -21,6 +21,7 @@ import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 import org.reactome.web.pwp.model.client.util.Path;
+import org.reactome.web.pwp.model.client.util.ResponseUtils;
 
 import java.util.Objects;
 
@@ -245,7 +246,7 @@ public class FireworksPresenter extends AbstractPresenter implements Fireworks.P
                             display.loadSpeciesFireworks(json);
                             break;
                         default:
-                            String errorMsg = "A problem has occurred while loading the pathways overview data. " + response.getStatusText();
+                            String errorMsg = "A problem has occurred while loading the pathways overview data. " + ResponseUtils.getStatusText(response.getStatusCode());
                             eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), FireworksPresenter.this);
                     }
                 }

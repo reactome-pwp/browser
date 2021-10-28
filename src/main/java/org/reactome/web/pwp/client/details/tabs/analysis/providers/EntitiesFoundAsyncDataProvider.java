@@ -13,6 +13,8 @@ import org.reactome.web.pwp.client.details.tabs.analysis.widgets.common.CustomPa
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.EntitiesFoundTable;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.notfound.NotFoundTable;
 
+import java.util.List;
+
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
@@ -24,12 +26,17 @@ public class EntitiesFoundAsyncDataProvider extends AsyncDataProvider<FoundEntit
     private String resource;
     private Long pathwayId;
 
-    public EntitiesFoundAsyncDataProvider(EntitiesFoundTable table, CustomPager pager, String token, Long pathwayId, String resource) {
+    private List<String> resources;
+    private List<String> columnNames;
+
+    public EntitiesFoundAsyncDataProvider(EntitiesFoundTable table, CustomPager pager, String token, Long pathwayId, String resource, List<String> resources, List<String> columnNames) {
         this.table = table;
         this.pager = pager;
         this.token = token;
         this.resource = resource;
         this.pathwayId = pathwayId;
+        this.resources = resources;
+        this.columnNames = columnNames;
         this.addDataDisplay(this.table);
     }
 
@@ -40,6 +47,7 @@ public class EntitiesFoundAsyncDataProvider extends AsyncDataProvider<FoundEntit
         AnalysisClient.getPathwayFoundEntities(token, resource, pathwayId, NotFoundTable.PAGE_SIZE, page, new AnalysisHandler.Entities() {
             @Override
             public void onPathwayEntitiesLoaded(FoundEntities entities, long time) {
+                table.addColumns(resources, columnNames, entities);
                 table.setRowCount(entities.getFound());
                 table.setRowData(pager.getPageStart(), entities.getIdentifiers());
             }

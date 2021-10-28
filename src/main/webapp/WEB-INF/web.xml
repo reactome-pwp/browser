@@ -201,12 +201,12 @@
         </init-param>
         <init-param>
             <param-name>proxyPath</param-name>
-            <param-value>/rest/</param-value>
+            <param-value>/rhea/</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>RheaProxy</servlet-name>
-        <url-pattern>/rhea/rest/*</url-pattern>
+        <url-pattern>/rhea/*</url-pattern>
     </servlet-mapping>
 
     <!-- Reactome Experiment Digester Configuration (ONLY USED IN DEV MODE) -->
