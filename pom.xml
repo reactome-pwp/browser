@@ -8,7 +8,7 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.8.0-SNAPSHOT</version>
+    <version>3.8.0</version>
 
     <name>Pathway Portal</name>
 
@@ -45,31 +45,29 @@
         <gwtVersion>2.9.0</gwtVersion>
         <gwtStyle>OBF</gwtStyle> <!-- OBF | PRETTY | DETAILED -->
         <jetty.runner.version>9.4.41.v20210516</jetty.runner.version>
-
-        <!-- GWT needs at least java 1.8 -->
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <jdk.version>11</jdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <reactome.web.analytics>2.0.1-SNAPSHOT</reactome.web.analytics>
-        <reactome.web.analysis-client>2.0.0-SNAPSHOT</reactome.web.analysis-client>
-        <reactome.web.carrousel>1.1.0-SNAPSHOT</reactome.web.carrousel>
-        <reactome.web.diagram>4.0.0-SNAPSHOT</reactome.web.diagram>
-        <reactome.web.fireworks>2.0.0-SNAPSHOT</reactome.web.fireworks>
-        <reactome.web.model>2.2.0-SNAPSHOT</reactome.web.model>
-        <reactome.web.pdb>2.3.2-SNAPSHOT</reactome.web.pdb>
-        <reactome.web.chebi>1.2.1-SNAPSHOT</reactome.web.chebi>
-        <reactome.web.rhea>1.3.2-SNAPSHOT</reactome.web.rhea>
-        <reactome.web.gxa>3.1.0-SNAPSHOT</reactome.web.gxa>
+        <reactome.web.analytics>2.0.1</reactome.web.analytics>
+        <reactome.web.analysis-client>2.0.0</reactome.web.analysis-client>
+        <reactome.web.carrousel>1.1.3</reactome.web.carrousel>
+        <reactome.web.diagram>4.0.0</reactome.web.diagram>
+        <reactome.web.fireworks>2.0.0</reactome.web.fireworks>
+        <reactome.web.model>2.2.0</reactome.web.model>
+        <reactome.web.pdb>2.3.2</reactome.web.pdb>
+        <reactome.web.chebi>1.2.1</reactome.web.chebi>
+        <reactome.web.rhea>1.3.2</reactome.web.rhea>
+        <reactome.web.gxa>3.1.0</reactome.web.gxa>
         <elemental2.version>1.1.0</elemental2.version>
 
-        <reactome.utils.version>1.1.0-SNAPSHOT</reactome.utils.version>
+        <reactome.utils.version>1.1.0</reactome.utils.version>
 
         <appModule>org.reactome.web.pwp.Browser</appModule>
         <appName>${appModule}</appName>
 
         <slf4j.version>1.7.22</slf4j.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
     </properties>
 
     <dependencyManagement>
@@ -283,6 +281,15 @@
                 </executions>
                 <configuration>
                     <webappDirectory>${webappDirectory}</webappDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
         </plugins>

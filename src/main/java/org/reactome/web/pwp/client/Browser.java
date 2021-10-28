@@ -28,6 +28,11 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
 
     public static final String VERSION = "3.7";
     public static final Boolean BETA = false;
+    
+    //set both of these to override switch case in GAManager. Otherwise, switch case
+    //will proceed as normal
+    public static String GA_TOKEN = null;
+    public static String GA_DOMAIN = null;
 
     //set both of these to override switch case in GAManager. Otherwise, switch case
     //will proceed as normal
@@ -67,7 +72,7 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
         showErrorMessage();
     }
 
-    private void initConfig() {
+    protected void initConfig() {
         String hostName = Window.Location.getHostName();
         Browser.VERBOSE = (hostName.equals("localhost") || hostName.equals("127.0.0.1"));
         TitleChangedEvent.REPORT = false;
