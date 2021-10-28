@@ -45,6 +45,7 @@
         <gwtVersion>2.9.0</gwtVersion>
         <gwtStyle>OBF</gwtStyle> <!-- OBF | PRETTY | DETAILED -->
         <jetty.runner.version>9.4.41.v20210516</jetty.runner.version>
+        <jdk.version>11</jdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -66,6 +67,7 @@
         <appName>${appModule}</appName>
 
         <slf4j.version>1.7.22</slf4j.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
     </properties>
 
     <dependencyManagement>
@@ -279,6 +281,15 @@
                 </executions>
                 <configuration>
                     <webappDirectory>${webappDirectory}</webappDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
         </plugins>
