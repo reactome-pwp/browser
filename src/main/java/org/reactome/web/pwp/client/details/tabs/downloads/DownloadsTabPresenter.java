@@ -18,6 +18,7 @@ import org.reactome.web.pwp.model.client.classes.Pathway;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
+import org.reactome.web.pwp.model.client.util.ResponseUtils;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -120,7 +121,7 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
     }
 
     private void requestDBName() {
-        String url = ContentClient.SERVER + "/ReactomeRESTfulAPI/RESTfulWS/getDBName";
+        String url = ContentClient.SERVER + ContentClient.CONTENT_SERVICE + "/data/database/name";
         RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, url);
         try {
             requestBuilder.sendRequest(null, new RequestCallback() {
@@ -132,7 +133,7 @@ public class DownloadsTabPresenter extends AbstractPresenter implements Download
                             display.setDbName(name);
                             break;
                         default:
-                            String errorMsg = "Error retrieving the database name. ERROR " + response.getStatusText();
+                            String errorMsg = "Error retrieving the database name. ERROR " + ResponseUtils.getStatusText(response.getStatusCode());
                             eventBus.fireEventFromSource(new ErrorMessageEvent(errorMsg), DownloadsTabPresenter.this);
                     }
                 }

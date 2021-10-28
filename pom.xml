@@ -8,7 +8,8 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.7.3</version>
+    <version>3.8.0</version>
+
     <name>Pathway Portal</name>
 
     <description>
@@ -41,31 +42,32 @@
         <fileName>PathwayBrowser</fileName>
 
         <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.8.2</gwtVersion>
+        <gwtVersion>2.9.0</gwtVersion>
         <gwtStyle>OBF</gwtStyle> <!-- OBF | PRETTY | DETAILED -->
-
-        <!-- GWT needs at least java 1.8 -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <jetty.runner.version>9.4.41.v20210516</jetty.runner.version>
+        <jdk.version>11</jdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <reactome.web.analyitics>2.0.1</reactome.web.analyitics>
-        <reactome.web.analysis-client>1.5.3</reactome.web.analysis-client>
-        <reactome.web.carrousel>1.0.2</reactome.web.carrousel>
-        <reactome.web.diagram>3.7.1</reactome.web.diagram>
-        <reactome.web.fireworks>1.9.1</reactome.web.fireworks>
-        <reactome.web.model>2.1.22</reactome.web.model>
-        <reactome.web.pdb>2.3.1</reactome.web.pdb>
-        <reactome.web.chebi>1.2.0</reactome.web.chebi>
-        <reactome.web.rhea>1.3.1</reactome.web.rhea>
-        <reactome.web.gxa>3.0.3</reactome.web.gxa>
-        <elemental2.version>1.0.0-RC1</elemental2.version>
+        <reactome.web.analytics>2.0.1</reactome.web.analytics>
+        <reactome.web.analysis-client>2.0.0</reactome.web.analysis-client>
+        <reactome.web.carrousel>1.1.3</reactome.web.carrousel>
+        <reactome.web.diagram>4.0.0</reactome.web.diagram>
+        <reactome.web.fireworks>2.0.0</reactome.web.fireworks>
+        <reactome.web.model>2.2.0</reactome.web.model>
+        <reactome.web.pdb>2.3.2</reactome.web.pdb>
+        <reactome.web.chebi>1.2.1</reactome.web.chebi>
+        <reactome.web.rhea>1.3.2</reactome.web.rhea>
+        <reactome.web.gxa>3.1.0</reactome.web.gxa>
+        <elemental2.version>1.1.0</elemental2.version>
 
-        <reactome.utils.version>1.0.7</reactome.utils.version>
+        <reactome.utils.version>1.1.0</reactome.utils.version>
 
         <appModule>org.reactome.web.pwp.Browser</appModule>
         <appName>${appModule}</appName>
+
+        <slf4j.version>1.7.22</slf4j.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
     </properties>
 
     <dependencyManagement>
@@ -86,11 +88,45 @@
             <artifactId>gwt-user</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-codeserver</artifactId>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-webapp</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-servlets</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>apache-jsp</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty.websocket</groupId>
+                    <artifactId>websocket-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>apache-jsp</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-runner</artifactId>
+            <version>${jetty.runner.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
@@ -147,7 +183,7 @@
         <dependency>
             <groupId>org.reactome.web.utils</groupId>
             <artifactId>analytics</artifactId>
-            <version>${reactome.web.analyitics}</version>
+            <version>${reactome.web.analytics}</version>
         </dependency>
 
         <dependency>
@@ -173,12 +209,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.22</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
-            <version>1.7.22</version>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 
@@ -227,6 +263,33 @@
                     <startupUrls>
                         <startupUrl>index.html</startupUrl>
                     </startupUrls>
+                </configuration>
+            </plugin>
+
+            <!-- Copy static web files before executing gwt:run -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <webappDirectory>${webappDirectory}</webappDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
         </plugins>
