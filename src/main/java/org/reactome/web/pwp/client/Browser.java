@@ -34,11 +34,6 @@ public class Browser implements EntryPoint, ContentClientHandler.DatabaseInfo {
     public static String GA_TOKEN = null;
     public static String GA_DOMAIN = null;
 
-    //set both of these to override switch case in GAManager. Otherwise, switch case
-    //will proceed as normal
-    public static String GA_TOKEN = null;
-    public static String GA_DOMAIN = null;
-
     public static boolean VERBOSE = true;
     private AppController appViewer;
 
