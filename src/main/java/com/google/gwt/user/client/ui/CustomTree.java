@@ -21,12 +21,7 @@ public class CustomTree extends Tree {
             parent.setState(true);
             parent = parent.getParentItem();
         }
-        Scheduler.get().scheduleDeferred(new Command() {
-            @Override
-            public void execute() {
-                item.getElement().scrollIntoView();
-            }
-        });
+        Scheduler.get().scheduleDeferred(() -> item.getElement().scrollIntoView());
     }
 
 //    /**
