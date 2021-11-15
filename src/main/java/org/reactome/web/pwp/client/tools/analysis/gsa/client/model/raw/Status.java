@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw;
 
 import com.google.web.bindery.autobean.shared.AutoBean;
+import com.google.web.bindery.autobean.shared.AutoBean.PropertyName;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface Status {
 
     List<Report> getReports();
 
-    @AutoBean.PropertyName("dataset_id")
+    @PropertyName("dataset_id")
     String getDatasetId();
 
 }
