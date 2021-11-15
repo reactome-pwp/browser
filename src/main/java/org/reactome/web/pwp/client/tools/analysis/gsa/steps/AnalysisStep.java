@@ -187,8 +187,18 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     @Override
     public void onResultLinksSuccess(ResultLinks resultLinks) {
         if (resultLinks == null || resultLinks.getReactomeLinks() == null || resultLinks.getReactomeLinks().isEmpty()) {
-            // An error has occurred and no result links are returned.
-            updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, "No result links returned");
+            if (createReports) {
+                stage = STAGE.GET_RESULT;
+                statusPanel.setVisible(false);
+                infoPanel.setVisible(false);
+                areReportsCompleted = false;
+                reportsPanel.setVisible(true);
+                checkReportsStatusUntilCompleted();
+                nextBtn.setVisible(true);
+            } else {
+                // An error has occurred and no result links are returned.
+                updateErrorPanel(DEFAULT_ERROR_TITLE, DEFAULT_ERROR_MSG, "No result links returned");
+            }
         } else {
             updateStatusPanel(null, "Retrieving analysis links", resultLinks.getReactomeLinks() + " links retrieved");
 
@@ -290,7 +300,7 @@ public class AnalysisStep extends AbstractGSAStep implements StepSelectedHandler
     }
 
     private void getResultLinks(){
-        stage = stage.GET_LINKS;
+        stage = STAGE.GET_LINKS;
         updateStatusPanel(null, "Retrieving analysis links", "");
         GSAClient.getAnalysisResultLinks(gsaToken, this);
     }
