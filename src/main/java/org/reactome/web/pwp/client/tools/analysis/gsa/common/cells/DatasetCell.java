@@ -71,7 +71,7 @@ public class DatasetCell extends AbstractCell<GSADataset> {
 
         SafeHtml name = SafeHtmlUtils.fromTrustedString(value.getName());
         SafeHtml comparisonFactor = SafeHtmlUtils.fromTrustedString(value.getAnnotations().getSelectedComparisonFactor());
-        SafeHtml groups = SafeHtmlUtils.fromTrustedString(value.getAnnotations().getGroupOne() + " vs " + value.getAnnotations().getGroupTwo());
+        SafeHtml groups = SafeHtmlUtils.fromTrustedString(value.getAnnotations().getGroupTwo() + " vs " + value.getAnnotations().getGroupOne());
 
         List<AnnotationProperty> covariatesList = value.getAnnotations().getCovariates();
         SafeHtml covariates = SafeHtmlUtils.fromTrustedString("-");

@@ -7,6 +7,8 @@ import org.reactome.web.analysis.client.model.AnalysisResult;
 import org.reactome.web.pwp.client.details.tabs.analysis.style.AnalysisTabStyleFactory;
 import org.reactome.web.pwp.client.tools.analysis.gsa.client.model.raw.Report;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +22,11 @@ public class DownloadPanel extends DockLayoutPanel {
     private FlowPanel main;
 
     private String species;
+
+    private static final List<AnalysisDownloadType> gsaExclusions = Arrays.asList(
+            AnalysisDownloadType.PDF_REPORT,
+            AnalysisDownloadType.RESULTS_CSV
+    );
 
     public DownloadPanel() {
         super(Style.Unit.EM);
@@ -40,7 +47,7 @@ public class DownloadPanel extends DockLayoutPanel {
         for (AnalysisDownloadType type : AnalysisDownloadType.values()) {
             if (type.equals(AnalysisDownloadType.GSA_REPORT)) continue; // skip it.
             // skip traditional PDF report when GSA has been performed. GSA Reports will be added #showGsaReportOptions
-//            if(type.equals(AnalysisDownloadType.PDF_REPORT) && isGsa) continue;
+            if (isGsa && gsaExclusions.contains(type)) continue;
             main.add(new AnalysisDownloadItem(type, token, resource, species));
         }
     }
