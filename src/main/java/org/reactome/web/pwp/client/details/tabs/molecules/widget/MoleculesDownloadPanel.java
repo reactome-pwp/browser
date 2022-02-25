@@ -265,6 +265,7 @@ public class MoleculesDownloadPanel extends DockLayoutPanel {
         resultString += buildGroupString(chemTB, result.getChemicals(), PropertyType.CHEMICAL_COMPOUNDS.getTitle());
         resultString += buildGroupString(protTB, result.getProteins(), PropertyType.PROTEINS.getTitle());
         resultString += buildGroupString(sequTB, result.getSequences(), PropertyType.SEQUENCES.getTitle());
+        resultString += buildGroupString(drugTB, result.getDrugs(), PropertyType.DRUG.getTitle());
         resultString += buildGroupString(otheTB, result.getOthers(), PropertyType.OTHERS.getTitle());
 
         return resultString;

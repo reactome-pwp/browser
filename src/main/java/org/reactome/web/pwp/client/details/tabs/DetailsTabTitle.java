@@ -52,15 +52,15 @@ public class DetailsTabTitle extends Composite {
         /**
          * The styles used in this widget.
          */
-        @Source(ResoruceCSS.CSS)
-        ResoruceCSS getCSS();
+        @Source(ResourceCSS.CSS)
+        ResourceCSS getCSS();
     }
 
     /**
      * Styles used by this widget.
      */
     @CssResource.ImportedWithPrefix("pwp-MoleculesTab")
-    public interface ResoruceCSS extends CssResource {
+    public interface ResourceCSS extends CssResource {
         /**
          * The path to the default CSS styles used by this resource.
          */
