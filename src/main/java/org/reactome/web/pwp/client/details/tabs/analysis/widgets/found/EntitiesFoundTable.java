@@ -3,6 +3,8 @@ package org.reactome.web.pwp.client.details.tabs.analysis.widgets.found;
 import com.google.gwt.user.cellview.client.DataGrid;
 import org.reactome.web.analysis.client.model.FoundEntities;
 import org.reactome.web.analysis.client.model.FoundEntity;
+import org.reactome.web.pwp.client.AppController;
+import org.reactome.web.pwp.client.common.events.TermFlaggedEvent;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.AbstractColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.EntityResourceColumn;
 import org.reactome.web.pwp.client.details.tabs.analysis.widgets.found.columns.ExpressionColumn;
@@ -24,6 +26,11 @@ public class EntitiesFoundTable extends DataGrid<FoundEntity> {
         this.setAutoHeaderRefreshDisabled(true);
         this.setWidth("100%");
         this.setVisible(true);
+        this.addCellPreviewHandler(event -> {
+            if (event.getNativeEvent().getType().equals("click")) {
+                AppController.eventBus.fireEventFromSource(new TermFlaggedEvent(event.getValue().getId(), true), this);
+            }
+        });
     }
 
     public void addColumns(List<String> resources, List<String> columnNames, FoundEntities foundEntities) {
