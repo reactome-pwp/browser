@@ -65,7 +65,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         this.setAnimationEnabled(true);
         this.setGlassEnabled(true);
         this.setAutoHideOnHistoryEventsEnabled(false);
-        this.addStyleName( RESOURCES.getCSS().popupPanel());
+        this.addStyleName(RESOURCES.getCSS().popupPanel());
         Window.addResizeHandler(this);
 
         int width = (int) Math.round(Window.getClientWidth() * 0.9);
@@ -85,6 +85,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         buttonsPanel.add(this.speciesBtn = getButton("Species Comparison", RESOURCES.speciesTabIcon()));
         buttonsPanel.add(this.experimentsBtn = getButton("Tissue Distribution", RESOURCES.tissuesTabIcon()));
         buttonsPanel.add(getVersionInfo());
+        buttonsPanel.add(getAnalysisInfo());
         this.analysisBtn.addStyleName(RESOURCES.getCSS().buttonSelected());
 
         this.container = new DeckLayoutPanel();                 // Main tab container
@@ -112,7 +113,6 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
     }
 
 
-
     @Override
     public void onAnalysisCompleted(AnalysisCompletedEvent event) {
         presenter.analysisCompleted(event);
@@ -126,13 +126,13 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         }
         Button btn = (Button) event.getSource();
         btn.addStyleName(RESOURCES.getCSS().buttonSelected());
-        if (btn.equals(this.analysisBtn)){
+        if (btn.equals(this.analysisBtn)) {
             this.container.showWidget(0);
-        } else if(btn.equals(this.gsaBtn)){
+        } else if (btn.equals(this.gsaBtn)) {
             this.container.showWidget(1);
-        } else if(btn.equals(this.speciesBtn)){
+        } else if (btn.equals(this.speciesBtn)) {
             this.container.showWidget(2);
-        } else if(btn.equals(this.experimentsBtn)) {
+        } else if (btn.equals(this.experimentsBtn)) {
             this.container.showWidget(3);
         }
     }
@@ -144,7 +144,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
 
     @Override
     public void onResize(ResizeEvent event) {
-        if(isVisible()){
+        if (isVisible()) {
             int width = (int) Math.round(RootLayoutPanel.get().getOffsetWidth() * 0.9);
             int height = (int) Math.round(RootLayoutPanel.get().getOffsetHeight() * 0.9);
             this.setWidth(width + "px");
@@ -215,7 +215,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         super.show();
     }
 
-    private Button getButton(String text, ImageResource imageResource){
+    private Button getButton(String text, ImageResource imageResource) {
         FlowPanel fp = new FlowPanel();
         Image image = new Image(imageResource);
         image.addStyleName(RESOURCES.getCSS().undraggable());
@@ -229,7 +229,7 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         return btn;
     }
 
-    private Widget setTitlePanel(){
+    private Widget setTitlePanel() {
         FlowPanel header = new FlowPanel();
         header.setStyleName(RESOURCES.getCSS().header());
         header.addStyleName(RESOURCES.getCSS().unselectable());
@@ -259,8 +259,20 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         return versionInfoPanel;
     }
 
+    private Widget getAnalysisInfo() {
+        FlowPanel analysisInfoPanel = new FlowPanel();
+
+        FlowPanel analysisInfo = new FlowPanel();
+        analysisInfo.setStyleName(RESOURCES.getCSS().versionInfo());
+        analysisInfo.getElement().setInnerHTML("The analysis results are only kept for 7 days after your last usage. " +
+                "Afterwards you'll need to re-perform your analysis to see the results.");
+
+        analysisInfoPanel.add(analysisInfo);
+        return analysisInfoPanel;
+    }
 
     public static Resources RESOURCES;
+
     static {
         RESOURCES = GWT.create(Resources.class);
         RESOURCES.getCSS().ensureInjected();

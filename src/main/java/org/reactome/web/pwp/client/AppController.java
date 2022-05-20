@@ -84,24 +84,22 @@ import java.util.List;
  */
 public class AppController implements BrowserReadyHandler {
 
+    public static EventBus eventBus;
     private final DBInfo dbInfo;
-    private final EventBus eventBus;
     private final IsWidget main;
 
     public AppController(DBInfo dbInfo) {
         this.dbInfo = dbInfo;
         this.printMessage();
-        this.eventBus = new BrowserEventBus();
-        this.eventBus.addHandler(BrowserReadyEvent.TYPE, this);
+        AppController.eventBus = new BrowserEventBus();
+        AppController.eventBus.addHandler(BrowserReadyEvent.TYPE, this);
         this.initManager();
         this.main = getDesktopBrowser();
-
-
     }
 
-    public void go(HasWidgets container){
+    public void go(HasWidgets container) {
         container.add(this.main.asWidget());
-        this.eventBus.fireEventFromSource(new BrowserReadyEvent(dbInfo), this);
+        eventBus.fireEventFromSource(new BrowserReadyEvent(dbInfo), this);
     }
 
     @Override
@@ -109,46 +107,46 @@ public class AppController implements BrowserReadyHandler {
         History.fireCurrentHistoryState();
     }
 
-    private void initManager(){
-        new StateManager(this.eventBus);
-        new OrthologyManager(this.eventBus);
-        new GAManager(this.eventBus);
+    private void initManager() {
+        new StateManager(eventBus);
+        new OrthologyManager(eventBus);
+        new GAManager(eventBus);
     }
 
-    private IsWidget getDesktopBrowser(){
+    private IsWidget getDesktopBrowser() {
         this.initialiseDetailsTabsList(); //IMPORTANT: It has to be initialised before creating the main details module
         this.initialiseTools(); //IMPORTANT: Even though the tools are not attached here, they need to be initialised
 
         //Messages is not attached anywhere here but it needs to be initialised
         Messages.Display messages = new MessagesDisplay();
-        new MessagesPresenter(this.eventBus, messages);
+        new MessagesPresenter(eventBus, messages);
 
         Hierarchy.Display hierarchy = new HierarchyDisplay();
-        new HierarchyPresenter(this.eventBus, hierarchy);
+        new HierarchyPresenter(eventBus, hierarchy);
 
         Details.Display details = new DetailsDisplay();
-        new DetailsPresenter(this.eventBus, details);
+        new DetailsPresenter(eventBus, details);
 
         DesktopApp.Display main = new DesktopAppDisplay(getTopPanel(), hierarchy, details, getViewport());
-        new DesktopAppPresenter(this.eventBus, main);
+        new DesktopAppPresenter(eventBus, main);
 
         return main;
     }
 
     public static final List<DetailsTab.Display> DETAILS_TABS = new LinkedList<>();
 
-    private IsWidget getTopPanel(){
+    private IsWidget getTopPanel() {
         LayoutSelector.Display layoutSelector = new LayoutSelectorDisplay();
-        new LayoutSelectorPresenter(this.eventBus, layoutSelector);
+        new LayoutSelectorPresenter(eventBus, layoutSelector);
 
         ToolLauncher.Display toolLauncher = new ToolLauncherDisplay();
-        new ToolLauncherPresenter(this.eventBus, toolLauncher);
+        new ToolLauncherPresenter(eventBus, toolLauncher);
 
         SpeciesSelector.Display species = new SpeciesSelectorDisplay();
-        new SpeciesSelectorPresenter(this.eventBus, species);
+        new SpeciesSelectorPresenter(eventBus, species);
 
         TourSelector.Display tour = new TourSelectorDisplay();
-        new TourSelectorPresenter(this.eventBus, tour);
+        new TourSelectorPresenter(eventBus, tour);
 
         FlowPanel topPanel = new FlowPanel();
         topPanel.setStyleName("elv-Top-Panel");
@@ -161,65 +159,64 @@ public class AppController implements BrowserReadyHandler {
         return topPanel;
     }
 
-    private IsWidget getViewport(){
+    private IsWidget getViewport() {
         Diagram.Display diagram = new DiagramDisplay();
-        new DiagramPresenter(this.eventBus, diagram);
+        new DiagramPresenter(eventBus, diagram);
 
         Viewport.Display viewport;
         if (AppConfig.getIsCurator()) {
             Welcome.Display welcome = new WelcomeDisplay();
-            new WelcomePresenter(this.eventBus, welcome);
+            new WelcomePresenter(eventBus, welcome);
 
             viewport = new ViewportDisplay(diagram, welcome);
         } else {
             Fireworks.Display fireworks = new FireworksDisplay();
-            new FireworksPresenter(this.eventBus, fireworks);
+            new FireworksPresenter(eventBus, fireworks);
 
             viewport = new ViewportDisplay(diagram, fireworks);
         }
-        new ViewportPresenter(this.eventBus, viewport);
+        new ViewportPresenter(eventBus, viewport);
         return viewport;
     }
 
-    private void initialiseDetailsTabsList(){
+    private void initialiseDetailsTabsList() {
         DescriptionTab.Display description = new DescriptionTabDisplay();
-        new DescriptionTabPresenter(this.eventBus, description);
+        new DescriptionTabPresenter(eventBus, description);
         DETAILS_TABS.add(description);
 
         MoleculesTab.Display molecules = new MoleculesTabDisplay();
-        new MoleculesTabPresenter(this.eventBus, molecules);
+        new MoleculesTabPresenter(eventBus, molecules);
         DETAILS_TABS.add(molecules);
 
         StructuresTab.Display structures = new StructuresTabDisplay();
-        new StructuresTabPresenter(this.eventBus, structures);
+        new StructuresTabPresenter(eventBus, structures);
         DETAILS_TABS.add(structures);
 
         ExpressionTab.Display expression = new ExpressionTabDisplay();
-        new ExpressionTabPresenter(this.eventBus, expression);
+        new ExpressionTabPresenter(eventBus, expression);
         DETAILS_TABS.add(expression);
 
         AnalysisTab.Display analysis = new AnalysisTabDisplay();
-        new AnalysisTabPresenter(this.eventBus, analysis);
+        new AnalysisTabPresenter(eventBus, analysis);
         DETAILS_TABS.add(analysis);
 
         DownloadsTab.Display downloads = new DownloadsTabDisplay();
-        new DownloadsTabPresenter(this.eventBus, downloads);
+        new DownloadsTabPresenter(eventBus, downloads);
         DETAILS_TABS.add(downloads);
     }
 
-    private void initialiseTools(){
+    private void initialiseTools() {
         AnalysisLauncher.Display analysisDisplay = new AnalysisLauncherDisplay();
-        new AnalysisLauncherPresenter(this.eventBus, analysisDisplay);
+        new AnalysisLauncherPresenter(eventBus, analysisDisplay);
 
         CitationLauncher.Display citationDisplay = new CitationLauncherDisplay();
-        new CitationLauncherPresenter(this.eventBus, citationDisplay);
-
+        new CitationLauncherPresenter(eventBus, citationDisplay);
     }
 
-    private void printMessage(){
-        System.out.println  ();                             //This is in purpose for the java console
-        System.out.println  ("##########################"); //This is in purpose for the java console
-        Console.info        ("# Starting PathwayPortal #"); //Both java and browser console
-        System.out.println  ("##########################"); //This is in purpose for the java console
+    private void printMessage() {
+        System.out.println();                             //This is in purpose for the java console
+        System.out.println("##########################"); //This is in purpose for the java console
+        Console.info("# Starting PathwayPortal #"); //Both java and browser console
+        System.out.println("##########################"); //This is in purpose for the java console
     }
 }
