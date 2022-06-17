@@ -27,7 +27,7 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
 
     private Species species;
     private static MapSet<Long, HierarchyItem> treeItems = new MapSet<>();
-    private static List<Long> ehlds = new ArrayList<>();
+    private static List<String> ehlds = new ArrayList<>();
 
     static {
         String url = "/download/current/ehld/svgsummary.txt?v=" + System.currentTimeMillis();
@@ -37,16 +37,10 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
                 @Override
                 public void onResponseReceived(Request request, Response response) {
                     if (response.getStatusCode() == Response.SC_OK) {
-                        for (String id : response.getText().split("\n")) {
-                            try {
-                                ehlds.add(Long.valueOf(id));
-                            } catch (NumberFormatException ex) {
-                                //Nothing here
-                            }
-                        }
+                        ehlds.addAll(Arrays.asList(response.getText().split("\n")));
                         //In case there are HierarchyItems already loaded, these might need to be updated
                         for (HierarchyItem hierarchyItem : treeItems.getValues()) {
-                            if(ehlds.contains(hierarchyItem.getEvent().getDbId())) {
+                            if (ehlds.contains(hierarchyItem.getEvent().getStId())) {
                                 hierarchyItem.setEHLD();
                             }
                         }
@@ -70,7 +64,7 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
         this.species = species;
     }
 
-    public HandlerRegistration addHierarchyItemDoubleClickedHandler(HierarchyItemDoubleClickedHandler handler){
+    public HandlerRegistration addHierarchyItemDoubleClickedHandler(HierarchyItemDoubleClickedHandler handler) {
         return addHandler(handler, HierarchyItemDoubleClickedEvent.TYPE);
     }
 
@@ -145,13 +139,13 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
         return this.treeItems.keySet();
     }
 
-    public Set<Pathway> getHierarchyPathwaysWithReactionsLoaded(){
+    public Set<Pathway> getHierarchyPathwaysWithReactionsLoaded() {
         Set<Pathway> rtn = new HashSet<>();
         for (Long eventId : treeItems.keySet()) {
             for (HierarchyItem item : treeItems.getElements(eventId)) {
-                if(item.getEvent() instanceof ReactionLikeEvent){
+                if (item.getEvent() instanceof ReactionLikeEvent) {
                     HierarchyItem parent = (HierarchyItem) item.getParentItem();
-                    rtn.add((Pathway)parent.getEvent());
+                    rtn.add((Pathway) parent.getEvent());
                 }
             }
         }
@@ -172,7 +166,7 @@ public class HierarchyTree extends CustomTree implements HierarchyItemDoubleClic
             item.setChildrenLoaded(true);
         }
         for (Event child : children) {
-            boolean ehld = ehlds.contains(child.getDbId());
+            boolean ehld = ehlds.contains(child.getStId());
             HierarchyItem hi = new HierarchyItem(species, child, ehld);
             hi.addHierarchyItemDoubleClickedHandler(this);
             hi.addHierarchyItemMouseOverHandler(this);
