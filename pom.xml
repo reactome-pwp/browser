@@ -66,7 +66,7 @@
         <appModule>org.reactome.web.pwp.Browser</appModule>
         <appName>${appModule}</appName>
 
-        <slf4j.version>1.7.22</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
     </properties>
 
