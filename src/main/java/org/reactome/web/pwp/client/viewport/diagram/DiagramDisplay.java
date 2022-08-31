@@ -1,14 +1,19 @@
 package org.reactome.web.pwp.client.viewport.diagram;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import org.reactome.web.diagram.client.DiagramFactory;
 import org.reactome.web.diagram.client.DiagramViewer;
 import org.reactome.web.diagram.client.OptionalWidget;
+import org.reactome.web.diagram.client.ViewerContainer;
 import org.reactome.web.diagram.data.loader.GraphLoader;
 import org.reactome.web.diagram.data.loader.LayoutLoader;
 import org.reactome.web.diagram.events.*;
 import org.reactome.web.diagram.handlers.*;
+import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.AppConfig;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.viewport.ViewportDisplay;
@@ -38,6 +43,12 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
         this.diagram = DiagramFactory.createDiagramViewer();
         this.diagram.asWidget().setStyleName(ViewportDisplay.RESOURCES.getCSS().viewportPanel());
 
+        // adjust PharmGKB position in PWB
+        if (!DiagramFactory.WATERMARK) {
+            findFirstChildElementByClassName(this.diagram.asWidget(), "pharmGKB").addClassName(ViewerContainer.RESOURCES.getCSS().pharmGKBAdjustPosition());
+            Console.log("catch you ");
+        }
+
         //When the pathway browser is configured to run on the Curator site, the Fireworks
         //is not available and the diagram data needs to be retrieved from the ContentService
         if (AppConfig.getIsCurator()) {
@@ -63,6 +74,29 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
 
         this.diagram.addDiagramProfileChangedHandler(this);
         this.diagram.addAnalysisProfileChangedHandler(this);
+    }
+
+
+    public static Element findFirstChildElementByClassName(Widget w, String className) {
+        return findFirstChildElementByClassName(w.getElement(), className);
+    }
+
+    private static Element findFirstChildElementByClassName(Element e, String className) {
+        for (int i = 0; i != e.getChildCount(); ++i) {
+            Node childNode = e.getChild(i);
+            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element childElement = (Element) childNode;
+                if (childElement.getClassName().contains(className))
+                    return childElement;
+                else if (childElement.hasChildNodes()) {
+                    Element grandChildElement =
+                            findFirstChildElementByClassName(
+                                    childElement, className);
+                    if (grandChildElement != null) return grandChildElement;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
