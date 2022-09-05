@@ -13,7 +13,6 @@ import org.reactome.web.diagram.data.loader.GraphLoader;
 import org.reactome.web.diagram.data.loader.LayoutLoader;
 import org.reactome.web.diagram.events.*;
 import org.reactome.web.diagram.handlers.*;
-import org.reactome.web.diagram.util.Console;
 import org.reactome.web.pwp.client.AppConfig;
 import org.reactome.web.pwp.client.common.AnalysisStatus;
 import org.reactome.web.pwp.client.viewport.ViewportDisplay;
@@ -46,7 +45,6 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
         // adjust PharmGKB position in PWB
         if (!DiagramFactory.WATERMARK) {
             findFirstChildElementByClassName(this.diagram.asWidget(), "pharmGKB").addClassName(ViewerContainer.RESOURCES.getCSS().pharmGKBAdjustPosition());
-            Console.log("catch you ");
         }
 
         //When the pathway browser is configured to run on the Curator site, the Fireworks
