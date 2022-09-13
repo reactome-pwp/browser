@@ -43,9 +43,7 @@ public class DiagramDisplay extends DockLayoutPanel implements Diagram.Display,
         this.diagram.asWidget().setStyleName(ViewportDisplay.RESOURCES.getCSS().viewportPanel());
 
         // adjust PharmGKB position in PWB
-        if (!DiagramFactory.WATERMARK) {
-            findFirstChildElementByClassName(this.diagram.asWidget(), "pharmGKB").addClassName(ViewerContainer.RESOURCES.getCSS().pharmGKBAdjustPosition());
-        }
+        findFirstChildElementByClassName(this.diagram.asWidget(), "pharmGKB").addClassName(ViewerContainer.RESOURCES.getCSS().pharmGKBAdjustPosition());
 
         //When the pathway browser is configured to run on the Curator site, the Fireworks
         //is not available and the diagram data needs to be retrieved from the ContentService
