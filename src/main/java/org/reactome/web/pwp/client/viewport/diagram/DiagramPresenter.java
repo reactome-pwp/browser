@@ -1,7 +1,10 @@
 package org.reactome.web.pwp.client.viewport.diagram;
 
+
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
+import org.reactome.web.diagram.client.ViewerContainer;
 import org.reactome.web.diagram.events.AnalysisProfileChangedEvent;
 import org.reactome.web.diagram.events.DiagramObjectsFlagResetEvent;
 import org.reactome.web.diagram.events.DiagramProfileChangedEvent;
@@ -253,6 +256,11 @@ public class DiagramPresenter extends AbstractPresenter implements Diagram.Prese
                 displayedPathway = null;
             }
         });
+
+        // adjust PharmGKB position in PWB if there is
+        if (DOM.getElementById("pharmGKB") != null) {
+            DOM.getElementById("pharmGKB").addClassName(ViewerContainer.RESOURCES.getCSS().pharmGKBAdjustPosition());
+        }
     }
 
     private void loadCurrentPathway(){
