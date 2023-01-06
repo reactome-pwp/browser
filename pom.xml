@@ -8,9 +8,15 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.9.0-SNAPSHOT</version>
+    <version>3.9.1</version>
 
     <name>Pathway Portal</name>
+
+    <parent>
+        <groupId>org.reactome.server</groupId>
+        <artifactId>reactome-pwp-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
 
     <description>
         The Pathway Browser is Reactome’s primary means of viewing and interacting with specific pathways
@@ -18,7 +24,7 @@
 
     <organization>
         <name>The European Bioinformatics Institute</name>
-        <url>http://www.ebi.ac.uk/</url>
+        <url>https://www.ebi.ac.uk/</url>
     </organization>
 
     <developers>
@@ -26,7 +32,7 @@
             <id>gviteri</id>
             <name>Guilherme Viteri</name>
             <email>gviteri@ebi.ac.uk</email>
-            <organization>http://www.ebi.ac.uk/</organization>
+            <organization>https://www.ebi.ac.uk/</organization>
         </developer>
         <developer>
             <id>ksidiro</id>
@@ -42,45 +48,12 @@
         <fileName>PathwayBrowser</fileName>
 
         <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.9.0</gwtVersion>
         <gwtStyle>OBF</gwtStyle> <!-- OBF | PRETTY | DETAILED -->
-        <jetty.runner.version>9.4.41.v20210516</jetty.runner.version>
-        <jdk.version>11</jdk.version>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <reactome.web.analytics>2.0.1</reactome.web.analytics>
-        <reactome.web.analysis-client>2.0.0</reactome.web.analysis-client>
-        <reactome.web.carrousel>1.1.3</reactome.web.carrousel>
-        <reactome.web.diagram>4.1.1-SNAPSHOT</reactome.web.diagram>
-        <reactome.web.fireworks>2.0.0</reactome.web.fireworks>
-        <reactome.web.model>2.2.0</reactome.web.model>
-        <reactome.web.pdb>2.3.2</reactome.web.pdb>
-        <reactome.web.chebi>1.2.1</reactome.web.chebi>
-        <reactome.web.rhea>1.3.2</reactome.web.rhea>
-        <reactome.web.gxa>3.1.0</reactome.web.gxa>
-        <elemental2.version>1.1.0</elemental2.version>
-
-        <reactome.utils.version>1.1.0</reactome.utils.version>
 
         <appModule>org.reactome.web.pwp.Browser</appModule>
         <appName>${appModule}</appName>
 
-        <slf4j.version>1.7.36</slf4j.version>
-        <maven.compiler.version>3.8.1</maven.compiler.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.gwt</groupId>
-                <artifactId>gwt</artifactId>
-                <version>${gwtVersion}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -123,7 +96,6 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-runner</artifactId>
-            <version>${jetty.runner.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -135,86 +107,72 @@
         <dependency>
             <groupId>org.reactome.web.pwp</groupId>
             <artifactId>model</artifactId>
-            <version>${reactome.web.model}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.web.pwp</groupId>
             <artifactId>analysis-client</artifactId>
-            <version>${reactome.web.analysis-client}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.web</groupId>
             <artifactId>fireworks</artifactId>
-            <version>${reactome.web.fireworks}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.web</groupId>
             <artifactId>diagram</artifactId>
-            <version>${reactome.web.diagram}</version>
         </dependency>
 
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>pdb</artifactId>
-            <version>${reactome.web.pdb}</version>
         </dependency>
 
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>chebi</artifactId>
-            <version>${reactome.web.chebi}</version>
         </dependency>
 
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>rhea</artifactId>
-            <version>${reactome.web.rhea}</version>
         </dependency>
 
         <dependency>
             <groupId>uk.ac.ebi.pwp.widgets</groupId>
             <artifactId>gxa</artifactId>
-            <version>${reactome.web.gxa}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.web.utils</groupId>
             <artifactId>analytics</artifactId>
-            <version>${reactome.web.analytics}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.web</groupId>
             <artifactId>carrousel</artifactId>
-            <version>${reactome.web.carrousel}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactome.server.utils</groupId>
             <artifactId>reactome-utils</artifactId>
-            <version>${reactome.utils.version}</version>
         </dependency>
 
         <!-- Elemental 2.0 -->
         <dependency>
             <groupId>com.google.elemental2</groupId>
             <artifactId>elemental2-core</artifactId>
-            <version>${elemental2.version}</version>
         </dependency>
 
         <!-- logging dependencies, delegate all to slf4j and use logback -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 
@@ -227,7 +185,7 @@
             <plugin>
                 <groupId>net.ltgt.gwt.maven</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>1.0-rc-6</version>
+                <version>${gwt.maven.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -270,7 +228,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>${maven.war.version}</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -288,8 +246,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -313,31 +271,6 @@
             <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <!-- EBI repo -->
-        <repository>
-            <id>nexus-ebi-repo</id>
-            <name>The EBI internal repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <!-- EBI SNAPSHOT repo -->
-        <repository>
-            <id>nexus-ebi-snapshot-repo</id>
-            <name>The EBI internal snapshot repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
