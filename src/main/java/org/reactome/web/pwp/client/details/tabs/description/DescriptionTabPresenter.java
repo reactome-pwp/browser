@@ -1,6 +1,7 @@
 package org.reactome.web.pwp.client.details.tabs.description;
 
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.DOM;
 import org.reactome.web.pwp.client.common.Selection;
 import org.reactome.web.pwp.client.common.events.DatabaseObjectSelectedEvent;
 import org.reactome.web.pwp.client.common.events.ErrorMessageEvent;
@@ -48,6 +49,15 @@ public class DescriptionTabPresenter extends AbstractPresenter implements Descri
                 public void onObjectLoaded(DatabaseObject databaseObject) {
                     currentlyShown = databaseObject;
                     display.showDetails(databaseObject);
+
+                    // score system css style
+                    if (DOM.getElementById("star") != null) {
+                        DOM.getElementById("star").addClassName(DescriptionTabDisplay.RESOURCES.getCSS().c100());
+                        DOM.getElementById("star").addClassName(DescriptionTabDisplay.RESOURCES.getCSS().small());
+                        DOM.getElementById("star-slice").addClassName(DescriptionTabDisplay.RESOURCES.getCSS().slice());
+                        DOM.getElementById("star-bar").addClassName(DescriptionTabDisplay.RESOURCES.getCSS().bar());
+                        DOM.getElementById("star-fill").addClassName(DescriptionTabDisplay.RESOURCES.getCSS().fill());
+                    }
                 }
 
                 @Override

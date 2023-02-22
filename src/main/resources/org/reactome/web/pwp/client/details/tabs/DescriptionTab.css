@@ -1,0 +1,142 @@
+/****************************************************************
+ *
+ * CSS Percentage Circle
+ * Author: Andre Firchow
+ * Link: http://circle.firchow.net/
+*****************************************************************/
+
+@external p20, p40, p60,  p80, p100, pie-fill, rect-auto, pie;
+
+.rect-auto, .c100.p60 .slice, .c100.p80 .slice, .c100.p100 .slice {
+    clip: rect(auto, auto, auto, auto);
+}
+
+.pie, .c100 .bar, .c100.p60 .fill,  .c100.p80 .fill, .c100.p100 .fill {
+    position: absolute;
+    border: 0.14em solid #2f9ec2;
+    width: 0.72em;
+    height: 0.72em;
+    clip: rect(0em, 0.5em, 1em, 0em);
+    border-radius: 50%;
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+
+.pie-fill, .c100.p60 .bar:after, .c100.p60 .fill,  .c100.p80 .fill,  .c100.p100 .bar:after, .c100.p100 .fill {
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.c100 {
+    position: relative;
+    font-size: 120px;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    float: left;
+    margin: 0 0.1em 0.1em 0;
+    background-color: #ccc;
+}
+.c100 *, .c100 *:before, .c100 *:after {
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.c100.small {
+    font-size: 30px;
+    margin-left: 5px;
+}
+.c100 > span {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    left: 0;
+    top: 0.65em;
+    /*width: 5em;*/
+    /*line-height: 5em;*/
+    font-size: 0.37em;
+    color: #000;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    -moz-transition-property: all;
+    -o-transition-property: all;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -moz-transition-timing-function: ease-out;
+    -o-transition-timing-function: ease-out;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+.c100:after {
+    position: absolute;
+    top: 0.14em;
+    left: 0.14em;
+    display: block;
+    content: " ";
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    width: 0.72em;
+    height: 0.72em;
+    -moz-transition-property: all;
+    -o-transition-property: all;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -moz-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+}
+.c100 .slice {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    clip: rect(0em, 1em, 1em, 0.5em);
+}
+
+.c100.p20 .bar {
+    -moz-transform: rotate(72deg);
+    -ms-transform: rotate(72deg);
+    -webkit-transform: rotate(72deg);
+    transform: rotate(72deg);
+}
+
+.c100.p40 .bar {
+    -moz-transform: rotate(144deg);
+    -ms-transform: rotate(144deg);
+    -webkit-transform: rotate(144deg);
+    transform: rotate(144deg);
+}
+
+.c100.p60 .bar {
+    -moz-transform: rotate(216deg);
+    -ms-transform: rotate(216deg);
+    -webkit-transform: rotate(216deg);
+    transform: rotate(216deg);
+}
+.c100.p80 .bar {
+    -moz-transform: rotate(288deg);
+    -ms-transform: rotate(288deg);
+    -webkit-transform: rotate(288deg);
+    transform: rotate(288deg);
+}
+
+.c100.p100 .bar {
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+}

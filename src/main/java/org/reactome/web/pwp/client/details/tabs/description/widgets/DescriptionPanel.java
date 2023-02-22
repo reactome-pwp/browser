@@ -1,63 +1,57 @@
 package org.reactome.web.pwp.client.details.tabs.description.widgets;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.safecss.shared.SafeStyles;
-import com.google.gwt.safecss.shared.SafeStylesBuilder;
-import com.google.gwt.safecss.shared.SafeStylesUtils;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.diagram.client.ViewerContainer;
 import org.reactome.web.pwp.client.common.utils.Console;
-import org.reactome.web.pwp.client.details.DetailsDisplay;
+import org.reactome.web.pwp.client.details.common.help.HelpPopup;
 import org.reactome.web.pwp.client.details.common.help.HelpPopupImage;
 import org.reactome.web.pwp.client.details.common.help.InstanceTypeExplanation;
-import org.reactome.web.pwp.client.details.tabs.description.DescriptionTabDisplay;
 import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factory.OverviewTableFactory;
-import org.reactome.web.pwp.client.tools.analysis.gsa.common.cells.DatasetCell;
-import org.reactome.web.pwp.model.client.classes.DatabaseObject;
-import org.reactome.web.pwp.model.client.classes.Event;
-import org.reactome.web.pwp.model.client.classes.PhysicalEntity;
-import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.classes.*;
 
 import java.util.List;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
  */
-public class DescriptionPanel extends DockLayoutPanel {
+public class DescriptionPanel extends DockLayoutPanel implements MouseOverHandler, MouseOutHandler {
+
+    private HelpPopup popup;
 
     /**
      * The HTML templates used to render the star system.
      */
     interface ReviewStatusTemplates extends SafeHtmlTemplates {
         /**
-         * The template for this star rating, which includes styles and a value.
+         * The template for this star rating, which includes star rating and a value.
          *
-         * @param score  the safe value. Since the value type is {@link SafeHtml},
-         *               it will not be escaped before including it in the template.
-         *               Alternatively, you could make the value type String, in which
-         *               case the value would be escaped.
+         * @param stars review status value
+         *              five stars - 100
+         *              four stars - 80
+         *              three stars - 60
+         *              two stars - 40
+         *              one star - 20
+         * @param score convert to a score to display in PWB
+         *              example: 100 - 5
          * @return a {@link SafeHtml} instance
          */
         @Template(
-                "<div class=\"c100 p{0} small \">" +
-                      "<span> {1}/5</span>" +
-                      "<div class=\"slice\">" +
-                          "<div class=\"bar\"></div>" +
-                          "<div class=\"fill\"></div>" +
-                      "</div>" +
-                "</div>")
-        SafeHtml reviewStatus(String score, String scale);
+                "<div id = \"star\" class=\"c100 p{0} small \">" +
+                        "<span> {1}/5</span>" +
+                        "<div id = \"star-slice\" class=\"slice\">" +
+                        "<div id = \"star-bar\" class=\"bar\"></div>" +
+                        "<div id = \"star-fill\" class=\"fill\"></div>" +
+                        "</div>" +
+                        "</div>")
+        SafeHtml reviewStatus(String stars, String score);
     }
 
     /**
@@ -67,20 +61,19 @@ public class DescriptionPanel extends DockLayoutPanel {
     private static ReviewStatusTemplates templates = GWT.create(ReviewStatusTemplates.class);
 
 
-
     public DescriptionPanel(DatabaseObject databaseObject) {
         super(Style.Unit.PX);
         addStyleName("elv-Details-Tab");
 
         HorizontalPanel topBar = new HorizontalPanel();
         topBar.add(getTitle(databaseObject));
-        if (databaseObject.getStId()!=null) {
+        if (databaseObject.getStId() != null) {
             topBar.add(getStableId(databaseObject));
         }
         topBar.add(getSpecies(databaseObject));
         addNorth(topBar, 35);
 
-        if(databaseObject instanceof Event){
+        if (databaseObject instanceof Event) {
             topBar.add(getReviewStatus(databaseObject));
         }
 
@@ -101,19 +94,19 @@ public class DescriptionPanel extends DockLayoutPanel {
         add(overview);
     }
 
-    private Widget getTitle(DatabaseObject databaseObject){
+    private Widget getTitle(DatabaseObject databaseObject) {
         HorizontalPanel titlePanel = new HorizontalPanel();
         titlePanel.setStyleName("elv-Details-Title");
         if (databaseObject instanceof Event) {
             if (((Event) databaseObject).getInDisease()) titlePanel.addStyleName("elv-Details-Title-Disease");
         }
 
-        try{
+        try {
             ImageResource img = databaseObject.getImageResource();
             String helpTitle = databaseObject.getSchemaClass().name;
             HTMLPanel helpContent = new HTMLPanel(InstanceTypeExplanation.getExplanation(databaseObject.getSchemaClass()));
             titlePanel.add(new HelpPopupImage(img, helpTitle, helpContent));
-        }catch (Exception e){
+        } catch (Exception e) {
             Console.error(getClass() + ": " + e.getMessage());
             //ToDo: Look into new Error Handling
         }
@@ -125,29 +118,29 @@ public class DescriptionPanel extends DockLayoutPanel {
         return titlePanel;
     }
 
-    private Widget getSpecies(DatabaseObject databaseObject){
+    private Widget getSpecies(DatabaseObject databaseObject) {
         String species = null;
-        if(databaseObject instanceof PhysicalEntity){
+        if (databaseObject instanceof PhysicalEntity) {
             List<Species> speciesList = ((PhysicalEntity) databaseObject).getSpecies();
-            if(!speciesList.isEmpty()){
+            if (!speciesList.isEmpty()) {
                 species = speciesList.get(0).getDisplayName();
             }
-        }else if(databaseObject instanceof Event){
+        } else if (databaseObject instanceof Event) {
             Event event = (Event) databaseObject;
-            if(!event.getSpecies().isEmpty()){
+            if (!event.getSpecies().isEmpty()) {
                 species = event.getSpecies().get(0).getDisplayName();
             }
         }
 
         HorizontalPanel speciesPanel = new HorizontalPanel();
-        if(species!=null){
+        if (species != null) {
             speciesPanel.setStyleName("elv-Details-Species");
             speciesPanel.add(new HTMLPanel("Species: " + species));
         }
         return speciesPanel;
     }
 
-    private Widget getStableId(DatabaseObject databaseObject){
+    private Widget getStableId(DatabaseObject databaseObject) {
         String stId = databaseObject.getStIdVersion();
         if (stId == null || stId.isEmpty()) stId = databaseObject.getClassName();
 
@@ -158,72 +151,63 @@ public class DescriptionPanel extends DockLayoutPanel {
     }
 
     private Widget getReviewStatus(DatabaseObject databaseObject) {
-        String reviewStatus = null;
+        ReviewStatus reviewStatus = null;
         Event event = (Event) databaseObject;
         if (!event.getReviewStatus().getDisplayName().isEmpty()) {
-            reviewStatus = event.getReviewStatus().getDisplayName();
+            reviewStatus = event.getReviewStatus();
         }
-        Element div = DOM.createElement("div");
         HorizontalPanel reviewStatusPanel = new HorizontalPanel();
-        if (reviewStatus != null) {
+        FocusPanel helpPanel = new FocusPanel();
+        SafeHtml rendered = null;
+        if (reviewStatus != null && reviewStatus.getDisplayName() != null) {
+            switch (reviewStatus.getDisplayName()) {
+                case "five stars":
+                    rendered = templates.reviewStatus("100", "5");
+                    break;
+                case "four stars":
+                    rendered = templates.reviewStatus("80", "4");
+                    break;
+                case "three stars":
+                    rendered = templates.reviewStatus("60", "3");
+                    break;
+                case "two stars":
+                    rendered = templates.reviewStatus("40", "2");
+                    break;
+                case "one star":
+                    rendered = templates.reviewStatus("20", "1");
+            }
 
-            SafeHtml rendered = templates.reviewStatus("40", "2");
+            String helpTitle = "Review Status";
+            HTMLPanel helpContent = new HTMLPanel("" +
+                    "Score grading system-based release of Reactome content. \n \n <br>" +
+                    " 1 - Structure updated after internally reviewed. \n <br> " +
+                    " 2 - Structure updated after externally and internally reviewed. \n <br> " +
+                    " 3 - Internally reviewed. \n <br> " +
+                    " 4 - Structure updated after externally reviewed and then internally reviewed. \n <br> " +
+                    " 5 - Externally reviewed.  <br>"
+            );
+            popup = new HelpPopup(helpTitle, helpContent);
+            helpPanel.addMouseOutHandler(this);
+            helpPanel.addMouseOverHandler(this);
+            helpPanel.getElement().getStyle().setProperty("cursor", "help");
 
-//            if (DOM.getElementById("star") != null) {
-//                Console.error("star is not empty");
-//                DOM.getElementById("star").addClassName(RESOURCES.getCSS().c100());
-//                DOM.getElementById("star").addClassName(RESOURCES.getCSS().c100());
-//                DOM.getElementById("slice").addClassName(RESOURCES.getCSS().slice());
-//                DOM.getElementById("bar").addClassName(RESOURCES.getCSS().bar());
-//                DOM.getElementById("fill").addClassName(RESOURCES.getCSS().fill());
-//            }
-//
-//
-//            if (DOM.getElementById("star") == null) {
-//                Console.error("star is  empty");
-//            }
-
+            HTMLPanel reviewStatusTitle = new HTMLPanel("Review Status: ");
+            reviewStatusTitle.addStyleName("elv-Details-ReviewStatus");
+            reviewStatusPanel.add(reviewStatusTitle);
             reviewStatusPanel.add(new HTMLPanel(rendered));
-
+            helpPanel.add(reviewStatusPanel.asWidget());
         }
-        return reviewStatusPanel;
+        return helpPanel;
     }
-//
-//    public static Resources RESOURCES;
-//    static {
-//        RESOURCES = GWT.create(Resources.class);
-//        RESOURCES.getCSS().ensureInjected();
-//    }
-//
-//    /**
-//     * A ClientBundle of resources used by this widget.
-//     */
-//    public interface Resources extends ClientBundle {
-//        /**
-//         * The styles used in this widget.
-//         */
-//        @Source(ResoruceCSS.CSS)
-//        ResoruceCSS getCSS();
-//    }
-//
-//    /**
-//     * Styles used by this widget.
-//     */
-//    @CssResource.ImportedWithPrefix("pwp-Description")
-//    public interface ResoruceCSS extends CssResource {
-//        /**
-//         * The path to the default CSS styles used by this resource.
-//         */
-//        String CSS = "org/reactome/web/pwp/client/details/tabs/DescriptionTab.css";
-//
-//        String c100();
-//
-//        String small();
-//
-//        String fill();
-//
-//        String slice();
-//
-//        String bar();
-//    }
+
+    @Override
+    public void onMouseOut(MouseOutEvent mouseOutEvent) {
+        popup.hide(true);
+    }
+
+    @Override
+    public void onMouseOver(MouseOverEvent mouseOverEvent) {
+        popup.setPositionAndShow(mouseOverEvent);
+    }
+
 }

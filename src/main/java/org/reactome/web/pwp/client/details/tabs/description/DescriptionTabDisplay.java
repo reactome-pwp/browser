@@ -1,6 +1,9 @@
 package org.reactome.web.pwp.client.details.tabs.description;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.*;
 import org.reactome.web.pwp.client.common.CommonImages;
 import org.reactome.web.pwp.client.details.delegates.InstanceSelectedDelegate;
@@ -106,5 +109,45 @@ public class DescriptionTabDisplay extends ResizeComposite implements Descriptio
     @Override
     public void instanceSelected(DatabaseObject databaseObject) {
         presenter.selectObject(databaseObject);
+    }
+
+
+    public static Resources RESOURCES;
+    static {
+        RESOURCES = GWT.create(Resources.class);
+        RESOURCES.getCSS().ensureInjected();
+    }
+
+
+    /**
+     * A ClientBundle of resources used by this widget.
+     */
+    public interface Resources extends ClientBundle {
+        /**
+         * The styles used in this widget.
+         */
+        @Source(ResoruceCSS.CSS)
+        ResoruceCSS getCSS();
+    }
+
+    /**
+     * Styles used by this widget.
+     */
+    @CssResource.ImportedWithPrefix("pwp-Description")
+    public interface ResoruceCSS extends CssResource {
+        /**
+         * The path to the default CSS styles used by this resource.
+         */
+        String CSS = "org/reactome/web/pwp/client/details/tabs/DescriptionTab.css";
+
+        String c100();
+
+        String small();
+
+        String fill();
+
+        String slice();
+
+        String bar();
     }
 }
