@@ -153,7 +153,7 @@ public class DescriptionPanel extends DockLayoutPanel implements MouseOverHandle
     private Widget getReviewStatus(DatabaseObject databaseObject) {
         ReviewStatus reviewStatus = null;
         Event event = (Event) databaseObject;
-        if (!event.getReviewStatus().getDisplayName().isEmpty()) {
+        if (event.getReviewStatus() != null) {
             reviewStatus = event.getReviewStatus();
         }
         HorizontalPanel reviewStatusPanel = new HorizontalPanel();
