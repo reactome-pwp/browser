@@ -179,12 +179,12 @@ public class DescriptionPanel extends DockLayoutPanel implements MouseOverHandle
 
             String helpTitle = "Review Status";
             HTMLPanel helpContent = new HTMLPanel("" +
-                    "Score grading system-based release of Reactome content. \n \n <br>" +
-                    " 1 - Structure updated after internally reviewed. \n <br> " +
-                    " 2 - Structure updated after externally and internally reviewed. \n <br> " +
-                    " 3 - Internally reviewed. \n <br> " +
-                    " 4 - Structure updated after externally reviewed and then internally reviewed. \n <br> " +
-                    " 5 - Externally reviewed.  <br>"
+                    "Review Based Release of Reactome Content. \n <br>" +
+                    " 1 - Unreleased, awaiting internal review. \n <br> " +
+                    " 2 - Unreleased, awaiting internal reassessment after major updates. \n <br> " +
+                    " 3 - Released, awaiting external review. \n <br> " +
+                    " 4 - Released, awaiting external reassessment after major updates. \n <br> " +
+                    " 5 - Released, fully reviewed. \n <br>"
             );
             popup = new HelpPopup(helpTitle, helpContent);
             helpPanel.addMouseOutHandler(this);
