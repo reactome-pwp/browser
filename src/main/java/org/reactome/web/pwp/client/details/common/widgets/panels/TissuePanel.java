@@ -65,8 +65,6 @@ public class TissuePanel extends DetailsPanel implements OpenHandler<DisclosureP
 
     public void setReceivedData(DatabaseObject data) {
 
-        Console.error(" setReceivedData in organ ");
-
         this.tissue = (Anatomy) data;
 
         VerticalPanel vp = new VerticalPanel();
@@ -96,9 +94,7 @@ public class TissuePanel extends DetailsPanel implements OpenHandler<DisclosureP
         sp.add(new HTML(definition));
         sp.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
         vp.add(sp);
-
-        Console.error(" tissue defination panel ");
-
+        
         return vp;
     }
 

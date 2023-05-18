@@ -4,7 +4,6 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.*;
-import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.details.common.widgets.disclosure.DisclosurePanelFactory;
 import org.reactome.web.pwp.model.client.classes.Anatomy;
 import org.reactome.web.pwp.model.client.classes.DatabaseObject;
@@ -63,8 +62,6 @@ public class OrganPanel extends DetailsPanel implements OpenHandler<DisclosurePa
 
     public void setReceivedData(DatabaseObject data) {
 
-        Console.error(" setReceivedData in organ ");
-
         this.organ = (Anatomy) data;
 
         VerticalPanel vp = new VerticalPanel();
@@ -94,8 +91,6 @@ public class OrganPanel extends DetailsPanel implements OpenHandler<DisclosurePa
         sp.add(new HTML(definition));
         sp.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
         vp.add(sp);
-
-        Console.error(" organ defination panel ");
 
         return vp;
     }
