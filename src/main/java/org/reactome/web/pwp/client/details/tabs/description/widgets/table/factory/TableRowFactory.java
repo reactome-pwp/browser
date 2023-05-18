@@ -115,6 +115,14 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
+    public static Widget getTissueRow(String title, Anatomy tissue) {
+        List<DetailsPanel> panels = new LinkedList<>();
+        if (tissue != null) {
+            panels.add(new TissuePanel(tissue));
+        }
+        return getOverviewRow(title, panels);
+    }
+
     public static Widget getGOCellularComponentRow(String title, List<? extends GO_CellularComponent> goCellularComponents) {
         List<DetailsPanel> panels = new LinkedList<>();
         for (GO_CellularComponent goCellularComponent : goCellularComponents) {

@@ -89,6 +89,11 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
         vp.add(getSynonymsPanel(this.physicalEntity.getName()));
 
+        if(this.physicalEntity instanceof Cell){
+            Cell cell = (Cell) this.physicalEntity;
+            vp.add(new CellPanel(this, cell));
+        }
+
         if(this.physicalEntity instanceof Complex){
             Complex complex = (Complex) this.physicalEntity;
             vp.add(getHasComponentsPanel("Has components:", complex.getHasComponent()));

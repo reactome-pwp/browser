@@ -37,6 +37,7 @@ public enum PropertyType {
     INFERRED_TO("View computationally predicted event in"),
     GO_BIOLOGICAL_PROCESS("Represents GO Biological Process"),
     //GO_MOLECULAR_FUNCTION("Represents GO Molecular Function"),
+    TISSUE("Tissue"),
 
     PRODUCED_BY("Produced by"),
     CONSUMED_BY("Consumed by"),

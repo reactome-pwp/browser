@@ -20,6 +20,10 @@ public abstract class OverviewTableFactory {
             return new BlackBoxEventTable((BlackBoxEvent) databaseObject);
         }
 
+        if(databaseObject instanceof CellDevelopmentStep){
+            return new CellDevelopmentStepTable((CellDevelopmentStep) databaseObject);
+        }
+
         if(databaseObject instanceof Reaction){
             return new ReactionTable((Reaction) databaseObject);
         }
