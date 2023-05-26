@@ -80,11 +80,11 @@ public class MarkerReferencePanel extends DetailsPanel implements OpenHandler<Di
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
 
-        if (!this.markerReference.getMarker().isEmpty()) {
+        if (this.markerReference.getMarker() != null && !this.markerReference.getMarker().isEmpty()) {
             vp.add(getMarkerReferencePanel("Marker:", this.markerReference.getMarker()));
         }
 
-        if (!this.markerReference.getLiteratureReference().isEmpty()) {
+        if (this.markerReference.getLiteratureReference() != null && !this.markerReference.getLiteratureReference().isEmpty()) {
             vp.add(getLiteratureReferencePanel("Literature References:", this.markerReference.getLiteratureReference()));
         }
 

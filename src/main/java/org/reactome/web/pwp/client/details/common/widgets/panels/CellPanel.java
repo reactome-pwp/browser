@@ -42,13 +42,20 @@ public class CellPanel extends DetailsPanel implements TransparentPanel {
             vp.add(getTissueLayerPanel(this.cell.getTissue()));
         }
 
-        if (!this.cell.getProteinMarker().isEmpty()) {
-            vp.add(getProteinMarkersPanel("Protein markers:", cell.getProteinMarker()));
+        if (this.cell.getProteinMarker() != null && !this.cell.getProteinMarker().isEmpty()) {
+            vp.add(getProteinMarkersPanel("Protein markers:", this.cell));
         }
 
-        if(!this.cell.getMarkerReference().isEmpty()) {
-             vp.add(getMarkerReferencePanel("Markers:", cell.getMarkerReference()));
+        if (this.cell.getRnaMarker() != null && !this.cell.getRnaMarker().isEmpty()) {
+            vp.add(getRnaMarkersPanel("RNA markers:", this.cell.getRnaMarker()));
         }
+
+        /**
+         *  Do not display marker reference to avoid duplicating data, add the Literature References: to protein marker
+         */
+//        if(this.cell.getMarkerReference() != null && !this.cell.getMarkerReference().isEmpty()){
+//            vp.add(getMarkerReferencePanel("Marker Reference:", this.cell.getMarkerReference()));
+//        }
 
         initWidget(vp);
     }
@@ -99,7 +106,13 @@ public class CellPanel extends DetailsPanel implements TransparentPanel {
     }
 
 
-    private Widget getProteinMarkersPanel(String title, List<EntityWithAccessionedSequence> ptoteinMarkers) {
+    private Widget getProteinMarkersPanel(String title, Cell cell) {
+
+        Map<Long, List<Publication>> markerAndPublications = new HashMap<>();
+        if (!cell.getMarkerReference().isEmpty()) {
+            markerAndPublications = getMarkerAndPublicationFromMarkerRefs(cell.getMarkerReference());
+        }
+
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("100%");
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
@@ -111,7 +124,37 @@ public class CellPanel extends DetailsPanel implements TransparentPanel {
         vp.add(label);
 
         Map<EntityWithAccessionedSequence, Integer> map = new HashMap<EntityWithAccessionedSequence, Integer>();
-        for (EntityWithAccessionedSequence ewas : ptoteinMarkers) {
+        for (EntityWithAccessionedSequence ewas : cell.getProteinMarker()) {
+            int num = 1;
+            if (map.containsKey(ewas)) {
+                num = map.get(ewas) + 1;
+            }
+            map.put(ewas, num);
+        }
+
+        for (EntityWithAccessionedSequence entity : map.keySet()) {
+            DetailsPanel p = new PhysicalEntityPanel(this, markerAndPublications, entity, map.get(entity));
+            p.setWidth("99%");
+            p.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+            vp.add(p);
+        }
+        return vp;
+    }
+
+    private Widget getRnaMarkersPanel(String title, List<EntityWithAccessionedSequence> rnaMarkers ) {
+
+        VerticalPanel vp = new VerticalPanel();
+        vp.setWidth("100%");
+        vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
+
+        Label label = new Label(title);
+        Style titleStyle = label.getElement().getStyle();
+        titleStyle.setFontWeight(Style.FontWeight.BOLD);
+        titleStyle.setMarginRight(5, Style.Unit.PX);
+        vp.add(label);
+
+        Map<EntityWithAccessionedSequence, Integer> map = new HashMap<EntityWithAccessionedSequence, Integer>();
+        for (EntityWithAccessionedSequence ewas : rnaMarkers) {
             int num = 1;
             if (map.containsKey(ewas)) {
                 num = map.get(ewas) + 1;
@@ -125,11 +168,11 @@ public class CellPanel extends DetailsPanel implements TransparentPanel {
             p.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
             vp.add(p);
         }
-
         return vp;
     }
 
-    private Widget getMarkerReferencePanel(String title, List<MarkerReference> markerReference) {
+
+    private Widget getMarkerReferencePanel(String title, List<MarkerReference> markerReferences) {
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("100%");
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
@@ -140,13 +183,13 @@ public class CellPanel extends DetailsPanel implements TransparentPanel {
         titleStyle.setMarginRight(5, Style.Unit.PX);
         vp.add(label);
 
-        Map<MarkerReference, Integer> map = new HashMap<MarkerReference, Integer>();
-        for (MarkerReference ewas : markerReference) {
+        Map<MarkerReference, Integer> map = new HashMap<>();
+        for (MarkerReference markerReference : markerReferences) {
             int num = 1;
-            if (map.containsKey(ewas)) {
-                num = map.get(ewas) + 1;
+            if (map.containsKey(markerReference)) {
+                num = map.get(markerReference) + 1;
             }
-            map.put(ewas, num);
+            map.put(markerReference, num);
         }
 
         for (MarkerReference entity : map.keySet()) {
@@ -157,5 +200,17 @@ public class CellPanel extends DetailsPanel implements TransparentPanel {
         }
 
         return vp;
+    }
+
+    private Map<Long, List<Publication>> getMarkerAndPublicationFromMarkerRefs(List<MarkerReference> markerReferences) {
+        Map<Long, List<Publication>> literatureReferenceMap = new HashMap<>();
+        for (MarkerReference markerReference : markerReferences) {
+            if (!markerReference.getMarker().isEmpty()) {
+                for (EntityWithAccessionedSequence ewas : markerReference.getMarker()) {
+                    literatureReferenceMap.put(ewas.getDbId(), markerReference.getLiteratureReference());
+                }
+            }
+        }
+        return literatureReferenceMap;
     }
 }

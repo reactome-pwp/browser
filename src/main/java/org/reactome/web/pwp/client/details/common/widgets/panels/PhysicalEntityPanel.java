@@ -24,6 +24,8 @@ import java.util.Map;
 public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<DisclosurePanel>, ClickHandler {
     PhysicalEntity physicalEntity;
     DisclosurePanel disclosurePanel;
+    //marker and literature references map works with Cell object
+    Map<Long, List<Publication>> markerRefs = new HashMap<>();
 
     public PhysicalEntityPanel(PhysicalEntity physicalEntity) {
         this(null, physicalEntity, 1);
@@ -39,6 +41,13 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
     public PhysicalEntityPanel(DetailsPanel parentPanel, PhysicalEntity physicalEntity, int num) {
         super(parentPanel);
+        this.physicalEntity = physicalEntity;
+        initialize(num);
+    }
+
+    public PhysicalEntityPanel(DetailsPanel parentPanel, Map<Long, List<Publication>> markerRefs, PhysicalEntity physicalEntity, int num) {
+        super(parentPanel);
+        this. markerRefs =  markerRefs;
         this.physicalEntity = physicalEntity;
         initialize(num);
     }
@@ -113,9 +122,13 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
             }
         }
 
-        if(this.physicalEntity instanceof EntityWithAccessionedSequence){
+        if (this.physicalEntity instanceof EntityWithAccessionedSequence) {
             EntityWithAccessionedSequence ewas = (EntityWithAccessionedSequence) this.physicalEntity;
-            vp.add(new EntityWithAccessionedSequencePanel(this, ewas));
+            if (markerRefs != null && !markerRefs.isEmpty()) {
+                vp.add(new EntityWithAccessionedSequencePanel(this, ewas, markerRefs));
+            } else {
+                vp.add(new EntityWithAccessionedSequencePanel(this, ewas));
+            }
         }
 
         if(this.physicalEntity instanceof Drug){

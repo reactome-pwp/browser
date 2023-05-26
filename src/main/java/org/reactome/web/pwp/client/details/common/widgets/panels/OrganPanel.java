@@ -69,7 +69,7 @@ public class OrganPanel extends DetailsPanel implements OpenHandler<DisclosurePa
 
         vp.add(getDefinitionPanel(this.organ.getDefinition()));
 
-        if(!this.organ.getSynonym().isEmpty())
+        if (this.organ.getSynonym() != null && !this.organ.getSynonym().isEmpty())
             vp.add(getSynonymsPanel(this.organ.getSynonym()));
 
         this.disclosurePanel.setContent(vp);

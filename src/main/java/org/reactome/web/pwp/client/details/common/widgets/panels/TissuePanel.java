@@ -72,7 +72,7 @@ public class TissuePanel extends DetailsPanel implements OpenHandler<DisclosureP
 
         vp.add(getDefinitionPanel(this.tissue.getDefinition()));
 
-        if(!this.tissue.getSynonym().isEmpty())
+        if (this.tissue.getSynonym() != null && !this.tissue.getSynonym().isEmpty())
             vp.add(getSynonymsPanel(this.tissue.getSynonym()));
 
         this.disclosurePanel.setContent(vp);
