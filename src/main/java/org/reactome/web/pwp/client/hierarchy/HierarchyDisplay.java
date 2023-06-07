@@ -21,10 +21,7 @@ import org.reactome.web.pwp.client.hierarchy.handlers.HierarchyItemMouseOverHand
 import org.reactome.web.pwp.client.hierarchy.widget.HierarchyContainer;
 import org.reactome.web.pwp.client.hierarchy.widget.HierarchyItem;
 import org.reactome.web.pwp.client.hierarchy.widget.HierarchyTree;
-import org.reactome.web.pwp.model.client.classes.DatabaseObject;
-import org.reactome.web.pwp.model.client.classes.Event;
-import org.reactome.web.pwp.model.client.classes.Pathway;
-import org.reactome.web.pwp.model.client.classes.Species;
+import org.reactome.web.pwp.model.client.classes.*;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 import org.reactome.web.pwp.model.client.util.Path;
@@ -66,6 +63,10 @@ public class HierarchyDisplay extends Composite implements OpenHandler<TreeItem>
         Event event = e.getItem().getEvent();
         if(event instanceof Pathway) {
             this.presenter.openDiagram((Pathway) event);
+        }
+
+        if(event instanceof CellLineagePath) {
+            this.presenter.openDiagramForCellLineagePath((CellLineagePath) event);
         }
     }
 

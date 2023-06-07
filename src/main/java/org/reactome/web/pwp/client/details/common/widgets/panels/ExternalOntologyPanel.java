@@ -67,8 +67,6 @@ public class ExternalOntologyPanel extends DetailsPanel implements OpenHandler<D
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
 
-        vp.add(getExternalIdentifier(this.externalOntology));
-
         vp.add(getDefinitionPanel(this.externalOntology.getDefinition()));
 
         if(!this.externalOntology.getInstanceOf().isEmpty())
@@ -76,6 +74,8 @@ public class ExternalOntologyPanel extends DetailsPanel implements OpenHandler<D
 
         if(!this.externalOntology.getSynonym().isEmpty())
             vp.add(getSynonymsPanel(this.externalOntology.getSynonym()));
+
+        vp.add(getExternalIdentifier(this.externalOntology));
 
         this.disclosurePanel.setContent(vp);
         setLoaded(true);
@@ -101,15 +101,21 @@ public class ExternalOntologyPanel extends DetailsPanel implements OpenHandler<D
     }
 
     private Widget getExternalIdentifier(ExternalOntology eo){
-        InlineLabel label = new InlineLabel(eo.getDatabaseName());
-        Anchor link = new Anchor(eo.getIdentifier(), eo.getUrl(), "_blank");
-        link.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
 
-        FlowPanel fp = new FlowPanel();
-        fp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
-        fp.add(label);
-        fp.add(link);
-        return fp;
+        HorizontalPanel hp = new HorizontalPanel();
+        hp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
+
+        Label title = new Label("Ontology ID:");
+        Style titleStyle = title.getElement().getStyle();
+        titleStyle.setFontWeight(Style.FontWeight.BOLD);
+        titleStyle.setMarginRight(5, Style.Unit.PX);
+        hp.add(title);
+
+        Anchor link = new Anchor(eo.getDatabaseName() + ":" +eo.getIdentifier(), eo.getUrl(), "_blank");
+        //  link.getElement().getStyle().setMarginLeft(1, Style.Unit.EM);
+        hp.add(link);
+
+        return hp;
     }
 
     private Widget getInstanceOfPanel(List<ExternalOntology> instances){

@@ -28,7 +28,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
     Map<Long, List<Publication>> markerRefs = new HashMap<>();
 
     public PhysicalEntityPanel(PhysicalEntity physicalEntity) {
-        this(null, physicalEntity, 1);
+        this(null, null, physicalEntity, 1);
     }
 
     public PhysicalEntityPanel(DetailsPanel parentPanel, PhysicalEntity physicalEntity) {
@@ -36,7 +36,11 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
     }
 
     public PhysicalEntityPanel(PhysicalEntity physicalEntity, int num) {
-        this(null, physicalEntity, num);
+        this(null,null, physicalEntity, num);
+    }
+
+    public PhysicalEntityPanel(Map<Long, List<Publication>> markerRefs, PhysicalEntity physicalEntity, int num) {
+        this(null, markerRefs, physicalEntity, num);
     }
 
     public PhysicalEntityPanel(DetailsPanel parentPanel, PhysicalEntity physicalEntity, int num) {
@@ -47,14 +51,14 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
     public PhysicalEntityPanel(DetailsPanel parentPanel, Map<Long, List<Publication>> markerRefs, PhysicalEntity physicalEntity, int num) {
         super(parentPanel);
-        this. markerRefs =  markerRefs;
+        this.markerRefs = markerRefs;
         this.physicalEntity = physicalEntity;
         initialize(num);
     }
 
-    private void initialize(int num){
+    private void initialize(int num) {
         String displayName = physicalEntity.getDisplayName();
-        if(num>1)
+        if (num > 1)
             displayName = num + " x " + displayName;
         disclosurePanel = DisclosurePanelFactory.getAdvancedDisclosurePanel(displayName, this);
         disclosurePanel.addOpenHandler(this);
@@ -68,7 +72,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
     @Override
     public void onOpen(OpenEvent<DisclosurePanel> event) {
-        if(!isLoaded())
+        if (!isLoaded())
             this.physicalEntity.load(new ContentClientHandler.ObjectLoaded() {
                 @Override
                 public void onObjectLoaded(DatabaseObject databaseObject) {
@@ -92,32 +96,32 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
 
-        if(!this.physicalEntity.getSpecies().isEmpty()){
+        if (!this.physicalEntity.getSpecies().isEmpty()) {
             vp.add(new SpeciesPanel(this, this.physicalEntity.getSpecies()));
         }
 
         vp.add(getSynonymsPanel(this.physicalEntity.getName()));
 
-        if(this.physicalEntity instanceof Cell){
+        if (this.physicalEntity instanceof Cell) {
             Cell cell = (Cell) this.physicalEntity;
             vp.add(new CellPanel(this, cell));
         }
 
-        if(this.physicalEntity instanceof Complex){
+        if (this.physicalEntity instanceof Complex) {
             Complex complex = (Complex) this.physicalEntity;
             vp.add(getHasComponentsPanel("Has components:", complex.getHasComponent()));
         }
 
-        if(this.physicalEntity instanceof EntitySet) {
+        if (this.physicalEntity instanceof EntitySet) {
             EntitySet entitySet = (EntitySet) this.physicalEntity;
-            if (!entitySet.getHasMember().isEmpty() ) {
+            if (!entitySet.getHasMember().isEmpty()) {
                 vp.add(getHasComponentsPanel("Has members:", entitySet.getHasMember()));
             }
         }
 
-        if(this.physicalEntity instanceof CandidateSet){
+        if (this.physicalEntity instanceof CandidateSet) {
             CandidateSet candidateSet = (CandidateSet) this.physicalEntity;
-            if(!candidateSet.getHasCandidate().isEmpty()){
+            if (!candidateSet.getHasCandidate().isEmpty()) {
                 vp.add(getHasComponentsPanel("Has candidates:", candidateSet.getHasCandidate()));
             }
         }
@@ -131,12 +135,12 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
             }
         }
 
-        if(this.physicalEntity instanceof Drug){
+        if (this.physicalEntity instanceof Drug) {
             Drug drug = (Drug) this.physicalEntity;
             vp.add(new DrugPanel(this, drug));
         }
 
-        if(!this.physicalEntity.getCrossReference().isEmpty()){
+        if (!this.physicalEntity.getCrossReference().isEmpty()) {
             vp.add(getCrossReferenceTree());
         }
 
@@ -150,7 +154,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         InstanceSelectedDelegate.get().instanceSelected(this.physicalEntity);
     }
 
-    Widget getCrossReferenceTree(){
+    Widget getCrossReferenceTree() {
         TreeItem references = new TreeItem(SafeHtmlUtils.fromString("External cross-references"));
         DatabaseIdentifierPanel dbIdPanel = new DatabaseIdentifierPanel(physicalEntity);
         TreeItem reference = dbIdPanel.asTreeItem();
@@ -159,8 +163,8 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
 
         //Links to the complex portal have been added as cross references for Complexes but they
         //do not have reference entity. The first condition is a hack to accommodate this case
-        if(!(this.physicalEntity instanceof Complex) && !(this.physicalEntity instanceof GenomeEncodedEntity) &&
-           !(this.physicalEntity instanceof OtherEntity) && !(this.physicalEntity instanceof Polymer) && !this.physicalEntity.getCrossReference().isEmpty()){
+        if (!(this.physicalEntity instanceof Complex) && !(this.physicalEntity instanceof GenomeEncodedEntity) &&
+                !(this.physicalEntity instanceof OtherEntity) && !(this.physicalEntity instanceof Polymer) && !this.physicalEntity.getCrossReference().isEmpty()) {
             Collections.sort(physicalEntity.getCrossReference());
             for (DatabaseIdentifier databaseIdentifier : this.physicalEntity.getCrossReference()) {
                 dbIdPanel = new DatabaseIdentifierPanel(databaseIdentifier);
@@ -176,7 +180,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         return referencesTree;
     }
 
-    private Widget getHasComponentsPanel(String title, List<PhysicalEntity> components){
+    private Widget getHasComponentsPanel(String title, List<PhysicalEntity> components) {
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("100%");
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
@@ -190,7 +194,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         Map<PhysicalEntity, Integer> map = new HashMap<PhysicalEntity, Integer>();
         for (PhysicalEntity physicalEntity : components) {
             int num = 1;
-            if(map.containsKey(physicalEntity)){
+            if (map.containsKey(physicalEntity)) {
                 num = map.get(physicalEntity) + 1;
             }
             map.put(physicalEntity, num);
@@ -206,7 +210,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
         return vp;
     }
 
-    private Widget getSynonymsPanel(List<String> names){
+    private Widget getSynonymsPanel(List<String> names) {
         HorizontalPanel hp = new HorizontalPanel();
         hp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
 
@@ -221,7 +225,7 @@ public class PhysicalEntityPanel extends DetailsPanel implements OpenHandler<Dis
             synonyms.append(name);
             synonyms.append(", ");
         }
-        synonyms.delete(synonyms.length()-2, synonyms.length()-1);
+        synonyms.delete(synonyms.length() - 2, synonyms.length() - 1);
         hp.add(new Label(synonyms.toString()));
 
         return hp;
