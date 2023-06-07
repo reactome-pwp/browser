@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.reactome.web.pwp.client.details.MarkerUtils;
 import org.reactome.web.pwp.client.details.common.widgets.panels.*;
 import org.reactome.web.pwp.model.client.classes.*;
 
@@ -115,10 +116,20 @@ public abstract class TableRowFactory {
         return getOverviewRow(title, panels);
     }
 
-    public static Widget getTissueRow(String title, Anatomy tissue) {
+    public static Widget getCellTypeRow(String title, List<CellType> cellTypes) {
         List<DetailsPanel> panels = new LinkedList<>();
-        if (tissue != null) {
-            panels.add(new TissuePanel(tissue));
+        if (!cellTypes.isEmpty()) {
+            for (CellType cellType : cellTypes) {
+                panels.add(new ExternalOntologyPanel(cellType));
+            }
+        }
+        return getOverviewRow(title, panels);
+    }
+
+    public static Widget getAnatomyRow(String title, Anatomy anatomy) {
+        List<DetailsPanel> panels = new LinkedList<>();
+        if (anatomy != null) {
+            panels.add(new ExternalOntologyPanel(anatomy));
         }
         return getOverviewRow(title, panels);
     }
@@ -224,6 +235,30 @@ public abstract class TableRowFactory {
         List<DetailsPanel> panels = new LinkedList<>();
         for (PhysicalEntity physicalEntity : map.keySet()) {
             panels.add(new PhysicalEntityPanel(physicalEntity, map.get(physicalEntity)));
+        }
+        return getOverviewRow(title, panels);
+    }
+
+    public static  OverviewRow getCellMarkersRow(String title, Cell cell, List<EntityWithAccessionedSequence> markers){
+
+        Map<Long, List<Publication>> markersPublication = new HashMap<>();
+        if(cell.getMarkerReference() != null && !cell.getMarkerReference().isEmpty()){
+            markersPublication = MarkerUtils.getMarkerPublicationsFromMarkerRefs(cell.getMarkerReference());
+        }
+
+        Map<EntityWithAccessionedSequence, Integer> map = new HashMap<EntityWithAccessionedSequence, Integer>();
+        for (EntityWithAccessionedSequence ewas : markers) {
+            int num = 1;
+            if (map.containsKey(ewas)) {
+                num = map.get(ewas) + 1;
+            }
+            map.put(ewas, num);
+        }
+
+        List<DetailsPanel> panels = new LinkedList<>();
+        for (EntityWithAccessionedSequence entity : map.keySet()) {
+            DetailsPanel p = new PhysicalEntityPanel(markersPublication, entity, map.get(entity));
+            panels.add(p);
         }
         return getOverviewRow(title, panels);
     }

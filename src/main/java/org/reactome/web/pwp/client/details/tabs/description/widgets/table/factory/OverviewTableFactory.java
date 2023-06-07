@@ -49,6 +49,10 @@ public abstract class OverviewTableFactory {
             return new GenomeEncodedEntityTable((GenomeEncodedEntity) databaseObject);
         }
 
+        if (databaseObject instanceof Cell) {
+            return new CellTable((Cell) databaseObject);
+        }
+
         if(databaseObject instanceof Complex){
             return new ComplexTable((Complex) databaseObject);
         }

@@ -30,6 +30,14 @@ public enum PropertyType {
     NORMAL_REACTION("Normal reaction"),
     NORMAL_PATHWAY("Normal parthway"),
 
+    //Cell
+    CELL_TYPE("Cell type"),
+    ORGAN("Organ"),
+    TISSUE("Tissue"),
+    TISSUE_LAYER("Tissue layer"),
+    PROTEIN_MARKERS("Protein markers"),
+    RNA_MARKERS("RNA markers"),
+
     HAS_MEMBER("Members"),
     HAS_CANDIDATE("Candidates"),
 
@@ -37,7 +45,6 @@ public enum PropertyType {
     INFERRED_TO("View computationally predicted event in"),
     GO_BIOLOGICAL_PROCESS("Represents GO Biological Process"),
     //GO_MOLECULAR_FUNCTION("Represents GO Molecular Function"),
-    TISSUE("Tissue"),
 
     PRODUCED_BY("Produced by"),
     CONSUMED_BY("Consumed by"),
