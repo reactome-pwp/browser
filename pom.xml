@@ -8,14 +8,14 @@
     <groupId>org.reactome.web.pwp</groupId>
     <artifactId>browser</artifactId>
     <packaging>war</packaging>
-    <version>3.9.3</version>
+    <version>3.9.4-SNAPSHOT</version>
 
     <name>Pathway Portal</name>
 
     <parent>
         <groupId>org.reactome.maven</groupId>
         <artifactId>reactome-pwp-parent</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
 
     <description>
