@@ -27,6 +27,8 @@ public class PhysicalEntityTable extends OverviewTable {
         switch (propertyType) {
             case NAMES:
                 return TableRowFactory.getSynonymRow(title, this.physicalEntity.getName());
+            case CELL_TYPE:
+                return TableRowFactory.getCellTypeRow(title, this.physicalEntity.getCellType());
             case CELLULAR_COMPARTMENT:
                 return TableRowFactory.getGOCellularComponentRow(title, this.physicalEntity.getCompartment());
             case DEDUCED_FROM:

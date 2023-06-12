@@ -12,10 +12,7 @@ import org.reactome.web.pwp.client.common.module.AbstractPresenter;
 import org.reactome.web.pwp.client.common.utils.Console;
 import org.reactome.web.pwp.client.hierarchy.delgates.HierarchyPathLoader;
 import org.reactome.web.pwp.client.manager.state.State;
-import org.reactome.web.pwp.model.client.classes.Event;
-import org.reactome.web.pwp.model.client.classes.Pathway;
-import org.reactome.web.pwp.model.client.classes.Species;
-import org.reactome.web.pwp.model.client.classes.TopLevelPathway;
+import org.reactome.web.pwp.model.client.classes.*;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClient;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
@@ -125,6 +122,12 @@ public class HierarchyPresenter extends AbstractPresenter implements Hierarchy.P
     public void openDiagram(Pathway pathway) {
         this.eventBus.fireEventFromSource(new PathwayDiagramOpenRequestEvent(pathway), this);
     }
+
+    @Override
+    public void openDiagramForCellLineagePath(CellLineagePath cellLineagePath) {
+        this.eventBus.fireEventFromSource(new PathwayDiagramOpenRequestEvent(cellLineagePath), this);
+    }
+
 
     @Override
     public void pathwayExpanded(Pathway pathway) {

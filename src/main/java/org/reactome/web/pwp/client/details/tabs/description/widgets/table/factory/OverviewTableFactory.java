@@ -20,6 +20,10 @@ public abstract class OverviewTableFactory {
             return new BlackBoxEventTable((BlackBoxEvent) databaseObject);
         }
 
+        if(databaseObject instanceof CellDevelopmentStep){
+            return new CellDevelopmentStepTable((CellDevelopmentStep) databaseObject);
+        }
+
         if(databaseObject instanceof Reaction){
             return new ReactionTable((Reaction) databaseObject);
         }
@@ -43,6 +47,10 @@ public abstract class OverviewTableFactory {
 
         if(databaseObject instanceof GenomeEncodedEntity){
             return new GenomeEncodedEntityTable((GenomeEncodedEntity) databaseObject);
+        }
+
+        if (databaseObject instanceof Cell) {
+            return new CellTable((Cell) databaseObject);
         }
 
         if(databaseObject instanceof Complex){

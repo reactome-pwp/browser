@@ -9,7 +9,9 @@ import org.reactome.web.pwp.client.details.tabs.description.widgets.table.factor
 import org.reactome.web.pwp.model.client.classes.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Antonio Fabregat <fabregat@ebi.ac.uk>
@@ -17,9 +19,24 @@ import java.util.List;
 public class EntityWithAccessionedSequencePanel extends DetailsPanel implements TransparentPanel {
     private EntityWithAccessionedSequence ewas;
 
+    /**
+     *  Add Literature References from MarkerReference to ProteinMarkers to avoid duplicating data in front end
+     *  this map uses dbId as key and literature reference as value, map to the same dbId in protein markers to assign
+     *  literature Reference to it
+     */
+    private  Map<Long, List<Publication>> markerRefs = new HashMap<>();
+
     @SuppressWarnings("UnusedDeclaration")
     public EntityWithAccessionedSequencePanel(EntityWithAccessionedSequence ewas) {
         this(null, ewas);
+    }
+
+    public EntityWithAccessionedSequencePanel(DetailsPanel parentPanel, EntityWithAccessionedSequence ewas, Map<Long, List<Publication>> markerRefs) {
+        super(parentPanel);
+        this.ewas = ewas;
+        this.markerRefs = markerRefs;
+        setLoaded(true);    //EntityWithAccessionedSequence will always be passed as a fully loaded object
+        initialize();
     }
 
     public EntityWithAccessionedSequencePanel(DetailsPanel parentPanel, EntityWithAccessionedSequence ewas) {
@@ -39,6 +56,13 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
         if(this.ewas.getHasModifiedResidue()!=null && !this.ewas.getHasModifiedResidue().isEmpty()){
             vp.add(getModifiedResiduePanel(this.ewas.getHasModifiedResidue()));
         }
+
+        if (markerRefs != null && !markerRefs.isEmpty()) {
+            if (markerRefs.containsKey(this.ewas.getDbId())) {
+                vp.add(getLiteratureReferencePanel("Literature References:", markerRefs.get(this.ewas.getDbId())));
+            }
+        }
+
         initWidget(vp);
     }
 
@@ -120,5 +144,26 @@ public class EntityWithAccessionedSequencePanel extends DetailsPanel implements 
         panel.add(new Label(coordinates.toString()));
 
         return panel;
+    }
+
+    private Widget getLiteratureReferencePanel(String title, List<Publication> LiteratureReference) {
+
+        VerticalPanel vp = new VerticalPanel();
+        vp.setWidth("99%");
+        vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
+
+        Label label = new Label(title);
+        Style titleStyle = label.getElement().getStyle();
+        titleStyle.setFontWeight(Style.FontWeight.BOLD);
+        titleStyle.setMarginRight(5, Style.Unit.PX);
+        vp.add(label);
+
+        for (Publication publication : LiteratureReference) {
+            DetailsPanel pp = new PublicationPanel(this, publication);
+            pp.setWidth("100%");
+            pp.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+            vp.add(pp);
+        }
+        return vp;
     }
 }

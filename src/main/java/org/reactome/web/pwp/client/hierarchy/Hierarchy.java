@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.hierarchy;
 
 import org.reactome.web.analysis.client.model.PathwaySummary;
 import org.reactome.web.pwp.client.common.module.BrowserModule;
+import org.reactome.web.pwp.model.client.classes.CellLineagePath;
 import org.reactome.web.pwp.model.client.classes.Event;
 import org.reactome.web.pwp.model.client.classes.Pathway;
 import org.reactome.web.pwp.model.client.classes.Species;
@@ -26,6 +27,8 @@ public interface Hierarchy {
         void hierarchyChanged(Species species);
 
         void openDiagram(Pathway pathway);
+
+        void openDiagramForCellLineagePath(CellLineagePath cellLineagePath);
 
         void pathwayExpanded(Pathway pathway);
 

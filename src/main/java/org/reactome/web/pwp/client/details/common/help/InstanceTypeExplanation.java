@@ -27,6 +27,12 @@ public abstract class InstanceTypeExplanation {
             case PATHWAY:
                 explanation = "A collection of related Events. These events can be ReactionlikeEvents or Pathways";
                 break;
+            case CELL_LINEAGE_PATH:
+                explanation = "A collection of related Events describing development of a cell line.There events can be CellDevelopmentSteps or CellLineagePaths";
+                break;
+            case CELL_DEVELOPMENT_STEP:
+                explanation = "Reaction with Cells are inputs and outputs descriping one step for development of a cell line";
+                break;
             case POLYMERISATION:
                 explanation = "Reactions that follow the pattern: Polymer + Unit -> Polymer (there may be a catalyst involved).<p>" +
                         "Used to describe the mechanistic detail of a polymerisation";
@@ -52,6 +58,9 @@ public abstract class InstanceTypeExplanation {
             case COMPLEX:
                 explanation = "An entity formed by the association of two or more component entities (these components can themselves be complexes).<p>" +
                         "At least one component must be specified. Complexes represent all experimentally verified components and their stoichiometry where this is known but may not include as yet unidentified components";
+                break;
+            case CELL:
+                explanation = "A cell from a particular line or origin in a particular state of development";
                 break;
             case DEFINED_SET:
                 explanation = "Two or more entities that are interchangeable in function";
