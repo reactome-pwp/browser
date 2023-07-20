@@ -23,7 +23,12 @@ public class DownloadItem extends FlowPanel {
 
     public DownloadItem(final DownloadType type, final List<String> urls) {
         setStyleName(RESOURCES.getCSS().downloadItem());
-        setTitle("View/download in " + type.getTooltip() + " format");
+
+        if(type.getTooltip().equals("NEWT")){
+            setTitle("SBGN view in " + type.getTooltip() + " Editor");
+        } else {
+            setTitle("View/download in " + type.getTooltip() + " format");
+        }
 
         FlowPanel container = new FlowPanel();
         container.add(new Image(type.getIcon()));
