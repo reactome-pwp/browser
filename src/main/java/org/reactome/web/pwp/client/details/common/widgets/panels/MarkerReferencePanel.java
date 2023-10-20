@@ -15,10 +15,7 @@ import org.reactome.web.pwp.model.client.classes.Publication;
 import org.reactome.web.pwp.model.client.common.ContentClientHandler;
 import org.reactome.web.pwp.model.client.content.ContentClientError;
 
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class MarkerReferencePanel extends DetailsPanel implements OpenHandler<DisclosurePanel> {
@@ -80,7 +77,7 @@ public class MarkerReferencePanel extends DetailsPanel implements OpenHandler<Di
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
 
-        if (this.markerReference.getMarker() != null && !this.markerReference.getMarker().isEmpty()) {
+        if (this.markerReference.getMarker() != null ) {
             vp.add(getMarkerReferencePanel("Marker:", this.markerReference.getMarker()));
         }
 
@@ -93,9 +90,7 @@ public class MarkerReferencePanel extends DetailsPanel implements OpenHandler<Di
     }
 
 
-
-
-    private Widget getMarkerReferencePanel(String title, List<EntityWithAccessionedSequence> markers) {
+    private Widget getMarkerReferencePanel(String title, EntityWithAccessionedSequence marker) {
         VerticalPanel vp = new VerticalPanel();
         vp.setWidth("98%");
         vp.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
@@ -106,21 +101,11 @@ public class MarkerReferencePanel extends DetailsPanel implements OpenHandler<Di
         titleStyle.setMarginRight(5, Style.Unit.PX);
         vp.add(label);
 
-        Map<EntityWithAccessionedSequence, Integer> map = new HashMap<EntityWithAccessionedSequence, Integer>();
-        for (EntityWithAccessionedSequence ewas : markers) {
-            int num = 1;
-            if (map.containsKey(ewas)) {
-                num = map.get(ewas) + 1;
-            }
-            map.put(ewas, num);
-        }
 
-        for (EntityWithAccessionedSequence entity : map.keySet()) {
-            DetailsPanel p = new PhysicalEntityPanel(this, entity, map.get(entity));
-            p.setWidth("99%");
-            p.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
-            vp.add(p);
-        }
+        DetailsPanel p = new PhysicalEntityPanel(this, marker);
+        p.setWidth("99%");
+        p.getElement().getStyle().setMarginLeft(15, Style.Unit.PX);
+        vp.add(p);
         return vp;
     }
 
