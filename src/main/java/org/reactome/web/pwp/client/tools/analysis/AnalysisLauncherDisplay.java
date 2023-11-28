@@ -129,7 +129,8 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
         if (btn.equals(this.analysisBtn)) {
             this.container.showWidget(0);
         } else if (btn.equals(this.gsaBtn)) {
-            this.container.showWidget(1);
+           // this.container.showWidget(1);
+            Window.open("/gsa/home", "_blank","");
         } else if (btn.equals(this.speciesBtn)) {
             this.container.showWidget(2);
         } else if (btn.equals(this.experimentsBtn)) {
