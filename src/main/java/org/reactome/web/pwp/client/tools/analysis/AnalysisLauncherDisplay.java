@@ -130,7 +130,12 @@ public class AnalysisLauncherDisplay extends PopupPanel implements AnalysisLaunc
             this.container.showWidget(0);
         } else if (btn.equals(this.gsaBtn)) {
            // this.container.showWidget(1);
-            Window.open("/gsa/home", "_blank","");
+            String hostName = Window.Location.getHostName();
+            if (hostName.equals("localhost") || hostName.equals("127.0.0.1")) {
+                Window.open("https://dev.reactome.org/gsa/home", "_self", "");
+            } else {
+                Window.open("/gsa/home", "_self", "");
+            }
         } else if (btn.equals(this.speciesBtn)) {
             this.container.showWidget(2);
         } else if (btn.equals(this.experimentsBtn)) {
