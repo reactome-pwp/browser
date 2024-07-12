@@ -3,6 +3,7 @@ package org.reactome.web.pwp.client.details.tabs.downloads.widgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import org.reactome.web.pwp.model.client.common.ContentClientAbstract;
 
 import java.util.Arrays;
@@ -18,6 +19,7 @@ public enum DownloadType {
     BIOPAX_2    ("BIOPAX 2", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level2/__ID__", "Biopax 2", DownloadIcons.INSTANCE.BioPAX2Icon(), Group.FORMAT ),
     BIOPAX_3    ("BIOPAX 3", "/ReactomeRESTfulAPI/RESTfulWS/biopaxExporter/Level3/__ID__", "Biopax 3", DownloadIcons.INSTANCE.BioPAX3Icon(), Group.FORMAT),
     PDF         ("PDF", ContentClientAbstract.CONTENT_SERVICE + "exporter/document/event/__STID__.pdf__PARAMS__", "PDF", DownloadIcons.INSTANCE.PDFIcon(), Group.FORMAT),
+    NEWT        ("NEWT EDITOR", "https://web.newteditor.org/?URL=https://" + getHost() + ContentClientAbstract.CONTENT_SERVICE + "exporter/event/__STID__.sbgn" + "&inferNestingOnLoad=true&mapColorScheme=opposed_red_blue&fitLabelsToNodes=true", "NEWT", DownloadIcons.INSTANCE.NEWTIcon(), Group.FORMAT),
     //    PROTEGE     ("Protege", "/cgi-bin/protegeexporter?DB=__DB__&ID=__ID__", "OWL", DownloadIcons.INSTANCE.ProtegeIcon(), Group.FORMAT),
     SVG         ("SVG", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.svg__PARAMS__", "SVG", DownloadIcons.INSTANCE.SVGIcon(), Group.DIAGRAM),
     //    POWERPOINT  ("Powerpoint", ContentClientAbstract.CONTENT_SERVICE + "exporter/diagram/__STID__.pptx__PARAMS__", "PPTX", DownloadIcons.INSTANCE.PowerPointIcon(), Group.FORMAT),
@@ -77,6 +79,14 @@ public enum DownloadType {
         return hasQualityOptions;
     }
 
+    public static String getHost() {
+        String hostName = Window.Location.getHostName();
+        if (hostName.equals("localhost") || hostName.equals("127.0.0.1")) {
+            return "dev.reactome.org";
+        }
+        return hostName;
+    }
+
     public interface DownloadIcons extends ClientBundle {
 
         DownloadIcons INSTANCE = GWT.create(DownloadIcons.class);
@@ -116,5 +126,8 @@ public enum DownloadType {
 
         @Source("images/GIF_download.png")
         ImageResource GIFIcon();
+
+        @Source("images/NEWT_editor.png")
+        ImageResource NEWTIcon();
     }
 }

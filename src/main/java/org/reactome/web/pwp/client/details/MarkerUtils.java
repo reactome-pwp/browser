@@ -13,10 +13,9 @@ public class MarkerUtils {
     public static Map<Long, List<Publication>> getMarkerPublicationsFromMarkerRefs(List<MarkerReference> markerReferences) {
         Map<Long, List<Publication>> literatureReferenceMap = new HashMap<>();
         for (MarkerReference markerReference : markerReferences) {
-            if (!markerReference.getMarker().isEmpty()) {
-                for (EntityWithAccessionedSequence ewas : markerReference.getMarker()) {
+            if (markerReference.getMarker() != null) {
+                EntityWithAccessionedSequence ewas = markerReference.getMarker();
                     literatureReferenceMap.put(ewas.getDbId(), markerReference.getLiteratureReference());
-                }
             }
         }
         return literatureReferenceMap;

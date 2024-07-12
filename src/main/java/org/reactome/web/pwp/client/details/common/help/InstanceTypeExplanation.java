@@ -24,6 +24,7 @@ public abstract class InstanceTypeExplanation {
                         "Used to describe the mechanistic detail of depolymerisation";
                 break;
             //case EQUIVALENT_EVENT_SET: //DEPRECATED
+            case TOP_LEVEL_PATHWAY:
             case PATHWAY:
                 explanation = "A collection of related Events. These events can be ReactionlikeEvents or Pathways";
                 break;
